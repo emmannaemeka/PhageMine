@@ -1,0 +1,8 @@
+# This MVP intentionally defaults to deterministic mock evidence. It is not biological annotation.
+gene_prediction:
+  min_orf_nt: 90
+evidence:
+  backend: mock
+scoring:
+  high_interest: 70
+  moderate_interest: 45

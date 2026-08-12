@@ -1,0 +1,21 @@
+>Feature demo_phage
+1	150	CDS
+			protein_id	gnl|PhageMine|PM_000001
+			product	hypothetical protein
+			note	PhageMine evidence record: cds_provenance.json#PM_000001; functional claims withheld unless supported by non-mock curated/experimental evidence.
+150	311	CDS
+			protein_id	gnl|PhageMine|PM_000002
+			product	hypothetical protein
+			note	PhageMine evidence record: cds_provenance.json#PM_000002; functional claims withheld unless supported by non-mock curated/experimental evidence.
+311	475	CDS
+			protein_id	gnl|PhageMine|PM_000003
+			product	hypothetical protein
+			note	PhageMine evidence record: cds_provenance.json#PM_000003; functional claims withheld unless supported by non-mock curated/experimental evidence.
+475	642	CDS
+			protein_id	gnl|PhageMine|PM_000004
+			product	hypothetical protein
+			note	PhageMine evidence record: cds_provenance.json#PM_000004; functional claims withheld unless supported by non-mock curated/experimental evidence.
+642	809	CDS
+			protein_id	gnl|PhageMine|PM_000005
+			product	hypothetical protein
+			note	PhageMine evidence record: cds_provenance.json#PM_000005; functional claims withheld unless supported by non-mock curated/experimental evidence.

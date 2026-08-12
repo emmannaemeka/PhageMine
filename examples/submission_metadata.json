@@ -1,0 +1,13 @@
+{
+  "sequence_id": "demo_phage",
+  "organism": "unclassified bacteriophage",
+  "phage_name": "DemoPhage",
+  "host": "Escherichia coli",
+  "isolation_source": "wastewater",
+  "collection_date": "2026-01-15",
+  "geographic_location": "Nigeria: Lagos",
+  "sequencing_technology": "Illumina",
+  "submitter_name": "Example Submitter",
+  "submitter_email": "submitter@example.org",
+  "authors": ["Example Author"]
+}

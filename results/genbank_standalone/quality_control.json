@@ -1,0 +1,39 @@
+{
+  "predicted_cds": 5,
+  "sequence_length": 809,
+  "status": "review_required",
+  "warnings": [
+    {
+      "code": "overlapping_cds",
+      "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+      "proteins": [
+        "PM_000001",
+        "PM_000002"
+      ]
+    },
+    {
+      "code": "overlapping_cds",
+      "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+      "proteins": [
+        "PM_000002",
+        "PM_000003"
+      ]
+    },
+    {
+      "code": "overlapping_cds",
+      "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+      "proteins": [
+        "PM_000003",
+        "PM_000004"
+      ]
+    },
+    {
+      "code": "overlapping_cds",
+      "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+      "proteins": [
+        "PM_000004",
+        "PM_000005"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "errors": [],
+  "genome_id": "demo_phage",
+  "provenance": {
+    "command": "genbank",
+    "created_at": "2026-08-12T23:20:49.970075+00:00",
+    "evidence_backend": {
+      "name": "mock-phage-evidence",
+      "status": "MOCK; not biological evidence",
+      "version": "demo-1"
+    },
+    "gene_caller": {
+      "name": "simple_orf_demo",
+      "status": "demonstration only",
+      "version": "0.1.0"
+    },
+    "input": "examples/demo_phage.fasta",
+    "input_sha256": "adbbc5511083111a0d6c6f03d1361ee288a57b330125d8c2e6497407e4f7328b",
+    "parameters": {
+      "min_orf_nt": 90
+    },
+    "pipeline": "PhageMine",
+    "pipeline_version": "0.1.0",
+    "quality_control": {
+      "predicted_cds": 5,
+      "sequence_length": 809,
+      "status": "review_required",
+      "warnings": [
+        {
+          "code": "overlapping_cds",
+          "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+          "proteins": [
+            "PM_000001",
+            "PM_000002"
+          ]
+        },
+        {
+          "code": "overlapping_cds",
+          "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+          "proteins": [
+            "PM_000002",
+            "PM_000003"
+          ]
+        },
+        {
+          "code": "overlapping_cds",
+          "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+          "proteins": [
+            "PM_000003",
+            "PM_000004"
+          ]
+        },
+        {
+          "code": "overlapping_cds",
+          "message": "Predicted CDS coordinates overlap; review gene calls before submission.",
+          "proteins": [
+            "PM_000004",
+            "PM_000005"
+          ]
+        }
+      ]
+    }
+  },
+  "sequence_length": 809,
+  "valid": true,
+  "warnings": [
+    {
+      "code": "mock_or_unsupported_function",
+      "end": 150,
+      "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein.",
+      "protein_id": "PM_000001",
+      "start": 1
+    },
+    {
+      "code": "mock_or_unsupported_function",
+      "end": 311,
+      "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein.",
+      "protein_id": "PM_000002",
+      "start": 150
+    },
+    {
+      "code": "uncharacterized_product",
+      "end": 311,
+      "message": "No supported functional product name is available; feature product will be hypothetical protein.",
+      "protein_id": "PM_000002",
+      "start": 150
+    },
+    {
+      "code": "mock_or_unsupported_function",
+      "end": 475,
+      "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein.",
+      "protein_id": "PM_000003",
+      "start": 311
+    },
+    {
+      "code": "uncharacterized_product",
+      "end": 475,
+      "message": "No supported functional product name is available; feature product will be hypothetical protein.",
+      "protein_id": "PM_000003",
+      "start": 311
+    },
+    {
+      "code": "mock_or_unsupported_function",
+      "end": 642,
+      "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein.",
+      "protein_id": "PM_000004",
+      "start": 475
+    },
+    {
+      "code": "mock_or_unsupported_function",
+      "end": 809,
+      "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein.",
+      "protein_id": "PM_000005",
+      "start": 642
+    },
+    {
+      "code": "uncharacterized_product",
+      "end": 809,
+      "message": "No supported functional product name is available; feature product will be hypothetical protein.",
+      "protein_id": "PM_000005",
+      "start": 642
+    }
+  ]
+}

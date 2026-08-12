@@ -1,0 +1,7 @@
+# Scores are heuristic and configurable. They rank investigation priority, not function probability.
+novelty_max: 22
+conservation_max: 18
+context_max: 20
+functional_signal_max: 18
+evidence_convergence_max: 16
+quality_penalty_max: 20

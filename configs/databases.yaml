@@ -1,0 +1,4 @@
+# Real adapters should pin release, checksum, and search parameters here.
+mock:
+  version: "demo-1"
+  status: "demonstration only; not a biological database"

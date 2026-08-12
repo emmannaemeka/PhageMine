@@ -1,0 +1,4 @@
+rank	protein_id	annotation	biological_interest	functional_confidence	evidence_diversity	score_components
+1	PM_000002	Uncharacterized protein with weak domain signal (MOCK)	67	Low	High	"{""conservation"": 13, ""context"": 14, ""convergence"": 12, ""functional_signal"": 12, ""novelty"": 16, ""quality_penalty"": 0}"
+2	PM_000003	Hypothetical protein	61	None	High	"{""conservation"": 13, ""context"": 14, ""convergence"": 12, ""functional_signal"": 6, ""novelty"": 16, ""quality_penalty"": 0}"
+3	PM_000005	Hypothetical protein	61	None	High	"{""conservation"": 13, ""context"": 14, ""convergence"": 12, ""functional_signal"": 6, ""novelty"": 16, ""quality_penalty"": 0}"
