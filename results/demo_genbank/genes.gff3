@@ -1,6 +1,0 @@
-##gff-version 3
-demo_phage	PhageMine	CDS	1	150	.	+	0	ID=PM_000001;Name=PM_000001;calling_source=simple_orf_demo
-demo_phage	PhageMine	CDS	150	311	.	+	0	ID=PM_000002;Name=PM_000002;calling_source=simple_orf_demo
-demo_phage	PhageMine	CDS	311	475	.	+	0	ID=PM_000003;Name=PM_000003;calling_source=simple_orf_demo
-demo_phage	PhageMine	CDS	475	642	.	+	0	ID=PM_000004;Name=PM_000004;calling_source=simple_orf_demo
-demo_phage	PhageMine	CDS	642	809	.	+	0	ID=PM_000005;Name=PM_000005;calling_source=simple_orf_demo

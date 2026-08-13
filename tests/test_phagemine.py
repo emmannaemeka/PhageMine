@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from phagemine.genome import predict_orfs, translate
+from phagemine.gene_prediction import DemoORFPredictor, PHANOTATEPredictor
 from phagemine.io import read_fasta
 from phagemine.models import Evidence, EvidenceLevel
 from phagemine.pipeline import run
@@ -13,6 +14,7 @@ from phagemine.genbank import feature_table, product_name, table2asn_status, val
 from phagemine.annotation import MockEvidenceBackend
 from phagemine.cli import main
 from phagemine.models import SubmissionMetadata
+from phagemine.genome_representation import GenomeRepresentation, Orientation, Rotation, Topology
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,9 +43,9 @@ class PhageMineTests(unittest.TestCase):
     def test_full_pipeline_generates_explainable_outputs(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "run"
-            count = run(ROOT / "examples/demo_phage.fasta", output)
+            count = run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
             self.assertEqual(count, 5)
-            for filename in ("genes.gff3", "proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
+            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "genes.gff3", "proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
                 self.assertTrue((output / filename).exists(), filename)
             report = (output / "report.md").read_text()
             self.assertIn("Computational hypothesis only", report)
@@ -90,8 +92,78 @@ class PhageMineTests(unittest.TestCase):
     def test_genbank_cli_is_independently_callable(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "genbank"
-            self.assertEqual(main(["genbank", str(ROOT / "examples/demo_phage.fasta"), "--output", str(output)]), 0)
+            self.assertEqual(main(["genbank", str(ROOT / "examples/demo_phage.fasta"), "--gene-predictor", "demo", "--output", str(output)]), 0)
             self.assertTrue((output / "genbank_submission" / "validation.json").exists())
+
+    def test_phanotate_adapter_parses_coordinates_strands_and_translation(self):
+        genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = PHANOTATEPredictor.parse_output(genome_id, genome, "# START STOP FRAME CONTIG\n1 150 + demo_phage\n311 475 + demo_phage\n")
+        self.assertEqual([protein.protein_id for protein in proteins], ["PM_000001", "PM_000002"])
+        self.assertEqual(proteins[0].gene_call_source, "PHANOTATE")
+        self.assertEqual(proteins[0].locus_tag, "PM_000001")
+        self.assertEqual(proteins[0].start_codon, "ATG")
+        self.assertEqual(proteins[0].stop_codon, "TAA")
+        self.assertEqual(proteins[0].sequence, translate(genome[:150]))
+        self.assertEqual(proteins[1].gene_call_parameters["reported_strand"], "+")
+
+    def test_phanotate_adapter_handles_reverse_strand(self):
+        sequence = "TTATTTCAT"
+        proteins = PHANOTATEPredictor.parse_output("reverse", sequence, "9 1 - reverse\n")
+        self.assertEqual(proteins[0].strand, "-")
+        self.assertEqual(proteins[0].cds, "ATGAAATAA")
+        self.assertEqual(proteins[0].sequence, "MK")
+
+    def test_phanotate_unavailable_gives_actionable_error(self):
+        predictor = PHANOTATEPredictor("/definitely/not/a/phanotate")
+        with self.assertRaisesRegex(RuntimeError, "PHANOTATE is required"):
+            predictor.predict("demo", "ATGAAATAA", ROOT / "examples/demo_phage.fasta")
+
+    def test_original_representation_preserves_authoritative_sequence(self):
+        representation = GenomeRepresentation.original("assembly", "ATGCCCTAA")
+        self.assertEqual(representation.original_sequence, "ATGCCCTAA")
+        self.assertEqual(representation.analysis_sequence, "ATGCCCTAA")
+        self.assertEqual(representation.topology, Topology.UNKNOWN)
+        self.assertEqual(representation.orientation, Orientation.ORIGINAL)
+        self.assertEqual(representation.rotation, Rotation.NONE)
+        self.assertEqual(representation.transform_history, ())
+
+    def test_reverse_complement_representation_has_explicit_history(self):
+        representation = GenomeRepresentation.original("assembly", "ATGCCCTAA").with_reverse_complement("User requested comparison to reference orientation", [{"type": "reference_alignment", "status": "supporting"}], {"accession": "REF_1"})
+        self.assertEqual(representation.original_sequence, "ATGCCCTAA")
+        self.assertEqual(representation.analysis_sequence, "TTAGGGCAT")
+        self.assertEqual(representation.orientation, Orientation.REVERSE_COMPLEMENT)
+        self.assertEqual(representation.transform_history[0].operation, "reverse_complement")
+        self.assertEqual(representation.manifest()["reference"]["accession"], "REF_1")
+
+    def test_circular_rotation_representation_records_coordinate_scope(self):
+        representation = GenomeRepresentation.original("assembly", "AAACCCGGG", topology=Topology.CIRCULAR).with_rotation(4, "User selected coordinate 4 as analysis origin")
+        self.assertEqual(representation.analysis_sequence, "CCCGGGAAA")
+        self.assertEqual(representation.rotation, Rotation.ROTATED)
+        self.assertEqual(representation.transform_history[0].parameters["analysis_origin"], 4)
+        with self.assertRaises(ValueError):
+            GenomeRepresentation.original("linear", "AAACCC").with_rotation(2, "not allowed")
+
+    def test_combined_transform_history_and_analysis_coordinate_scope(self):
+        representation = GenomeRepresentation.original("assembly", "ATGAAATAA", topology=Topology.CIRCULAR).with_reverse_complement("explicit test transform").with_rotation(2, "explicit test origin")
+        self.assertEqual([event.operation for event in representation.transform_history], ["reverse_complement", "rotate"])
+        self.assertEqual(representation.analysis_sequence, "TATTTCATT")
+        self.assertIn("analysis_sequence_id", representation.manifest()["coordinate_scope"])
+
+    def test_pipeline_preserves_original_fasta_and_coordinates_use_analysis_representation(self):
+        genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        representation = GenomeRepresentation.original(genome_id, genome, topology=Topology.CIRCULAR).with_rotation(151, "Fixture-only explicit rotation")
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "represented"
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor(), representation=representation)
+            self.assertEqual((output / "original_input.fasta").read_bytes(), (ROOT / "examples/demo_phage.fasta").read_bytes())
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["genome_representation"]["analysis_sequence_id"], representation.analysis_sequence_id)
+            gff = (output / "genes.gff3").read_text()
+            self.assertIn(representation.analysis_sequence_id + "\tPhageMine\tCDS", gff)
+            self.assertIn("Analysis sequence", (output / "report.md").read_text())
+            annotations = (output / "annotation.tsv").read_text()
+            self.assertIn("analysis_sequence_id", annotations)
+            self.assertIn(representation.analysis_sequence_id, annotations)
 
     def _complete_metadata(self):
         return SubmissionMetadata.from_dict(json.loads((ROOT / "examples/submission_metadata.json").read_text()))

@@ -1,1 +1,0 @@
-This package was generated locally by PhageMine for pre-submission review. It has not been submitted to NCBI. Run an official NCBI validation/submission workflow after replacing mock evidence and supplying required submitter/source metadata.

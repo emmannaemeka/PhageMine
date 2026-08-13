@@ -1,6 +1,0 @@
-protein_id	start	end	strand	length	annotation	annotation_level	functional_confidence	biological_interest	evidence_diversity
-PM_000001	1	150	+	49	Putative structural protein (MOCK)	curated database-supported	High	0	Low
-PM_000002	150	311	+	53	Uncharacterized protein with weak domain signal (MOCK)	weak inference	Low	67	High
-PM_000003	311	475	+	54	Hypothetical protein	hypothesis requiring experimental validation	None	61	High
-PM_000004	475	642	+	55	Putative DNA metabolism protein (MOCK)	computational prediction	Moderate	0	Low
-PM_000005	642	809	+	55	Hypothetical protein	hypothesis requiring experimental validation	None	61	High

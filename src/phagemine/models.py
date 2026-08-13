@@ -67,6 +67,10 @@ class Protein:
     cds: str
     sequence: str
     gene_call_source: str
+    locus_tag: str | None = None
+    gene_call_parameters: dict[str, Any] = field(default_factory=dict)
+    start_codon: str | None = None
+    stop_codon: str | None = None
     annotation: str = "Hypothetical protein"
     annotation_level: EvidenceLevel = EvidenceLevel.HYPOTHESIS
     evidence: list[Evidence] = field(default_factory=list)

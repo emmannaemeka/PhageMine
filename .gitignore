@@ -1,0 +1,15 @@
+# Operating-system and Python artifacts
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Generated analysis and submission outputs
+results/
+tmp/
+*.tmp
+
+# Local Evidence Packs and biological databases (never commit)
+evidence_packs/
+databases/
+*.dmnd
+*.hmmpress
