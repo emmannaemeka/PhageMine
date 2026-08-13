@@ -2,3 +2,10 @@
 mock:
   version: "demo-1"
   status: "demonstration only; not a biological database"
+pfam:
+  path: null
+  hmmscan: null
+  version: null
+  evalue_threshold: null
+  coverage_threshold: null
+  trusted_cutoff: false

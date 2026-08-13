@@ -16,6 +16,7 @@ from phagemine.cli import main
 from phagemine.models import SubmissionMetadata
 from phagemine.genome_representation import GenomeRepresentation, Orientation, Rotation, Topology
 from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
+from phagemine.pfam import PfamHMMAdapter
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -192,6 +193,52 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(provenance.sequencing_platform, SequencingPlatform.UNKNOWN)
         self.assertIsNone(provenance.assembler)
         self.assertIsNone(provenance.raw_reads_available)
+
+    def test_pfam_domtblout_parser_preserves_domain_evidence(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        proteins[0].protein_id = "PM_000001"
+        proteins[0].sequence = "M" * 300
+        adapter = PfamHMMAdapter(evalue_threshold=1e-5, coverage_threshold=0.5, database_version="Pfam-test-1")
+        evidence = adapter.parse_domtblout((ROOT / "tests/fixtures/pfam_domtblout.txt").read_text(), proteins, {"status": "REAL", "fixture": True})
+        self.assertEqual(len(evidence), 1)
+        record = evidence[0]
+        self.assertEqual(record.identifier, "PF00001.1")
+        self.assertEqual(record.source, "Pfam")
+        self.assertEqual(record.status, "REAL")
+        self.assertEqual(record.evidence_strength, "strong")
+        self.assertEqual(record.family_name, "PF00001.1")
+        self.assertEqual(record.description, "synthetic capsid-like domain")
+        self.assertEqual(record.coordinates, {"start": 20, "end": 200})
+        self.assertAlmostEqual(record.metrics["hmm_score"], 145.0)
+        self.assertAlmostEqual(record.metrics["independent_e_value"], 3e-42)
+        self.assertEqual(record.provenance["protein_id"], "PM_000001")
+
+    def test_pfam_unavailable_has_no_fabricated_evidence(self):
+        result = PfamHMMAdapter("/definitely/missing/Pfam-A.hmm", "/definitely/missing/hmmscan").analyze([])
+        self.assertEqual(result.status, "UNAVAILABLE")
+        self.assertEqual(result.evidence, [])
+        self.assertIn("no domain evidence was fabricated", result.message)
+
+    def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "real-no-db"
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["evidence_adapters"][0]["status"], "UNAVAILABLE")
+            self.assertNotIn("MOCK", {adapter["status"] for adapter in manifest["evidence_adapters"]})
+            evidence = json.loads((output / "evidence.json").read_text())
+            self.assertFalse(any(item["source"] == "mock-phage-evidence" for protein in evidence for item in protein["evidence"]))
+
+    def test_no_evidence_does_not_assign_misleading_ordinal_ranks(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "insufficient"
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["discovery_ranking"]["status"], "INSUFFICIENT_EVIDENCE")
+            ranking = (output / "candidate_ranking.tsv").read_text().splitlines()
+            self.assertTrue(all(line.startswith("NA\t") for line in ranking[1:]))
+            self.assertIn("INSUFFICIENT_EVIDENCE", (output / "report.md").read_text())
 
     def test_fasta_analysis_without_sequencing_metadata_uses_unknown(self):
         with tempfile.TemporaryDirectory() as temp:

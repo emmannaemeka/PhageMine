@@ -39,3 +39,7 @@ Core production analysis uses the `PHANOTATEPredictor` adapter by default. Insta
 ## Sequencing provenance
 
 PhageMine analyzes assembled FASTA independently of sequencing platform. Optionally pass `--sequencing-provenance provenance.json` to record platform, library, assembly, polishing, and raw-read availability. Without it, the platform is explicitly `UNKNOWN`; PhageMine never infers sequencing technology from FASTA. Sequencing provenance is separate from genome topology, orientation, and rotation.
+
+## Optional Pfam evidence
+
+PhageMine can use a user-supplied local Pfam HMM database with `--pfam /path/to/Pfam-A.hmm`. HMMER must be installed separately (or supplied with `--pfam-hmmscan`). PhageMine does not download Pfam. Missing Pfam/HMMER is reported as `UNAVAILABLE` and produces no fabricated domain evidence. Pfam hits are evidence records, not automatic functional assignments.

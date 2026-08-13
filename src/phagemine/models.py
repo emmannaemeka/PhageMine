@@ -55,6 +55,13 @@ class Evidence:
     status: str = "mock"
     supports: bool = True
     metrics: dict[str, Any] = field(default_factory=dict)
+    identifier: str | None = None
+    threshold: dict[str, Any] = field(default_factory=dict)
+    coordinates: dict[str, int] | None = None
+    provenance: dict[str, Any] = field(default_factory=dict)
+    evidence_strength: str | None = None
+    family_name: str | None = None
+    description: str | None = None
 
 
 @dataclass

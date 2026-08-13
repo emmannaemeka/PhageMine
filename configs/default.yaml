@@ -3,7 +3,13 @@ gene_prediction:
   predictor: phanotate
   # PHANOTATE is an external phage-oriented gene caller. Demo ORF calling is fixture-only.
 evidence:
-  backend: mock
+  backend: optional
+  pfam:
+    path: null
+    hmmscan: null
+    evalue_threshold: null
+    coverage_threshold: null
+    trusted_cutoff: false
 scoring:
   high_interest: 70
   moderate_interest: 45
