@@ -42,15 +42,25 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
             observed_cds = _reverse_complement(observed_cds)
         if observed_cds != protein.cds:
             errors.append({**prefix, "code": "cds_fasta_mismatch", "message": "CDS sequence does not match its stated coordinates in submitted FASTA."})
+        if len(protein.cds) % 3 != 0:
+            errors.append({**prefix, "code": "cds_length_not_multiple_of_three", "message": "CDS length is not divisible by three."})
         if not protein.sequence or "*" in protein.sequence:
             errors.append({**prefix, "code": "invalid_translation", "message": "Protein translation is empty or contains an internal stop."})
+        expected_translation = __import__("phagemine.genome", fromlist=["translate"]).translate(protein.cds)
+        if protein.sequence != expected_translation:
+            errors.append({**prefix, "code": "translation_mismatch", "message": "Protein translation does not match the submitted CDS sequence."})
+        if protein.strand in {"+", "-"} and len(protein.cds) >= 6:
+            if protein.cds[:3] not in {"ATG", "GTG", "TTG"}:
+                warnings.append({**prefix, "code": "noncanonical_start_codon", "message": "CDS does not begin with a standard PHANOTATE start codon."})
+            if protein.cds[-3:] not in {"TAA", "TAG", "TGA"}:
+                warnings.append({**prefix, "code": "missing_terminal_stop_codon", "message": "CDS does not end with a standard stop codon."})
         if "mock" in protein.annotation.lower() or any(e.status == "mock" for e in protein.evidence):
             warnings.append({**prefix, "code": "mock_or_unsupported_function", "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein."})
         if protein.annotation_level.value in {"weak inference", "hypothesis requiring experimental validation"}:
             warnings.append({**prefix, "code": "uncharacterized_product", "message": "No supported functional product name is available; feature product will be hypothetical protein."})
     if provenance.get("input_sha256") is None:
         errors.append({"code": "missing_provenance", "message": "Input checksum is required for provenance linkage."})
-    return {"validator": "PhageMine pre-submission validator", "official_ncbi_validation": False, "genome_id": genome_id, "sequence_length": len(genome), "valid": not errors, "errors": errors, "warnings": warnings, "provenance": provenance}
+    return {"validator": "PhageMine pre-submission validator", "official_ncbi_validation": False, "genome_id": genome_id, "sequence_length": len(genome), "coordinate_system": "1-based-inclusive", "valid": not errors, "errors": errors, "warnings": warnings, "provenance": provenance}
 
 
 def product_name(protein: Protein) -> str:
@@ -114,7 +124,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
     (root / "submission.sbt").write_text(_submission_template(metadata))
-    cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "protein_fasta_id": f"gnl|PhageMine|{p.protein_id}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
+    cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{p.protein_id}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
     (root / "cds_provenance.json").write_text(json.dumps(cds_provenance, indent=2, default=str, sort_keys=True))
     table2asn = table2asn_status(root, table2asn_executable)
     state, missing = readiness(pre_validation, metadata, table2asn)

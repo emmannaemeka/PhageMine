@@ -112,7 +112,13 @@ class PHANOTATEPredictor(GenePredictor):
             genomic_cds = sequence[start - 1:end]
             cds = reverse_complement(genomic_cds) if strand == "-" else genomic_cds
             protein = Protein(genome_id, "", start, end, strand, cds, translate(cds), "PHANOTATE")
-            protein.gene_call_parameters = {"raw_start": raw_start, "raw_end": raw_end, "reported_strand": strand_token}
+            protein.gene_call_parameters = {
+                "raw_start": raw_start,
+                "raw_end": raw_end,
+                "reported_strand": strand_token,
+                "coordinate_system": "1-based-inclusive",
+                "coordinate_transform": "none",
+            }
             proteins.append(protein)
         if not proteins:
             raise ValueError("PHANOTATE produced no parseable gene calls; inspect its output format and version.")

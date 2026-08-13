@@ -71,6 +71,7 @@ class PhageMineTests(unittest.TestCase):
         protein = predict_orfs(genome_id, genome)[0]
         protein.strand = "-"
         protein.cds = protein.cds.translate(str.maketrans("ACGT", "TGCA"))[::-1]
+        protein.sequence = translate(protein.cds)
         table = feature_table(genome_id, [protein])
         self.assertIn(f"{protein.end}\t{protein.start}\tCDS", table)
         self.assertTrue(validate(genome_id, genome, [protein], {"input_sha256": "fixture"})["valid"])
