@@ -16,7 +16,7 @@ from .pfam import PfamHMMAdapter
 from .resources import EvidenceResourceManager, ResourceType
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None) -> int:
     genome_id, genome = read_fasta(fasta)
     representation = representation or GenomeRepresentation.original(genome_id, genome)
     sequencing_provenance = sequencing_provenance or SequencingProvenance()
@@ -41,18 +41,22 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         if registered:
             pfam_path = registered["path"]
             pfam_origin = "registered_resource"
-    pfam_adapter = PfamHMMAdapter(pfam_path, pfam_hmmscan, pfam_evalue, pfam_coverage, pfam_trusted_cutoff)
+    pfam_adapter = PfamHMMAdapter(pfam_path, pfam_hmmscan, pfam_evalue, pfam_coverage, pfam_trusted_cutoff, threshold_mode=pfam_threshold_mode)
     pfam_result = pfam_adapter.analyze(proteins)
     pfam_result.provenance["resource_origin"] = pfam_origin
     proteins_by_id = {protein.protein_id: protein for protein in proteins}
     for evidence in pfam_result.evidence:
-        protein_id = evidence.provenance.get("protein_id")
+        # The query identifier is authoritative in parsed HMMER metrics. Keep
+        # provenance-only adapters compatible, but do not drop a valid hit if
+        # an adapter has not duplicated that identifier into provenance yet.
+        protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
         if protein_id in proteins_by_id:
+            evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": pfam_result.adapter, "status": pfam_result.status, "provenance": pfam_result.provenance, "message": pfam_result.message})
     mine(proteins, mock=use_mock_evidence)
     candidates = ranked_candidates(proteins)
-    ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and all(protein.biological_interest == 0 and not any(e.supports for e in protein.evidence) for protein in candidates) else "RANKED"
+    ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"} for protein in candidates for e in protein.evidence) else "RANKED"
     manifest = {"pipeline": "PhageMine", "pipeline_version": "0.1.0", "command": command, "input": str(fasta), "input_sha256": checksum(fasta), "genome_representation": representation.manifest(), "sequencing_provenance": sequencing_provenance.manifest(), "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "evidence_adapters": evidence_adapters, "discovery_ranking": {"status": ranking_status, "message": "Candidate prioritization was not performed because sufficient evidence was unavailable." if ranking_status == "INSUFFICIENT_EVIDENCE" else "Candidates ranked by available evidence."}}
     quality_control = assess(representation.analysis_sequence, proteins)
     manifest["quality_control"] = quality_control

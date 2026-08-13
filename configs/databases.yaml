@@ -9,3 +9,4 @@ pfam:
   evalue_threshold: null
   coverage_threshold: null
   trusted_cutoff: false
+  threshold_mode: none

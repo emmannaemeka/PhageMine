@@ -10,6 +10,7 @@ evidence:
     evalue_threshold: null
     coverage_threshold: null
     trusted_cutoff: false
+    threshold_mode: none
 scoring:
   high_interest: 70
   moderate_interest: 45

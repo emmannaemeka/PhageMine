@@ -30,7 +30,7 @@ def mine(proteins: list[Protein], mock: bool = False) -> None:
             if mock and any(c != "uncharacterized" for c in categories):
                 components["context"] = 14
                 protein.evidence.append(Evidence("genomic_context", f"Mock neighborhood contains {', '.join(sorted(set(categories)))} annotation(s); context suggests, but does not prove, association.", EvidenceLevel.WEAK, "mock-context", "demo-1", metrics={"upstream": previous.protein_id if previous else None, "downstream": following.protein_id if following else None, "orientation": protein.strand}))
-            if any(e.modality == "domain" and e.supports for e in protein.evidence):
+            if any(e.modality == "domain" and e.supports and e.evidence_strength == "STRONG" for e in protein.evidence):
                 components["functional_signal"] = 12
             elif mock:
                 # weak sequence signal is only generated for unknown candidates

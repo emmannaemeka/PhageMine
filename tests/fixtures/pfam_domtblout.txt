@@ -1,5 +1,5 @@
-# Synthetic HMMER hmmscan --domtblout fixture
+# Real-format HMMER 3.4 hmmscan --domtblout fixture
 # target name accession tlen query name accession qlen full sequence E-value score bias # dom c-Evalue i-Evalue score bias hmm from hmm to ali from ali to env from env to acc description
-PF00001.1 PF00001.1 120 PM_000001 - 300 1e-40 150.0 0.2 1 1 2e-42 3e-42 145.0 0.1 1 110 20 200 15 205 0.98 synthetic capsid-like domain
+ATP-synt_D PF01813.21 196 PM_000001 - 104 0.00079 19.5 0.2 1 1 6.7e-07 0.00082 19.4 0.2 3 53 12 62 10 102 0.91 ATP synthase subunit D
 PF00002.1 PF00002.1 80 PM_000002 - 200 2e-03 20.0 0.0 1 1 2e-03 2e-03 20.0 0.0 1 30 10 39 8 42 0.70 synthetic weak domain
 PF00003.1 PF00003.1 80 PM_000003 - 200 1e-30 100.0 0.0 1 1 1e-30 1e-30 100.0 0.0 1 70 1 70 1 70 0.90 synthetic filtered domain

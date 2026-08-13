@@ -3,6 +3,7 @@ import os
 import stat
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from phagemine.genome import predict_orfs, translate
@@ -17,6 +18,8 @@ from phagemine.models import SubmissionMetadata
 from phagemine.genome_representation import GenomeRepresentation, Orientation, Rotation, Topology
 from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
 from phagemine.pfam import PfamHMMAdapter
+from phagemine.evidence import EvidenceAdapterResult
+from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
 
 
@@ -199,21 +202,98 @@ class PhageMineTests(unittest.TestCase):
         _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
         proteins = predict_orfs("demo", genome)
         proteins[0].protein_id = "PM_000001"
-        proteins[0].sequence = "M" * 300
-        adapter = PfamHMMAdapter(evalue_threshold=1e-5, coverage_threshold=0.5, database_version="Pfam-test-1")
+        proteins[0].sequence = "M" * 104
+        adapter = PfamHMMAdapter(database_version="Pfam-test-1")
         evidence = adapter.parse_domtblout((ROOT / "tests/fixtures/pfam_domtblout.txt").read_text(), proteins, {"status": "REAL", "fixture": True})
-        self.assertEqual(len(evidence), 1)
-        record = evidence[0]
-        self.assertEqual(record.identifier, "PF00001.1")
+        self.assertEqual(len(evidence), 3)
+        record = next(item for item in evidence if item.provenance["protein_id"] == "PM_000001")
+        self.assertEqual(record.identifier, "PF01813.21")
+        self.assertEqual(record.family_name, "ATP-synt_D")
         self.assertEqual(record.source, "Pfam")
         self.assertEqual(record.status, "REAL")
-        self.assertEqual(record.evidence_strength, "strong")
-        self.assertEqual(record.family_name, "PF00001.1")
-        self.assertEqual(record.description, "synthetic capsid-like domain")
-        self.assertEqual(record.coordinates, {"start": 20, "end": 200})
-        self.assertAlmostEqual(record.metrics["hmm_score"], 145.0)
-        self.assertAlmostEqual(record.metrics["independent_e_value"], 3e-42)
+        self.assertEqual(record.evidence_strength, "WEAK")
+        self.assertEqual(record.description, "ATP synthase subunit D")
+        self.assertEqual(record.coordinates, {"start": 12, "end": 62})
+        self.assertAlmostEqual(record.metrics["independent_domain_e_value"], 6.7e-7)
+        self.assertAlmostEqual(record.metrics["conditional_domain_e_value"], 0.00082)
+        self.assertEqual(record.metrics["query_protein_id"], "PM_000001")
+        self.assertEqual(record.metrics["envelope_coordinates"], {"start": 10, "end": 102})
         self.assertEqual(record.provenance["protein_id"], "PM_000001")
+        weak = next(item for item in evidence if item.provenance["protein_id"] == "PM_000002")
+        self.assertEqual(weak.evidence_strength, "WEAK")
+        self.assertFalse("Putative" in weak.description or "protein" == weak.description)
+
+    def test_pfam_thresholds_retain_rejected_raw_hits(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        adapter = PfamHMMAdapter(evalue_threshold=1e-5, coverage_threshold=0.4)
+        evidence = adapter.parse_domtblout((ROOT / "tests/fixtures/pfam_domtblout.txt").read_text(), proteins, {"status": "REAL"})
+        rejected = next(item for item in evidence if item.provenance["protein_id"] == "PM_000002")
+        self.assertEqual(rejected.evidence_strength, "REJECTED")
+        self.assertFalse(rejected.supports)
+        self.assertIn("raw_hmmscan_row", rejected.metrics)
+
+    def test_pfam_ga_mode_classifies_hits_strong_and_records_mode(self):
+        adapter = PfamHMMAdapter(threshold_mode="GA", hmmscan="hmmscan")
+        self.assertEqual(adapter.threshold_mode, "GA")
+        self.assertTrue(adapter.trusted_cutoff)
+        self.assertIn("threshold_mode", adapter.provenance())
+        self.assertEqual(adapter.provenance()["threshold_mode"], "GA")
+        self.assertTrue(adapter.provenance()["trusted_cutoff"])
+        command = adapter._search_command(Path("domtblout"), Path("proteins.faa"))
+        self.assertIn("--cut_ga", command)
+
+    def test_pfam_ga_parser_marks_reported_hits_strong_and_mining_can_use_them(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        proteins[0].sequence = "M" * 104
+        adapter = PfamHMMAdapter(threshold_mode="GA", database_version="Pfam-test-1")
+        evidence = adapter.parse_domtblout((ROOT / "tests/fixtures/pfam_domtblout.txt").read_text(), proteins)
+        ga = next(item for item in evidence if item.provenance["protein_id"] == "PM_000001")
+        self.assertEqual(ga.evidence_strength, "STRONG")
+        self.assertTrue(ga.supports)
+        proteins[0].evidence.append(ga)
+        mine(proteins)
+        self.assertGreater(proteins[0].biological_interest, 0)
+
+    def test_weak_only_pfam_does_not_enable_ranking(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        adapter = PfamHMMAdapter(threshold_mode="NONE")
+        evidence = adapter.parse_domtblout((ROOT / "tests/fixtures/pfam_domtblout.txt").read_text(), proteins)
+        proteins[0].evidence.append(next(item for item in evidence if item.provenance["protein_id"] == "PM_000001"))
+        mine(proteins)
+        self.assertEqual(proteins[0].biological_interest, 0)
+        self.assertEqual(proteins[0].evidence_diversity, "Low")
+
+    def test_pipeline_persists_accepted_ga_pfam_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "ga-persistence"
+            _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+            proteins = predict_orfs("demo", genome)
+            accepted = Evidence(
+                "domain", "Pfam domain evidence", EvidenceLevel.COMPUTATIONAL,
+                "Pfam", "Pfam-test", status="REAL", supports=True,
+                identifier="PF00001", evidence_strength="STRONG",
+                family_name="Test_family", description="Test domain",
+                metrics={"query_protein_id": proteins[0].protein_id,
+                         "independent_domain_e_value": 1e-8},
+                provenance={"threshold_mode": "GA", "trusted_cutoff": True},
+            )
+            result = EvidenceAdapterResult(
+                "PfamHMMAdapter", "REAL", evidence=[accepted],
+                provenance={"threshold_mode": "GA", "trusted_cutoff": True},
+            )
+            with patch("phagemine.pipeline.PfamHMMAdapter") as adapter:
+                adapter.return_value.analyze.return_value = result
+                run(ROOT / "examples/demo_phage.fasta", output,
+                    predictor=DemoORFPredictor(), pfam_threshold_mode="GA")
+            records = json.loads((output / "evidence.json").read_text())
+            persisted = [e for p in records for e in p["evidence"] if e["source"] == "Pfam"]
+            self.assertEqual(len(persisted), 1)
+            self.assertEqual(persisted[0]["status"], "REAL")
+            self.assertEqual(persisted[0]["provenance"]["threshold_mode"], "GA")
+            self.assertTrue(persisted[0]["provenance"]["trusted_cutoff"])
 
     def test_pfam_unavailable_has_no_fabricated_evidence(self):
         result = PfamHMMAdapter("/definitely/missing/Pfam-A.hmm", "/definitely/missing/hmmscan").analyze([])
@@ -224,7 +304,7 @@ class PhageMineTests(unittest.TestCase):
     def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "real-no-db"
-            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor(), pfam_path="/definitely/missing/Pfam-A.hmm")
             manifest = json.loads((output / "run_manifest.json").read_text())
             self.assertEqual(manifest["evidence_adapters"][0]["status"], "UNAVAILABLE")
             self.assertNotIn("MOCK", {adapter["status"] for adapter in manifest["evidence_adapters"]})
