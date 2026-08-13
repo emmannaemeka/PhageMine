@@ -11,7 +11,7 @@ from pathlib import Path
 from phagemine.genome import predict_orfs, translate
 from phagemine.gene_prediction import DemoORFPredictor, PHANOTATEPredictor
 from phagemine.io import read_fasta
-from phagemine.models import Evidence, EvidenceLevel
+from phagemine.models import Evidence, EvidenceLevel, Protein
 from phagemine.pipeline import run
 from phagemine.genbank import feature_table, product_name, table2asn_status, validate, write_package
 from phagemine.annotation import MockEvidenceBackend
@@ -25,6 +25,7 @@ from phagemine.phrogs import MMSEQS_FORMAT, PHROGSMMseqsAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
 from phagemine.resume import _load_source, RESUME_STAGES
+from phagemine.fusion import classify_protein, classify_proteins, normalize_function, write_classification
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -34,6 +35,94 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PhageMineTests(unittest.TestCase):
+    def _fusion_protein(self, evidence=()):
+        return Protein("g", "P", 1, 30, "+", "ATG" * 10, "M" * 10, "test", evidence=list(evidence))
+
+    def _fusion_e(self, source, desc, strength="STRONG", supports=True, modality="test", category=None, identifier="x"):
+        metrics = {"functional_category": category} if category else {}
+        return Evidence(modality, "statement", EvidenceLevel.COMPUTATIONAL, source, "1", status="REAL", supports=supports, identifier=identifier, evidence_strength=strength, description=desc, metrics=metrics)
+
+    def test_fusion_classification_rules_and_determinism(self):
+        unknown = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="unknown")]))
+        self.assertEqual(unknown["functional_state"], "CONSERVED_UNKNOWN")
+        probable = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "RNA polymerase")]))
+        self.assertEqual(probable["functional_state"], "PROBABLE_FUNCTION")
+        orthology_pair = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "toxin", identifier="p"), self._fusion_e("VOGDB", "toxin", identifier="v")]))
+        self.assertEqual(orthology_pair["functional_state"], "PROBABLE_FUNCTION")
+        self.assertEqual(orthology_pair["supporting_source_count"], 2)
+        self.assertEqual(orthology_pair["supporting_modality_count"], 2)
+        known = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "major capsid protein"), self._fusion_e("PHROGs", "Major capsid protein {ECO:0001}", identifier="y")]))
+        self.assertEqual(known["functional_state"], "KNOWN_FUNCTION")
+        broad = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="head and packaging")]))
+        self.assertEqual(broad["functional_state"], "FUNCTIONAL_CLASS_ONLY")
+        unresolved = classify_protein(self._fusion_protein())
+        self.assertEqual(unresolved["functional_state"], "UNRESOLVED")
+        rejected = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "DNA polymerase", supports=False)]))
+        self.assertEqual(rejected["functional_state"], "UNRESOLVED")
+        conflict = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "integrase"), self._fusion_e("PHROGs", "major capsid protein", identifier="y")]))
+        self.assertEqual(conflict["functional_state"], "CONFLICTING_EVIDENCE")
+        same_source = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "integrase", identifier="a"), self._fusion_e("PHROGs", "integrase", identifier="b")]))
+        self.assertEqual(same_source["supporting_source_count"], 1)
+        self.assertEqual(same_source["supporting_modality_count"], 1)
+        rejected_alt = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "integrase"), self._fusion_e("PHROGs", "major capsid protein", supports=False, identifier="rejected")]))
+        self.assertNotEqual(rejected_alt["functional_state"], "CONFLICTING_EVIDENCE")
+        hypothetical = classify_protein(self._fusion_protein([self._fusion_e("VOGDB", "REFSEQ hypothetical protein")]))
+        self.assertEqual(hypothetical["functional_state"], "CONSERVED_UNKNOWN")
+        unavailable = classify_protein(self._fusion_protein())
+        self.assertEqual(unavailable["functional_state"], "UNRESOLVED")
+        original = self._fusion_e("PHROGs", "RNA polymerase")
+        before = original.to_dict() if hasattr(original, "to_dict") else original.__dict__.copy()
+        classify_protein(self._fusion_protein([original]))
+        self.assertEqual(before, original.__dict__)
+        self.assertEqual(normalize_function("Major capsid protein {ECO:0001}"), "major capsid protein")
+        self.assertEqual(unknown, classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="unknown")])))
+
+    def test_fusion_outputs_cover_integration_fixture(self):
+        proteins = [self._fusion_protein() for _ in range(99)]
+        for i, protein in enumerate(proteins, 1): protein.protein_id = f"P{i:03d}"
+        with tempfile.TemporaryDirectory() as temp:
+            write_classification(temp, proteins)
+            self.assertEqual(len(json.loads((Path(temp) / "functional_classification.json").read_text())), 99)
+            self.assertEqual(len((Path(temp) / "functional_classification.tsv").read_text().splitlines()), 100)
+            self.assertEqual([x["protein_id"] for x in classify_proteins(proteins)], [x["protein_id"] for x in classify_proteins(proteins)])
+
+    def test_fusion_conserved_unknown_from_phrogs_and_vogdb(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function"), self._fusion_e("VOGDB", "hypothetical protein")]))
+        self.assertEqual(result["functional_state"], "CONSERVED_UNKNOWN")
+
+    def test_fusion_phrogs_and_vogdb_same_function_is_probable(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "portal protein"), self._fusion_e("VOGDB", "portal protein")]))
+        self.assertEqual(result["functional_state"], "PROBABLE_FUNCTION")
+        self.assertNotEqual(result["functional_state"], "KNOWN_FUNCTION")
+
+    def test_fusion_category_only(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="head and packaging")]))
+        self.assertEqual(result["functional_state"], "FUNCTIONAL_CLASS_ONLY")
+
+    def test_fusion_supporting_source_and_modality_counts(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "portal protein"), self._fusion_e("PHROGs", "portal protein", identifier="2"), self._fusion_e("VOGDB", "portal protein")]))
+        self.assertEqual(result["supporting_source_count"], 2)
+        self.assertEqual(result["supporting_modality_count"], 2)
+
+    def test_fusion_rejected_alternative_cannot_conflict(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "integrase"), self._fusion_e("PHROGs", "major capsid protein", supports=False)]))
+        self.assertNotEqual(result["functional_state"], "CONFLICTING_EVIDENCE")
+
+    def test_fusion_unavailable_is_not_negative_evidence(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "portal protein")]))
+        self.assertEqual(result["functional_state"], "PROBABLE_FUNCTION")
+
+    def test_fusion_ambiguous_labels_are_not_conflict(self):
+        result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "DNA-dependent RNA polymerase"), self._fusion_e("VOGDB", "T7 RNA polymerase")]))
+        self.assertNotEqual(result["functional_state"], "CONFLICTING_EVIDENCE")
+        self.assertTrue(result["ambiguity_flags"])
+
+    def test_fusion_resume_output_layer_regenerates_both_files(self):
+        proteins = [self._fusion_protein()]
+        with tempfile.TemporaryDirectory() as temp:
+            write_classification(temp, proteins)
+            self.assertTrue((Path(temp) / "functional_classification.json").is_file())
+            self.assertTrue((Path(temp) / "functional_classification.tsv").is_file())
     def test_resume_progress_uses_resume_stage_ledger_without_duplicate_labels(self):
         stream = StringIO()
         progress = ProgressReporter(stream=stream)

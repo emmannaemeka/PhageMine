@@ -10,9 +10,10 @@ from pathlib import Path
 from .models import Protein
 from .genome_representation import GenomeRepresentation
 from .sequencing_provenance import SequencingProvenance
+from .fusion import write_classification
 
 
-def write_outputs(output: str | Path, representation: GenomeRepresentation, sequencing_provenance: SequencingProvenance, proteins: list[Protein], candidates: list[Protein], manifest: dict, quality_control: dict | None = None, original_fasta: str | Path | None = None) -> None:
+def write_outputs(output: str | Path, representation: GenomeRepresentation, sequencing_provenance: SequencingProvenance, proteins: list[Protein], candidates: list[Protein], manifest: dict, quality_control: dict | None = None, original_fasta: str | Path | None = None, classifications: list[dict] | None = None) -> None:
     root = Path(output)
     root.mkdir(parents=True, exist_ok=True)
     if original_fasta is not None:
@@ -36,6 +37,7 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
         for rank, p in enumerate(candidates, 1):
             writer.writerow(["NA" if insufficient else rank, p.protein_id, p.annotation, p.biological_interest, p.functional_confidence, p.evidence_diversity, json.dumps(p.score_components, sort_keys=True)])
     (root / "evidence.json").write_text(json.dumps([asdict(p) for p in proteins], indent=2, default=str))
+    write_classification(root, proteins, classifications)
     manifest["created_at"] = datetime.now(timezone.utc).isoformat()
     (root / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     if quality_control is not None:

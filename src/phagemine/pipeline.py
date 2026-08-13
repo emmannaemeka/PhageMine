@@ -18,6 +18,7 @@ from .swissprot import SwissProtEvidenceAdapter
 from .phrogs import PHROGSMMseqsAdapter
 from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
+from .fusion import classify_proteins
 
 
 def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, progress: ProgressReporter | None = None) -> int:
@@ -127,6 +128,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     progress.finish(f"{sum(e.supports for e in phrogs_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in phrogs_result.evidence if e.supports})} proteins")
     progress.start("evidence integration")
     progress.finish(f"{sum(len(p.evidence) for p in proteins)} evidence records")
+    classifications = classify_proteins(proteins)
     progress.start("candidate ranking/mining")
     mine(proteins, mock=use_mock_evidence)
     candidates = ranked_candidates(proteins)
@@ -136,7 +138,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     progress.start("QC/report generation")
     quality_control = assess(representation.analysis_sequence, proteins)
     manifest["quality_control"] = quality_control
-    write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta)
+    write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta, classifications)
     progress.finish(f"outputs written to {output}")
     # Local package generation follows annotation, mining, ranking, and QC evidence collection.
     progress.start("GenBank pre-submission package")
