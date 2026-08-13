@@ -14,10 +14,11 @@ from .sequencing_provenance import SequencingProvenance
 from .annotation import MockEvidenceBackend
 from .pfam import PfamHMMAdapter
 from .vog import VOGHMMAdapter
+from .swissprot import SwissProtEvidenceAdapter
 from .resources import EvidenceResourceManager, ResourceType
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5) -> int:
     genome_id, genome = read_fasta(fasta)
     representation = representation or GenomeRepresentation.original(genome_id, genome)
     sequencing_provenance = sequencing_provenance or SequencingProvenance()
@@ -73,6 +74,24 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": vog_result.adapter, "status": vog_result.status, "provenance": vog_result.provenance, "message": vog_result.message})
+    swiss_origin = "explicit_cli" if swissprot_path else "unavailable"
+    swiss_version = None
+    if swissprot_path is None:
+        registered_swiss = EvidenceResourceManager().find(ResourceType.SWISSPROT)
+        if registered_swiss:
+            swissprot_path = registered_swiss["path"]
+            swiss_origin = "registered_resource"
+            swiss_version = registered_swiss.get("version")
+            swissprot_metadata = swissprot_metadata or registered_swiss.get("provenance", {}).get("metadata_path")
+    swiss_adapter = SwissProtEvidenceAdapter(swissprot_path, swissprot_metadata, diamond, database_version=swiss_version, evalue_threshold=swissprot_evalue)
+    swiss_result = swiss_adapter.analyze(proteins)
+    swiss_result.provenance["resource_origin"] = swiss_origin
+    for evidence in swiss_result.evidence:
+        protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+        if protein_id in proteins_by_id:
+            evidence.provenance.setdefault("protein_id", protein_id)
+            proteins_by_id[protein_id].evidence.append(evidence)
+    evidence_adapters.append({"adapter": swiss_result.adapter, "status": swiss_result.status, "provenance": swiss_result.provenance, "message": swiss_result.message})
     mine(proteins, mock=use_mock_evidence)
     candidates = ranked_candidates(proteins)
     ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"} for protein in candidates for e in protein.evidence) else "RANKED"

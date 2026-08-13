@@ -15,3 +15,8 @@ pfam:
     annotations: null
     evalue_threshold: 1.0e-5
     coverage_threshold: 0.5
+  swissprot:
+    path: null
+    metadata: null
+    diamond: null
+    evalue_threshold: 1.0e-5

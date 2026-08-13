@@ -19,6 +19,7 @@ from phagemine.genome_representation import GenomeRepresentation, Orientation, R
 from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
 from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
+from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -357,6 +358,46 @@ class PhageMineTests(unittest.TestCase):
     def test_vog_is_distinct_evidence_source(self):
         evidence = Evidence("viral_orthology", "VOG evidence", EvidenceLevel.COMPUTATIONAL, "VOGDB", "test", status="REAL", evidence_strength="STRONG", provenance={"protein_id": "PM_000001"})
         self.assertNotEqual(evidence.source, "Pfam")
+
+    def test_swissprot_parser_metadata_and_strengths(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        with tempfile.TemporaryDirectory() as temp:
+            dat = Path(temp) / "uniprot.dat"
+            dat.write_text("ID   001R_FRG3G              Reviewed;         100 AA.\nAC   Q6GZX4;\nDE   RecName: Full=Curated viral protein;\nOS   Test virus.\nOX   NCBI_TaxID=12345;\nGN   Name=geneA;\nPE   1: Evidence at protein level;\n//\nID   002L_FRG3G              Reviewed;         100 AA.\nAC   Q6GZX3;\nDE   RecName: Full=Second curated protein;\n//\n")
+            adapter = SwissProtEvidenceAdapter(metadata_path=dat)
+            evidence = adapter.parse_tabular((ROOT / "tests/fixtures/swissprot_diamond.tsv").read_text(), proteins)
+        strong = next(item for item in evidence if item.identifier == "Q6GZX4")
+        moderate = next(item for item in evidence if item.identifier == "Q6GZX3")
+        rejected = next(item for item in evidence if item.provenance["protein_id"] == "PM_000003")
+        self.assertEqual(strong.evidence_strength, "STRONG")
+        self.assertTrue(strong.supports)
+        self.assertEqual(strong.metrics["entry_name"], "001R_FRG3G")
+        self.assertEqual(strong.metrics["protein_name"], "Curated viral protein")
+        self.assertEqual(strong.metrics["taxonomy_id"], "12345")
+        self.assertAlmostEqual(strong.metrics["query_coverage"], 0.8)
+        self.assertAlmostEqual(strong.metrics["subject_coverage"], 0.8)
+        self.assertAlmostEqual(strong.metrics["evalue"], 1e-30)
+        self.assertLessEqual(strong.metrics["query_coverage"], 1.0)
+        self.assertLessEqual(strong.metrics["subject_coverage"], 1.0)
+        self.assertEqual(moderate.evidence_strength, "MODERATE")
+        self.assertTrue(moderate.supports)
+        self.assertEqual(rejected.evidence_strength, "REJECTED")
+        self.assertFalse(rejected.supports)
+
+    def test_swissprot_full_length_coverage_is_one(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        row = "PM_000001\tsp|Q6GZX4|001R_FRG3G\t80.0\t120\t120\t120\t1\t120\t1\t120\t1e-30\t120.0\n"
+        record = SwissProtEvidenceAdapter().parse_tabular(row, proteins)[0]
+        self.assertEqual(record.metrics["query_coverage"], 1.0)
+        self.assertEqual(record.metrics["subject_coverage"], 1.0)
+
+    def test_swissprot_subject_id_and_unavailable(self):
+        self.assertEqual(SwissProtEvidenceAdapter.parse_subject_id("sp|Q6GZX4|001R_FRG3G"), ("Q6GZX4", "001R_FRG3G"))
+        result = SwissProtEvidenceAdapter("/missing/db.dmnd", diamond="/missing/diamond").analyze([])
+        self.assertEqual(result.status, "UNAVAILABLE")
+        self.assertEqual(result.evidence, [])
 
     def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):
         with tempfile.TemporaryDirectory() as temp:
