@@ -1,0 +1,3 @@
+# query target fident alnlen qstart qend qlen tstart tend tlen evalue bits qcov tcov
+PM_000001	1	32.5	90	8	97	104	2	91	100	2e-12	75.0	0.865385	0.9
+PM_000002	2	12.0	37	12	48	104	4	40	120	0.02	14.0	0.355769	0.308333

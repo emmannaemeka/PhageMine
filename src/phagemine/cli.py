@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from .pipeline import run
+from .resume import resume
 from .models import SubmissionMetadata
 from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
@@ -27,6 +28,17 @@ def main(argv: list[str] | None = None) -> int:
     database_commands.add_parser("status", help="List registered evidence resources")
     remove = database_commands.add_parser("remove", help="Remove a resource registration")
     remove.add_argument("name")
+    resume_command = subcommands.add_parser("resume", help="Resume from a completed run and run missing evidence")
+    resume_command.add_argument("source")
+    resume_command.add_argument("--output", required=True)
+    resume_command.add_argument("--run-missing-evidence", action="store_true")
+    resume_command.add_argument("--refresh-evidence", choices=("PHROGS",))
+    resume_command.add_argument("--mmseqs")
+    resume_command.add_argument("--phrogs")
+    resume_command.add_argument("--phrogs-annotations")
+    resume_command.add_argument("--phrogs-evalue", type=float, default=1e-5)
+    resume_command.add_argument("--phrogs-coverage", type=float, default=0.5)
+    resume_command.add_argument("--phrogs-score", type=float)
     for name in ("annotate", "mine", "run", "genbank"):
         command = subcommands.add_parser(name, help=f"Run the MVP {name} workflow")
         command.add_argument("fasta", help="Single-record phage genome FASTA")
@@ -51,10 +63,25 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--swissprot-metadata", help="Optional Swiss-Prot DAT metadata path")
         command.add_argument("--diamond", help="Optional DIAMOND executable path")
         command.add_argument("--swissprot-evalue", type=float, default=1e-5, help="Swiss-Prot E-value threshold")
+        command.add_argument("--phrogs", help="Optional prepared PHROGs MMseqs2 profile database prefix")
+        command.add_argument("--phrogs-annotations", help="Optional PHROGs annotation table path")
+        command.add_argument("--mmseqs", help="Optional MMseqs2 executable path for PHROGs")
+        command.add_argument("--phrogs-evalue", type=float, default=1e-5, help="Manual PHROGs E-value threshold")
+        command.add_argument("--phrogs-coverage", type=float, default=0.5, help="Manual PHROGs query coverage threshold (0-1)")
+        command.add_argument("--phrogs-score", type=float, help="Optional manual PHROGs MMseqs2 bit-score threshold")
+        command.add_argument("--phrogs-identity", type=float, help="Optional manual PHROGs identity threshold (MMseqs2 fident percent)")
+        command.add_argument("--phrogs-alignment-length", type=int, help="Optional manual PHROGs alignment-length threshold")
         command.add_argument("--quiet", action="store_true", help="Suppress progress display")
         command.add_argument("--no-progress", action="store_true", help="Disable dynamic progress rendering")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
     args = parser.parse_args(argv)
+    if args.command == "resume":
+        try:
+            count = resume(args.source, args.output, args.run_missing_evidence, args.refresh_evidence, args.mmseqs, args.phrogs, args.phrogs_annotations, args.phrogs_evalue, args.phrogs_coverage, args.phrogs_score, ProgressReporter(quiet=False))
+        except (OSError, ValueError, RuntimeError) as exc:
+            parser.error(str(exc))
+        print(f"PhageMine resume complete: {count} predicted proteins. Outputs: {args.output}")
+        return 0
     if args.command == "databases":
         manager = EvidenceResourceManager()
         if args.database_command == "register":
@@ -75,7 +102,7 @@ def main(argv: list[str] | None = None) -> int:
         from .sequencing_provenance import SequencingProvenance
         sequencing_provenance = SequencingProvenance.from_dict(json.loads(Path(args.sequencing_provenance).read_text())) if args.sequencing_provenance else SequencingProvenance()
         from .gene_prediction import create_predictor
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

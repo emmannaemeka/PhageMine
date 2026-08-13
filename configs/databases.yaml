@@ -20,3 +20,12 @@ pfam:
     metadata: null
     diamond: null
     evalue_threshold: 1.0e-5
+  phrogs:
+    path: null
+    annotations: null
+    mmseqs: null
+    evalue_threshold: 1.0e-5
+    coverage_threshold: 0.5
+    score_threshold: null
+    identity_threshold: null
+    alignment_length_threshold: null

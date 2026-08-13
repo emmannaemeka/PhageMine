@@ -1,6 +1,7 @@
 import json
 import os
 import stat
+import shutil
 import tempfile
 import unittest
 from io import StringIO
@@ -20,8 +21,10 @@ from phagemine.genome_representation import GenomeRepresentation, Orientation, R
 from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
 from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
+from phagemine.phrogs import MMSEQS_FORMAT, PHROGSMMseqsAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
+from phagemine.resume import _load_source, RESUME_STAGES
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -31,6 +34,43 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PhageMineTests(unittest.TestCase):
+    def test_resume_progress_uses_resume_stage_ledger_without_duplicate_labels(self):
+        stream = StringIO()
+        progress = ProgressReporter(stream=stream)
+        progress.STAGES = RESUME_STAGES
+        progress.start("PHROGs")
+        progress.finish("accepted hits")
+        output = stream.getvalue()
+        self.assertIn("[PhageMine 0/11] RUNNING: PHROGs", output)
+        self.assertIn("[PhageMine 1/11] DONE: PHROGs", output)
+        self.assertNotIn("RUNNING: RUNNING:", output)
+
+    def test_resume_source_loader_reuses_proteins_and_evidence_verbatim(self):
+        source = ROOT / "results" / "phage_c6_full_evidence"
+        manifest, representation, proteins, sequence, _ = _load_source(source)
+        self.assertEqual(len(proteins), 99)
+        self.assertEqual(proteins[0].protein_id, "PM_000001")
+        self.assertEqual(proteins[0].evidence[0].provenance["adapter"], "VOGHMMAdapter")
+        self.assertEqual(manifest["evidence_adapters"][0]["provenance"]["threshold_mode"], "GA")
+        self.assertEqual(representation.analysis_sequence, sequence)
+
+    def test_resume_source_loader_rejects_protein_sequence_mismatch(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "source"
+            shutil.copytree(ROOT / "results" / "phage_c6_full_evidence", source)
+            fasta = source / "proteins.faa"
+            text = fasta.read_text()
+            fasta.write_text(text.replace("MISQDKFEYEISAMK", "MSSQDKFEYEISAMK", 1))
+            with self.assertRaisesRegex(ValueError, "protein sequence/length mismatch"):
+                _load_source(source)
+
+    def test_resume_source_loader_rejects_missing_artifact(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "source"
+            shutil.copytree(ROOT / "results" / "phage_c6_full_evidence", source)
+            (source / "evidence.json").unlink()
+            with self.assertRaisesRegex(ValueError, "missing source artifacts"):
+                _load_source(source)
     def test_progress_stage_transitions_and_non_tty_output(self):
         stream = StringIO()
         progress = ProgressReporter(stream=stream)
@@ -383,6 +423,65 @@ class PhageMineTests(unittest.TestCase):
     def test_vog_is_distinct_evidence_source(self):
         evidence = Evidence("viral_orthology", "VOG evidence", EvidenceLevel.COMPUTATIONAL, "VOGDB", "test", status="REAL", evidence_strength="STRONG", provenance={"protein_id": "PM_000001"})
         self.assertNotEqual(evidence.source, "Pfam")
+
+    def test_phrogs_parser_preserves_phrogs_semantics(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        with tempfile.TemporaryDirectory() as temp:
+            annotations = Path(temp) / "phrogs.tsv"
+            annotations.write_text("phrog\tcolor\tannot\tcategory\n1\t#fff\tunknown function\tunknown\n2\t#000\tDNA-associated protein\tDNA, RNA and nucleotide metabolism\n")
+            adapter = PHROGSMMseqsAdapter(annotations_path=annotations, evalue_threshold=1e-5, coverage_threshold=0.5)
+            evidence = adapter.parse_tabular((ROOT / "tests/fixtures/phrogs_mmseqs.tsv").read_text(), proteins)
+        strong = next(item for item in evidence if item.identifier == "1")
+        rejected = next(item for item in evidence if item.identifier == "2")
+        self.assertEqual(strong.modality, "phage_orthology")
+        self.assertEqual(strong.metrics["functional_category"], "unknown")
+        self.assertIsNone(strong.description)
+        self.assertTrue(strong.supports)
+        self.assertEqual(strong.metrics["mmseqs_score"], 75.0)
+        self.assertEqual(strong.metrics["sequence_identity"], 32.5)
+        self.assertEqual(strong.metrics["bit_score"], 75.0)
+        self.assertEqual(strong.metrics["percent_identity"], 32.5)
+        self.assertEqual(strong.metrics["raw_mmseqs_row"].split("\t")[0], "PM_000001")
+        self.assertEqual(adapter.provenance()["output_format"], MMSEQS_FORMAT)
+        self.assertEqual(strong.provenance["threshold_mode"], "MANUAL")
+        self.assertEqual(rejected.evidence_strength, "REJECTED")
+        self.assertFalse(rejected.supports)
+
+    def test_phrogs_unavailable_does_not_fabricate_evidence(self):
+        result = PHROGSMMseqsAdapter("/missing/phrogs", mmseqs="/missing/mmseqs").analyze([])
+        self.assertEqual(result.status, "UNAVAILABLE")
+        self.assertEqual(result.evidence, [])
+
+    def test_phrogs_manual_identity_and_alignment_thresholds_reject(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        adapter = PHROGSMMseqsAdapter(
+            evalue_threshold=None, coverage_threshold=None,
+            identity_threshold=40.0, alignment_length_threshold=80)
+        evidence = adapter.parse_tabular(
+            (ROOT / "tests/fixtures/phrogs_mmseqs.tsv").read_text(), proteins)
+        self.assertTrue(evidence)
+        self.assertTrue(all(not item.supports for item in evidence))
+        self.assertTrue(all(item.evidence_strength == "REJECTED" for item in evidence))
+
+    def test_phrogs_conflicting_strong_annotations_are_preserved(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        with tempfile.TemporaryDirectory() as temp:
+            annotations = Path(temp) / "phrogs.tsv"
+            annotations.write_text(
+                "phrog\tcolor\tannot\tcategory\n"
+                "1\t#fff\tintegrase\tintegration and excision\n"
+                "2\t#000\tportal protein\thead and packaging\n")
+            adapter = PHROGSMMseqsAdapter(annotations_path=annotations)
+            text = (
+                "PM_000001\t1\t50\t90\t1\t90\t104\t1\t90\t100\t1e-20\t100\t0.86\t0.9\n"
+                "PM_000001\t2\t45\t85\t2\t86\t104\t3\t87\t120\t1e-15\t90\t0.82\t0.71\n")
+            evidence = adapter.parse_tabular(text, proteins)
+        adapter._mark_conflicts(evidence)
+        self.assertEqual({item.description for item in evidence}, {"integrase", "portal protein"})
+        self.assertTrue(all(item.metrics["conflict"] for item in evidence))
 
     def test_swissprot_parser_metadata_and_strengths(self):
         _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")

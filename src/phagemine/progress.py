@@ -7,7 +7,7 @@ from typing import TextIO
 
 
 class ProgressReporter:
-    STAGES = ("input/genome validation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot",
+    STAGES = ("input/genome validation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs",
               "evidence integration", "candidate ranking/mining", "QC/report generation",
               "GenBank pre-submission package")
 
