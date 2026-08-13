@@ -11,6 +11,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from .models import EvidenceLevel, Protein, SubmissionMetadata
+from .sequencing_provenance import SequencingProvenance
 
 
 def _reverse_complement(sequence: str) -> str:
@@ -97,10 +98,11 @@ def readiness(pre_validation: dict, metadata: SubmissionMetadata, table2asn: dic
     return "READY", missing
 
 
-def write_package(output: str | Path, genome_id: str, genome: str, proteins: list[Protein], provenance: dict, metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None) -> dict:
+def write_package(output: str | Path, genome_id: str, genome: str, proteins: list[Protein], provenance: dict, metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, sequencing_provenance: SequencingProvenance | None = None) -> dict:
     root = Path(output) / "genbank_submission"
     root.mkdir(parents=True, exist_ok=True)
     metadata = metadata or SubmissionMetadata()
+    sequencing_provenance = sequencing_provenance or SequencingProvenance()
     pre_validation = validate(genome_id, genome, proteins, provenance)
     if metadata.sequence_id and metadata.sequence_id != genome_id:
         pre_validation["errors"].append({"code": "metadata_sequence_id_mismatch", "message": "Metadata sequence_id does not match the FASTA identifier."})
@@ -110,6 +112,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     (root / "features.tbl").write_text(feature_table(genome_id, proteins))
     (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{p.protein_id} {p.protein_id}\n{p.sequence}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
+    (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
     (root / "submission.sbt").write_text(_submission_template(metadata))
     cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "protein_fasta_id": f"gnl|PhageMine|{p.protein_id}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
     (root / "cds_provenance.json").write_text(json.dumps(cds_provenance, indent=2, default=str, sort_keys=True))

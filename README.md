@@ -35,3 +35,7 @@ The built-in mock backend is only for exercising the complete workflow without e
 ## Gene prediction
 
 Core production analysis uses the `PHANOTATEPredictor` adapter by default. Install PHANOTATE separately and ensure `phanotate.py` or `phanotate` is on `PATH`, or use `--phanotate /path/to/phanotate.py`. It is intentionally not bundled or installed by PhageMine. The predictor identity, executable, version, and parameters are recorded in the run manifest. The legacy simple ORF caller is retained only as `--gene-predictor demo` for test fixtures.
+
+## Sequencing provenance
+
+PhageMine analyzes assembled FASTA independently of sequencing platform. Optionally pass `--sequencing-provenance provenance.json` to record platform, library, assembly, polishing, and raw-read availability. Without it, the platform is explicitly `UNKNOWN`; PhageMine never infers sequencing technology from FASTA. Sequencing provenance is separate from genome topology, orientation, and rotation.

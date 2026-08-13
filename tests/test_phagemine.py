@@ -15,6 +15,7 @@ from phagemine.annotation import MockEvidenceBackend
 from phagemine.cli import main
 from phagemine.models import SubmissionMetadata
 from phagemine.genome_representation import GenomeRepresentation, Orientation, Rotation, Topology
+from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,13 +46,13 @@ class PhageMineTests(unittest.TestCase):
             output = Path(temp) / "run"
             count = run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
             self.assertEqual(count, 5)
-            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "genes.gff3", "proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
+            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
                 self.assertTrue((output / filename).exists(), filename)
             report = (output / "report.md").read_text()
             self.assertIn("Computational hypothesis only", report)
             evidence = json.loads((output / "evidence.json").read_text())
             self.assertTrue(any(item["missing_evidence"] for item in evidence))
-            for filename in ("genome.fsa", "features.tbl", "proteins.faa", "validation.json", "provenance.json", "README.txt"):
+            for filename in ("genome.fsa", "features.tbl", "proteins.faa", "sequencing_provenance.json", "validation.json", "provenance.json", "README.txt"):
                 self.assertTrue((output / "genbank_submission" / filename).exists(), filename)
 
     def test_genbank_feature_table_and_validation(self):
@@ -164,6 +165,53 @@ class PhageMineTests(unittest.TestCase):
             annotations = (output / "annotation.tsv").read_text()
             self.assertIn("analysis_sequence_id", annotations)
             self.assertIn(representation.analysis_sequence_id, annotations)
+
+    def test_illumina_provenance(self):
+        provenance = SequencingProvenance.from_dict({"sequencing_platform": "ILLUMINA", "assembler": "SPAdes"})
+        self.assertEqual(provenance.sequencing_platform, SequencingPlatform.ILLUMINA)
+        self.assertEqual(provenance.assembler, "SPAdes")
+
+    def test_oxford_nanopore_provenance(self):
+        provenance = SequencingProvenance.from_dict({"sequencing_platform": "OXFORD_NANOPORE", "polishing_method": "Medaka"})
+        self.assertEqual(provenance.sequencing_platform, SequencingPlatform.OXFORD_NANOPORE)
+        self.assertEqual(provenance.polishing_method, "Medaka")
+
+    def test_pacbio_provenance(self):
+        provenance = SequencingProvenance.from_dict({"sequencing_platform": "PACBIO", "read_type": "HiFi"})
+        self.assertEqual(provenance.sequencing_platform, SequencingPlatform.PACBIO)
+        self.assertEqual(provenance.read_type, "HiFi")
+
+    def test_hybrid_provenance(self):
+        provenance = SequencingProvenance.from_dict({"sequencing_platform": "HYBRID", "assembly_method": "hybrid de novo"})
+        self.assertEqual(provenance.sequencing_platform, SequencingPlatform.HYBRID)
+        self.assertEqual(provenance.assembly_method, "hybrid de novo")
+
+    def test_unknown_provenance_does_not_invent_metadata(self):
+        provenance = SequencingProvenance()
+        self.assertEqual(provenance.sequencing_platform, SequencingPlatform.UNKNOWN)
+        self.assertIsNone(provenance.assembler)
+        self.assertIsNone(provenance.raw_reads_available)
+
+    def test_fasta_analysis_without_sequencing_metadata_uses_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "unknown-provenance"
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["sequencing_provenance"]["sequencing_platform"], "UNKNOWN")
+
+    def test_sequencing_provenance_is_preserved_and_separate_from_representation(self):
+        genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        representation = GenomeRepresentation.original(genome_id, genome)
+        provenance = SequencingProvenance.from_dict({"sequencing_platform": "OXFORD_NANOPORE", "assembler": "Flye", "raw_reads_available": True, "metadata_source": "lab notebook"})
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "ont"
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor(), representation=representation, sequencing_provenance=provenance)
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["sequencing_provenance"]["sequencing_platform"], "OXFORD_NANOPORE")
+            self.assertEqual(manifest["genome_representation"]["topology"], "UNKNOWN")
+            self.assertEqual(manifest["genome_representation"]["orientation"], "ORIGINAL")
+            package = json.loads((output / "genbank_submission" / "sequencing_provenance.json").read_text())
+            self.assertEqual(package["assembler"], "Flye")
 
     def _complete_metadata(self):
         return SubmissionMetadata.from_dict(json.loads((ROOT / "examples/submission_metadata.json").read_text()))

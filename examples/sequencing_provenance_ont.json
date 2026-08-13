@@ -1,0 +1,13 @@
+{
+  "sequencing_platform": "OXFORD_NANOPORE",
+  "library_type": "ligation",
+  "read_type": "long reads",
+  "assembler": "example-assembler",
+  "assembler_version": "1.0",
+  "polishing_method": "example-polisher",
+  "polishing_version": "1.0",
+  "assembly_method": "de novo assembly",
+  "assembly_version": "1.0",
+  "raw_reads_available": true,
+  "metadata_source": "laboratory record"
+}
