@@ -13,6 +13,7 @@ from .genome_representation import GenomeRepresentation
 from .sequencing_provenance import SequencingProvenance
 from .annotation import MockEvidenceBackend
 from .pfam import PfamHMMAdapter
+from .resources import EvidenceResourceManager, ResourceType
 
 
 def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False) -> int:
@@ -34,7 +35,15 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     if use_mock_evidence:
         mock_result = MockEvidenceBackend().analyze(proteins)
         evidence_adapters.append({"adapter": mock_result.adapter, "status": mock_result.status, "provenance": mock_result.provenance, "message": mock_result.message})
-    pfam_result = PfamHMMAdapter(pfam_path, pfam_hmmscan, pfam_evalue, pfam_coverage, pfam_trusted_cutoff).analyze(proteins)
+    pfam_origin = "explicit_cli" if pfam_path else "unavailable"
+    if pfam_path is None:
+        registered = EvidenceResourceManager().find(ResourceType.PFAM)
+        if registered:
+            pfam_path = registered["path"]
+            pfam_origin = "registered_resource"
+    pfam_adapter = PfamHMMAdapter(pfam_path, pfam_hmmscan, pfam_evalue, pfam_coverage, pfam_trusted_cutoff)
+    pfam_result = pfam_adapter.analyze(proteins)
+    pfam_result.provenance["resource_origin"] = pfam_origin
     proteins_by_id = {protein.protein_id: protein for protein in proteins}
     for evidence in pfam_result.evidence:
         protein_id = evidence.provenance.get("protein_id")

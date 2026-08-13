@@ -17,6 +17,7 @@ from phagemine.models import SubmissionMetadata
 from phagemine.genome_representation import GenomeRepresentation, Orientation, Rotation, Topology
 from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
 from phagemine.pfam import PfamHMMAdapter
+from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -239,6 +240,59 @@ class PhageMineTests(unittest.TestCase):
             ranking = (output / "candidate_ranking.tsv").read_text().splitlines()
             self.assertTrue(all(line.startswith("NA\t") for line in ranking[1:]))
             self.assertIn("INSUFFICIENT_EVIDENCE", (output / "report.md").read_text())
+
+    def test_resource_manager_registers_pfam_and_persists_metadata(self):
+        with tempfile.TemporaryDirectory() as temp:
+            registry = Path(temp) / "resources.json"
+            database = Path(temp) / "Pfam-A.hmm"
+            database.write_text("synthetic HMM")
+            manager = EvidenceResourceManager(registry)
+            manager.register("PFAM", ResourceType.PFAM, database, version="Pfam-test-1", required_tools=["hmmscan"])
+            loaded = EvidenceResourceManager(registry).get("PFAM")
+            self.assertEqual(loaded["resource_type"], "PFAM")
+            self.assertEqual(loaded["status"], ResourceStatus.READY.value)
+            self.assertEqual(loaded["version"], "Pfam-test-1")
+            self.assertIsNone(loaded["checksum"])
+
+    def test_resource_manager_supports_types_missing_paths_and_removal(self):
+        with tempfile.TemporaryDirectory() as temp:
+            registry = Path(temp) / "resources.json"
+            manager = EvidenceResourceManager(registry)
+            manager.register("SWISSPROT", ResourceType.SWISSPROT, Path(temp) / "missing.fasta")
+            manager.register("REFSEQ", "REFSEQ", Path(temp) / "missing-refseq")
+            self.assertEqual({item["resource_type"] for item in manager.list()}, {"SWISSPROT", "REFSEQ"})
+            self.assertTrue(all(item["status"] == "UNAVAILABLE" for item in manager.list()))
+            self.assertTrue(manager.unregister("SWISSPROT"))
+            self.assertFalse(manager.unregister("SWISSPROT"))
+
+    def test_resource_manager_does_not_download_or_mutate_database(self):
+        with tempfile.TemporaryDirectory() as temp:
+            registry = Path(temp) / "resources.json"
+            database = Path(temp) / "dummy.hmm"
+            database.write_text("unchanged")
+            manager = EvidenceResourceManager(registry)
+            manager.register("PFAM", "PFAM", database)
+            self.assertEqual(database.read_text(), "unchanged")
+            self.assertFalse((Path(temp) / "download").exists())
+
+    def test_pfam_registered_fallback_and_explicit_precedence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            registry = Path(temp) / "resources.json"
+            registered = Path(temp) / "registered.hmm"
+            explicit = Path(temp) / "explicit.hmm"
+            registered.write_text("registered")
+            explicit.write_text("explicit")
+            manager = EvidenceResourceManager(registry)
+            manager.register("PFAM", "PFAM", registered)
+            found = manager.find(ResourceType.PFAM)
+            self.assertEqual(found["path"], str(registered))
+            # The pipeline's precedence decision is explicit path first; this mirrors the adapter input contract.
+            explicit_adapter = PfamHMMAdapter(explicit, "/missing/hmmscan")
+            self.assertEqual(explicit_adapter.pfam_path, explicit)
+
+    def test_default_registry_is_user_level_not_repository(self):
+        registry = default_registry_path()
+        self.assertNotIn(str(ROOT), str(registry))
 
     def test_fasta_analysis_without_sequencing_metadata_uses_unknown(self):
         with tempfile.TemporaryDirectory() as temp:

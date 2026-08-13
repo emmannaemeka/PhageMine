@@ -5,12 +5,25 @@ from pathlib import Path
 
 from .pipeline import run
 from .models import SubmissionMetadata
+from .resources import EvidenceResourceManager, ResourceType
 import json
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="PhageMine: annotation followed by cautious discovery mining")
     subcommands = parser.add_subparsers(dest="command", required=True)
+    databases = subcommands.add_parser("databases", help="Manage registered local evidence resources")
+    database_commands = databases.add_subparsers(dest="database_command", required=True)
+    register = database_commands.add_parser("register", help="Register a local evidence resource")
+    register.add_argument("resource_type", choices=[item.value.lower() for item in ResourceType])
+    register.add_argument("path")
+    register.add_argument("--name")
+    register.add_argument("--version")
+    register.add_argument("--checksum")
+    register.add_argument("--notes")
+    database_commands.add_parser("status", help="List registered evidence resources")
+    remove = database_commands.add_parser("remove", help="Remove a resource registration")
+    remove.add_argument("name")
     for name in ("annotate", "mine", "run", "genbank"):
         command = subcommands.add_parser(name, help=f"Run the MVP {name} workflow")
         command.add_argument("fasta", help="Single-record phage genome FASTA")
@@ -27,6 +40,19 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--pfam-trusted-cutoff", action="store_true", help="Use configured Pfam trusted-cutoff policy when available")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
     args = parser.parse_args(argv)
+    if args.command == "databases":
+        manager = EvidenceResourceManager()
+        if args.database_command == "register":
+            name = args.name or args.resource_type.upper()
+            resource = manager.register(name, args.resource_type, args.path, version=args.version, checksum=args.checksum, notes=args.notes)
+            print(json.dumps(resource.metadata(), indent=2, sort_keys=True))
+            return 0
+        if args.database_command == "status":
+            print(json.dumps(manager.list(), indent=2, sort_keys=True))
+            return 0
+        removed = manager.unregister(args.name)
+        print(f"Removed {args.name}" if removed else f"No registration found for {args.name}")
+        return 0 if removed else 1
     output = args.output or str(Path("results") / Path(args.fasta).stem)
     try:
         metadata = SubmissionMetadata.from_dict(json.loads(Path(args.metadata).read_text())) if args.metadata else None
