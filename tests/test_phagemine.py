@@ -18,6 +18,7 @@ from phagemine.models import SubmissionMetadata
 from phagemine.genome_representation import GenomeRepresentation, Orientation, Rotation, Topology
 from phagemine.sequencing_provenance import SequencingPlatform, SequencingProvenance
 from phagemine.pfam import PfamHMMAdapter
+from phagemine.vog import VOGHMMAdapter
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -300,6 +301,62 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(result.status, "UNAVAILABLE")
         self.assertEqual(result.evidence, [])
         self.assertIn("no domain evidence was fabricated", result.message)
+
+    def test_vog_parser_maps_orthology_and_annotations(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        with tempfile.TemporaryDirectory() as temp:
+            annotations = Path(temp) / "vog.annotations.tsv"
+            annotations.write_text("#GroupName\tProteinCount\tSpeciesCount\tFunctionalCategory\tConsensusFunctionalDescription\nVOG00001\t1\t1\tS\tstructural viral protein\n")
+            adapter = VOGHMMAdapter(annotations_path=annotations, evalue_threshold=1e-5, coverage_threshold=0.5)
+            evidence = adapter.parse_domtblout((ROOT / "tests/fixtures/vog_domtblout.txt").read_text(), proteins, {"status": "REAL"})
+        strong = next(item for item in evidence if item.identifier == "VOG00001")
+        self.assertEqual(strong.source, "VOGDB")
+        self.assertEqual(strong.evidence_strength, "STRONG")
+        self.assertEqual(strong.metrics["query_coordinates"], {"start": 8, "end": 96})
+        self.assertEqual(strong.metrics["vog_id"], "VOG00001")
+        self.assertEqual(strong.metrics["functional_category"], "S")
+        self.assertEqual(strong.description, "structural viral protein")
+        self.assertEqual(strong.metrics["consensus_functional_description"], "structural viral protein")
+        self.assertEqual(strong.provenance["threshold_mode"], "MANUAL")
+
+    def test_vog_unavailable_does_not_fabricate_evidence(self):
+        result = VOGHMMAdapter("/definitely/missing/vog.hmm").analyze([])
+        self.assertEqual(result.status, "UNAVAILABLE")
+        self.assertEqual(result.evidence, [])
+        self.assertIn("no VOG evidence was fabricated", result.message)
+
+    def test_vog_rejected_rows_are_not_supportive(self):
+        _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+        proteins = predict_orfs("demo", genome)
+        evidence = VOGHMMAdapter(evalue_threshold=1e-5, coverage_threshold=0.5).parse_domtblout(
+            (ROOT / "tests/fixtures/vog_domtblout.txt").read_text(), proteins)
+        accepted = next(item for item in evidence if item.identifier == "VOG00001")
+        rejected = next(item for item in evidence if item.identifier == "VOG00002")
+        self.assertTrue(accepted.supports)
+        self.assertEqual(accepted.evidence_strength, "STRONG")
+        self.assertFalse(rejected.supports)
+        self.assertEqual(rejected.evidence_strength, "REJECTED")
+
+    def test_registered_vog_version_propagates(self):
+        with tempfile.TemporaryDirectory() as temp:
+            registry = Path(temp) / "resources.json"
+            hmm = Path(temp) / "VOGDB.hmm"
+            hmm.write_text("synthetic")
+            manager = EvidenceResourceManager(registry)
+            manager.register("VOGDB-236", ResourceType.VOGDB, hmm, version="236")
+            registered = manager.find(ResourceType.VOGDB)
+            adapter = VOGHMMAdapter(registered["path"], database_version=registered["version"], hmmscan="/missing/hmmscan")
+            self.assertEqual(adapter.provenance()["vogdb_version"], "236")
+            _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
+            proteins = predict_orfs("demo", genome)
+            row = adapter.parse_domtblout((ROOT / "tests/fixtures/vog_domtblout.txt").read_text(), proteins)[0]
+            self.assertEqual(row.source_version, "236")
+            self.assertEqual(row.provenance["vogdb_version"], "236")
+
+    def test_vog_is_distinct_evidence_source(self):
+        evidence = Evidence("viral_orthology", "VOG evidence", EvidenceLevel.COMPUTATIONAL, "VOGDB", "test", status="REAL", evidence_strength="STRONG", provenance={"protein_id": "PM_000001"})
+        self.assertNotEqual(evidence.source, "Pfam")
 
     def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):
         with tempfile.TemporaryDirectory() as temp:

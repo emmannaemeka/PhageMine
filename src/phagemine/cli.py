@@ -21,6 +21,7 @@ def main(argv: list[str] | None = None) -> int:
     register.add_argument("--version")
     register.add_argument("--checksum")
     register.add_argument("--notes")
+    register.add_argument("--annotations", help="Optional annotation table path (used by VOGDB resources)")
     database_commands.add_parser("status", help="List registered evidence resources")
     remove = database_commands.add_parser("remove", help="Remove a resource registration")
     remove.add_argument("name")
@@ -39,13 +40,19 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--pfam-coverage", type=float, help="Optional Pfam query coverage threshold (0-1)")
         command.add_argument("--pfam-trusted-cutoff", action="store_true", help="Use configured Pfam trusted-cutoff policy when available")
         command.add_argument("--pfam-threshold-mode", choices=("ga", "manual", "none"), help="Pfam threshold mode")
+        command.add_argument("--vogdb", help="Optional prepared combined VOGDB HMM database path")
+        command.add_argument("--vog-annotations", help="Optional VOGDB annotation TSV/TSV.GZ path")
+        command.add_argument("--vog-hmmscan", help="Optional hmmscan executable path for VOGDB")
+        command.add_argument("--vog-evalue", type=float, default=1e-5, help="VOGDB independent E-value threshold")
+        command.add_argument("--vog-coverage", type=float, default=0.5, help="VOGDB query coverage threshold")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
     args = parser.parse_args(argv)
     if args.command == "databases":
         manager = EvidenceResourceManager()
         if args.database_command == "register":
             name = args.name or args.resource_type.upper()
-            resource = manager.register(name, args.resource_type, args.path, version=args.version, checksum=args.checksum, notes=args.notes)
+            provenance = {"annotations_path": args.annotations} if args.annotations else None
+            resource = manager.register(name, args.resource_type, args.path, version=args.version, checksum=args.checksum, notes=args.notes, provenance=provenance)
             print(json.dumps(resource.metadata(), indent=2, sort_keys=True))
             return 0
         if args.database_command == "status":
@@ -60,7 +67,7 @@ def main(argv: list[str] | None = None) -> int:
         from .sequencing_provenance import SequencingProvenance
         sequencing_provenance = SequencingProvenance.from_dict(json.loads(Path(args.sequencing_provenance).read_text())) if args.sequencing_provenance else SequencingProvenance()
         from .gene_prediction import create_predictor
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode)
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage)
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

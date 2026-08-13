@@ -13,10 +13,11 @@ from .genome_representation import GenomeRepresentation
 from .sequencing_provenance import SequencingProvenance
 from .annotation import MockEvidenceBackend
 from .pfam import PfamHMMAdapter
+from .vog import VOGHMMAdapter
 from .resources import EvidenceResourceManager, ResourceType
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5) -> int:
     genome_id, genome = read_fasta(fasta)
     representation = representation or GenomeRepresentation.original(genome_id, genome)
     sequencing_provenance = sequencing_provenance or SequencingProvenance()
@@ -54,6 +55,24 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": pfam_result.adapter, "status": pfam_result.status, "provenance": pfam_result.provenance, "message": pfam_result.message})
+    vog_origin = "explicit_cli" if vog_path else "unavailable"
+    vog_version = None
+    if vog_path is None:
+        registered_vog = EvidenceResourceManager().find(ResourceType.VOGDB)
+        if registered_vog:
+            vog_path = registered_vog["path"]
+            vog_origin = "registered_resource"
+            vog_version = registered_vog.get("version")
+            vog_annotations = vog_annotations or registered_vog.get("provenance", {}).get("annotations_path")
+    vog_adapter = VOGHMMAdapter(vog_path, vog_annotations, vog_hmmscan, vog_evalue, vog_coverage, database_version=vog_version)
+    vog_result = vog_adapter.analyze(proteins)
+    vog_result.provenance["resource_origin"] = vog_origin
+    for evidence in vog_result.evidence:
+        protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+        if protein_id in proteins_by_id:
+            evidence.provenance.setdefault("protein_id", protein_id)
+            proteins_by_id[protein_id].evidence.append(evidence)
+    evidence_adapters.append({"adapter": vog_result.adapter, "status": vog_result.status, "provenance": vog_result.provenance, "message": vog_result.message})
     mine(proteins, mock=use_mock_evidence)
     candidates = ranked_candidates(proteins)
     ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"} for protein in candidates for e in protein.evidence) else "RANKED"

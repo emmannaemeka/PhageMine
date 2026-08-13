@@ -14,6 +14,7 @@ from typing import Any
 
 class ResourceType(str, Enum):
     PFAM = "PFAM"
+    VOGDB = "VOGDB"
     SWISSPROT = "SWISSPROT"
     REFSEQ = "REFSEQ"
     PHAGE_PROTEINS = "PHAGE_PROTEINS"

@@ -10,3 +10,8 @@ pfam:
   coverage_threshold: null
   trusted_cutoff: false
   threshold_mode: none
+  vogdb:
+    path: null
+    annotations: null
+    evalue_threshold: 1.0e-5
+    coverage_threshold: 0.5
