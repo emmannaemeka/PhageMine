@@ -3,6 +3,7 @@ import os
 import stat
 import tempfile
 import unittest
+from io import StringIO
 from unittest.mock import patch
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from phagemine.sequencing_provenance import SequencingPlatform, SequencingProven
 from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
+from phagemine.progress import ProgressReporter
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -29,6 +31,29 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PhageMineTests(unittest.TestCase):
+    def test_progress_stage_transitions_and_non_tty_output(self):
+        stream = StringIO()
+        progress = ProgressReporter(stream=stream)
+        progress.start("Pfam")
+        progress.finish("2 accepted hits / 1 proteins")
+        text = stream.getvalue()
+        self.assertIn("RUNNING: Pfam", text)
+        self.assertIn("DONE: Pfam", text)
+        self.assertIn("2 accepted hits", text)
+
+    def test_progress_quiet_mode(self):
+        stream = StringIO()
+        progress = ProgressReporter(stream=stream, quiet=True)
+        progress.start("Pfam")
+        progress.finish("summary")
+        self.assertEqual(stream.getvalue(), "")
+
+    def test_progress_does_not_enter_scientific_outputs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "progress-output"
+            run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor(), progress=ProgressReporter(stream=StringIO()))
+            self.assertNotIn("RUNNING", (output / "run_manifest.json").read_text())
+            self.assertNotIn("DONE", (output / "annotation.tsv").read_text())
     def test_translation(self):
         self.assertEqual(translate("ATGGCTTAA"), "MA")
 

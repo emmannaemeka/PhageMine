@@ -6,6 +6,7 @@ from pathlib import Path
 from .pipeline import run
 from .models import SubmissionMetadata
 from .resources import EvidenceResourceManager, ResourceType
+from .progress import ProgressReporter
 import json
 
 
@@ -50,6 +51,8 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--swissprot-metadata", help="Optional Swiss-Prot DAT metadata path")
         command.add_argument("--diamond", help="Optional DIAMOND executable path")
         command.add_argument("--swissprot-evalue", type=float, default=1e-5, help="Swiss-Prot E-value threshold")
+        command.add_argument("--quiet", action="store_true", help="Suppress progress display")
+        command.add_argument("--no-progress", action="store_true", help="Disable dynamic progress rendering")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
     args = parser.parse_args(argv)
     if args.command == "databases":
@@ -72,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
         from .sequencing_provenance import SequencingProvenance
         sequencing_provenance = SequencingProvenance.from_dict(json.loads(Path(args.sequencing_provenance).read_text())) if args.sequencing_provenance else SequencingProvenance()
         from .gene_prediction import create_predictor
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue)
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")
