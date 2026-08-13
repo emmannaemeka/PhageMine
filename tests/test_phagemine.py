@@ -26,6 +26,7 @@ from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
 from phagemine.resume import _load_source, RESUME_STAGES
 from phagemine.fusion import classify_protein, classify_proteins, normalize_function, write_classification
+from phagemine.context import build_context, write_context
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -35,6 +36,44 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PhageMineTests(unittest.TestCase):
+    def _context_protein(self, protein_id, start, sequence="M" * 30):
+        return Protein("g", protein_id, start, start + len(sequence) * 3 - 1, "+", "ATG" * len(sequence), sequence, "test")
+
+    def _context_classification(self, protein_id, function=None, category=None, state="UNRESOLVED", conservation="NOT_ESTABLISHED"):
+        return {"protein_id": protein_id, "functional_state": state, "proposed_function": function, "functional_category": category, "conservation_status": conservation}
+
+    def test_context_coherent_unknown_module_and_unknown_preserved(self):
+        proteins = [self._context_protein("A", 1), self._context_protein("B", 100), self._context_protein("C", 199)]
+        classifications = [self._context_classification("A", "portal protein", state="PROBABLE_FUNCTION"), self._context_classification("B", state="CONSERVED_UNKNOWN", conservation="STRONGLY_CONSERVED"), self._context_classification("C", "major capsid protein", state="PROBABLE_FUNCTION")]
+        records, modules = build_context(proteins, classifications)
+        target = next(r for r in records if r["protein_id"] == "B")
+        self.assertEqual(target["functional_module"], "head_and_packaging")
+        self.assertTrue(target["conserved_unknown"])
+        self.assertIsNone(target["proposed_function"])
+        self.assertEqual(len(modules), 1)
+
+    def test_context_mixed_neighbors_and_edges(self):
+        proteins = [self._context_protein("A", 1), self._context_protein("B", 100), self._context_protein("C", 199), self._context_protein("D", 298)]
+        classifications = [self._context_classification("A", "portal protein", state="PROBABLE_FUNCTION"), self._context_classification("B"), self._context_classification("C", "integrase", state="PROBABLE_FUNCTION"), self._context_classification("D", "tail protein", state="PROBABLE_FUNCTION")]
+        records, modules = build_context(proteins, classifications)
+        self.assertIsNone(next(r for r in records if r["protein_id"] == "B")["functional_module"])
+        self.assertTrue(any(r["ambiguous_module_boundary"] for r in records))
+        self.assertIsNone(records[0]["upstream_protein_id"])
+        self.assertIsNone(records[-1]["downstream_protein_id"])
+
+    def test_context_output_deterministic_and_does_not_mutate_fusion(self):
+        proteins = [self._context_protein("A", 1), self._context_protein("B", 100)]
+        classifications = [self._context_classification("A", "portal protein", state="PROBABLE_FUNCTION"), self._context_classification("B", state="CONSERVED_UNKNOWN", conservation="CONSERVED")]
+        snapshot = json.loads(json.dumps(classifications, sort_keys=True))
+        records, modules = build_context(proteins, classifications)
+        self.assertEqual(classifications, snapshot)
+        self.assertEqual((records, modules), build_context(proteins, classifications))
+        with tempfile.TemporaryDirectory() as temp:
+            write_context(temp, records, modules)
+            self.assertTrue((Path(temp) / "genomic_context.tsv").is_file())
+            self.assertTrue((Path(temp) / "genomic_context.json").is_file())
+            self.assertTrue((Path(temp) / "modules.tsv").is_file())
+            self.assertTrue((Path(temp) / "modules.json").is_file())
     def _fusion_protein(self, evidence=()):
         return Protein("g", "P", 1, 30, "+", "ATG" * 10, "M" * 10, "test", evidence=list(evidence))
 

@@ -22,6 +22,7 @@ from .reporting import write_outputs
 from .resources import EvidenceResourceManager, ResourceType
 from .sequencing_provenance import SequencingProvenance
 from .fusion import classify_proteins
+from .context import build_context
 
 
 REUSED = ("input/genome validation", "genome representation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot")
@@ -131,6 +132,7 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
     progress.start("evidence integration")
     progress.finish("integrated")
     classifications = classify_proteins(proteins)
+    context_records, modules = build_context(proteins, classifications)
     progress.start("candidate ranking/mining")
     mine(proteins)
     candidates = ranked_candidates(proteins)
@@ -146,7 +148,7 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
     new_manifest["quality_control"] = quality
     temp = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(output.parent)))
     try:
-        write_outputs(temp, representation, sequencing, proteins, candidates, new_manifest, quality, source / "original_input.fasta", classifications)
+        write_outputs(temp, representation, sequencing, proteins, candidates, new_manifest, quality, source / "original_input.fasta", classifications, context_records, modules)
         progress.start("GenBank package")
         write_package(temp, representation.analysis_sequence_id, representation.analysis_sequence, proteins, new_manifest, sequencing_provenance=sequencing)
         progress.finish("regenerated")
