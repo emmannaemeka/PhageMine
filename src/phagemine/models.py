@@ -31,6 +31,7 @@ class SubmissionMetadata:
     authors: list[str] = field(default_factory=list)
     bioproject_accession: str | None = None
     biosample_accession: str | None = None
+    locus_tag_prefix: str | None = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SubmissionMetadata":

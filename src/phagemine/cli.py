@@ -7,12 +7,16 @@ from .pipeline import run
 from .resume import resume
 from .models import SubmissionMetadata
 from .resources import EvidenceResourceManager, ResourceType
+from .compare import compare
+from .batch import batch
 from .progress import ProgressReporter
 import json
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="PhageMine: annotation followed by cautious discovery mining")
+    from . import __version__
+    parser.add_argument("--version", action="version", version=__version__)
     subcommands = parser.add_subparsers(dest="command", required=True)
     databases = subcommands.add_parser("databases", help="Manage registered local evidence resources")
     database_commands = databases.add_subparsers(dest="database_command", required=True)
@@ -39,6 +43,28 @@ def main(argv: list[str] | None = None) -> int:
     resume_command.add_argument("--phrogs-evalue", type=float, default=1e-5)
     resume_command.add_argument("--phrogs-coverage", type=float, default=0.5)
     resume_command.add_argument("--phrogs-score", type=float)
+    stage_command = subcommands.add_parser("resume-stage", help="Recover from validated mixed stage checkpoints")
+    stage_command.add_argument("source"); stage_command.add_argument("--swissprot"); stage_command.add_argument("--diamond")
+    compare_command = subcommands.add_parser("compare", help="Compare completed PhageMine result directories offline")
+    compare_command.add_argument("results", nargs="+", help="Two to ten completed PhageMine result directories")
+    compare_command.add_argument("--output", required=True)
+    compare_command.add_argument("--mmseqs")
+    family_command = subcommands.add_parser("families", help="Offline protein-family workflows")
+    family_sub = family_command.add_subparsers(dest='families_command', required=True)
+    family_build = family_sub.add_parser('build'); family_build.add_argument('proteins'); family_build.add_argument('--output',required=True); family_build.add_argument('--metadata'); family_build.add_argument('--registry'); family_build.add_argument('--version',default='1.0'); family_build.add_argument('--backend',choices=('exact','mmseqs'),default='exact'); family_build.add_argument('--mmseqs',default='mmseqs'); family_build.add_argument('--minimum-identity',type=float,default=0.3); family_build.add_argument('--minimum-coverage',type=float,default=0.5); family_build.add_argument('--coverage-mode',type=int,default=0); family_build.add_argument('--clustering-mode',type=int,default=0)
+    family_assign = family_sub.add_parser('assign'); family_assign.add_argument('proteins'); family_assign.add_argument('--database',required=True); family_assign.add_argument('--output',required=True); family_assign.add_argument('--mmseqs',default='mmseqs')
+    family_compare = family_sub.add_parser('compare'); family_compare.add_argument('database'); family_compare.add_argument('--output',required=True); family_compare.add_argument('--core-genomes')
+    family_enrich = family_sub.add_parser('enrich'); family_enrich.add_argument('database'); family_enrich.add_argument('--results',nargs='+',required=True); family_enrich.add_argument('--output',required=True)
+    family_priority = family_sub.add_parser('prioritize'); family_priority.add_argument('database'); family_priority.add_argument('--output',required=True)
+    family_external = family_sub.add_parser('validate-external'); family_external.add_argument('database'); family_external.add_argument('--reference-db'); family_external.add_argument('--reference-proteins'); family_external.add_argument('--reference-metadata'); family_external.add_argument('--output',required=True); family_external.add_argument('--mmseqs',default='mmseqs'); family_external.add_argument('--top-n',type=int)
+    family_sensitivity = family_sub.add_parser('sensitivity'); family_sensitivity.add_argument('proteins'); family_sensitivity.add_argument('--output',required=True); family_sensitivity.add_argument('--identities',required=True); family_sensitivity.add_argument('--minimum-coverage',type=float,default=0.5); family_sensitivity.add_argument('--coverage-mode',type=int,default=0); family_sensitivity.add_argument('--clustering-mode',type=int,default=0); family_sensitivity.add_argument('--metadata'); family_sensitivity.add_argument('--backend',choices=('exact','mmseqs'),default='mmseqs'); family_sensitivity.add_argument('--mmseqs',default='mmseqs')
+    benchmark_command = subcommands.add_parser("benchmark", help="Import and compare external annotation outputs")
+    benchmark_command.add_argument("--output", required=True)
+    benchmark_command.add_argument("--prokka-gff")
+    benchmark_command.add_argument("--pharokka-gff")
+    benchmark_command.add_argument("--phagemine-results")
+    batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files sequentially")
+    batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal")
     for name in ("annotate", "mine", "run", "genbank"):
         command = subcommands.add_parser(name, help=f"Run the MVP {name} workflow")
         command.add_argument("fasta", help="Single-record phage genome FASTA")
@@ -48,6 +74,8 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--table2asn", help="Optional path to official NCBI table2asn executable")
         command.add_argument("--gene-predictor", choices=("phanotate", "demo"), default="phanotate", help="Gene caller; demo is for fixtures/tests only")
         command.add_argument("--phanotate", help="Path to PHANOTATE executable")
+        command.add_argument("--reconcile-orfs", action="store_true", help="Compare PHANOTATE models with optional Prodigal models without changing annotation")
+        command.add_argument("--prodigal", help="Path to Prodigal executable for ORF reconciliation")
         command.add_argument("--pfam", help="Optional local Pfam HMM database path")
         command.add_argument("--pfam-hmmscan", help="Optional hmmscan executable path")
         command.add_argument("--pfam-evalue", type=float, help="Optional Pfam domain i-Evalue threshold")
@@ -74,7 +102,83 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--quiet", action="store_true", help="Suppress progress display")
         command.add_argument("--no-progress", action="store_true", help="Disable dynamic progress rendering")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
+    revise = subcommands.add_parser("revise", help="Revise a completed GenBank submission without rerunning analysis")
+    revise.add_argument("results_dir")
+    revise.add_argument("--corrections", required=True)
+    revise.add_argument("--output", required=True)
     args = parser.parse_args(argv)
+    if args.command == "families":
+        from .family import build_database, assign_protein_family, write_assignments, _fasta
+        if args.families_command == 'build':
+            metadata=json.loads(Path(args.metadata).read_text()) if args.metadata else None
+            build_database(args.proteins,args.output,metadata=metadata,registry=args.registry,database_version=args.version,backend='MMSEQS2' if args.backend=='mmseqs' else 'EXACT_SEQUENCE',mmseqs=args.mmseqs,config={'family_build':{'minimum_identity':args.minimum_identity,'minimum_coverage':args.minimum_coverage,'coverage_mode':args.coverage_mode,'clustering_mode':args.clustering_mode}})
+        elif args.families_command == 'compare':
+            from .family_compare import compare_database
+            core=args.core_genomes.split(',') if args.core_genomes else None
+            compare_database(args.database,args.output,core_genomes=core)
+        elif args.families_command == 'enrich':
+            from .family_enrichment import enrich_database
+            enrich_database(args.database,args.results,args.output)
+        elif args.families_command == 'prioritize':
+            from .family_priority import prioritize
+            prioritize(args.database,args.output)
+        elif args.families_command == 'validate-external':
+            from .family_external import validate_external
+            if bool(args.reference_db)==bool(args.reference_proteins): parser.error('provide exactly one of --reference-db or --reference-proteins')
+            validate_external(args.database,args.reference_proteins,args.output,args.reference_metadata,args.mmseqs,args.top_n,args.reference_db)
+        elif args.families_command == 'sensitivity':
+            from .family import build_database
+            from .family_compare import compare_database
+            import tempfile
+            metadata=json.loads(Path(args.metadata).read_text()) if args.metadata else None
+            out=Path(args.output); out.mkdir(parents=True,exist_ok=True); summaries={}
+            for value in sorted({float(x) for x in args.identities.split(',')}):
+                db=out/f'identity_{value:.3f}'
+                build_database(args.proteins,db,metadata=metadata,database_version=f'identity-{value}',backend='MMSEQS2' if args.backend=='mmseqs' else 'EXACT_SEQUENCE',mmseqs=args.mmseqs,config={'family_build':{'minimum_identity':value,'minimum_coverage':args.minimum_coverage,'coverage_mode':args.coverage_mode,'clustering_mode':args.clustering_mode}})
+                summaries[value]=compare_database(db,db,core_genomes=None)
+                summaries[value].update({'minimum_coverage':args.minimum_coverage,'coverage_mode':args.coverage_mode,'clustering_mode':args.clustering_mode,'backend':'MMSEQS2' if args.backend=='mmseqs' else 'EXACT_SEQUENCE'})
+            from .family_compare import sensitivity_rows
+            rows=sensitivity_rows(summaries)
+            with (out/'pmf_threshold_sensitivity.tsv').open('w') as h:
+                if rows:
+                    h.write('\t'.join(rows[0])+'\n'); [h.write('\t'.join(str(r[k]) for k in rows[0])+'\n') for r in rows]
+            (out/'pmf_threshold_sensitivity.json').write_text(json.dumps(rows,indent=2,sort_keys=True))
+        else:
+            from .family import assign_protein_families
+            write_assignments(assign_protein_families([{'protein_id':pid,'sequence':seq} for pid,seq in _fasta(args.proteins).items()],args.database,mmseqs=args.mmseqs),args.output)
+        print(f"Protein-family workflow complete. Outputs: {args.output}")
+        return 0
+    if args.command == "benchmark":
+        from .benchmark import import_prokka, import_pharokka, import_phagemine, benchmark
+        methods={}
+        if args.phagemine_results: methods["PHAGEMINE"]=import_phagemine(args.phagemine_results)
+        if args.prokka_gff: methods["Prokka"]=import_prokka(args.prokka_gff)
+        if args.pharokka_gff: methods["Pharokka"]=import_pharokka(args.pharokka_gff)
+        benchmark(methods,args.output)
+        print(f"PhageMine benchmark complete. Outputs: {args.output}"); return 0
+    if args.command == "revise":
+        from .submission_revision import revise as revise_submission
+        try:
+            result = revise_submission(args.results_dir, args.corrections, args.output)
+        except (OSError, ValueError, RuntimeError) as exc:
+            parser.error(str(exc))
+        print(json.dumps(result, indent=2, sort_keys=True))
+        print(f"Revised GenBank package: {Path(args.output) / 'submission_v2' / 'genbank_submission'}")
+        return 0
+    if args.command == "resume-stage":
+        from .stage_resume import resume_stage
+        try: print(json.dumps(resume_stage(args.source,args.swissprot,args.diamond),indent=2,sort_keys=True))
+        except (OSError,ValueError,RuntimeError) as exc: parser.error(str(exc))
+        return 0
+    if args.command == "compare":
+        try: compare(args.results, args.output, args.mmseqs)
+        except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
+        print(f"PhageMine comparison complete. Outputs: {args.output}")
+        return 0
+    if args.command == "batch":
+        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal)
+        except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
+        print(f"PhageMine batch complete. Outputs: {args.output}"); return 0
     if args.command == "resume":
         try:
             count = resume(args.source, args.output, args.run_missing_evidence, args.refresh_evidence, args.mmseqs, args.phrogs, args.phrogs_annotations, args.phrogs_evalue, args.phrogs_coverage, args.phrogs_score, ProgressReporter(quiet=False))
@@ -102,7 +206,7 @@ def main(argv: list[str] | None = None) -> int:
         from .sequencing_provenance import SequencingProvenance
         sequencing_provenance = SequencingProvenance.from_dict(json.loads(Path(args.sequencing_provenance).read_text())) if args.sequencing_provenance else SequencingProvenance()
         from .gene_prediction import create_predictor
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=args.reconcile_orfs, prodigal=args.prodigal, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

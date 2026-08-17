@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from dataclasses import asdict
 
 from .gene_prediction import GenePredictor, create_predictor
 from .io import checksum, read_fasta
 from .genbank import write_package
 from .models import SubmissionMetadata
 from .mining import mine, ranked_candidates
-from .reporting import write_outputs
+from .reporting import write_outputs, write_checkpoint_snapshot, write_stage_checkpoint
 from .quality import assess
 from .genome_representation import GenomeRepresentation
 from .sequencing_provenance import SequencingProvenance
@@ -20,9 +22,12 @@ from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
 from .fusion import classify_proteins
 from .context import build_context
+from .reconciliation import GeneModel, ProdigalPredictor, reconcile_models, write_reconciliation
+from .adjudication import adjudicate, write_adjudication
+from .alternative_evidence import alternative_models, acquire_alternative_evidence, write_alternative_evidence
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, progress: ProgressReporter | None = None) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None) -> int:
     progress = progress or ProgressReporter(quiet=True)
     progress.start("input/genome validation")
     genome_id, genome = read_fasta(fasta)
@@ -41,6 +46,21 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     proteins = predictor.predict(representation.analysis_sequence_id, representation.analysis_sequence, predictor_input)
     if not proteins:
         raise ValueError("No ORFs met the MVP minimum length; use a genome with coding sequences or lower the configured threshold in a future adapter.")
+    gene_manifest = {"stage": "gene_prediction", "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "input_sha256": checksum(fasta)}
+    write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "gene_prediction", representation, sequencing_provenance, proteins, gene_manifest, fasta)
+    reconciliation_rows = None
+    prodigal_models = None
+    if reconcile_orfs:
+        progress.start("Prodigal secondary gene prediction")
+        prodigal_models = ProdigalPredictor(prodigal).predict(fasta, representation.analysis_sequence)
+        progress.finish(f"{len(prodigal_models)} proteins")
+        progress.start("ORF reconciliation")
+        phanotate_models = [GeneModel("PHANOTATE", p.protein_id, p.start, p.end, p.strand, p.cds, caller_version=predictor.version(), options=p.gene_call_parameters) for p in proteins]
+        reconciliation_rows = reconcile_models(phanotate_models, prodigal_models, checksum(fasta))
+        write_reconciliation(output, reconciliation_rows, {"input_sha256": checksum(fasta), "phanotate": predictor.parameters(), "prodigal": {"executable": prodigal or "PATH"}})
+        (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
+        (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
+        progress.finish("reconciliation persisted")
     progress.finish(f"{len(proteins)} proteins")
     evidence_adapters = []
     if use_mock_evidence:
@@ -66,6 +86,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": pfam_result.adapter, "status": pfam_result.status, "provenance": pfam_result.provenance, "message": pfam_result.message})
+    write_stage_checkpoint(Path(output) / "checkpoints", "pfam", [asdict(e) for e in pfam_result.evidence], pfam_result.provenance)
     progress.finish(f"{sum(e.supports for e in pfam_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in pfam_result.evidence if e.supports})} proteins")
     vog_origin = "explicit_cli" if vog_path else "unavailable"
     vog_version = None
@@ -86,6 +107,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": vog_result.adapter, "status": vog_result.status, "provenance": vog_result.provenance, "message": vog_result.message})
+    write_stage_checkpoint(Path(output) / "checkpoints", "vogdb", [asdict(e) for e in vog_result.evidence], vog_result.provenance)
     progress.finish(f"{sum(e.supports for e in vog_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in vog_result.evidence if e.supports})} proteins")
     swiss_origin = "explicit_cli" if swissprot_path else "unavailable"
     swiss_version = None
@@ -106,7 +128,11 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": swiss_result.adapter, "status": swiss_result.status, "provenance": swiss_result.provenance, "message": swiss_result.message})
-    progress.finish(f"{sum(e.supports for e in swiss_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in swiss_result.evidence if e.supports})} proteins")
+    write_stage_checkpoint(Path(output) / "checkpoints", "swissprot", [asdict(e) for e in swiss_result.evidence], swiss_result.provenance)
+    if swiss_result.status == "UNAVAILABLE":
+        progress.finish(f"UNAVAILABLE — {swiss_result.message or 'resource or DIAMOND unavailable'}")
+    else:
+        progress.finish(f"{sum(e.supports for e in swiss_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in swiss_result.evidence if e.supports})} proteins")
     phrogs_origin = "explicit_cli" if phrogs_path else "unavailable"
     phrogs_version = None
     if phrogs_path is None:
@@ -126,8 +152,28 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": phrogs_result.adapter, "status": phrogs_result.status, "provenance": phrogs_result.provenance, "message": phrogs_result.message})
+    write_stage_checkpoint(Path(output) / "checkpoints", "phrogs", [asdict(e) for e in phrogs_result.evidence], phrogs_result.provenance)
+    if reconcile_orfs:
+        alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
+        progress.start("alternative ORF evidence")
+        # Adapter objects are reused with isolated one-protein inputs; canonical evidence is untouched.
+        alt = acquire_alternative_evidence(alt, (pfam_adapter, vog_adapter, swiss_adapter, phrogs_adapter), Path(output)/"checkpoints"/"alternative_evidence")
+        write_alternative_evidence(output, alt, {"input_sha256": checksum(fasta), "cached": True})
+        progress.finish("alternative evidence persisted")
+        evidence_map = {p.protein_id: [asdict(e) for e in p.evidence] for p in proteins}
+        evidence_map.update({m["alternative_model_id"]: m.get("evidence",[]) for m in alt})
+        evidence_map.update({m["caller_id"]: m.get("evidence",[]) for m in alt})
+        progress.start("ORF adjudication")
+        write_adjudication(output, adjudicate(reconciliation_rows, evidence_map), {"input_sha256": checksum(fasta), "observational": True})
+        progress.finish("adjudication persisted")
     progress.finish(f"{sum(e.supports for e in phrogs_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in phrogs_result.evidence if e.supports})} proteins")
     progress.start("evidence integration")
+    checkpoint_manifest = {"pipeline": "PhageMine", "pipeline_version": "0.1.0", "command": command,
+                           "input": str(fasta), "input_sha256": checksum(fasta),
+                           "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()},
+                           "evidence_adapters": evidence_adapters}
+    write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "evidence_complete",
+                              representation, sequencing_provenance, proteins, checkpoint_manifest, fasta)
     progress.finish(f"{sum(len(p.evidence) for p in proteins)} evidence records")
     classifications = classify_proteins(proteins)
     context_records, modules = build_context(proteins, classifications)

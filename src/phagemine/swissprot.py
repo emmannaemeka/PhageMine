@@ -1,7 +1,7 @@
 """Optional local Swiss-Prot curated sequence-homology evidence adapter."""
 from __future__ import annotations
 
-import gzip
+import gzip, json, sqlite3, hashlib, os
 import re
 import shutil
 import subprocess
@@ -138,6 +138,11 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
     def _metadata_for(self, accession: str | None) -> dict[str, Any]:
         if not accession or not self.metadata_path or not self.metadata_path.exists():
             return {}
+        index=self._metadata_index()
+        if index:
+            with sqlite3.connect(index) as db:
+                row=db.execute('SELECT payload FROM metadata WHERE accession=?',(accession,)).fetchone()
+            return json.loads(row[0]) if row else {}
         opener = gzip.open if self.metadata_path.suffix == ".gz" else open
         current: list[str] = []
         result: dict[str, Any] = {}
@@ -150,6 +155,34 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
                     current = []
                 current.append(line.rstrip("\n"))
         return result
+
+    def _metadata_index(self) -> Path | None:
+        """Build/reuse a checksum-validated local metadata index atomically."""
+        if not self.metadata_path or not self.metadata_path.exists(): return None
+        source=str(self.metadata_path); stat=self.metadata_path.stat(); sha=hashlib.sha256(self.metadata_path.read_bytes()).hexdigest()
+        index=self.metadata_path.with_suffix(self.metadata_path.suffix+'.sqlite')
+        try:
+            with sqlite3.connect(index) as db:
+                meta=db.execute("SELECT value FROM meta WHERE key='source_sha256'").fetchone()
+                if meta and meta[0]==sha: return index
+        except sqlite3.Error: pass
+        tmp=index.with_name(index.name+'.tmp')
+        if tmp.exists(): tmp.unlink()
+        with sqlite3.connect(tmp) as db:
+            db.execute('CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)'); db.execute('CREATE TABLE metadata (accession TEXT PRIMARY KEY, payload TEXT)')
+            opener=gzip.open if self.metadata_path.suffix=='.gz' else open; current=[]; rows=[]
+            with opener(self.metadata_path,'rt',encoding='utf-8',errors='replace') as handle:
+                for line in handle:
+                    if line.startswith('//'):
+                        if current:
+                            rec=self._parse_dat_record(current)
+                            ac=next((x[5:].split(';')[0] for x in current if x.startswith('AC   ')),None)
+                            if ac: rows.append((ac,json.dumps(rec,sort_keys=True)))
+                        current=[]
+                    else: current.append(line.rstrip('\n'))
+            db.executemany('INSERT OR REPLACE INTO metadata VALUES (?,?)',rows)
+            db.executemany('INSERT INTO meta VALUES (?,?)',[('source_sha256',sha),('source_path',source),('source_size',str(stat.st_size)),('index_version','1')]); db.commit()
+        os.replace(tmp,index); return index
 
     @staticmethod
     def _parse_dat_record(lines: list[str]) -> dict[str, Any]:

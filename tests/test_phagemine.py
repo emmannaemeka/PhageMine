@@ -1,9 +1,12 @@
 import json
+import csv
+import hashlib
 import os
 import stat
 import shutil
 import tempfile
 import unittest
+import pytest
 from io import StringIO
 from unittest.mock import patch
 from pathlib import Path
@@ -24,9 +27,20 @@ from phagemine.vog import VOGHMMAdapter
 from phagemine.phrogs import MMSEQS_FORMAT, PHROGSMMseqsAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
-from phagemine.resume import _load_source, RESUME_STAGES
+from phagemine.resume import _load_source, RESUME_STAGES, checkpoint_reusable
 from phagemine.fusion import classify_protein, classify_proteins, normalize_function, write_classification
 from phagemine.context import build_context, write_context
+from phagemine.compare import compare
+from phagemine.batch import discover_inputs, batch
+from phagemine.reconciliation import GeneModel, reconcile_models
+from phagemine.adjudication import adjudicate
+from phagemine.alternative_evidence import alternative_models, extract_translation, cache_key
+from phagemine.pfam import PfamHMMAdapter
+from phagemine.vog import VOGHMMAdapter
+from phagemine.swissprot import SwissProtEvidenceAdapter
+from phagemine.phrogs import PHROGSMMseqsAdapter
+from phagemine.benchmark import import_prokka, import_pharokka, import_phagemine, compare_models, metrics
+from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -36,6 +50,353 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PhageMineTests(unittest.TestCase):
+    def test_orf_reconciliation_boundary_and_strand_categories(self):
+        p=GeneModel("PHANOTATE","P1",100,400,"+")
+        self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",100,400,"+")])[0]["conflict_type"],"EXACT_CONCORDANCE")
+        self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",130,400,"+")])[0]["conflict_type"],"START_DISCORDANCE")
+        self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",100,370,"+")])[0]["conflict_type"],"STOP_DISCORDANCE")
+        self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",130,370,"+")])[0]["conflict_type"],"START_AND_STOP_DISCORDANCE")
+        self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",100,400,"-")])[0]["conflict_type"],"STRAND_DISCORDANCE")
+
+    def test_orf_reconciliation_caller_specific_and_deterministic(self):
+        p=GeneModel("PHANOTATE","P1",100,400,"+"); d=GeneModel("Prodigal","D1",800,1000,"+")
+        rows=reconcile_models([p],[d]); self.assertEqual({r["conflict_type"] for r in rows},{"PHANOTATE_ONLY","PRODIGAL_ONLY"})
+        self.assertEqual(rows,reconcile_models([p],[d]))
+
+    def test_orf_adjudication_is_observational_and_model_specific(self):
+        row=reconcile_models([GeneModel("PHANOTATE","P1",100,400,"+")],[GeneModel("Prodigal","D1",130,400,"+")])[0]
+        result=adjudicate([row], {"P1":[{"supports":True,"evidence_strength":"STRONG","source":"Swiss-Prot"}],"D1":[]})[0]
+        self.assertEqual(result["start_decision"],"START_AMBIGUOUS")
+        self.assertEqual(result["adjudication_status"],"INSUFFICIENT_COMPARATIVE_EVIDENCE")
+        self.assertTrue(result["manual_review"])
+
+    def test_alternative_translation_is_strand_aware_and_model_specific(self):
+        cds, protein=extract_translation("ATGAAATAG",1,9,"+")
+        self.assertEqual(cds,"ATGAAATAG"); self.assertEqual(protein,"MK")
+        rows=[{"locus_id":"L1","conflict_type":"START_DISCORDANCE","prodigal_id":"D1","prodigal_start":1,"prodigal_end":9,"prodigal_strand":"+"}]
+        models=alternative_models(rows,"ATGAAATAG")
+        self.assertEqual(models[0]["alternative_model_id"],"ALT_PRODIGAL_00001")
+        self.assertNotEqual(models[0]["translation_sha256"],"")
+
+    def test_alternative_cache_identity_supports_all_adapters(self):
+        model={"translation_sha256":"abc"}
+        adapters=[PfamHMMAdapter(evalue_threshold=1e-5),VOGHMMAdapter(evalue_threshold=1e-5),SwissProtEvidenceAdapter(evalue_threshold=1e-5),PHROGSMMseqsAdapter(evalue_threshold=1e-5)]
+        keys=[cache_key(model,a) for a in adapters]
+        self.assertEqual(keys,[cache_key(model,a) for a in adapters]); self.assertEqual(len(set(keys)),4)
+        self.assertNotEqual(cache_key(model,PfamHMMAdapter(evalue_threshold=1e-3)),keys[0])
+
+    def test_batched_alternative_evidence_maps_protein_ids_without_model_attribute(self):
+        from phagemine.alternative_evidence import acquire_alternative_evidence
+        class Adapter:
+            name='TEST'
+            def provenance(self): return {'adapter':'TEST','thresholds':{'x':1}}
+            def analyze(self, proteins):
+                from phagemine.evidence import EvidenceAdapterResult
+                from phagemine.models import Evidence, EvidenceLevel
+                hits=[]
+                for p in proteins:
+                    if p.protein_id != 'ALT_PRODIGAL_00002':
+                        e=Evidence('TEST','statement',EvidenceLevel.COMPUTATIONAL,'TEST','1',supports=True,identifier=p.protein_id); e.provenance['protein_id']=p.protein_id; hits.append(e)
+                return EvidenceAdapterResult('TEST','REAL',evidence=hits)
+        models=[{'alternative_model_id':f'ALT_PRODIGAL_{i:05d}','locus_id':f'L{i}','caller_id':str(i),'start':1,'end':9,'strand':'+','cds':'ATGAAATAG','protein_sequence':'MK','translation_sha256':str(i),'evidence':[]} for i in range(1,4)]
+        acquire_alternative_evidence(models,[Adapter()])
+        self.assertEqual(len(models[0]['evidence']),1); self.assertEqual(len(models[1]['evidence']),0); self.assertEqual(len(models[2]['evidence']),1)
+
+    def test_alternative_search_status_counts_match_model_evidence(self):
+        from phagemine.alternative_evidence import acquire_alternative_evidence
+        from phagemine.evidence import EvidenceAdapterResult
+        from phagemine.models import Evidence, EvidenceLevel
+        class Adapter:
+            name='TEST'
+            def provenance(self): return {'adapter':'TEST','thresholds':{}}
+            def analyze(self, proteins):
+                hits=[]
+                for p in proteins:
+                    n=2 if p.protein_id == 'ALT_PRODIGAL_00001' else (1 if p.protein_id == 'ALT_PRODIGAL_00003' else 0)
+                    for i in range(n):
+                        e=Evidence('TEST','statement',EvidenceLevel.COMPUTATIONAL,'TEST',str(i),supports=(p.protein_id != 'ALT_PRODIGAL_00003'))
+                        e.provenance['protein_id']=p.protein_id; hits.append(e)
+                return EvidenceAdapterResult('TEST','REAL',evidence=hits)
+        models=[{'alternative_model_id':f'ALT_PRODIGAL_{i:05d}','locus_id':f'L{i}','caller_id':str(i),'start':1,'end':9,'strand':'+','cds':'ATGAAATAG','protein_sequence':'MK','translation_sha256':str(i),'evidence':[]} for i in range(1,4)]
+        with tempfile.TemporaryDirectory() as td:
+            status=Path(td)/'status.tsv'; acquire_alternative_evidence(models,[Adapter()],status_output=status)
+            rows=list(csv.DictReader(status.open(),delimiter='\t'))
+        self.assertEqual([int(r['records_returned']) for r in rows],[2,0,1])
+        self.assertEqual([int(r['accepted_records']) for r in rows],[2,0,0])
+        self.assertEqual(rows[1]['search_status'],'SEARCH_EXECUTED_ZERO_HITS')
+        self.assertEqual(sum(int(r['records_returned']) for r in rows),3)
+
+    def test_fresh_alternative_status_uses_canonical_source_partition(self):
+        """Fresh batched results with legacy source spelling still balance."""
+        from phagemine.alternative_evidence import acquire_alternative_evidence
+        from phagemine.evidence import EvidenceAdapterResult
+        from phagemine.models import Evidence, EvidenceLevel
+        class Adapter:
+            name='SwissProt'
+            def provenance(self): return {'thresholds': {'x': 1}}
+            def analyze(self, proteins):
+                hits=[]
+                for p in proteins:
+                    e=Evidence('sequence_similarity','hit',EvidenceLevel.CURATED,
+                               'SwissProt','1',supports=True,identifier=p.protein_id)
+                    e.provenance['protein_id']=p.protein_id; hits.append(e)
+                return EvidenceAdapterResult('SwissProt','REAL',evidence=hits)
+        models=[{'alternative_model_id':f'ALT_PRODIGAL_{i:05d}','locus_id':f'L{i}',
+                 'caller_id':str(i),'start':1,'end':9,'strand':'+','cds':'ATGAAATAG',
+                 'protein_sequence':'MK','translation_sha256':str(i),'evidence':[]} for i in range(1,3)]
+        with tempfile.TemporaryDirectory() as td:
+            status=Path(td)/'status.tsv'; acquire_alternative_evidence(models,[Adapter()],status_output=status)
+            rows=list(csv.DictReader(status.open(),delimiter='\t'))
+        self.assertEqual(sum(int(r['records_returned']) for r in rows),2)
+        self.assertEqual(sum(int(r['accepted_records']) for r in rows),2)
+
+    def test_pmf_comparison_statistics_pairwise_core_and_presence(self):
+        from phagemine.family_compare import compare_database
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td)/'db'; root.mkdir()
+            families=[{'family_id':'PMF-000001','family_database_version':'v1'},{'family_id':'PMF-000002','family_database_version':'v1'}]
+            (root/'families.json').write_text(json.dumps(families))
+            with (root/'family_members.tsv').open('w') as h:
+                h.write('family_id\tmember_id\tsequence_sha256\tsource_genome_id\tsource_protein_id\thost_genus\toriginal_annotation\n')
+                h.write('PMF-000001\tA|P1\tx\tA\tA|P1\tPseudomonas\t\nPMF-000001\tB|P1\ty\tB\tB|P1\tSalmonella\t\nPMF-000002\tA|P2\tz\tA\tA|P2\tPseudomonas\t\n')
+            summary=compare_database(root,Path(td)/'out',core_genomes=['A','B'])
+            self.assertEqual(summary['statistics']['total_proteins'],3)
+            self.assertEqual(summary['statistics']['singleton_families'],1)
+            self.assertEqual(summary['core_family_count'],1)
+            pair=list(csv.DictReader((Path(td)/'out'/'pmf_pairwise_genomes.tsv').open(),delimiter='\t'))[0]
+            self.assertEqual(pair['shared_pmf_count'],'1')
+            self.assertTrue((Path(td)/'out'/'pmf_presence_absence.tsv').exists())
+
+    def test_pmf_sensitivity_rows_preserve_effective_configuration(self):
+        from phagemine.family_compare import sensitivity_rows
+        summary={'statistics':{'total_families':3,'singleton_families':1,'multi_member_families':2,'family_size_distribution':{'1':1,'2':2}},'minimum_coverage':0.5,'coverage_mode':0,'clustering_mode':1,'backend':'MMSEQS2','core_family_count':2,'host_group_counts':{'CROSS_HOST_COHORT':1}}
+        row=sensitivity_rows({0.2:summary})[0]
+        self.assertEqual(row['minimum_identity'],0.2); self.assertEqual(row['minimum_coverage'],0.5)
+        self.assertEqual(row['coverage_mode'],0); self.assertEqual(row['clustering_mode'],1); self.assertEqual(row['backend'],'MMSEQS2')
+
+    def test_pmf_enrichment_conservative_states(self):
+        from phagemine.family_enrichment import enrich_database
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td); db=root/'db'; db.mkdir(); result=root/'A'; result.mkdir(); out=root/'out'
+            (db/'families.json').write_text(json.dumps([{'family_id':'PMF-000001','member_count':1,'genome_count':1,'host_genera':['Pseudomonas'],'source_genome_ids':['A']}]))
+            (db/'family_members.tsv').write_text('family_id\tmember_id\tsequence_sha256\tsource_genome_id\tsource_protein_id\thost_genus\toriginal_annotation\nPMF-000001\tA|P1\tx\tA\tA|P1\tPseudomonas\t\n')
+            (result/'evidence.json').write_text(json.dumps([{'protein_id':'P1','annotation':'hypothetical protein','evidence':[]}]))
+            (result/'functional_classification.json').write_text(json.dumps([{'protein_id':'P1','functional_state':'CONSERVED_UNKNOWN','proposed_function':None}]))
+            rows=enrich_database(db,[result],out)
+            self.assertEqual(rows[0]['family_functional_status'],'UNKNOWN_SINGLETON')
+            self.assertTrue((out/'pmf_member_evidence.tsv').exists())
+
+    def test_pmf_priority_only_ranks_unknown_multi_genome(self):
+        from phagemine.family_priority import prioritize
+        with tempfile.TemporaryDirectory() as td:
+            db=Path(td); (db/'pmf_functional_enrichment.tsv').write_text('family_id\tfamily_functional_status\tmember_count\tgenome_count\tsource_genomes\thost_genera\tevidence_sources_present\tmember_annotations\nA\tUNKNOWN_MULTI_GENOME\t2\t2\tA,B\tPseudomonas\tPfam,VOGDB\t\nB\tUNKNOWN_SINGLETON\t1\t1\tA\tPseudomonas\t\t\nC\tCONFLICTING_MEMBER_ANNOTATIONS\t2\t2\tA,B\tPseudomonas\tPfam\tx;y\n')
+            out=Path(td)/'out'; rows=prioritize(db,out)
+            self.assertEqual([r['family_id'] for r in rows],['A'])
+            self.assertNotIn('novel', (out/'pmf_unresolved_priority.tsv').read_text().lower())
+
+    def test_benchmark_import_and_coordinate_metrics(self):
+        with tempfile.TemporaryDirectory() as temp:
+            g=Path(temp)/"x.gff"; g.write_text("##gff-version 3\ng\tProkka\tCDS\t100\t400\t.\t+\t0\tID=x1;product=hypothetical protein\n")
+            a=import_prokka(g); b=import_pharokka(g); self.assertEqual(compare_models(a,b)[0]["relationship"],"EXACT_MATCH"); self.assertEqual(metrics(a,b)["exact_f1"],1.0)
+
+    def test_benchmark_exact_match_precedes_boundary_contact(self):
+        a=[{'start':2,'end':313,'strand':'-','locus_id':'A'},{'start':313,'end':894,'strand':'-','locus_id':'B'}]
+        b=[{'start':313,'end':894,'strand':'-','locus_id':'X'}]
+        rows=compare_models(a,b)
+        exact=[r for r in rows if r['relationship']=='EXACT_MATCH']
+        self.assertEqual(len(exact),1); self.assertEqual(exact[0]['method_a']['locus_id'],'B')
+        self.assertFalse(any(r['relationship']=='START_AND_STOP_DIFFERENCE' and r.get('method_b') for r in rows))
+
+    def test_benchmark_imports_phagemine_and_fails_on_missing_required_files(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); (root/"genes.gff3").write_text("g\tPhageMine\tCDS\t1\t9\t.\t+\t0\tID=PM_000001\n"); (root/"annotation.tsv").write_text("protein_id\tannotation\nPM_000001\tunknown\n"); (root/"functional_classification.tsv").write_text("protein_id\tfunctional_state\tproposed_function\tconfidence\nPM_000001\tUNRESOLVED\t\tNONE\n")
+            self.assertEqual(import_phagemine(root)[0]["tool"],"PHAGEMINE")
+            (root/"functional_classification.tsv").unlink()
+            legacy=import_phagemine(root)
+            self.assertEqual(legacy[0]["functional_classification_status"],"LEGACY_OUTPUT_NOT_AVAILABLE")
+            (root/"genes.gff3").unlink()
+            with self.assertRaises(ValueError): import_phagemine(root)
+
+    def test_swissprot_unavailable_is_explicit(self):
+        adapter=SwissProtEvidenceAdapter(database_path=None, diamond="/nonexistent/diamond")
+        result=adapter.analyze([])
+        self.assertEqual(result.status,"UNAVAILABLE")
+        self.assertIn("unavailable", result.message.lower())
+
+    def test_unavailable_checkpoint_is_invalidated_when_resource_is_available(self):
+        checkpoint={"status":"REAL","provenance":{"status":"UNAVAILABLE","adapter":"SwissProtEvidenceAdapter"}}
+        self.assertFalse(checkpoint_reusable(checkpoint,{"status":"REAL","adapter":"SwissProtEvidenceAdapter"}))
+        valid={"status":"REAL","provenance":{"status":"REAL","adapter":"SwissProtEvidenceAdapter","swissprot_version":"v1","thresholds":{"evalue":1e-5}}}
+        self.assertTrue(checkpoint_reusable(valid,{"status":"REAL","adapter":"SwissProtEvidenceAdapter","swissprot_version":"v1","thresholds":{"evalue":1e-5}}))
+        self.assertFalse(checkpoint_reusable(valid,{"status":"REAL","adapter":"SwissProtEvidenceAdapter","swissprot_version":"v2","thresholds":{"evalue":1e-5}}))
+    def test_batch_discovers_deterministically_and_runs_isolated_samples(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inp=Path(temp)/"in"; out=Path(temp)/"out"; inp.mkdir()
+            genome=(ROOT/"examples/demo_phage.fasta").read_text(); (inp/"z.fa").write_text(genome.replace("demo_phage","z")); (inp/"a.fasta").write_text(genome.replace("demo_phage","a")); (inp/"skip.txt").write_text("x")
+            self.assertEqual([p.name for p in discover_inputs(inp)], ["a.fasta","z.fa"])
+            def fake_run(path, destination, progress=None, **kwargs):
+                self.assertTrue((Path(destination) / "sample_status.json").is_file())
+                progress.start("input/genome validation"); progress.finish()
+                (Path(destination)/"analysis_genome.fasta").write_text(genome)
+                (Path(destination)/"functional_classification.json").write_text(json.dumps([{"functional_state":"UNRESOLVED"}]))
+                for name, value in (("evidence.json", []), ("genomic_context.json", []), ("modules.json", []), ("run_manifest.json", {})):
+                    (Path(destination)/name).write_text(json.dumps(value))
+            with patch("phagemine.batch.run", fake_run):
+                rows=batch(inp,out,gene_predictor="demo")
+            self.assertEqual([r["sample_id"] for r in rows], ["a","z"])
+            self.assertTrue((out/"a"/"run_manifest.json").is_file()); self.assertTrue((out/"z"/"functional_classification.json").is_file())
+            self.assertTrue((out/"batch_manifest.json").is_file())
+
+    def test_batch_sample_uses_standard_single_run_scientific_outputs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inp, out = Path(temp)/"in", Path(temp)/"out"; inp.mkdir()
+            genome=(ROOT/"examples/demo_phage.fasta").read_text(); (inp/"a.fasta").write_text(genome)
+            def fake_run(path, destination, progress=None, **kwargs):
+                d=Path(destination); (d/"analysis_genome.fasta").write_text(genome)
+                (d/"functional_classification.json").write_text("[]"); (d/"genomic_context.json").write_text("[]"); (d/"modules.json").write_text("[]")
+                for name in ("run_manifest.json","evidence.json","proteins.faa","genes.gff3","cds.fna","annotation.tsv","functional_classification.tsv"):
+                    (d/name).write_text("{}" if name.endswith("json") else "")
+            with patch("phagemine.batch.run", fake_run):
+                batch(inp, out, gene_predictor="demo")
+            sample=out/"a"
+            self.assertTrue((sample/"annotation.tsv").is_file())
+            self.assertFalse((sample/"a_proteins.faa").exists())
+
+    def test_batch_continues_after_failed_sample(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inp=Path(temp)/"in"; out=Path(temp)/"out"; inp.mkdir()
+            genome=(ROOT/"examples/demo_phage.fasta").read_text(); (inp/"a.fasta").write_text(genome.replace("demo_phage","a")); (inp/"bad.fasta").write_text(">a\nNNN\n")
+            def fake_run(path, destination, progress=None, **kwargs):
+                if Path(path).name == "bad.fasta":
+                    raise RuntimeError("synthetic failure")
+                (Path(destination)/"analysis_genome.fasta").write_text(genome)
+                (Path(destination)/"functional_classification.json").write_text(json.dumps([{"functional_state":"UNRESOLVED"}]))
+                for name, value in (("evidence.json", []), ("genomic_context.json", []), ("modules.json", []), ("run_manifest.json", {})):
+                    (Path(destination)/name).write_text(json.dumps(value))
+            with patch("phagemine.batch.run", fake_run):
+                rows=batch(inp,out,gene_predictor="demo")
+            self.assertEqual([r["status"] for r in rows], ["SUCCESS","FAILED"])
+            self.assertTrue((out/"a"/"run_manifest.json").is_file())
+            self.assertTrue((out/"bad"/"sample_status.json").is_file())
+
+    def test_batch_persists_checkpoints_and_reuses_valid_sample(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inp, out = Path(temp)/"in", Path(temp)/"out"; inp.mkdir()
+            genome=(ROOT/"examples/demo_phage.fasta").read_text(); (inp/"a.fasta").write_text(genome)
+            calls=[]
+            def fake_run(path, destination, progress=None, **kwargs):
+                calls.append(Path(path).name)
+                progress.start("gene prediction"); progress.finish()
+                d=Path(destination); (d/"analysis_genome.fasta").write_text(genome)
+                (d/"functional_classification.json").write_text(json.dumps([{"functional_state":"UNRESOLVED"}]))
+                for name, value in (("evidence.json", []), ("genomic_context.json", []), ("modules.json", []), ("run_manifest.json", {})):
+                    (d/name).write_text(json.dumps(value))
+            with patch("phagemine.batch.run", fake_run):
+                batch(inp, out, gene_predictor="demo")
+                rows=batch(inp, out, resume_existing=True, gene_predictor="demo")
+            self.assertEqual(calls, ["a.fasta"])
+            self.assertEqual(rows[0]["status"], "REUSED")
+            state=json.loads((out/"a"/"sample_status.json").read_text())
+            self.assertEqual(state["status"], "REUSED")
+            self.assertTrue((out/"a"/"checkpoints").is_dir())
+
+    def test_batch_recovers_failed_evidence_complete_sample(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inp, out = Path(temp)/"in", Path(temp)/"out"; inp.mkdir()
+            genome=(ROOT/"examples/demo_phage.fasta").read_text(); fasta=inp/"a.fasta"; fasta.write_text(genome)
+            sample=out/"a"; (sample/"checkpoints").mkdir(parents=True); (sample/"logs").mkdir()
+            digest=hashlib.sha256(fasta.read_bytes()).hexdigest()
+            (sample/"sample_status.json").write_text(json.dumps({"sample_id":"a","input_sha256":digest,"status":"FAILED","failed_stage":"functional classification / evidence fusion","error_message":"synthetic","checkpoints":{"evidence_integration":{"status":"COMPLETE"}}}))
+            with patch("phagemine.batch.run", side_effect=AssertionError("pipeline must not restart")), patch("phagemine.batch.recover_evidence_complete") as recover:
+                def recovered(destination, progress):
+                    (sample/"analysis_genome.fasta").write_text(genome)
+                    (sample/"functional_classification.json").write_text("[]")
+                    (sample/"modules.json").write_text("[]")
+                recover.side_effect=recovered
+                rows=batch(inp, out, resume_existing=True, gene_predictor="demo")
+            self.assertEqual(rows[0]["status"], "SUCCESS")
+            recover.assert_called_once()
+
+    def test_evidence_complete_checkpoint_contains_recovery_artifacts(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); fasta=root/"input.fasta"; fasta.write_text(">g\nATGATGATG\n")
+            protein=self._fusion_protein(); representation=GenomeRepresentation.original("g", "ATGATGATG")
+            checkpoint=root/"checkpoints"/"evidence_complete"
+            write_checkpoint_snapshot(root, checkpoint, representation, SequencingProvenance(), [protein], {"gene_caller":{"name":"PHANOTATE"},"evidence_adapters":[{"adapter":"x","status":"REAL"}],"input_sha256":hashlib.sha256(fasta.read_bytes()).hexdigest()}, fasta)
+            self.assertTrue(all((checkpoint/name).is_file() for name in ("original_input.fasta","analysis_genome.fasta","genome_representation.json","proteins.faa","evidence.json","checkpoint_manifest.json")))
+
+    def test_stage_checkpoint_persists_evidence_and_provenance_atomically(self):
+        with tempfile.TemporaryDirectory() as temp:
+            write_stage_checkpoint(Path(temp)/"checkpoints", "pfam", [{"identifier":"PF1"}], {"database":"pfam.hmm","threshold":1e-5})
+            payload=json.loads((Path(temp)/"checkpoints"/"pfam"/"evidence.json").read_text())
+            manifest=json.loads((Path(temp)/"checkpoints"/"pfam"/"checkpoint_manifest.json").read_text())
+            self.assertEqual(payload[0]["identifier"], "PF1")
+            self.assertEqual(manifest["provenance"]["threshold"], 1e-5)
+
+    def test_batch_checkpoint_aliases_are_sample_prefixed_and_legacy_remains(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); (root/"checkpoints"/"evidence_complete").mkdir(parents=True)
+            (root/"checkpoints"/"evidence_complete"/"evidence.json").write_text("[{\"protein_id\":\"P1\"}]")
+            (root/"checkpoints"/"evidence_complete"/"checkpoint_manifest.json").write_text("{}")
+            prefix_checkpoint_artifacts(root, "phage_a")
+            self.assertTrue((root/"checkpoints/evidence_complete/phage_a_evidence.json").is_file())
+            self.assertTrue((root/"checkpoints/evidence_complete/phage_a_checkpoint.json").is_file())
+            self.assertTrue(json.loads((root/"checkpoints/evidence_complete/phage_a_evidence.json").read_text())[0]["sample_id"] == "phage_a")
+    def test_compare_synthetic_phrog_anchor_and_mmseqs_fallback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            roots=[]
+            for suffix, phrog in (("a", True), ("b", False)):
+                root=Path(temp)/suffix; root.mkdir(); pid="P1"; seq="M"*10
+                (root/"proteins.faa").write_text(f">{pid}\n{seq}\n")
+                (root/"genes.gff3").write_text("##gff-version 3\n")
+                cls={"protein_id":pid,"functional_state":"CONSERVED_UNKNOWN","proposed_function":None,"functional_category":None,"conservation_status":"STRONGLY_CONSERVED"}
+                ctx={"protein_id":pid,"gene_order_index":0,"start":1,"end":30,"strand":"+","functional_state":"CONSERVED_UNKNOWN","proposed_function":None,"functional_category":None,"conservation_status":"STRONGLY_CONSERVED","functional_module":"head_and_packaging","module_id":"m1"}
+                ev={"protein_id":pid,"genome_id":"g","start":1,"end":30,"strand":"+","sequence":seq,"evidence":[{"supports":True,"source":"PHROGs","identifier":"1"}] if phrog else []}
+                (root/"functional_classification.json").write_text(json.dumps([cls])); (root/"genomic_context.json").write_text(json.dumps([ctx])); (root/"modules.json").write_text("[]"); (root/"evidence.json").write_text(json.dumps([ev])); (root/"run_manifest.json").write_text("{}")
+                roots.append(root)
+            rows, links=compare(roots, Path(temp)/"out")
+            self.assertEqual(rows[0]["synteny_status"], "STRONGLY_CONSERVED_CONTEXT")
+            self.assertEqual(links[0]["reference_protein_id"], "P1")
+            self.assertIn(links[0]["orthology_method"], {"PHROG_ANCHOR", "EXACT_SEQUENCE_MATCH"})
+            self.assertIn(links[0]["orthology_method"], {"PHROG_ANCHOR", "MMSEQS2", "EXACT_SEQUENCE_MATCH"})
+
+    def test_compare_exact_fallback_is_not_labeled_mmseqs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            roots=[]
+            for suffix in ("a", "b"):
+                root=Path(temp)/suffix; root.mkdir(); seq="M"*10
+                (root/"proteins.faa").write_text(f">P1\n{seq}\n")
+                (root/"genes.gff3").write_text("##gff-version 3\n")
+                (root/"functional_classification.json").write_text(json.dumps([{"protein_id":"P1","functional_state":"UNRESOLVED","proposed_function":None,"functional_category":None,"conservation_status":"NOT_ESTABLISHED"}]))
+                (root/"genomic_context.json").write_text(json.dumps([{"protein_id":"P1","gene_order_index":0,"start":1,"end":30,"strand":"+","functional_state":"UNRESOLVED","proposed_function":None,"functional_category":None,"conservation_status":"NOT_ESTABLISHED","functional_module":None}]))
+                (root/"modules.json").write_text("[]"); (root/"evidence.json").write_text(json.dumps([{"protein_id":"P1","genome_id":"g","start":1,"end":30,"strand":"+","sequence":seq,"evidence":[]}]))
+                (root/"run_manifest.json").write_text("{}")
+                roots.append(root)
+            _, links=compare(roots, Path(temp)/"out", mmseqs="/unused/mmseqs")
+            self.assertEqual(links[0]["orthology_method"], "EXACT_SEQUENCE_MATCH")
+            self.assertFalse(links[0]["provenance"]["mmseqs_executed"])
+
+    @pytest.mark.integration
+    def test_compare_real_mmseqs_provenance_for_non_phrog_match(self):
+        mmseqs = shutil.which("mmseqs") or "/opt/anaconda3/envs/phagemine/bin/mmseqs"
+        if not Path(mmseqs).exists():
+            self.skipTest("MMseqs2 unavailable")
+        with tempfile.TemporaryDirectory() as temp:
+            roots=[]
+            for suffix in ("a", "b"):
+                root=Path(temp)/suffix; root.mkdir(); seq="MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAN" * 3
+                (root/"proteins.faa").write_text(f">P1\n{seq}\n")
+                (root/"genes.gff3").write_text("##gff-version 3\n")
+                common={"protein_id":"P1","functional_state":"UNRESOLVED","proposed_function":None,"functional_category":None,"conservation_status":"NOT_ESTABLISHED"}
+                ctx={**common,"gene_order_index":0,"start":1,"end":90,"strand":"+","functional_module":None}
+                ev={"protein_id":"P1","genome_id":"g","start":1,"end":90,"strand":"+","sequence":seq,"evidence":[]}
+                (root/"functional_classification.json").write_text(json.dumps([common])); (root/"genomic_context.json").write_text(json.dumps([ctx])); (root/"modules.json").write_text("[]"); (root/"evidence.json").write_text(json.dumps([ev])); (root/"run_manifest.json").write_text("{}")
+                roots.append(root)
+            _, links=compare(roots, Path(temp)/"out", mmseqs=mmseqs)
+            self.assertEqual(links[0]["orthology_method"], "MMSEQS2")
+            self.assertTrue(links[0]["provenance"]["mmseqs_executed"])
+            self.assertIn("mmseqs_version", links[0]["provenance"])
+            self.assertIn("commands", links[0]["provenance"])
     def _context_protein(self, protein_id, start, sequence="M" * 30):
         return Protein("g", protein_id, start, start + len(sequence) * 3 - 1, "+", "ATG" * len(sequence), sequence, "test")
 
@@ -115,6 +476,13 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(before, original.__dict__)
         self.assertEqual(normalize_function("Major capsid protein {ECO:0001}"), "major capsid protein")
         self.assertEqual(unknown, classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="unknown")])))
+
+    def test_fusion_moderate_informative_reason_uses_selected_evidence(self):
+        evidence = self._fusion_e("PHROGs", "RNA polymerase", strength="MODERATE", identifier="moderate-1")
+        result = classify_protein(self._fusion_protein([evidence]))
+        self.assertEqual(result["functional_state"], "PROBABLE_FUNCTION")
+        self.assertIn("PHROGs", result["confidence_reasons"][0])
+        self.assertIn("MODERATE", result["confidence_reasons"][0])
 
     def test_fusion_outputs_cover_integration_fixture(self):
         proteins = [self._fusion_protein() for _ in range(99)]
@@ -216,6 +584,7 @@ class PhageMineTests(unittest.TestCase):
         progress.finish("summary")
         self.assertEqual(stream.getvalue(), "")
 
+    @pytest.mark.integration
     def test_progress_does_not_enter_scientific_outputs(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "progress-output"
@@ -241,6 +610,7 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(evidence.source_version, "v1")
         self.assertTrue(evidence.supports)
 
+    @pytest.mark.integration
     def test_full_pipeline_generates_explainable_outputs(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "run"
@@ -351,6 +721,7 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(representation.analysis_sequence, "TATTTCATT")
         self.assertIn("analysis_sequence_id", representation.manifest()["coordinate_scope"])
 
+    @pytest.mark.integration
     def test_pipeline_preserves_original_fasta_and_coordinates_use_analysis_representation(self):
         genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
         representation = GenomeRepresentation.original(genome_id, genome, topology=Topology.CIRCULAR).with_rotation(151, "Fixture-only explicit rotation")
@@ -387,6 +758,7 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(provenance.sequencing_platform, SequencingPlatform.HYBRID)
         self.assertEqual(provenance.assembly_method, "hybrid de novo")
 
+    @pytest.mark.integration
     def test_unknown_provenance_does_not_invent_metadata(self):
         provenance = SequencingProvenance()
         self.assertEqual(provenance.sequencing_platform, SequencingPlatform.UNKNOWN)
@@ -461,6 +833,7 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(proteins[0].biological_interest, 0)
         self.assertEqual(proteins[0].evidence_diversity, "Low")
 
+    @pytest.mark.integration
     def test_pipeline_persists_accepted_ga_pfam_evidence(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "ga-persistence"
@@ -651,6 +1024,7 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(result.status, "UNAVAILABLE")
         self.assertEqual(result.evidence, [])
 
+    @pytest.mark.integration
     def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "real-no-db"
@@ -661,6 +1035,7 @@ class PhageMineTests(unittest.TestCase):
             evidence = json.loads((output / "evidence.json").read_text())
             self.assertFalse(any(item["source"] == "mock-phage-evidence" for protein in evidence for item in protein["evidence"]))
 
+    @pytest.mark.integration
     def test_no_evidence_does_not_assign_misleading_ordinal_ranks(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "insufficient"
@@ -724,6 +1099,7 @@ class PhageMineTests(unittest.TestCase):
         registry = default_registry_path()
         self.assertNotIn(str(ROOT), str(registry))
 
+    @pytest.mark.integration
     def test_fasta_analysis_without_sequencing_metadata_uses_unknown(self):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "unknown-provenance"
@@ -731,6 +1107,7 @@ class PhageMineTests(unittest.TestCase):
             manifest = json.loads((output / "run_manifest.json").read_text())
             self.assertEqual(manifest["sequencing_provenance"]["sequencing_platform"], "UNKNOWN")
 
+    @pytest.mark.integration
     def test_sequencing_provenance_is_preserved_and_separate_from_representation(self):
         genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
         representation = GenomeRepresentation.original(genome_id, genome)

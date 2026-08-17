@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phagemine"
-version = "0.1.0"
-description = "Evidence-first phage annotation and discovery-mining prototype"
+version = "1.0.0rc1"
+description = "Evidence-first phage annotation and discovery mining"
 requires-python = ">=3.10"
 dependencies = []
 
@@ -14,3 +14,10 @@ phagemine = "phagemine.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-m 'not integration'"
+markers = [
+    "integration: exercises external tools or registered biological resources",
+    "slow: long-running resource-backed integration test",
+]

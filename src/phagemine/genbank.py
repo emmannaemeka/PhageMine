@@ -70,11 +70,17 @@ def product_name(protein: Protein) -> str:
     return "hypothetical protein"
 
 
-def feature_table(genome_id: str, proteins: list[Protein]) -> str:
+def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | None = None, locus_tag_prefix: str | None = None) -> str:
     lines = [f">Feature {genome_id}"]
     for protein in proteins:
         start, end = (protein.start, protein.end) if protein.strand == "+" else (protein.end, protein.start)
-        lines.extend([f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{protein.protein_id}", f"\t\t\tproduct\t{product_name(protein)}", f"\t\t\tnote\tPhageMine evidence record: cds_provenance.json#{protein.protein_id}; functional claims withheld unless supported by non-mock curated/experimental evidence."])
+        change = (overrides or {}).get(protein.protein_id, {})
+        product = change.get("product") or product_name(protein)
+        tag = f"{locus_tag_prefix}{protein.protein_id}" if locus_tag_prefix else protein.protein_id
+        note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; functional claims withheld unless supported by non-mock curated/experimental evidence."
+        lines.extend([f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", f"\t\t\tnote\t{_safe(note)}"])
+        if change.get("partial") is True:
+            lines.append("\t\t\tpartial")
     return "\n".join(lines) + "\n"
 
 
@@ -108,7 +114,7 @@ def readiness(pre_validation: dict, metadata: SubmissionMetadata, table2asn: dic
     return "READY", missing
 
 
-def write_package(output: str | Path, genome_id: str, genome: str, proteins: list[Protein], provenance: dict, metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, sequencing_provenance: SequencingProvenance | None = None) -> dict:
+def write_package(output: str | Path, genome_id: str, genome: str, proteins: list[Protein], provenance: dict, metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, sequencing_provenance: SequencingProvenance | None = None, feature_overrides: dict | None = None) -> dict:
     root = Path(output) / "genbank_submission"
     root.mkdir(parents=True, exist_ok=True)
     metadata = metadata or SubmissionMetadata()
@@ -119,7 +125,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
         pre_validation["valid"] = False
     fasta_header = f">{genome_id}" + (f" [organism={metadata.organism}]" if metadata.organism else "")
     (root / "genome.fsa").write_text(f"{fasta_header}\n{genome}\n")
-    (root / "features.tbl").write_text(feature_table(genome_id, proteins))
+    (root / "features.tbl").write_text(feature_table(genome_id, proteins, feature_overrides, getattr(metadata, "locus_tag_prefix", None)))
     (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{p.protein_id} {p.protein_id}\n{p.sequence}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))

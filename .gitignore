@@ -7,9 +7,24 @@ __pycache__/
 results/
 tmp/
 *.tmp
+build/
+dist/
+*.egg-info/
+pseudomonas_batch_input/
+salmonella_validation_input/
+cache/
+*_cache/
+publication_figures_v1/
+benchmark_*/
+benchmarks/generated/
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
 
 # Local Evidence Packs and biological databases (never commit)
 evidence_packs/
 databases/
 *.dmnd
 *.hmmpress
+PMFDB*/

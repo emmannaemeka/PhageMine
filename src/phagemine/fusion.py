@@ -99,7 +99,10 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         reasons.append("no accepted strong conflict")
     elif strong_info or informative:
         state, confidence = "PROBABLE_FUNCTION", "MODERATE" if strong_info else "LOW"
-        reasons = [f"accepted {e.evidence_strength or 'informative'} {e.source} evidence supports a functional interpretation"]
+        reasons = [
+            f"accepted {e.evidence_strength or 'informative'} {e.source} evidence supports a functional interpretation"
+            for _, e, _ in informative
+        ]
     elif categories:
         state, confidence = "FUNCTIONAL_CLASS_ONLY", "LOW"
         reasons = ["accepted evidence supports a broad functional category without an informative specific function"]

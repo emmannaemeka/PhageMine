@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 import tempfile
+from datetime import datetime, timezone
 from dataclasses import fields
 from pathlib import Path
 from typing import Any
@@ -28,6 +29,19 @@ from .context import build_context
 REUSED = ("input/genome validation", "genome representation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot")
 RESUME_STAGES = REUSED + ("PHROGs", "evidence integration", "candidate ranking/mining", "QC/report generation", "GenBank package")
 
+def checkpoint_reusable(checkpoint: dict, current_provenance: dict | None) -> bool:
+    """A previously unavailable resource is never reusable once requested now."""
+    if not checkpoint or checkpoint.get("status") not in {"REAL", "COMPLETE"}:
+        return False
+    previous = checkpoint.get("provenance", {})
+    if previous.get("status") == "UNAVAILABLE":
+        return False
+    if current_provenance:
+        for key in ("adapter", "adapter_version", "swissprot_path", "swissprot_version", "diamond", "diamond_version", "thresholds"):
+            if key in previous and key in current_provenance and previous[key] != current_provenance[key]:
+                return False
+    return True
+
 
 def _representation(data: dict[str, Any]) -> GenomeRepresentation:
     events = tuple(TransformEvent(**event) for event in data.get("transform_history", []))
@@ -45,29 +59,43 @@ def _evidence(data: dict[str, Any]) -> Evidence:
 
 def _load_source(source: Path) -> tuple[dict[str, Any], GenomeRepresentation, list[Protein], str, SequencingProvenance]:
     manifest_path = source / "run_manifest.json"
-    required = [manifest_path, source / "original_input.fasta", source / "analysis_genome.fasta", source / "proteins.faa", source / "evidence.json", source / "genome_representation.json"]
+    if not manifest_path.is_file() and (source / "checkpoint_manifest.json").is_file():
+        manifest_path = source / "checkpoint_manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.is_file() else {}
+    sample_id = manifest.get("sample_id")
+    def artifact(generic: str, suffix: str) -> Path:
+        direct = source / generic
+        if direct.is_file():
+            return direct
+        matches = sorted(source.glob(f"*_{suffix}"))
+        return matches[0] if len(matches) == 1 else direct
+    original_path = artifact("original_input.fasta", "original.fasta")
+    analysis_path = artifact("analysis_genome.fasta", "analysis.fasta")
+    proteins_path = artifact("proteins.faa", "proteins.faa")
+    evidence_path = artifact("evidence.json", "evidence.json")
+    genome_path = artifact("genome_representation.json", "genome.json")
+    required = [manifest_path, original_path, analysis_path, proteins_path, evidence_path, genome_path]
     missing = [str(path) for path in required if not path.is_file()]
     if missing:
         raise ValueError("Resume validation failed; missing source artifacts: " + ", ".join(missing))
-    manifest = json.loads(manifest_path.read_text())
-    input_id, input_sequence = read_fasta(source / "original_input.fasta")
-    if manifest.get("input_sha256") != checksum(source / "original_input.fasta"):
+    input_id, input_sequence = read_fasta(original_path)
+    if manifest.get("input_sha256") != checksum(original_path):
         raise ValueError("Resume validation failed; original input genome SHA-256 does not match run_manifest.json")
-    analysis_id, analysis_sequence = read_fasta(source / "analysis_genome.fasta")
-    rep_data = json.loads((source / "genome_representation.json").read_text())
+    analysis_id, analysis_sequence = read_fasta(analysis_path)
+    rep_data = json.loads(genome_path.read_text())
     if rep_data.get("original_sequence_id") != input_id or rep_data.get("analysis_sequence_id") != analysis_id:
         raise ValueError("Resume validation failed; genome representation identifiers do not match FASTA artifacts")
     rep = _representation(rep_data)
     rep = GenomeRepresentation(rep.original_sequence_id, rep.analysis_sequence_id, input_sequence, analysis_sequence, rep.topology, rep.orientation, rep.rotation, rep.transform_history, rep.evidence, rep.reference)
     if rep.original_sequence != input_sequence or rep.analysis_sequence != analysis_sequence:
         raise ValueError("Resume validation failed; genome representation sequence content is inconsistent")
-    raw = json.loads((source / "evidence.json").read_text())
-    if not isinstance(raw, list) or len(raw) != 99:
-        raise ValueError("Resume validation failed; evidence.json does not contain the expected 99 protein records")
+    raw = json.loads(evidence_path.read_text())
+    if not isinstance(raw, list) or not raw:
+        raise ValueError("Resume validation failed; evidence.json does not contain protein records")
     fasta_records = []
     header = None
     seq = []
-    for line in (source / "proteins.faa").read_text().splitlines():
+    for line in proteins_path.read_text().splitlines():
         if line.startswith(">"):
             if header is not None: fasta_records.append((header, "".join(seq)))
             header, seq = line[1:].split()[0], []
@@ -87,6 +115,54 @@ def _load_source(source: Path) -> tuple[dict[str, Any], GenomeRepresentation, li
         raise ValueError("Resume validation failed; original gene-caller provenance is missing or not PHANOTATE")
     sequencing = SequencingProvenance.from_dict(json.loads((source / "sequencing_provenance.json").read_text())) if (source / "sequencing_provenance.json").is_file() else SequencingProvenance()
     return manifest, rep, proteins, input_sequence, sequencing
+
+
+def recover_evidence_complete(source: str | Path, progress: ProgressReporter | None = None) -> int:
+    """Regenerate only fusion and downstream outputs from validated evidence."""
+    source = Path(source).resolve()
+    status_path = source / "sample_status.json"
+    if not status_path.is_file():
+        raise ValueError("Evidence-complete recovery requires sample_status.json")
+    status = json.loads(status_path.read_text())
+    checkpoint = status.get("checkpoints", {}).get("evidence_integration")
+    if not checkpoint or checkpoint.get("status") != "COMPLETE":
+        raise ValueError("Evidence-complete recovery requires a COMPLETE evidence integration checkpoint")
+    manifest, representation, proteins, _, sequencing = _load_source(source)
+    checkpoint_source = source / "checkpoints" / "evidence_complete"
+    if not checkpoint_source.is_dir():
+        raise ValueError("Evidence-complete recovery failed; persisted checkpoint snapshot is missing")
+    manifest, representation, proteins, _, sequencing = _load_source(checkpoint_source)
+    if not manifest.get("evidence_adapters"):
+        raise ValueError("Evidence-complete recovery failed; adapter provenance is missing")
+    progress = progress or ProgressReporter(quiet=True)
+    progress.STAGES = RESUME_STAGES
+    for stage in REUSED:
+        progress.start(f"REUSED: {stage}"); progress.finish("validated")
+    for stage in ("PHROGs", "evidence integration"):
+        progress.start(f"REUSED: {stage}"); progress.finish("validated")
+    progress.start("functional classification")
+    classifications = classify_proteins(proteins)
+    context_records, modules = build_context(proteins, classifications)
+    progress.finish("regenerated")
+    progress.start("candidate ranking/mining")
+    mine(proteins)
+    candidates = ranked_candidates(proteins)
+    progress.finish("regenerated")
+    ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"} for p in candidates for e in p.evidence) else "RANKED"
+    progress.start("QC/report generation")
+    quality = assess(representation.analysis_sequence, proteins)
+    recovered = {**manifest, "command": "batch-recovery", "stage_status": {stage: "REUSED" for stage in REUSED + ("PHROGs", "evidence integration")} | {"functional classification": "RUN", "genomic context/modules": "RUN", "candidate ranking/mining": "RUN", "QC/report generation": "RUN", "GenBank package": "RUN"}, "recovery": {"mode": "evidence_complete", "source": str(source)}, "quality_control": quality, "discovery_ranking": {"status": ranking_status, "message": "Candidates ranked by available evidence."}}
+    write_outputs(source, representation, sequencing, proteins, candidates, recovered, quality, source / "original_input.fasta", classifications, context_records, modules)
+    progress.finish("regenerated")
+    progress.start("GenBank package")
+    write_package(source, representation.analysis_sequence_id, representation.analysis_sequence, proteins, recovered, sequencing_provenance=sequencing)
+    progress.finish("regenerated")
+    history = status.setdefault("audit_history", [])
+    history.append({"status": status.get("status"), "failed_stage": status.get("failed_stage"), "error_message": status.get("error_message"), "recovered_at": datetime.now(timezone.utc).isoformat()})
+    status.update({"status": "SUCCESS", "failed_stage": None, "current_stage": None, "recovery": "evidence_complete"})
+    _atomic_json(status_path, status)
+    (source / "run_manifest.json").write_text(json.dumps(recovered, indent=2, sort_keys=True))
+    return len(proteins)
 
 
 def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = False,
