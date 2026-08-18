@@ -31,7 +31,8 @@ class PHROGSMMseqsAdapter(EvidenceAdapter):
                  coverage_threshold: float | None = 0.5,
                  score_threshold: float | None = None,
                  identity_threshold: float | None = None,
-                 alignment_length_threshold: int | None = None):
+                 alignment_length_threshold: int | None = None, threads: int = 1):
+        self.threads = max(1, int(threads))
         self.database_path = Path(database_path).expanduser() if database_path else None
         self.annotations_path = Path(annotations_path).expanduser() if annotations_path else None
         self.mmseqs = mmseqs or shutil.which("mmseqs")
@@ -91,7 +92,7 @@ class PHROGSMMseqsAdapter(EvidenceAdapter):
             fasta.write_text("".join(f">{p.protein_id}\n{p.sequence}\n" for p in proteins))
             commands = [
                 [str(self.mmseqs), "createdb", str(fasta), str(query_db)],
-                [str(self.mmseqs), "search", str(query_db), str(self.database_path), str(result_db), str(tmp)],
+                [str(self.mmseqs), "search", str(query_db), str(self.database_path), str(result_db), str(tmp), "--threads", str(self.threads)],
                 [str(self.mmseqs), "convertalis", str(query_db), str(self.database_path),
                  str(result_db), str(output), "--format-output", MMSEQS_FORMAT],
             ]

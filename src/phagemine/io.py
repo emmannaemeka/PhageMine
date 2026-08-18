@@ -23,8 +23,11 @@ def read_fasta(path: str | Path) -> tuple[str, str]:
     if len(records) != 1:
         raise ValueError("MVP accepts exactly one FASTA record per run")
     genome_id, sequence = records[0]
-    if not sequence or set(sequence) - set("ACGTN"):
-        raise ValueError("FASTA sequence must contain only A, C, G, T, or N")
+    # Accept standard IUPAC DNA ambiguity codes; preserve the sequence exactly
+    # for provenance while allowing annotated public cohorts with ambiguous
+    # bases (e.g. Y) to proceed through validation.
+    if not sequence or set(sequence) - set("ACGTRYSWKMBDHVN"):
+        raise ValueError("FASTA sequence must contain standard IUPAC DNA bases")
     return genome_id, sequence
 
 

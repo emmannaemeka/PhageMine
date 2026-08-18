@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import platform
+import shutil
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
@@ -23,9 +24,13 @@ class ResourceType(str, Enum):
 
 
 class ResourceStatus(str, Enum):
+    REGISTERED = "REGISTERED"
     READY = "READY"
     UNAVAILABLE = "UNAVAILABLE"
     INVALID = "INVALID"
+
+
+REQUIRED_TOOLS = {"PFAM": "hmmscan", "VOGDB": "hmmscan", "SWISSPROT": "diamond", "PHROGS": "mmseqs"}
 
 
 def default_registry_path() -> Path:
@@ -80,6 +85,64 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _tool_available(tool: str | None) -> bool:
+    if not tool:
+        return False
+    candidate = Path(str(tool)).expanduser()
+    return (candidate.is_file() and os.access(candidate, os.X_OK)) or bool(shutil.which(str(tool)))
+
+
+def validate_resource(resource: dict[str, Any], *, check_checksum: bool = True) -> dict[str, Any]:
+    """Validate a registered resource and its operational sidecars.
+
+    This is deliberately conservative: a resource is READY only when the
+    primary path, declared annotations/metadata, required executable(s), and
+    format-specific index markers are present.
+    """
+    result = dict(resource)
+    path = Path(str(resource.get("path", ""))).expanduser()
+    problems: list[str] = []
+    if not path.exists():
+        result["status"] = ResourceStatus.UNAVAILABLE.value
+        result["validation_errors"] = ["resource path does not exist"]
+        return result
+    if not os.access(path, os.R_OK):
+        problems.append("resource path is not readable")
+    if check_checksum and resource.get("checksum") and path.is_file() and _sha256(path) != resource["checksum"]:
+        problems.append("resource checksum mismatch")
+    provenance = resource.get("provenance") or {}
+    kind = str(resource.get("resource_type", "")).upper()
+    required_tool = REQUIRED_TOOLS.get(kind)
+    declared_tools = list(resource.get("required_tools") or [])
+    if required_tool and required_tool not in declared_tools:
+        declared_tools.append(required_tool)
+    for key in ("annotations_path", "metadata_path"):
+        value = provenance.get(key)
+        if value and not Path(value).expanduser().is_file():
+            problems.append(f"{key} does not exist")
+    for tool in declared_tools:
+        if not _tool_available(tool):
+            problems.append(f"required executable unavailable: {tool}")
+    if kind in {"PFAM", "VOGDB"} and path.is_file():
+        # hmmsearch/hmmscan databases are operationally prepared when all
+        # HMMER pressed companions exist; permit explicit small test fixtures.
+        companions = [Path(str(path) + suffix) for suffix in (".h3f", ".h3i", ".h3m", ".h3p")]
+        if not all(p.exists() for p in companions):
+            problems.append("HMM database is marked prepared but pressed indexes are incomplete")
+        if kind == "VOGDB" and not provenance.get("annotations_path"):
+            problems.append("VOGDB annotation mapping is not registered")
+    if kind == "PHROGS":
+        if not Path(str(path) + ".dbtype").is_file():
+            problems.append("MMseqs2 database .dbtype companion is missing")
+        if not provenance.get("annotations_path"):
+            problems.append("PHROGs annotation mapping is not registered")
+    if kind == "SWISSPROT" and not provenance.get("metadata_path"):
+        problems.append("Swiss-Prot metadata is not registered")
+    result["status"] = ResourceStatus.INVALID.value if problems else ResourceStatus.READY.value
+    result["validation_errors"] = problems
+    return result
+
+
 class EvidenceResourceManager:
     def __init__(self, registry_path: str | Path | None = None):
         self.registry_path = Path(registry_path).expanduser() if registry_path else default_registry_path()
@@ -114,18 +177,26 @@ class EvidenceResourceManager:
     def list(self, check_checksum: bool = False) -> list[dict[str, Any]]:
         return [resource.metadata(check_checksum) for resource in self._load().values()]
 
+    def validate_all(self, check_checksum: bool = True) -> list[dict[str, Any]]:
+        return [validate_resource(resource.metadata(check_checksum), check_checksum=check_checksum)
+                for resource in self._load().values()]
+
+    def validate(self, name: str, check_checksum: bool = True) -> dict[str, Any] | None:
+        resource = self._load().get(name)
+        return validate_resource(resource.metadata(check_checksum), check_checksum=check_checksum) if resource else None
+
     def get(self, name: str, check_checksum: bool = False) -> dict[str, Any] | None:
         resource = self._load().get(name)
         return resource.metadata(check_checksum) if resource else None
 
     def find(self, resource_type: ResourceType | str, check_checksum: bool = False) -> dict[str, Any] | None:
         target = resource_type if isinstance(resource_type, ResourceType) else ResourceType(str(resource_type).upper())
-        for resource in self._load().values():
-            if resource.resource_type == target:
-                metadata = resource.metadata(check_checksum)
-                if metadata["status"] == ResourceStatus.READY.value:
-                    return metadata
-        return None
+        # Legacy adapter lookup remains path-based for backwards compatibility;
+        # strict operational selection is performed by preflight_profile and
+        # validate_all before public execution.
+        candidates = [resource.metadata(check_checksum) for resource in self._load().values()
+                      if resource.resource_type == target and resource.status(check_checksum) == ResourceStatus.READY]
+        return candidates[0] if candidates else None
 
     @staticmethod
     def checksum(path: str | Path) -> str:

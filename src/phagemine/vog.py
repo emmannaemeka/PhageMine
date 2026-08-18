@@ -18,13 +18,14 @@ class VOGHMMAdapter(EvidenceAdapter):
 
     def __init__(self, vog_path: str | Path | None = None, annotations_path: str | Path | None = None,
                  hmmscan: str | None = None, evalue_threshold: float | None = 1e-5,
-                 coverage_threshold: float | None = 0.5, database_version: str | None = None):
+                 coverage_threshold: float | None = 0.5, database_version: str | None = None, threads: int = 1):
         self.vog_path = Path(vog_path).expanduser() if vog_path else None
         self.annotations_path = Path(annotations_path).expanduser() if annotations_path else None
         self.hmmscan = hmmscan or shutil.which("hmmscan")
         self.evalue_threshold = evalue_threshold
         self.coverage_threshold = coverage_threshold
         self.database_version = database_version or "unknown"
+        self.threads = max(1, int(threads))
 
     def available(self) -> bool:
         executable = bool(self.hmmscan and (Path(self.hmmscan).exists() or shutil.which(self.hmmscan)))
@@ -54,7 +55,7 @@ class VOGHMMAdapter(EvidenceAdapter):
             fasta = Path(temp) / "proteins.faa"
             domtblout = Path(temp) / "hmmscan.domtblout"
             fasta.write_text("".join(f">{p.protein_id}\n{p.sequence}\n" for p in proteins))
-            command = [str(self.hmmscan), "--domtblout", str(domtblout), str(self.vog_path), str(fasta)]
+            command = [str(self.hmmscan), "--cpu", str(self.threads), "--domtblout", str(domtblout), str(self.vog_path), str(fasta)]
             result = subprocess.run(command, capture_output=True, text=True, check=False)
             provenance["search_command"] = command
             provenance["search_parameters"] = {"domtblout": True, "threshold_mode": "MANUAL"}

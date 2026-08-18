@@ -7,6 +7,9 @@ import json
 import os
 import re
 import traceback
+import shutil
+import pickle
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -15,6 +18,22 @@ from .pipeline import run
 from .progress import ProgressReporter
 from .resume import recover_evidence_complete
 from .reporting import prefix_checkpoint_artifacts
+from .io import read_fasta, checksum
+from .models import Protein
+from .genome_representation import GenomeRepresentation
+from .sequencing_provenance import SequencingProvenance
+from .fusion import classify_proteins
+from .context import build_context
+from .mining import mine, ranked_candidates
+from .quality import assess
+from .reporting import write_outputs
+from .genbank import write_package
+from .pooled import deduplicate_proteins, sequence_sha256
+from .pfam import PfamHMMAdapter
+from .vog import VOGHMMAdapter
+from .swissprot import SwissProtEvidenceAdapter
+from .phrogs import PHROGSMMseqsAdapter
+from .resources import EvidenceResourceManager, ResourceType
 
 FASTA_EXTENSIONS = {".fasta", ".fa", ".fna"}
 REQUIRED_RUN = ("run_manifest.json", "evidence.json", "functional_classification.json",
@@ -23,6 +42,119 @@ SUMMARY_FIELDS = ("sample_id", "input_file", "status", "error_message", "genome_
                   "predicted_proteins", "KNOWN_FUNCTION", "PROBABLE_FUNCTION",
                   "FUNCTIONAL_CLASS_ONLY", "CONSERVED_UNKNOWN", "CONFLICTING_EVIDENCE",
                   "UNRESOLVED", "module_count", "output_directory")
+
+
+def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predictor="phanotate", phanotate=None, progress=None, resume_existing=False):
+    """Run gene prediction per genome, then each requested adapter once on exact representatives."""
+    from .preflight import preflight_profile
+    resolution = preflight_profile(profile)
+    progress = progress or ProgressReporter(quiet=True)
+    project = Path(output); project.mkdir(parents=True, exist_ok=True)
+    checkpoint_path = project / "pooled_checkpoints.json"
+    checkpoints = json.loads(checkpoint_path.read_text()) if resume_existing and checkpoint_path.is_file() else {}
+    def mark(stage, state="COMPLETE", detail=None):
+        checkpoints[stage] = {"state": state, "detail": detail, "time": datetime.now(timezone.utc).isoformat()}
+        checkpoint_path.write_text(json.dumps(checkpoints, indent=2, sort_keys=True))
+    state_path = project / "pooled_state.pkl"
+    fingerprint = {str(Path(p)): checksum(p) for p in input_paths}
+    reusable = resume_existing and state_path.is_file() and checkpoints.get("GENE_PREDICTION", {}).get("state") == "COMPLETE"
+    state = pickle.loads(state_path.read_bytes()) if reusable else {}
+    predictor_factory = lambda: create_predictor(gene_predictor, phanotate)
+    def predict(path):
+        gid, seq = read_fasta(path)
+        proteins = predictor_factory().predict(gid, seq, path)
+        if not proteins: raise ValueError(f"No proteins predicted for {path}")
+        return path, gid, seq, proteins
+    if reusable and state.get("input_fingerprint") == fingerprint:
+        predicted = state["predicted"]
+    else:
+        with ThreadPoolExecutor(max_workers=max(1, int(threads))) as pool:
+            predicted = list(pool.map(predict, input_paths))
+        state = {"input_fingerprint": fingerprint, "predicted": predicted}
+        mark("GENE_PREDICTION")
+    all_proteins = [p for _, _, _, ps in predicted for p in ps]
+    if reusable and state.get("input_fingerprint") == fingerprint and state.get("representatives"):
+        representatives, occurrences = state["representatives"], state["occurrences"]
+    else:
+        representatives, occurrences = deduplicate_proteins(all_proteins)
+        state.update(representatives=representatives, occurrences=occurrences)
+    state_path.write_bytes(pickle.dumps(state))
+    mark("POOL_DEDUP")
+    by_digest = {sequence_sha256(p.sequence): p for p in representatives}
+    resource_map = {r["resource_type"]: r for r in resolution.get("resources", [])}
+    evidence_adapters = []
+    adapters = []
+    if profile == "standard":
+        kinds = ["PHROGS"]
+    elif profile == "full":
+        kinds = ["PFAM", "VOGDB", "SWISSPROT", "PHROGS"]
+    else:
+        kinds = []
+    for kind in kinds:
+        r = resource_map[kind]; prov = r.get("provenance") or {}
+        # CLI-resolved explicit resources use adapter-default identity unless a
+        # user supplies a version; keep pooled and single-genome semantics equal.
+        if kind == "PFAM": adapter = PfamHMMAdapter(r["path"], evalue_threshold=None, coverage_threshold=None, threads=threads)
+        elif kind == "VOGDB": adapter = VOGHMMAdapter(r["path"], prov.get("annotations_path"), database_version="unknown", threads=threads)
+        elif kind == "SWISSPROT": adapter = SwissProtEvidenceAdapter(r["path"], prov.get("metadata_path"), database_version="unknown", threads=threads)
+        else: adapter = PHROGSMMseqsAdapter(r["path"], prov.get("annotations_path"), database_version="unknown", threads=threads)
+        adapters.append((kind, adapter))
+        if reusable and checkpoints.get(kind, {}).get("state") == "COMPLETE" and state.get("evidence", {}).get(kind) is not None:
+            result = state["evidence"][kind]
+        else:
+            result = adapter.analyze(representatives)
+            state.setdefault("evidence", {})[kind] = result
+            state_path.write_bytes(pickle.dumps(state))
+            mark(kind)
+        evidence_adapters.append({"adapter": result.adapter, "status": result.status, "provenance": result.provenance, "pooled_execution": True})
+        rep_by_id = {p.protein_id: p for p in representatives}
+        for evidence in result.evidence:
+            pid = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+            if pid in rep_by_id:
+                evidence.provenance["pooled_execution"] = True
+                rep_by_id[pid].evidence.append(evidence)
+    evidence_by_digest = {sequence_sha256(p.sequence): list(p.evidence) for p in representatives}
+    for p in all_proteins:
+        p.evidence = [type(e)(**{**e.__dict__, "provenance": {**e.provenance, "pooled_execution": True}}) for e in evidence_by_digest[sequence_sha256(p.sequence)]]
+    mark("EVIDENCE_REMAP")
+    rows=[]
+    for path, gid, seq, proteins in predicted:
+        destination = project / _sample_id(path); destination.mkdir(parents=True, exist_ok=True)
+        local = [p for p in all_proteins if p.genome_id == gid]
+        classifications = classify_proteins(local); contexts, modules = build_context(local, classifications)
+        mine(local); candidates = ranked_candidates(local); quality = assess(seq, local)
+        manifest = {"pipeline":"PhageMine", "command":"batch", "pooled_execution":True,
+                    "threads":threads, "evidence_profile":profile, "input":str(path), "input_sha256":checksum(path),
+                    "gene_caller":{"name":predictor_factory().name,"version":predictor_factory().version(),"parameters":predictor_factory().parameters()},
+                    "evidence_adapters":evidence_adapters, "pooled_proteins":{"total_occurrences":len(all_proteins),"unique_sequences":len(representatives),"occurrence_map":occurrences},
+                    "discovery_ranking":{"status":"RANKED"}}
+        rep = GenomeRepresentation.original(gid, seq)
+        write_outputs(destination, rep, SequencingProvenance(), local, candidates, manifest, quality, path, classifications, contexts, modules)
+        write_package(destination, gid, seq, local, manifest, sequencing_provenance=SequencingProvenance())
+        rows.append({"sample_id":_sample_id(path),"status":"SUCCESS","predicted_proteins":len(local),"output_directory":str(destination)})
+    (project/"pooled_manifest.json").write_text(json.dumps({"pooled_execution":True,"threads":threads,"profile":profile,"total_proteins":len(all_proteins),"unique_proteins":len(representatives),"occurrences":occurrences,"samples":rows},indent=2,sort_keys=True))
+    return rows
+
+
+def discovery_from_annotation(annotation_root, output):
+    """Build the discovery view from completed independent annotations.
+
+    No gene caller or evidence adapter is invoked; annotation artifacts are
+    copied verbatim and provenance records the reuse.
+    """
+    source = Path(annotation_root); destination = Path(output)
+    destination.mkdir(parents=True, exist_ok=True)
+    samples = []
+    for sample in sorted(p for p in source.iterdir() if p.is_dir() and (p / "proteins.faa").is_file()):
+        target = destination / sample.name
+        if target.exists(): shutil.rmtree(target)
+        shutil.copytree(sample, target)
+        samples.append({"sample_id": sample.name, "status": "REUSED_ANNOTATION",
+                        "output_directory": str(target)})
+    (destination / "pooled_manifest.json").write_text(json.dumps({
+        "pooled_execution": False, "discovery_from_annotation": True,
+        "evidence_reused": True, "samples": samples}, indent=2, sort_keys=True))
+    return samples
 
 
 def _sample_id(path: Path) -> str:
@@ -65,11 +197,25 @@ def _atomic_json(path: Path, value) -> None:
 
 def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_existing=False,
           fail_fast=False, gene_predictor="phanotate", phanotate=None, progress=None,
-          reconcile_orfs=False, prodigal=None) -> list[dict]:
+          reconcile_orfs=False, prodigal=None, threads: int = 1, evidence_profile: str = "core",
+          mode: str = "annotate") -> list[dict]:
     root = Path(input_dir).resolve()
+    from .preflight import preflight_profile
+    profile_resolution = preflight_profile(evidence_profile)
+    if mode not in {"annotate", "discover", "both"}:
+        raise ValueError("mode must be annotate, discover, or both")
     project = Path(output).resolve()
     project.mkdir(parents=True, exist_ok=True)
     inputs = discover_inputs(root, recursive)
+    if mode == "discover":
+        return pooled_batch(inputs, project, profile=evidence_profile, threads=threads,
+                            gene_predictor=gene_predictor, phanotate=phanotate, progress=progress,
+                            resume_existing=resume_existing)
+    if mode == "both":
+        batch(input_dir, project / "annotation", recursive, resume_existing, fail_fast,
+              gene_predictor, phanotate, progress, reconcile_orfs, prodigal, threads,
+              evidence_profile, mode="annotate")
+        return discovery_from_annotation(project / "annotation", project / "discovery")
     progress = progress or ProgressReporter(quiet=True)
     started = datetime.now(timezone.utc).isoformat()
     rows: list[dict] = []
@@ -77,7 +223,12 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
                 "ended_at": None, "input_directory": str(root), "recursive": recursive,
                 "inputs": [str(p) for p in inputs], "samples": [], "failures": [],
                 "configuration": {"gene_predictor": gene_predictor, "resume_existing": resume_existing,
-                                   "fail_fast": fail_fast}}
+                                   "fail_fast": fail_fast, "threads": threads,
+                                   "evidence_profile": evidence_profile,
+                                   "mode": mode,
+                                   "evidence_profile_resolution": profile_resolution,
+                                   "pooled_execution": False,
+                                   "pooled_execution_note": "Reserved until pooled adapter equivalence is validated."}}
 
     def write_summary() -> None:
         _atomic_json(project / "batch_summary.json", rows)

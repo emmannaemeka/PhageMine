@@ -18,7 +18,7 @@ from .models import Evidence, EvidenceLevel, Protein
 class PfamHMMAdapter(EvidenceAdapter):
     name = "PfamHMMAdapter"
 
-    def __init__(self, pfam_path: str | Path | None = None, hmmscan: str | None = None, evalue_threshold: float | None = None, coverage_threshold: float | None = None, trusted_cutoff: bool = False, database_version: str | None = None, evidence_pack_id: str | None = None, threshold_mode: str | None = None):
+    def __init__(self, pfam_path: str | Path | None = None, hmmscan: str | None = None, evalue_threshold: float | None = None, coverage_threshold: float | None = None, trusted_cutoff: bool = False, database_version: str | None = None, evidence_pack_id: str | None = None, threshold_mode: str | None = None, threads: int = 1):
         self.pfam_path = Path(pfam_path) if pfam_path else None
         self.hmmscan = hmmscan or shutil.which("hmmscan")
         self.evalue_threshold = evalue_threshold
@@ -29,6 +29,7 @@ class PfamHMMAdapter(EvidenceAdapter):
         self.trusted_cutoff = self.threshold_mode == "GA"
         self.database_version = database_version or "unknown"
         self.evidence_pack_id = evidence_pack_id
+        self.threads = max(1, int(threads))
 
     def available(self) -> bool:
         executable_available = bool(self.hmmscan and (Path(self.hmmscan).exists() or shutil.which(self.hmmscan)))
@@ -62,7 +63,7 @@ class PfamHMMAdapter(EvidenceAdapter):
         return EvidenceAdapterResult(self.name, "REAL", evidence=evidence, provenance=provenance)
 
     def _search_command(self, domtblout: Path, fasta: Path) -> list[str]:
-        command = [str(self.hmmscan), "--domtblout", str(domtblout), str(self.pfam_path), str(fasta)]
+        command = [str(self.hmmscan), "--cpu", str(self.threads), "--domtblout", str(domtblout), str(self.pfam_path), str(fasta)]
         if self.threshold_mode == "GA":
             command.insert(1, "--cut_ga")
         return command

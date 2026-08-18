@@ -5,6 +5,7 @@ import html
 import json
 import os
 import shutil
+import hashlib
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -40,7 +41,10 @@ def write_stage_checkpoint(checkpoint_dir: str | Path, stage: str, payload: dict
     """Atomically persist a stage payload and its provenance."""
     destination = Path(checkpoint_dir) / stage
     destination.mkdir(parents=True, exist_ok=True)
-    manifest = {"stage": stage, "provenance": provenance or {}, "schema_version": "1.0"}
+    encoded = json.dumps(payload, indent=2, sort_keys=True, default=str).encode()
+    manifest = {"stage": stage, "provenance": provenance or {}, "schema_version": "1.1",
+                "output_checksums": {"evidence.json": hashlib.sha256(encoded).hexdigest()},
+                "dependencies": ["GENE_PREDICTION"]}
     for name, value in (("evidence.json", payload), ("checkpoint_manifest.json", manifest)):
         temporary = destination / (name + ".tmp")
         temporary.write_text(json.dumps(value, indent=2, sort_keys=True, default=str))

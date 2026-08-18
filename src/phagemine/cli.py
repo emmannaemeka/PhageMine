@@ -18,6 +18,9 @@ def main(argv: list[str] | None = None) -> int:
     from . import __version__
     parser.add_argument("--version", action="version", version=__version__)
     subcommands = parser.add_subparsers(dest="command", required=True)
+    doctor_command = subcommands.add_parser("doctor", help="Validate executables and registered evidence resources")
+    doctor_command.add_argument("--output", help="Optional JSON report path")
+    doctor_command.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
     databases = subcommands.add_parser("databases", help="Manage registered local evidence resources")
     database_commands = databases.add_subparsers(dest="database_command", required=True)
     register = database_commands.add_parser("register", help="Register a local evidence resource")
@@ -63,8 +66,8 @@ def main(argv: list[str] | None = None) -> int:
     benchmark_command.add_argument("--prokka-gff")
     benchmark_command.add_argument("--pharokka-gff")
     benchmark_command.add_argument("--phagemine-results")
-    batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files sequentially")
-    batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal")
+    batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files")
+    batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--mode", choices=("annotate", "discover", "both"), default="annotate"); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal"); batch_command.add_argument("--threads", type=int, default=1); batch_command.add_argument("--evidence", dest="evidence_profile", choices=("core", "standard", "full"), default="core")
     for name in ("annotate", "mine", "run", "genbank"):
         command = subcommands.add_parser(name, help=f"Run the MVP {name} workflow")
         command.add_argument("fasta", help="Single-record phage genome FASTA")
@@ -101,12 +104,18 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--phrogs-alignment-length", type=int, help="Optional manual PHROGs alignment-length threshold")
         command.add_argument("--quiet", action="store_true", help="Suppress progress display")
         command.add_argument("--no-progress", action="store_true", help="Disable dynamic progress rendering")
+        command.add_argument("--threads", type=int, default=1, help="Threads for evidence tools")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
     revise = subcommands.add_parser("revise", help="Revise a completed GenBank submission without rerunning analysis")
     revise.add_argument("results_dir")
     revise.add_argument("--corrections", required=True)
     revise.add_argument("--output", required=True)
     args = parser.parse_args(argv)
+    if args.command == "doctor":
+        from .preflight import doctor, doctor_text, write_doctor_report
+        payload = write_doctor_report(args.output) if args.output else doctor()
+        print(json.dumps(payload, indent=2, sort_keys=True) if args.json or args.output else doctor_text(payload))
+        return 0 if all(x.get("status") in {"READY", "MISSING"} for x in payload["executables"]) else 1
     if args.command == "families":
         from .family import build_database, assign_protein_family, write_assignments, _fasta
         if args.families_command == 'build':
@@ -176,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"PhageMine comparison complete. Outputs: {args.output}")
         return 0
     if args.command == "batch":
-        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal)
+        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode)
         except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
         print(f"PhageMine batch complete. Outputs: {args.output}"); return 0
     if args.command == "resume":
@@ -202,11 +211,18 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if removed else 1
     output = args.output or str(Path("results") / Path(args.fasta).stem)
     try:
+        from .preflight import preflight_resources
+        preflight_resources({
+            "PFAM": {"path": args.pfam, "required_tools": [args.pfam_hmmscan or "hmmscan"]} if args.pfam else None,
+            "VOGDB": {"path": args.vogdb, "required_tools": [args.vog_hmmscan or "hmmscan"], "provenance": {"annotations_path": args.vog_annotations}} if args.vogdb else None,
+            "SWISSPROT": {"path": args.swissprot, "required_tools": [args.diamond or "diamond"], "provenance": {"metadata_path": args.swissprot_metadata}} if args.swissprot else None,
+            "PHROGS": {"path": args.phrogs, "required_tools": [args.mmseqs or "mmseqs"], "provenance": {"annotations_path": args.phrogs_annotations}} if args.phrogs else None,
+        })
         metadata = SubmissionMetadata.from_dict(json.loads(Path(args.metadata).read_text())) if args.metadata else None
         from .sequencing_provenance import SequencingProvenance
         sequencing_provenance = SequencingProvenance.from_dict(json.loads(Path(args.sequencing_provenance).read_text())) if args.sequencing_provenance else SequencingProvenance()
         from .gene_prediction import create_predictor
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=args.reconcile_orfs, prodigal=args.prodigal, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=args.reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

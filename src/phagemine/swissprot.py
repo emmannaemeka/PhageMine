@@ -20,7 +20,7 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
                  diamond: str | None = None, database_version: str | None = None,
                  strong_identity: float = 0.70, moderate_identity: float = 0.35,
                  strong_coverage: float = 0.70, moderate_coverage: float = 0.40,
-                 evalue_threshold: float = 1e-5, min_alignment_length: int = 30):
+                 evalue_threshold: float = 1e-5, min_alignment_length: int = 30, threads: int = 1):
         self.database_path = Path(database_path).expanduser() if database_path else None
         self.metadata_path = Path(metadata_path).expanduser() if metadata_path else None
         self.diamond = diamond or shutil.which("diamond")
@@ -29,6 +29,7 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
         self.strong_coverage, self.moderate_coverage = strong_coverage, moderate_coverage
         self.evalue_threshold = evalue_threshold
         self.min_alignment_length = min_alignment_length
+        self.threads = max(1, int(threads))
 
     def available(self) -> bool:
         executable = bool(self.diamond and (Path(self.diamond).exists() or shutil.which(self.diamond)))
@@ -68,7 +69,7 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
             fasta.write_text("".join(f">{p.protein_id}\n{p.sequence}\n" for p in proteins))
             fields = "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
             command = [str(self.diamond), "blastp", "--db", str(self.database_path), "--query", str(fasta),
-                       "--out", str(output), "--outfmt", "6", *fields.split()]
+                       "--out", str(output), "--outfmt", "6", "--threads", str(self.threads), *fields.split()]
             result = subprocess.run(command, capture_output=True, text=True, check=False)
             provenance["search_command"] = command
             provenance["search_parameters"] = {"outfmt": fields}
