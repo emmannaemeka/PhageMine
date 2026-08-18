@@ -5,6 +5,7 @@ __pycache__/
 
 # Generated analysis and submission outputs
 results/
+publication/
 tmp/
 *.tmp
 build/

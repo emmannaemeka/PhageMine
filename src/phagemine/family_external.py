@@ -35,15 +35,41 @@ def validate_external(database, reference=None, output=None, metadata=None, mmse
         if mp.suffix.lower()=='.json': meta=json.loads(mp.read_text())
         else:
             with mp.open() as h:
-                for r in csv.DictReader(h,delimiter='\t'): meta[r.get('protein_id') or r.get('id')]=r
+                for r in csv.DictReader(h,delimiter='\t'):
+                    identifier = r.get('external_protein_id') or r.get('protein_id') or r.get('raw_fasta_id') or r.get('id')
+                    if identifier: meta[identifier]=r
     exe=mmseqs if Path(mmseqs).exists() else shutil.which(mmseqs)
     if not exe: raise RuntimeError('MMseqs2 unavailable; provide --mmseqs')
     with tempfile.TemporaryDirectory(prefix='phagemine-external-') as t:
         root=Path(t); q=root/'q.faa'; ref=root/'ref.faa'; out=root/'hits'; tmp=root/'tmp'
-        q.write_text(''.join(f">{f['family_id']}\n{f['representative_sequence']}\n" for f in families)); shutil.copyfile(reference,ref)
-        cmd=[exe,'easy-search',str(q),str(ref),str(out),str(tmp),'--format-output','query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov','--max-seqs','100']
-        run=subprocess.run(cmd,capture_output=True,text=True,check=False)
-        if run.returncode: raise RuntimeError(run.stderr.strip() or 'MMseqs2 search failed')
+        q.write_text(''.join(f">{f['family_id']}\n{f['representative_sequence']}\n" for f in families))
+        cached_target = None
+        cache_manifest = None
+        if pmfdb_manifest:
+            candidate = Path(reference).parent.parent.parent / 'cache' / 'mmseqs' / Path(reference).parent.name
+            manifest_path = candidate / 'mmseqs_index_manifest.json'
+            if (candidate/'target_db.dbtype').is_file() and manifest_path.is_file():
+                cache_manifest=json.loads(manifest_path.read_text())
+                if (cache_manifest.get('pmfdb_version') == pmfdb_manifest.get('pmfdb_version') and
+                    cache_manifest.get('pmfdb_reference_fasta_sha256') == _sha(reference) and
+                    cache_manifest.get('index_status') == 'SUCCESS'):
+                    cached_target=candidate/'target_db'
+        if cached_target:
+            query_db=root/'query_db'; result_db=root/'result_db'
+            commands=[
+                [exe,'createdb',str(q),str(query_db)],
+                [exe,'search',str(query_db),str(cached_target),str(result_db),str(tmp),'--max-seqs','100'],
+                [exe,'convertalis',str(query_db),str(cached_target),str(result_db),str(out),'--format-output','query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov'],
+            ]
+            for cmd in commands:
+                run=subprocess.run(cmd,capture_output=True,text=True,check=False)
+                if run.returncode: raise RuntimeError(run.stderr.strip() or 'MMseqs2 search failed')
+            cmd=commands
+        else:
+            shutil.copyfile(reference,ref)
+            cmd=[exe,'easy-search',str(q),str(ref),str(out),str(tmp),'--format-output','query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov','--max-seqs','100']
+            run=subprocess.run(cmd,capture_output=True,text=True,check=False)
+            if run.returncode: raise RuntimeError(run.stderr.strip() or 'MMseqs2 search failed')
         hits=[]
         for line in out.read_text().splitlines():
             f=line.split('\t')
@@ -63,7 +89,7 @@ def validate_external(database, reference=None, output=None, metadata=None, mmse
         summaries.append({'family_id':f['family_id'],'query_representative':f['representative_protein_id'],'external_match_count':len(hs),'distinct_external_genomes':len({x for x in genomes if x}),'distinct_host_genera':len({x for x in hosts if x}),'distinct_host_species':len({x for x in species if x}),'distinct_taxonomic_groups':len({x for x in taxa if x}),'host_genera':','.join(sorted(x for x in hosts if x)),'best_identity':best.get('identity'),'best_query_coverage':best.get('query_coverage'),'best_target_coverage':best.get('target_coverage'),'best_evalue':best.get('evalue'),'best_bitscore':best.get('bitscore'),'characterized_homolog_count':chars,'uncharacterized_homolog_count':len(hs)-chars,'metadata_incomplete_count':incomplete,'external_validation_status':status})
     outdir=Path(output);outdir.mkdir(parents=True,exist_ok=True); cols=list(summaries[0]) if summaries else ['family_id']
     with (outdir/'pmf_external_validation.tsv').open('w',newline='') as h:w=csv.DictWriter(h,fieldnames=cols,delimiter='\t');w.writeheader();w.writerows(summaries)
-    prov={'command':cmd,'reference':str(reference),'reference_type':'PMFDB' if pmfdb_manifest else 'CUSTOM_REFERENCE','validation_timestamp':datetime.now(timezone.utc).isoformat()}
+    prov={'command':cmd,'reference':str(reference),'reference_type':'PMFDB' if pmfdb_manifest else 'CUSTOM_REFERENCE','validation_timestamp':datetime.now(timezone.utc).isoformat(),'prebuilt_target_database':str(cached_target) if cached_target else None,'prebuilt_target_manifest':cache_manifest}
     if pmfdb_manifest:
         prov.update({'phagemine_version':'0.1.0','pmfdb_version':pmfdb_manifest['pmfdb_version'],'pmfdb_schema_version':pmfdb_manifest['schema_version'],'pmfdb_manifest_sha256':_sha(Path(reference).parent/'reference_manifest.json'),'reference_protein_sha256':_sha(reference),'reference_metadata_sha256':_sha(metadata),'reference_qc_sha256':_sha(Path(reference).parent/'reference_qc.tsv')})
     (outdir/'pmf_external_validation.json').write_text(json.dumps({'provenance':prov,'families':summaries},indent=2,sort_keys=True)); (outdir/'pmf_external_validation_manifest.json').write_text(json.dumps(prov,indent=2,sort_keys=True))

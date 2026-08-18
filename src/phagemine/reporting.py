@@ -15,6 +15,54 @@ from .genome_representation import GenomeRepresentation
 from .sequencing_provenance import SequencingProvenance
 from .fusion import write_classification
 from .context import write_context
+from .figures import generate_annotation_figures
+
+
+def _evidence_lines(protein: Protein) -> list[str]:
+    by_source = {"Pfam": [], "VOGDB": [], "PHROGs": [], "Swiss-Prot": []}
+    for evidence in protein.evidence:
+        source = evidence.source
+        if source in by_source:
+            label = evidence.description or evidence.identifier or evidence.family_name or "no informative hit"
+            by_source[source].append((label, bool(evidence.supports)))
+    return [f"{source}: " + ("; ".join(label + (" [support]" if ok else " [not informative]") for label, ok in values) if values else "no informative hit") for source, values in by_source.items()]
+
+
+def _write_protein_details(root: Path, proteins: list[Protein], classifications: list[dict], contexts: list[dict] | None) -> list[str]:
+    """Publish deterministic, directly navigable records without changing scientific data."""
+    detail_dir = root / "protein_details"; fasta_dir = detail_dir / "fasta"
+    detail_dir.mkdir(parents=True, exist_ok=True); fasta_dir.mkdir(exist_ok=True)
+    cls = {r["protein_id"]: r for r in classifications}; ctx = {r.get("protein_id"): r for r in (contexts or [])}
+    links = []
+    for protein in proteins:
+        record = cls.get(protein.protein_id, {})
+        aa = f">{protein.protein_id} genome={protein.genome_id}\n{protein.sequence}\n"
+        cds = f">{protein.protein_id}\n{protein.cds}\n"
+        (fasta_dir / f"{protein.protein_id}.faa").write_text(aa)
+        (fasta_dir / f"{protein.protein_id}.fna").write_text(cds)
+        evidence = [{"source": e.source, "identifier": e.identifier, "description": e.description, "supports": e.supports, "strength": e.evidence_strength, "metrics": e.metrics} for e in protein.evidence]
+        payload = {"protein_id": protein.protein_id, "genome_id": protein.genome_id, "start": protein.start, "end": protein.end, "strand": protein.strand, "length_aa": protein.length, "classification": record, "evidence": evidence, "genomic_context": ctx.get(protein.protein_id)}
+        (detail_dir / f"{protein.protein_id}.json").write_text(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        reason = record.get("reasoning_summary") or "No deterministic evidence-based explanation was generated."
+        evidence_html = "".join(f"<li>{html.escape(line)}</li>" for line in _evidence_lines(protein))
+        context_text = json.dumps(ctx.get(protein.protein_id), sort_keys=True) if ctx.get(protein.protein_id) else "No genomic-context record available."
+        page = f"<!doctype html><html><head><meta charset='utf-8'><title>{html.escape(protein.protein_id)}</title></head><body><h1>{html.escape(protein.protein_id)}</h1><p><b>Coordinates:</b> {protein.start}-{protein.end} &nbsp; <b>Strand:</b> {html.escape(protein.strand)} &nbsp; <b>Length:</b> {protein.length} aa</p><h2>Classification</h2><p>{html.escape(str(record.get('functional_state') or 'UNRESOLVED'))}</p><p><b>Proposed function:</b> {html.escape(record.get('proposed_function') or 'Function unresolved')}</p><p><b>Confidence:</b> {html.escape(str(record.get('confidence') or 'NONE'))}</p><p><b>Reason for annotation:</b> {html.escape(reason)}</p><h2>Evidence</h2><ul>{evidence_html}</ul><h2>Genomic context</h2><pre>{html.escape(context_text)}</pre><p><a download href='fasta/{html.escape(protein.protein_id)}.faa'>Protein FASTA</a> | <a download href='fasta/{html.escape(protein.protein_id)}.fna'>CDS FASTA</a> | <a href='{html.escape(protein.protein_id)}.json'>Evidence JSON</a></p></body></html>"
+        (detail_dir / f"{protein.protein_id}.html").write_text(page)
+        links.append(str(detail_dir / f"{protein.protein_id}.html"))
+    return links
+
+
+def extract_protein_record(run: str | Path, protein_id: str) -> dict:
+    root = Path(run)
+    candidates = [root] + [p for p in root.iterdir() if p.is_dir()] if root.is_dir() else []
+    for sample in candidates:
+        evidence_path = sample / "evidence.json"
+        if not evidence_path.is_file(): continue
+        records = json.loads(evidence_path.read_text())
+        for record in records:
+            if record.get("protein_id") == protein_id:
+                return {"protein_id": protein_id, "protein_fasta": f">{protein_id}\n{record.get('sequence','')}\n", "cds_fasta": f">{protein_id}\n{record.get('cds','')}\n", "evidence": record, "detail_html": str(sample / "protein_details" / f"{protein_id}.html")}
+    raise KeyError(f"protein ID not found in run: {protein_id}")
 
 
 def write_checkpoint_snapshot(root: str | Path, checkpoint_dir: str | Path, representation: GenomeRepresentation,
@@ -114,13 +162,22 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     write_classification(root, proteins, classifications)
     if context_records is not None and modules is not None:
         write_context(root, context_records, modules)
-    manifest["created_at"] = datetime.now(timezone.utc).isoformat()
-    (root / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     if quality_control is not None:
         (root / "quality_control.json").write_text(json.dumps(quality_control, indent=2, sort_keys=True))
+    manifest["figures"] = generate_annotation_figures(root, proteins, classifications or [], context_records, modules)
+    detail_links = _write_protein_details(root, proteins, classifications or [], context_records)
+    manifest["protein_detail_records"] = detail_links
+    manifest["created_at"] = datetime.now(timezone.utc).isoformat()
+    (root / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     markdown = _markdown(representation, sequencing_provenance, proteins, candidates, manifest)
     (root / "report.md").write_text(markdown)
-    (root / "report.html").write_text("<html><body><pre>" + html.escape(markdown) + "</pre></body></html>")
+    rows = []
+    cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
+    for protein in proteins:
+        c = cls_by_id.get(protein.protein_id, {})
+        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}-{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{html.escape(str(c.get('functional_state') or 'UNRESOLVED'))}</td><td>{html.escape(str(c.get('proposed_function') or 'Function unresolved'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td></tr>")
+    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1400px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%}}td,th{{border:1px solid #bbb;padding:.3em}}th{{background:#eee}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Classification</th><th>Proposed function</th><th>Confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
+    (root / "report.html").write_text(report_html)
 
 
 def _markdown(representation: GenomeRepresentation, sequencing_provenance: SequencingProvenance, proteins: list[Protein], candidates: list[Protein], manifest: dict) -> str:
@@ -130,7 +187,12 @@ def _markdown(representation: GenomeRepresentation, sequencing_provenance: Seque
     ranking = manifest.get("discovery_ranking", {})
     ranking_status = ranking.get("status", "RANKED")
     ranking_message = ranking.get("message", "Candidates ranked by available evidence.")
-    lines = [f"# PhageMine report: {representation.analysis_sequence_id}", "", warning, "", "## Genome representation", "", f"- Original input sequence: `{representation.original_sequence_id}`", f"- Analysis sequence: `{representation.analysis_sequence_id}`", f"- Topology: `{representation.topology.value}`", f"- Orientation: `{representation.orientation.value}`", f"- Rotation: `{representation.rotation.value}`", "- All reported gene, protein, neighborhood, and annotation coordinates are relative to the analysis sequence.", "", "### Explicit transformation history", *transforms, "", "## Sequencing provenance", "", f"- Sequencing platform: `{sequencing_provenance.sequencing_platform.value}`", f"- Assembler: `{sequencing_provenance.assembler or 'UNKNOWN'}`", f"- Polishing method: `{sequencing_provenance.polishing_method or 'UNKNOWN'}`", "- Sequencing provenance does not determine genome topology, orientation, or rotation.", "", f"Predicted proteins: **{len(proteins)}**  ", f"Poorly characterised proteins: **{len(candidates)}**", "", "## Discovery ranking", "", f"- Status: **{ranking_status}**", f"- {ranking_message}", "", "## Top candidates worth investigating", "", "| Rank | Protein | Current annotation | Biological interest | Functional confidence | Evidence diversity |", "|---:|---|---|---:|---|---|"]
+    lines = [f"# PhageMine report: {representation.analysis_sequence_id}", "", warning, "", "## Genome representation", "", f"- Original input sequence: `{representation.original_sequence_id}`", f"- Analysis sequence: `{representation.analysis_sequence_id}`", f"- Topology: `{representation.topology.value}`", f"- Orientation: `{representation.orientation.value}`", f"- Rotation: `{representation.rotation.value}`", "- All reported gene, protein, neighborhood, and annotation coordinates are relative to the analysis sequence.", "", "### Explicit transformation history", *transforms, "", "## Sequencing provenance", "", f"- Sequencing platform: `{sequencing_provenance.sequencing_platform.value}`", f"- Assembler: `{sequencing_provenance.assembler or 'UNKNOWN'}`", f"- Polishing method: `{sequencing_provenance.polishing_method or 'UNKNOWN'}`", "- Sequencing provenance does not determine genome topology, orientation, or rotation.", "", f"Predicted proteins: **{len(proteins)}**  ", f"Poorly characterised proteins: **{len(candidates)}**", "", "## Figures", ""]
+    for figure in manifest.get("figures", {}).get("created", []):
+        try: lines.append(f"- [{Path(figure).name}]({Path(figure).relative_to(Path(manifest.get('output', '.')) if manifest.get('output') else Path(figure).parent.parent)})")
+        except ValueError: lines.append(f"- `{figure}`")
+    for item in manifest.get("figures", {}).get("skipped", []): lines.append(f"- Skipped `{item['figure']}`: {item['reason']}")
+    lines += ["", "## Discovery ranking", "", f"- Status: **{ranking_status}**", f"- {ranking_message}", "", "## Top candidates worth investigating", "", "| Rank | Protein | Current annotation | Biological interest | Functional confidence | Evidence diversity |", "|---:|---|---|---:|---|---|"]
     for rank, p in enumerate(candidates, 1):
         display_rank = "NA" if ranking_status == "INSUFFICIENT_EVIDENCE" else rank
         lines.append(f"| {display_rank} | {p.protein_id} | {p.annotation} | {p.biological_interest} | {p.functional_confidence} | {p.evidence_diversity} |")

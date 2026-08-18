@@ -1,104 +1,149 @@
 # PhageMine
 
-PhageMine is an evidence-first prototype for annotating bacteriophage genomes and prioritising uncharacterised proteins for experimental follow-up.
+PhageMine is an evidence-based bacteriophage genome annotation and discovery-mining platform. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel.
 
-> Computational evidence produces hypotheses; it does not establish biological function.
+## Why PhageMine?
+
+Phage genomes contain many hypothetical or uncharacterized proteins. Conventional annotation often stops at “hypothetical protein”. PhageMine combines conservative evidence fusion for defensible annotation with cohort-level discovery of recurrent, context-preserved protein families. Predictions are computational hypotheses, not experimental confirmation.
+
+## Key features
+
+- PHANOTATE CDS prediction and genome validation
+- Pfam, VOGDB, Swiss-Prot, and PHROGs evidence
+- deterministic evidence fusion, functional state, proposed function, and confidence
+- genomic context, modules, candidate ranking, QC, and GenBank pre-submission files
+- batch annotation and HTML reports with linked protein records
+- PMF (PhageMine protein family) clustering, recurrence, synteny/context analysis, and PMFDB validation
+- publication-oriented PNG/SVG figures and retained figure source tables
+- checkpointing, fingerprints, resume, provenance, and BOTH-mode evidence reuse
+
+## The three modes
+
+### Annotation mode
+
+`genome FASTA → validation → PHANOTATE → proteins → Pfam/VOGDB/Swiss-Prot/PHROGs → evidence fusion → classification → context/modules → ranking/QC → figures/report → GenBank package`
+
+Evidence annotates predicted proteins; it never silently changes PHANOTATE ORF boundaries. A report records coordinates, strand, classification, proposed function, confidence, supporting evidence, and a deterministic reason.
+
+Illustrative example (not a guaranteed result):
+
+```text
+Protein: PM_000023
+Genome: NC_011107.1
+Classification: PROBABLE_FUNCTION
+Proposed function: Terminase large subunit
+Evidence: Pfam terminase ATPase; VOGDB terminase; PHROGs DNA packaging;
+          Swiss-Prot terminase homolog
+Confidence: HIGH
+Reason: Multiple independent evidence sources support a DNA-packaging
+        terminase assignment.
+```
+
+### Discovery mode
+
+`genomes → cohort QC → PHANOTATE per genome → protein pooling → exact AA deduplication → pooled evidence → remapping → classification → PMF clustering → recurrence → genomic context/synteny → PMFDB → ranking → figures/report`
+
+A PMF is a homologous PhageMine protein family based on biological sequence similarity. Exact amino-acid deduplication is only a computational optimization and does not define a PMF. PMFDB is the PhageMine protein-family knowledgebase. Its conservative states are `CHARACTERIZED_HOMOLOG_FOUND`, `MATCHES_UNCHARACTERIZED`, `NO_EXTERNAL_MATCH`, and `EXTERNAL_MATCHES_MIXED`. `NO_EXTERNAL_MATCH` does not mean novel.
+
+### Both mode
+
+Both mode completes per-genome annotation, then reuses valid proteins, coordinates, evidence, classifications, and provenance for cohort discovery. Equivalent expensive searches are not intentionally repeated.
+
+## Installation
+
+PhageMine supports Python 3.10 or newer.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+```
+
+Production runs require these executables on `PATH`: PHANOTATE, HMMER (`hmmscan`), MMseqs2 (`mmseqs`), and DIAMOND (`diamond`). `table2asn` is optional and never blocks the normal GenBank pre-submission package.
+
+## Database configuration
+
+Large databases are not bundled. Register local resources with the supported registry commands:
+
+```bash
+phagemine databases register pfam /path/to/Pfam-A.hmm --name Pfam-A
+phagemine databases register vogdb /path/to/VOGDB.hmm --name VOGDB \
+  --annotations /path/to/vog.annotations.tsv.gz
+phagemine databases register swissprot /path/to/uniprot_sprot.dmnd \
+  --name Swiss-Prot --metadata /path/to/uniprot_sprot.dat.gz
+phagemine databases register phrogs /path/to/phrogs_profile_db \
+  --name PHROGs --annotations /path/to/phrog_annotations.tsv
+```
+
+PMFDB is supplied as a versioned release directory and is passed to the existing family validation workflow; it is not bundled in this repository. Check readiness and executable availability with:
+
+```bash
+phagemine databases status
+phagemine doctor --json
+```
+
+`READY` means the registered path and required sidecars/tools are available. An unavailable resource is reported conservatively and its evidence is not fabricated.
 
 ## Quick start
 
-### Installation
-
-Build and install the release candidate with `python -m build` followed by
-`python -m pip install dist/phagemine-1.0.0rc1-py3-none-any.whl`. Production
-Core runs require Python 3.10+ and an installed PHANOTATE executable/script.
-
 ```bash
-phagemine run genome.fasta --phanotate /path/to/phanotate.py --output results/run
+phagemine run genome.fasta --output results/genome
+
+phagemine batch genomes/ --output results/annotation --mode annotate \
+  --evidence full --threads 8
+
+phagemine batch genomes/ --output results/discovery --mode discover \
+  --evidence full --threads 8
+
+phagemine batch genomes/ --output results/both --mode both \
+  --evidence full --threads 8
 ```
 
-Core performs genome QC, PHANOTATE gene prediction, conservative reporting,
-candidate prioritization, and local GenBank pre-submission packaging. Optional
-Pfam/HMMER, VOGDB/HMMER, PHROGs/MMseqs2, Swiss-Prot/DIAMOND, and Prodigal
-resources are enabled explicitly or through the local resource registry; they
-are not required for a Core installation and are never downloaded automatically.
-PMF family/PMFDB workflows are separate optional workflows. GenBank output is a
-local pre-submission package; PhageMine does not claim NCBI acceptance. Results
-are evidence-based hypotheses and the software makes no automatic novelty claim.
+## Interpreting annotation
 
-The dependency-light demonstration uses a built-in ORF caller and a deliberately labelled mock evidence backend:
+Classification answers “how well is this protein functionally resolved?”. Proposed function answers “what does PhageMine think it does?”. Evidence answers “why?”. Confidence answers “how strongly is the assignment supported?”. Canonical states include `KNOWN_FUNCTION`, `PROBABLE_FUNCTION`, `FUNCTIONAL_CLASS_ONLY`, `CONSERVED_UNKNOWN`, `CONFLICTING_EVIDENCE`, and `UNRESOLVED`. A prediction is not experimental confirmation.
+
+Batch tables include protein ID, coordinates, strand, classification, proposed function, confidence, evidence summaries, and PMF where available. Protein IDs link to detailed records rather than reducing a row to a state label alone.
+
+## Protein retrieval
 
 ```bash
-# Production default: locally installed PHANOTATE
-PYTHONPATH=src python -m phagemine run genome.fasta --output results/run
-
-# Synthetic fixture only (no PHANOTATE required)
-PYTHONPATH=src python -m phagemine run examples/demo_phage.fasta --gene-predictor demo --output results/demo
+phagemine extract protein PM_000023 --run results/genome --protein-fasta
+phagemine extract protein PM_000023 --run results/genome --cds-fasta
+phagemine extract protein PM_000023 --run results/genome --evidence
 ```
 
-It writes GFF3, CDS/protein FASTA, annotation TSV, evidence JSON, a candidate ranking TSV, Markdown/HTML reports, and a reproducibility manifest. Run `python -m unittest discover -s tests` for tests.
+Each record also links genomic context and, in discovery results, PMF membership. The internal PhageMine protein ID is the stable key connecting the report row, amino-acid FASTA, nucleotide CDS, evidence, and context.
 
-### Test suites
+## Important outputs
 
-Routine development tests exclude resource-backed integration tests:
+Annotation outputs include `annotation.tsv`, `functional_classification.tsv/json`, `evidence.json`, `candidate_ranking.tsv`, `proteins.faa`, `cds.fna`, `genes.gff3`, `genomic_context.tsv/json`, `modules.tsv/json`, `quality_control.json`, `report.html`, `report.md`, `protein_details/`, `figures/`, `figure_data/`, and `genbank_submission/`.
 
-```bash
-PYTHONPATH=src python -m pytest -q -m "not integration"
-```
+Discovery outputs include `pmf_families.tsv`, `pmf_members.tsv`, `family_recurrence.tsv`, `cohort_unknown_proteome.tsv`, `conserved_neighbourhoods.tsv`, `pmfdb_validation.tsv`, `discovery_ranking.tsv`, `discovery_report.html`, `discovery_report.md`, `figures/`, `figure_data/`, and `pooled_manifest.json`.
 
-The resource-backed tests remain available explicitly:
+The TSV files are stable, machine-readable tables; JSON files preserve detailed evidence/provenance; reports provide navigable summaries and downloads.
 
-```bash
-PYTHONPATH=src python -m pytest -q -m integration
-```
+## Figures
 
-The complete suite (overriding the default marker filter) is
-`PYTHONPATH=src python -m pytest -q -o addopts=''`.
-Integration tests retain coverage for registered HMMER, DIAMOND, MMseqs2, and
-end-to-end resource-backed runs; they are excluded from the default command
-only to keep routine regression feedback fast.
+Annotation figures include genome functional maps, functional-state summaries, evidence-support matrices, and functional-category distributions where the data support them. Batch output includes genome-by-functional-state comparison. Discovery output includes functional distribution, PMF recurrence heatmap/distribution, discovery ranking, PMFDB source data, and high-priority genomic-context diagrams. Plotting source tables are retained in `figure_data/` for reproducibility.
 
-`phagemine genbank genome.fasta` also runs the local-only pre-submission package builder. It creates `genome.fsa`, `features.tbl`, `proteins.faa`, `validation.json`, provenance, and review instructions under `genbank_submission/`. It does not contact NCBI or submit anything.
+## Resume and checkpoints
 
-Pass real submission information with `--metadata metadata.json`; PhageMine never fills in absent source or submitter fields. The future GUI should collect the same metadata before it enables final package generation. See `docs/genbank-submission.md` for the separation between PhageMine checks, optional `table2asn` validation, and NCBI's final review.
+Runs store stage checkpoints, input fingerprints, checksums, database provenance, parameters, and tool versions. Resume reuses valid completed stages and reruns only missing or stale stages plus required downstream dependencies. In BOTH mode, valid annotation evidence is reused for discovery; incompatible evidence is never silently reused.
 
-### Revising a submission package
+## GenBank pre-submission
 
-After curator or researcher review, metadata and explicit feature corrections can
-be applied without rerunning biological analysis:
+The `genbank_submission/` package contains genome FASTA, CDS/protein outputs, feature tables, supplied metadata/provenance, and validation results. PhageMine does not invent missing metadata. `table2asn` can be used when installed, but is optional.
 
-```bash
-PYTHONPATH=src python -m phagemine revise RESULTS_DIR \
-  --corrections submission_corrections.json \
-  --output revised_submission
-```
+## Conservative scientific interpretation
 
-The correction file is a transparent JSON object with `metadata` and
-`annotations` sections. Annotation entries may set `product`, `note`, `partial`,
-or `locus_tag`, and should include `reason` and `source`. The original analysis
-files are never overwritten; the revised package is written under
-`submission_v2/` with correction audit TSV/JSON and sequence/checksum
-provenance. A changed genome checksum fails with “Genome sequence has changed; a
-new PhageMine analysis is required.” Metadata/annotation corrections revise only
-the submission package; sequence corrections require a new PhageMine run.
+- Unknown does not mean novel.
+- Unresolved does not mean biologically unimportant.
+- `NO_EXTERNAL_MATCH` does not prove novelty.
+- Genomic context is supporting evidence, not proof of function.
+- Sequence similarity supports homology but does not automatically establish biochemical function.
+- Experimental validation remains necessary for biological claims.
 
-## Scientific scope
+## Development and citation
 
-The three scores are deliberately independent:
-
-- **Functional confidence**: strength of support for an interpretation.
-- **Biological interest**: priority for investigation, not probability of function.
-- **Evidence diversity**: number of distinct evidence modalities supporting priority.
-
-The built-in mock backend is only for exercising the complete workflow without external databases. It is marked in every output and must be replaced by real similarity/domain/conservation adapters for biological use. See `docs/evidence-framework.md` and `docs/database-policy.md`.
-
-## Gene prediction
-
-Core production analysis uses the `PHANOTATEPredictor` adapter by default. Install PHANOTATE separately and ensure `phanotate.py` or `phanotate` is on `PATH`, or use `--phanotate /path/to/phanotate.py`. It is intentionally not bundled or installed by PhageMine. The predictor identity, executable, version, and parameters are recorded in the run manifest. The legacy simple ORF caller is retained only as `--gene-predictor demo` for test fixtures.
-
-## Sequencing provenance
-
-PhageMine analyzes assembled FASTA independently of sequencing platform. Optionally pass `--sequencing-provenance provenance.json` to record platform, library, assembly, polishing, and raw-read availability. Without it, the platform is explicitly `UNKNOWN`; PhageMine never infers sequencing technology from FASTA. Sequencing provenance is separate from genome topology, orientation, and rotation.
-
-## Optional Pfam evidence
-
-PhageMine can use a user-supplied local Pfam HMM database with `--pfam /path/to/Pfam-A.hmm`. HMMER must be installed separately (or supplied with `--pfam-hmmscan`). PhageMine does not download Pfam. Missing Pfam/HMMER is reported as `UNAVAILABLE` and produces no fabricated domain evidence. Pfam hits are evidence records, not automatic functional assignments.
+Run the test suite with `PYTHONPATH=src pytest -q`. See `CHANGELOG.md`, `CITATION.cff`, and `LICENSE` for release metadata and terms.

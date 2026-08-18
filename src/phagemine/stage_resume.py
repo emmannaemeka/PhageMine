@@ -42,7 +42,7 @@ def resume_stage(source: str|Path, swissprot_path: str|Path|None=None, diamond: 
     for name in ('pfam','vogdb','phrogs'):
         if (cp/name/'evidence.json').is_file(): reused.append(name.upper())
     swiss=cp/'swissprot'/'checkpoint_manifest.json'; old=json.loads(swiss.read_text()) if swiss.is_file() else {}
-    registry_path=os.environ.get('PHAGEMINE_RESOURCE_REGISTRY','/Users/emmanuelnnadi/.phagemine/resources.json')
+    registry_path=os.environ.get('PHAGEMINE_RESOURCE_REGISTRY',str(Path.home()/'.phagemine'/'resources.json'))
     manager=EvidenceResourceManager(registry_path)
     resources={t:manager.find(t) for t in (ResourceType.PFAM,ResourceType.VOGDB,ResourceType.SWISSPROT,ResourceType.PHROGS)}
     print('Resource resolution:')

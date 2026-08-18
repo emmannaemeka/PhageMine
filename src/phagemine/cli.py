@@ -68,6 +68,14 @@ def main(argv: list[str] | None = None) -> int:
     benchmark_command.add_argument("--phagemine-results")
     batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files")
     batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--mode", choices=("annotate", "discover", "both"), default="annotate"); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal"); batch_command.add_argument("--threads", type=int, default=1); batch_command.add_argument("--evidence", dest="evidence_profile", choices=("core", "standard", "full"), default="core")
+    extract_command = subcommands.add_parser("extract", help="Retrieve stable protein records and FASTA from a completed run")
+    extract_sub = extract_command.add_subparsers(dest="extract_command", required=True)
+    extract_protein = extract_sub.add_parser("protein", help="Extract one protein by stable protein ID")
+    extract_protein.add_argument("protein_id")
+    extract_protein.add_argument("--run", required=True, help="Completed genome or batch result directory")
+    extract_protein.add_argument("--protein-fasta", action="store_true")
+    extract_protein.add_argument("--cds-fasta", action="store_true")
+    extract_protein.add_argument("--evidence", action="store_true")
     for name in ("annotate", "mine", "run", "genbank"):
         command = subcommands.add_parser(name, help=f"Run the MVP {name} workflow")
         command.add_argument("fasta", help="Single-record phage genome FASTA")
@@ -188,6 +196,22 @@ def main(argv: list[str] | None = None) -> int:
         try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode)
         except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
         print(f"PhageMine batch complete. Outputs: {args.output}"); return 0
+    if args.command == "extract":
+        if args.extract_command != "protein":
+            parser.error("unsupported extraction target")
+        from .reporting import extract_protein_record
+        try:
+            payload = extract_protein_record(args.run, args.protein_id)
+        except (OSError, ValueError, KeyError) as exc:
+            parser.error(str(exc))
+        requested = args.protein_fasta or args.cds_fasta or args.evidence
+        if not requested:
+            print(json.dumps(payload, indent=2, sort_keys=True))
+        else:
+            if args.protein_fasta: print(payload["protein_fasta"], end="")
+            if args.cds_fasta: print(payload["cds_fasta"], end="")
+            if args.evidence: print(json.dumps(payload["evidence"], indent=2, sort_keys=True))
+        return 0
     if args.command == "resume":
         try:
             count = resume(args.source, args.output, args.run_missing_evidence, args.refresh_evidence, args.mmseqs, args.phrogs, args.phrogs_annotations, args.phrogs_evalue, args.phrogs_coverage, args.phrogs_score, ProgressReporter(quiet=False))
