@@ -1,0 +1,53 @@
+[
+  {
+    "annotation": "Hypothetical protein",
+    "annotation_level": "hypothesis requiring experimental validation",
+    "biological_interest": 0,
+    "cds": "ATGATCTCTCAAGATAAATTTGAATATGAAATCTCTGCTATGAAA",
+    "end": 48,
+    "evidence": [
+      {
+        "evidence_strength": "STRONG",
+        "level": "computational prediction",
+        "modality": "viral_orthology",
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "protein_id": "PM_000001"
+        },
+        "source": "VOGDB",
+        "source_version": "fixture",
+        "statement": "Deterministic resume fixture evidence",
+        "status": "REAL",
+        "supports": true
+      }
+    ],
+    "evidence_diversity": "None",
+    "functional_confidence": "None",
+    "gene_call_parameters": {},
+    "gene_call_source": "PHANOTATE",
+    "genome_id": "resume_fixture",
+    "protein_id": "PM_000001",
+    "score_components": {},
+    "sequence": "MISQDKFEYEISAMK",
+    "start": 1,
+    "strand": "+"
+  },
+  {
+    "annotation": "Hypothetical protein",
+    "annotation_level": "hypothesis requiring experimental validation",
+    "biological_interest": 0,
+    "cds": "ATGAAAAAA",
+    "end": 63,
+    "evidence": [],
+    "evidence_diversity": "None",
+    "functional_confidence": "None",
+    "gene_call_parameters": {},
+    "gene_call_source": "PHANOTATE",
+    "genome_id": "resume_fixture",
+    "protein_id": "PM_000002",
+    "score_components": {},
+    "sequence": "MKK",
+    "start": 55,
+    "strand": "+"
+  }
+]

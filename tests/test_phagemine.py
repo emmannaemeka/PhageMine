@@ -47,6 +47,7 @@ from phagemine.resources import EvidenceResourceManager, ResourceStatus, Resourc
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RESUME_SOURCE_FIXTURE = ROOT / "tests" / "fixtures" / "resume_source"
 
 
 class PhageMineTests(unittest.TestCase):
@@ -542,10 +543,14 @@ class PhageMineTests(unittest.TestCase):
         self.assertNotIn("RUNNING: RUNNING:", output)
 
     def test_resume_source_loader_reuses_proteins_and_evidence_verbatim(self):
-        source = ROOT / "results" / "phage_c6_full_evidence"
+        source = RESUME_SOURCE_FIXTURE
         manifest, representation, proteins, sequence, _ = _load_source(source)
-        self.assertEqual(len(proteins), 99)
+        persisted = json.loads((source / "evidence.json").read_text())
+        self.assertEqual(len(proteins), 2)
+        self.assertEqual([protein.sequence for protein in proteins], [record["sequence"] for record in persisted])
         self.assertEqual(proteins[0].protein_id, "PM_000001")
+        self.assertEqual(proteins[0].evidence[0].statement, persisted[0]["evidence"][0]["statement"])
+        self.assertEqual(proteins[0].evidence[0].provenance, persisted[0]["evidence"][0]["provenance"])
         self.assertEqual(proteins[0].evidence[0].provenance["adapter"], "VOGHMMAdapter")
         self.assertEqual(manifest["evidence_adapters"][0]["provenance"]["threshold_mode"], "GA")
         self.assertEqual(representation.analysis_sequence, sequence)
@@ -553,7 +558,7 @@ class PhageMineTests(unittest.TestCase):
     def test_resume_source_loader_rejects_protein_sequence_mismatch(self):
         with tempfile.TemporaryDirectory() as temp:
             source = Path(temp) / "source"
-            shutil.copytree(ROOT / "results" / "phage_c6_full_evidence", source)
+            shutil.copytree(RESUME_SOURCE_FIXTURE, source)
             fasta = source / "proteins.faa"
             text = fasta.read_text()
             fasta.write_text(text.replace("MISQDKFEYEISAMK", "MSSQDKFEYEISAMK", 1))
@@ -563,7 +568,7 @@ class PhageMineTests(unittest.TestCase):
     def test_resume_source_loader_rejects_missing_artifact(self):
         with tempfile.TemporaryDirectory() as temp:
             source = Path(temp) / "source"
-            shutil.copytree(ROOT / "results" / "phage_c6_full_evidence", source)
+            shutil.copytree(RESUME_SOURCE_FIXTURE, source)
             (source / "evidence.json").unlink()
             with self.assertRaisesRegex(ValueError, "missing source artifacts"):
                 _load_source(source)
