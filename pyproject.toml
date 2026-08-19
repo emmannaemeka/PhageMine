@@ -9,8 +9,12 @@ description = "Evidence-first phage annotation and discovery mining"
 requires-python = ">=3.10"
 dependencies = []
 
+[project.optional-dependencies]
+gui = ["streamlit>=1.36,<2"]
+
 [project.scripts]
 phagemine = "phagemine.cli:main"
+phagemine-gui = "phagemine.gui.launcher:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

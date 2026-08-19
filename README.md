@@ -1,5 +1,23 @@
 # PhageMine
 
+## Local graphical interface (GUI v0.1)
+
+Install the optional GUI dependencies and launch the interface:
+
+```bash
+pip install "phagemine[gui]"
+phagemine-gui
+```
+
+`phagemine gui` is also supported. The Streamlit interface runs locally, does
+not upload analysis files to an external server, and calls the same PhageMine
+analysis engine used by the CLI. The CLI remains fully supported and its core
+installation does not depend on Streamlit.
+
+GUI documentation assets, including a future real screenshot, belong in
+`docs/images/phagemine-gui/`. No screenshot is included until one has been
+captured from a validated release build.
+
 PhageMine is an evidence-based bacteriophage genome annotation and discovery-mining platform. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel.
 
 ## Why PhageMine?
