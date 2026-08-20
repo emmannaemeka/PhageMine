@@ -98,13 +98,15 @@ jobs:
         run: |
           $productVersion = (Get-Item "dist\PhageMine\PhageMine.exe").VersionInfo.ProductVersion
           if ($productVersion -ne $env:PHAGEMINE_VERSION) { throw "Executable version $productVersion does not match $env:PHAGEMINE_VERSION" }
-          & "dist\PhageMine\PhageMine.exe" --phagemine-cli-output cli-version.txt --phagemine-cli --version
+          $versionProcess = Start-Process -FilePath "dist\PhageMine\PhageMine.exe" -ArgumentList "--phagemine-cli-output", "cli-version.txt", "--phagemine-cli", "--version" -Wait -PassThru
+          if ($versionProcess.ExitCode -ne 0) { throw "Frozen CLI version check failed with exit code $($versionProcess.ExitCode)" }
           $reported = (Get-Content cli-version.txt -Raw).Trim()
           if ($reported -ne $env:PHAGEMINE_VERSION) { throw "CLI version $reported does not match $env:PHAGEMINE_VERSION" }
       - name: Verify Windows core backend remains fail-closed
         shell: pwsh
         run: |
-          & "dist\PhageMine\PhageMine.exe" --phagemine-cli-output doctor.json --phagemine-cli doctor --json
+          $doctorProcess = Start-Process -FilePath "dist\PhageMine\PhageMine.exe" -ArgumentList "--phagemine-cli-output", "doctor.json", "--phagemine-cli", "doctor", "--json" -Wait -PassThru
+          if ($doctorProcess.ExitCode -ne 0) { throw "Frozen doctor failed with exit code $($doctorProcess.ExitCode)" }
           $doctor = (Get-Content doctor.json -Raw | ConvertFrom-Json)
           if ($doctor.capabilities.CORE_ANALYSIS -eq "READY") { throw "Windows core analysis must not be READY without a validated PHANOTATE backend" }
       - name: Smoke-test packaged CLI output pipeline (technical preview)

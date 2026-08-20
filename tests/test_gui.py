@@ -24,6 +24,7 @@ def test_native_workflow_distinguishes_scientific_and_preview_smokes():
     assert "smoke_packaged_analysis.py dist/PhageMine.app" in workflow
     assert 'smoke_packaged_analysis.py "dist\\PhageMine\\PhageMine.exe" examples\\demo_phage.fasta --demo' in workflow
     assert "Windows core analysis must not be READY" in workflow
+    assert 'Start-Process -FilePath "dist\\PhageMine\\PhageMine.exe"' in workflow
 
 
 def test_packaged_smoke_never_uses_a_shell():
