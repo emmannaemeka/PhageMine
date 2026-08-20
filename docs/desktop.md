@@ -15,13 +15,20 @@ name is `v1.1.0-rc.1`. This tag has not been created or published.
 
 ## PhageMine Desktop — macOS
 
-1. Download the `PhageMine-macOS-<commit>` artifact from the native macOS build.
+1. Download the DMG matching the Mac: `PhageMine-macOS-AppleSilicon-1.1.0rc1.dmg`
+   for arm64 Macs or `PhageMine-macOS-Intel-1.1.0rc1.dmg` for Intel x86_64 Macs.
 2. Open the DMG and move `PhageMine.app` to Applications.
 3. Launch **PhageMine** from Applications.
 4. Review Environment / Database Status before the first analysis.
 
 Release-candidate DMGs are not yet signed or notarized. They are CI validation
 artifacts, not a published v1.1.0 release.
+
+The two DMGs are separate native builds, not a claimed universal application.
+The Intel build is produced on GitHub's native `macos-15-intel` runner with a
+minimum supported deployment target of macOS 12.0. CI audits every embedded
+Mach-O executable, dynamic library, and extension module for x86_64 architecture
+and a declared minimum macOS version no later than 12.0 before upload.
 
 ## PhageMine Desktop — Windows
 
@@ -138,8 +145,9 @@ annotation, discovery, batch, resume, extraction, and database registry syntax.
 
 `scripts/build_desktop.py` creates native PyInstaller onedir bundles. PyInstaller
 is not a cross-compiler, so `.github/workflows/desktop-builds.yml` builds and
-smoke-tests macOS and Windows independently. macOS CI wraps `PhageMine.app` in a
-DMG. Windows CI uses Inno Setup to create a Start-menu/desktop installer. Neither
+smoke-tests Apple Silicon macOS, Intel macOS, and Windows independently. Each
+native macOS job wraps `PhageMine.app` in a clearly architecture-specific DMG;
+no universal2 claim is made. Windows CI uses Inno Setup to create a Start-menu/desktop installer. Neither
 job publishes a GitHub release.
 
 Both native jobs run the loopback-only Streamlit health check and exercise the

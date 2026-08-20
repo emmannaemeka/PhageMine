@@ -11,7 +11,9 @@ for core annotation; the Windows limitations are stated below.
 
 ### PhageMine Desktop — macOS
 
-Download the macOS DMG artifact, open it, and move **PhageMine** to Applications.
+Download the DMG matching your Mac: `PhageMine-macOS-AppleSilicon-1.1.0rc1.dmg`
+for Apple Silicon or `PhageMine-macOS-Intel-1.1.0rc1.dmg` for Intel x86_64
+(macOS 12 or later). Open it and move **PhageMine** to Applications.
 Launch PhageMine from its application icon. The application runs only on this
 Mac and opens its local interface automatically.
 

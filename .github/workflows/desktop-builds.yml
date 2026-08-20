@@ -9,7 +9,7 @@ on:
       - "src/phagemine/**"
       - "tests/**"
       - "packaging/**"
-      - "scripts/build_desktop.py"
+      - "scripts/**"
       - "pyproject.toml"
       - ".github/workflows/desktop-builds.yml"
   pull_request:
@@ -18,7 +18,7 @@ on:
       - "src/phagemine/**"
       - "tests/**"
       - "packaging/**"
-      - "scripts/build_desktop.py"
+      - "scripts/**"
       - "pyproject.toml"
       - ".github/workflows/desktop-builds.yml"
 
@@ -27,9 +27,23 @@ permissions:
 
 jobs:
   macos-desktop:
-    name: macOS desktop build and smoke test
-    runs-on: macos-14
+    name: macOS ${{ matrix.label }} desktop build and smoke test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            architecture: arm64
+            label: Apple Silicon
+            artifact: AppleSilicon
+          - runner: macos-15-intel
+            architecture: x86_64
+            label: Intel
+            artifact: Intel
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 45
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "12.0"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -37,7 +51,10 @@ jobs:
           python-version: "3.11"
           cache: pip
       - name: Install test and desktop dependencies
-        run: python -m pip install -e ".[desktop]" pytest
+        run: |
+          test "$(uname -m)" = "${{ matrix.architecture }}"
+          python -m pip install -c packaging/macos-desktop-constraints.txt -e ".[desktop]" pytest
+          python -m pip check
       - name: Resolve authoritative release-candidate version
         run: |
           echo "PHAGEMINE_VERSION=$(python -c 'from phagemine import __version__; print(__version__)')" >> "$GITHUB_ENV"
@@ -52,6 +69,14 @@ jobs:
         run: |
           test "$(defaults read "$PWD/dist/PhageMine.app/Contents/Info" CFBundleShortVersionString)" = "$PHAGEMINE_VERSION"
           dist/PhageMine.app/Contents/MacOS/PhageMine --phagemine-cli --version | grep -Fx "$PHAGEMINE_VERSION"
+      - name: Audit packaged architecture and deployment target
+        run: |
+          test "$(uname -m)" = "${{ matrix.architecture }}"
+          if [ "${{ matrix.architecture }}" = "x86_64" ]; then
+            python scripts/audit_macos_bundle.py dist/PhageMine.app --architecture x86_64 --maximum-minimum-macos 12.0
+          else
+            python scripts/audit_macos_bundle.py dist/PhageMine.app --architecture arm64
+          fi
       - name: Smoke-test packaged core annotation
         run: python scripts/smoke_packaged_analysis.py dist/PhageMine.app/Contents/MacOS/PhageMine examples/demo_phage.fasta
       - name: Smoke-test packaged local interface
@@ -61,11 +86,11 @@ jobs:
           trap 'kill $APP_PID || true' EXIT
           python scripts/wait_for_health.py http://127.0.0.1:8765/_stcore/health
       - name: Create DMG
-        run: hdiutil create -volname PhageMine -srcfolder dist/PhageMine.app -ov -format UDZO "PhageMine-macOS-${PHAGEMINE_VERSION}-${GITHUB_SHA}.dmg"
+        run: hdiutil create -volname PhageMine -srcfolder dist/PhageMine.app -ov -format UDZO "PhageMine-macOS-${{ matrix.artifact }}-${PHAGEMINE_VERSION}.dmg"
       - uses: actions/upload-artifact@v4
         with:
-          name: PhageMine-macOS-${{ env.PHAGEMINE_VERSION }}-${{ github.run_number }}-${{ github.sha }}
-          path: PhageMine-macOS-${{ env.PHAGEMINE_VERSION }}-${{ github.sha }}.dmg
+          name: PhageMine-macOS-${{ matrix.artifact }}-${{ env.PHAGEMINE_VERSION }}
+          path: PhageMine-macOS-${{ matrix.artifact }}-${{ env.PHAGEMINE_VERSION }}.dmg
           if-no-files-found: error
 
   windows-desktop:
