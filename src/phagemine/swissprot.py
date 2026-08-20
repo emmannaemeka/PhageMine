@@ -141,8 +141,11 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
             return {}
         index=self._metadata_index()
         if index:
-            with sqlite3.connect(index) as db:
+            db = sqlite3.connect(index)
+            try:
                 row=db.execute('SELECT payload FROM metadata WHERE accession=?',(accession,)).fetchone()
+            finally:
+                db.close()
             return json.loads(row[0]) if row else {}
         opener = gzip.open if self.metadata_path.suffix == ".gz" else open
         current: list[str] = []
