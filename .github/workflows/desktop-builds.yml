@@ -128,6 +128,8 @@ jobs:
         run: |
           choco install innosetup --no-progress -y
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DMyAppVersion=${env:PHAGEMINE_VERSION}" packaging\PhageMine.iss
+          $installerDescription = (Get-Item "installer-dist\PhageMine-Windows-Setup.exe").VersionInfo.FileDescription
+          if ($installerDescription -ne "PhageMine Desktop ${env:PHAGEMINE_VERSION} installer") { throw "Installer metadata version mismatch: $installerDescription" }
       - uses: actions/upload-artifact@v4
         with:
           name: PhageMine-Windows-${{ env.PHAGEMINE_VERSION }}-${{ github.run_number }}-${{ github.sha }}
