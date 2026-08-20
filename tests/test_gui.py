@@ -184,11 +184,12 @@ def test_workflow_readiness_uses_doctor_capabilities():
 
 def test_result_export_zip_preserves_native_files(tmp_path):
     from phagemine.gui.services.results import result_zip
-    (tmp_path / "annotation.tsv").write_text("protein_id\nP1\n")
+    annotation = tmp_path / "annotation.tsv"
+    annotation.write_text("protein_id\nP1\n")
     (tmp_path / "figures").mkdir(); (tmp_path / "figures" / "map.svg").write_text("<svg/>")
     with zipfile.ZipFile(BytesIO(result_zip(tmp_path))) as archive:
         assert sorted(archive.namelist()) == ["annotation.tsv", "figures/map.svg"]
-        assert archive.read("annotation.tsv") == b"protein_id\nP1\n"
+        assert archive.read("annotation.tsv") == annotation.read_bytes()
 
 
 def test_gui_subprocesses_explicitly_disable_shell_execution():
