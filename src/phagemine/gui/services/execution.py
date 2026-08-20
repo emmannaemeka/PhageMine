@@ -57,16 +57,30 @@ class RunResult:
 def execute(args: Sequence[str]) -> RunResult:
     """Run via the installed CLI semantics, without a shell."""
     command = list(args)
-    executable = [sys.executable, "-m", "phagemine", *command[1:]] if command and command[0] == "phagemine" else command
+    executable = execution_argv(command)
     completed = subprocess.run(executable, capture_output=True, text=True, check=False, shell=False)
-    try:
-        output = Path(command[command.index("--output") + 1])
-    except (ValueError, IndexError):
-        output = Path(".")
+    output = output_from_command(command)
     result = RunResult(command, completed.stdout, completed.stderr, completed.returncode, output)
     if completed.returncode == 0:
         write_gui_metadata(output, result)
     return result
+
+
+def execution_argv(command: Sequence[str]) -> list[str]:
+    command = list(command)
+    if not command or command[0] != "phagemine":
+        return command
+    if getattr(sys, "frozen", False):
+        return [sys.executable, "--phagemine-cli", *command[1:]]
+    return [sys.executable, "-m", "phagemine", *command[1:]]
+
+
+def output_from_command(command: Sequence[str]) -> Path:
+    command = list(command)
+    try:
+        return Path(command[command.index("--output") + 1])
+    except (ValueError, IndexError):
+        return Path(".")
 
 
 def write_gui_metadata(output: Path, result: RunResult) -> None:

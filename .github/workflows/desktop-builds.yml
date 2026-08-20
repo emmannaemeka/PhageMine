@@ -1,0 +1,90 @@
+name: Desktop release-candidate builds
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/phagemine/**"
+      - "tests/**"
+      - "packaging/**"
+      - "scripts/build_desktop.py"
+      - "pyproject.toml"
+      - ".github/workflows/desktop-builds.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  macos-desktop:
+    name: macOS desktop build and smoke test
+    runs-on: macos-14
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install test and desktop dependencies
+        run: python -m pip install -e ".[desktop]" pytest
+      - name: Run GUI tests
+        run: PYTHONPATH=src pytest -q tests/test_gui.py
+      - name: Run full unit suite
+        run: PYTHONPATH=src pytest -q
+      - name: Build PhageMine.app
+        run: python scripts/build_desktop.py
+      - name: Smoke-test packaged application
+        run: |
+          dist/PhageMine.app/Contents/MacOS/PhageMine --no-browser --server.port=8765 &
+          APP_PID=$!
+          trap 'kill $APP_PID || true' EXIT
+          python scripts/wait_for_health.py http://127.0.0.1:8765/_stcore/health
+      - name: Create DMG
+        run: hdiutil create -volname PhageMine -srcfolder dist/PhageMine.app -ov -format UDZO "PhageMine-macOS-${GITHUB_SHA}.dmg"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PhageMine-macOS-${{ github.sha }}
+          path: PhageMine-macOS-${{ github.sha }}.dmg
+          if-no-files-found: error
+
+  windows-desktop:
+    name: Windows desktop build and smoke test
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install test and desktop dependencies
+        run: python -m pip install -e ".[desktop]" pytest
+      - name: Run GUI tests
+        run: $env:PYTHONPATH="src"; pytest -q tests/test_gui.py
+      - name: Run full unit suite
+        run: $env:PYTHONPATH="src"; pytest -q
+      - name: Build windowless desktop application
+        run: python scripts/build_desktop.py
+      - name: Smoke-test packaged application
+        shell: pwsh
+        run: |
+          $process = Start-Process -FilePath "dist\PhageMine\PhageMine.exe" -ArgumentList "--no-browser", "--server.port=8765" -PassThru
+          $response = $null
+          try {
+            $deadline = (Get-Date).AddSeconds(30)
+            do {
+              try { $response = Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8765/_stcore/health -TimeoutSec 1 } catch { Start-Sleep -Milliseconds 500 }
+            } until (($null -ne $response -and $response.StatusCode -eq 200) -or (Get-Date) -gt $deadline)
+            if ($null -eq $response -or $response.StatusCode -ne 200) { throw "Packaged GUI health endpoint did not become ready" }
+          } finally { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
+      - name: Build Windows installer
+        shell: pwsh
+        run: |
+          choco install innosetup --no-progress -y
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DMyAppVersion=1.1.0-rc.${env:GITHUB_RUN_NUMBER}" packaging\PhageMine.iss
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PhageMine-Windows-${{ github.sha }}
+          path: installer-dist/PhageMine-Windows-Setup.exe
+          if-no-files-found: error

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import platform
 from pathlib import Path
 
 
@@ -30,6 +31,41 @@ def doctor_rows(payload: dict) -> list[dict]:
             state, detail = "NOT CONFIGURED", "No registered resource"
         rows.append({"component": label, "state": state, "detail": detail})
     return rows
+
+
+def capability_rows(payload: dict) -> list[dict]:
+    capabilities = payload.get("capabilities", {})
+    labels = {"CORE_ANALYSIS": "Core Analysis", "STANDARD_EVIDENCE": "Standard Evidence",
+              "FULL_EVIDENCE": "Full Evidence", "GENBANK_PRE_SUBMISSION": "GenBank Pre-submission",
+              "NCBI_TABLE2ASN_VALIDATION": "NCBI table2asn validation"}
+    rows = []
+    for key, label in labels.items():
+        raw = capabilities.get(key, "UNAVAILABLE")
+        state = "OPTIONAL" if key == "NCBI_TABLE2ASN_VALIDATION" and raw != "READY" else ("READY" if raw == "READY" else "NOT READY")
+        rows.append({"capability": label, "state": state})
+    return rows
+
+
+def workflow_readiness(payload: dict, *, mode: str, evidence: str, cohort: bool) -> tuple[bool, str]:
+    capabilities = payload.get("capabilities", {})
+    if capabilities.get("CORE_ANALYSIS") != "READY":
+        return False, "Core analysis needs a validated PHANOTATE installation."
+    tools = {item.get("name"): item.get("status") for item in payload.get("executables", [])}
+    if mode in {"discover", "both"} and cohort and tools.get("mmseqs") != "READY":
+        return False, "Cohort discovery needs MMseqs2 for PMF clustering."
+    required = {"standard": "STANDARD_EVIDENCE", "full": "FULL_EVIDENCE"}.get(evidence)
+    if required and capabilities.get(required) != "READY":
+        return False, f"The {evidence} evidence profile is not ready. Open Environment / Database Status for details."
+    return True, "Ready to run with the selected workflow and evidence profile."
+
+
+def platform_backend_note() -> str:
+    if platform.system() == "Windows":
+        return ("Windows application status is separate from scientific-backend readiness. "
+                "HMMER is not natively supported upstream; full evidence may require WSL2 or a validated local port. "
+                "PhageMine never substitutes another algorithm silently.")
+    return ("Scientific executables and evidence databases are installed separately from the application "
+            "and validated by PhageMine doctor.")
 
 
 def read_run_status(output: str | Path) -> dict:

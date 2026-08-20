@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import csv
 import json
+import io
+import zipfile
 from pathlib import Path
 
 
@@ -65,3 +67,14 @@ def downloadable_files(root: str | Path) -> list[Path]:
     root = Path(root)
     allowed = {".tsv", ".json", ".faa", ".fna", ".gff3", ".png", ".jpg", ".jpeg", ".svg", ".pdf", ".md", ".html", ".gb", ".gbk", ".sqn", ".tbl"}
     return sorted(p for p in root.rglob("*") if p.is_file() and p.suffix.lower() in allowed)
+
+
+def result_zip(root: str | Path) -> bytes:
+    root = Path(root)
+    if not root.is_dir():
+        raise ValueError(f"Result directory does not exist: {root}")
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(p for p in root.rglob("*") if p.is_file()):
+            archive.write(path, path.relative_to(root))
+    return buffer.getvalue()

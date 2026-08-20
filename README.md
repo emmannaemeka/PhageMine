@@ -1,6 +1,43 @@
 # PhageMine
 
-## Local graphical interface (GUI v0.1)
+## PhageMine Desktop
+
+PhageMine Desktop is the simplest route for researchers. Native release-candidate
+builds are produced for macOS and Windows by GitHub Actions; after review, signed
+installers will be attached to a future v1.1.0 release. Desktop users do not need
+Python, pip, Conda, Git, Streamlit, Terminal, or PowerShell for routine launch.
+
+### PhageMine Desktop — macOS
+
+Download the macOS DMG artifact, open it, and move **PhageMine** to Applications.
+Launch PhageMine from its application icon. The application runs only on this
+Mac and opens its local interface automatically.
+
+### PhageMine Desktop — Windows
+
+Download `PhageMine-Windows-Setup.exe`, run the installer, and launch **PhageMine**
+from the Start menu or optional desktop shortcut. The application has no console
+window. Application installation and scientific-backend readiness are separate:
+full evidence workflows need validated scientific tools, and upstream HMMER is
+not natively supported on Windows. See [Desktop setup and Windows limitations](docs/desktop.md).
+
+### First launch and drag-and-drop analysis
+
+1. Open **Environment / Database Status** and review truthful readiness states.
+2. On **Home / New Analysis**, drag one or more `.fa`, `.fasta`, `.fna`, or `.fas` files onto the upload area.
+3. One file runs a single-genome workflow; two or more files run a cohort workflow.
+4. Choose Annotation, Discovery, or Both, then evidence level and threads.
+5. Enter a project name and select **Start Analysis**.
+6. Monitor native checkpoint state, inspect results, and export the complete native result directory as ZIP.
+
+Files remain local and are never sent to an external service. Large evidence
+databases are intentionally stored outside the installed application so they
+can be maintained independently.
+
+See [PhageMine Desktop guide](docs/desktop.md) for evidence setup, updating
+databases, troubleshooting, platform support, and release-candidate limitations.
+
+## Local graphical interface for advanced Python users
 
 Install the optional GUI dependencies and launch the interface:
 
@@ -14,7 +51,7 @@ not upload analysis files to an external server, and calls the same PhageMine
 analysis engine used by the CLI. The CLI remains fully supported and its core
 installation does not depend on Streamlit.
 
-GUI documentation assets, including a future real screenshot, belong in
+GUI documentation assets, including a future validated screenshot, belong in
 `docs/images/phagemine-gui/`. No screenshot is included until one has been
 captured from a validated release build.
 

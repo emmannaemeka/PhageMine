@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import inspect
+import zipfile
+from io import BytesIO
 from pathlib import Path
 
 import pytest
@@ -89,3 +92,126 @@ def test_optional_dependency_message(monkeypatch, capsys):
     monkeypatch.setattr(launcher.importlib.util, "find_spec", lambda name: None)
     assert launcher.main() == 2
     assert 'pip install "phagemine[gui]"' in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("suffix", [".fa", ".fasta", ".fna", ".fas", ".FASTA"])
+def test_supported_upload_extensions_and_filename_sanitizing(suffix):
+    from phagemine.gui.services.inputs import sanitize_filename
+    assert sanitize_filename(f"../../unsafe genome;name{suffix}") == "unsafe_genome_name" + suffix.lower()
+
+
+def test_one_uploaded_fasta_is_single_genome(tmp_path):
+    from phagemine.gui.services.inputs import UploadedGenome, stage_uploads
+    staged = stage_uploads([UploadedGenome("one genome.fasta", b">one\nATGAAATAA\n")])
+    try:
+        assert staged.cohort is False
+        assert staged.path.is_file()
+        assert staged.path.name == "one_genome.fasta"
+    finally:
+        import shutil
+        shutil.rmtree(staged.root)
+
+
+def test_multiple_uploaded_fastas_are_cohort():
+    from phagemine.gui.services.inputs import UploadedGenome, stage_uploads
+    staged = stage_uploads([UploadedGenome("one.fa", b">one\nATG\n"), UploadedGenome("two.fna", b">two\nATG\n")])
+    try:
+        assert staged.cohort is True
+        assert staged.path == staged.root
+        assert len(staged.files) == 2
+    finally:
+        import shutil
+        shutil.rmtree(staged.root)
+
+
+def test_missing_or_malformed_upload_is_rejected():
+    from phagemine.gui.services.inputs import UploadedGenome, stage_uploads, validate_fasta_bytes
+    with pytest.raises(ValueError, match="at least one"):
+        stage_uploads([])
+    with pytest.raises(ValueError, match="exactly one FASTA record"):
+        validate_fasta_bytes("broken.fa", b"not fasta\n")
+    with pytest.raises(ValueError, match="standard IUPAC"):
+        validate_fasta_bytes("broken.fasta", b">g\nATGX\n")
+
+
+def test_duplicate_uploaded_names_remain_distinct():
+    from phagemine.gui.services.inputs import UploadedGenome, stage_uploads
+    staged = stage_uploads([UploadedGenome("same.fa", b">a\nATG\n"), UploadedGenome("same.fa", b">b\nATG\n")])
+    try:
+        assert [path.name for path in staged.files] == ["same.fa", "same_2.fa"]
+    finally:
+        import shutil
+        shutil.rmtree(staged.root)
+
+
+def test_launcher_is_loopback_only_and_browser_behavior_is_testable(tmp_path):
+    from phagemine.gui.launcher import LOOPBACK, streamlit_arguments
+    args = streamlit_arguments(tmp_path / "app.py", [], 8765)
+    assert LOOPBACK == "127.0.0.1"
+    assert "--server.address=127.0.0.1" in args
+    assert "--browser.serverAddress=127.0.0.1" in args
+    assert "--server.port=8765" in args
+    assert "0.0.0.0" not in " ".join(args)
+    assert "::" not in " ".join(args)
+
+
+def test_launcher_opens_browser_only_after_local_health_check(monkeypatch):
+    from phagemine.gui import launcher
+
+    class HealthyResponse:
+        status = 200
+        def __enter__(self): return self
+        def __exit__(self, *args): return False
+
+    opened = []
+    monkeypatch.setattr(launcher.urllib.request, "urlopen", lambda url, timeout: HealthyResponse())
+    monkeypatch.setattr(launcher.webbrowser, "open", lambda url, new: opened.append((url, new)))
+    launcher._open_when_ready("http://127.0.0.1:8765", timeout=0.1)
+    assert opened == [("http://127.0.0.1:8765", 1)]
+
+
+def test_workflow_readiness_uses_doctor_capabilities():
+    from phagemine.gui.services.status import workflow_readiness
+    missing = {"capabilities": {"CORE_ANALYSIS": "UNAVAILABLE"}, "executables": []}
+    assert workflow_readiness(missing, mode="annotate", evidence="core", cohort=False)[0] is False
+    ready = {"capabilities": {"CORE_ANALYSIS": "READY", "STANDARD_EVIDENCE": "READY", "FULL_EVIDENCE": "READY"},
+             "executables": [{"name": "mmseqs", "status": "READY"}]}
+    assert workflow_readiness(ready, mode="annotate", evidence="core", cohort=False)[0] is True
+    assert workflow_readiness(ready, mode="discover", evidence="full", cohort=True)[0] is True
+    ready["executables"][0]["status"] = "MISSING"
+    assert workflow_readiness(ready, mode="discover", evidence="core", cohort=True)[0] is False
+
+
+def test_result_export_zip_preserves_native_files(tmp_path):
+    from phagemine.gui.services.results import result_zip
+    (tmp_path / "annotation.tsv").write_text("protein_id\nP1\n")
+    (tmp_path / "figures").mkdir(); (tmp_path / "figures" / "map.svg").write_text("<svg/>")
+    with zipfile.ZipFile(BytesIO(result_zip(tmp_path))) as archive:
+        assert sorted(archive.namelist()) == ["annotation.tsv", "figures/map.svg"]
+        assert archive.read("annotation.tsv") == b"protein_id\nP1\n"
+
+
+def test_gui_subprocesses_explicitly_disable_shell_execution():
+    from phagemine.gui.services import execution, runs
+    assert "shell=False" in inspect.getsource(execution.execute)
+    assert "shell=False" in inspect.getsource(runs.start_run)
+    assert "shell=True" not in inspect.getsource(execution)
+    assert "shell=True" not in inspect.getsource(runs)
+
+
+def test_frozen_execution_reenters_same_phagemine_cli(monkeypatch):
+    from phagemine.gui.services import execution
+    monkeypatch.setattr(execution.sys, "frozen", True, raising=False)
+    monkeypatch.setattr(execution.sys, "executable", r"C:\Program Files\PhageMine\PhageMine.exe")
+    assert execution.execution_argv(["phagemine", "run", "input with spaces.fa"]) == [
+        r"C:\Program Files\PhageMine\PhageMine.exe", "--phagemine-cli", "run", "input with spaces.fa"]
+
+
+def test_desktop_entry_uses_package_launcher(monkeypatch):
+    from phagemine.gui import desktop, launcher
+    received = []
+    monkeypatch.setattr(desktop.sys, "argv", ["PhageMine", "--no-browser"])
+    monkeypatch.setattr(launcher, "main", lambda argv: received.append(argv) or 0)
+    assert desktop.main() == 0
+    assert received == [["--no-browser"]]
+    assert desktop.os.environ["PHAGEMINE_DESKTOP"] == "1"

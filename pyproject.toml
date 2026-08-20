@@ -11,10 +11,16 @@ dependencies = []
 
 [project.optional-dependencies]
 gui = ["streamlit>=1.36,<2"]
+desktop = [
+    "streamlit>=1.36,<2",
+    "pillow>=10,<12",
+    "pyinstaller>=6.10,<7",
+]
 
 [project.scripts]
 phagemine = "phagemine.cli:main"
 phagemine-gui = "phagemine.gui.launcher:main"
+phagemine-desktop = "phagemine.gui.desktop:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -10,6 +10,8 @@ tmp/
 *.tmp
 build/
 dist/
+installer-dist/
+*.spec
 *.egg-info/
 pseudomonas_batch_input/
 salmonella_validation_input/
