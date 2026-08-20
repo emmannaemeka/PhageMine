@@ -268,3 +268,19 @@ def test_desktop_entry_uses_package_launcher(monkeypatch):
     assert desktop.main() == 0
     assert received == [["--no-browser"]]
     assert desktop.os.environ["PHAGEMINE_DESKTOP"] == "1"
+
+
+def test_windowed_cli_can_write_diagnostics_to_an_explicit_file(monkeypatch, tmp_path):
+    from phagemine.gui import desktop
+    destination = tmp_path / "diagnostics with spaces.txt"
+    monkeypatch.setattr(desktop.sys, "stdout", desktop.sys.stdout)
+    monkeypatch.setattr(desktop.sys, "stderr", desktop.sys.stderr)
+    monkeypatch.setattr(desktop.sys, "argv", [
+        "PhageMine.exe", "--phagemine-cli-output", str(destination),
+        "--phagemine-cli", "--version",
+    ])
+    desktop._configure_cli_streams()
+    print("1.1.0rc1")
+    desktop.sys.stdout.flush()
+    assert destination.read_text().strip() == "1.1.0rc1"
+    assert "--phagemine-cli-output" not in desktop.sys.argv

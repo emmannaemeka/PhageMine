@@ -3,16 +3,32 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
+
+
+def _configure_cli_streams() -> None:
+    """Give a Windows windowed executable an explicit diagnostic stream."""
+    option = "--phagemine-cli-output"
+    if option in sys.argv:
+        index = sys.argv.index(option)
+        try:
+            destination = Path(sys.argv[index + 1])
+        except IndexError as exc:
+            raise SystemExit(f"{option} requires a path") from exc
+        del sys.argv[index:index + 2]
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        stream = destination.open("w", encoding="utf-8")
+        sys.stdout = stream
+        sys.stderr = stream
+    elif getattr(sys, "frozen", False) and sys.platform == "win32":
+        # Windowed PyInstaller processes have no reliable CRT console stream.
+        sys.stdout = open(os.devnull, "w")
+        sys.stderr = open(os.devnull, "w")
 
 
 def main() -> int:
     if "--phagemine-cli" in sys.argv:
-        # PyInstaller's Windows windowed mode supplies no standard streams.
-        # The CLI must still be usable internally by the GUI and smoke tests.
-        if sys.stdout is None:
-            sys.stdout = open(os.devnull, "w")
-        if sys.stderr is None:
-            sys.stderr = open(os.devnull, "w")
+        _configure_cli_streams()
         from phagemine.cli import main as cli_main
         index = sys.argv.index("--phagemine-cli")
         return cli_main(sys.argv[index + 1:])
