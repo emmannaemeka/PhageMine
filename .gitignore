@@ -12,6 +12,8 @@ build/
 dist/
 installer-dist/
 *.spec
+*.profraw
+*.dmg
 *.egg-info/
 pseudomonas_batch_input/
 salmonella_validation_input/

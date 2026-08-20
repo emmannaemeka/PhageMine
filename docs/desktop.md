@@ -10,6 +10,9 @@ The desktop package does not implement a second annotation pipeline. Analysis
 still runs through the same `phagemine run`, `phagemine mine`, and
 `phagemine batch` command semantics used by the CLI.
 
+The release-candidate package version is `1.1.0rc1`; its compatible future tag
+name is `v1.1.0-rc.1`. This tag has not been created or published.
+
 ## PhageMine Desktop — macOS
 
 1. Download the `PhageMine-macOS-<commit>` artifact from the native macOS build.
@@ -31,12 +34,13 @@ open during normal use. Release-candidate installers are not yet code-signed.
 
 ### Windows scientific-backend reality
 
-The desktop interface can be built and launched natively on Windows, but that
-does not imply every scientific backend is ready:
+The Windows desktop is a **technical preview**. The installer and frozen CLI/UI
+are tested on a clean native Windows CI runner, but production core annotation
+is deliberately fail-closed there:
 
 | Tool | macOS | Native Windows | Distribution decision |
 |---|---|---|---|
-| PHANOTATE | Python package; GPL-3.0 | Package is marked OS-independent, but packaged command integration still requires validation | Not silently bundled |
+| PHANOTATE 1.6.7 | Bundled separate backend; GPL-3.0-or-later | Not bundled: upstream `fastpath` has no Windows wheel and includes POSIX `getopt.h` | macOS includes attribution, licenses, and exact Corresponding Source archives; Windows reports NOT READY |
 | HMMER / hmmscan | Upstream POSIX support | Upstream does not support native Windows | Use a maintained WSL2 backend for full evidence; never substitute an algorithm |
 | MMseqs2 | Official universal build | Official Windows preview; upstream recommends WSL2 | External validated install |
 | DIAMOND | Official binary | Official binary; Visual C++ runtime required | External validated install |
@@ -55,6 +59,13 @@ It does not install or enable WSL2 automatically because that can require
 administrator approval and a restart. Until a Windows backend is validated by
 doctor, the GUI must show **NOT READY** and block affected workflows.
 
+The macOS PHANOTATE backend is an unmodified upstream scientific program run
+as a separate process. The macOS application carries PHANOTATE, fastpath, and genbank
+license texts plus their exact pinned source archives. No gene-calling
+algorithm, default, or threshold is substituted. Other scientific executables
+and all large evidence databases remain external and are never marked ready
+unless the existing doctor validation succeeds.
+
 ## First launch
 
 Open **Environment / Database Status**. Capability states come directly from
@@ -62,7 +73,8 @@ PhageMine's existing doctor and resource validation logic. A path alone is not
 enough for READY: executability, database sidecars, mappings, indexes, and
 checksums are validated where configured.
 
-Core Analysis needs PHANOTATE. Cohort Discovery also needs MMseqs2 for PMF
+On macOS, Core Analysis uses the bundled PHANOTATE backend. On Windows it stays
+NOT READY until a validated backend is configured. Cohort Discovery also needs MMseqs2 for PMF
 clustering. Standard Evidence needs ready PHROGs plus MMseqs2. Full Evidence
 needs validated Pfam, VOGDB, Swiss-Prot, and PHROGs resources together with
 HMMER, DIAMOND, and MMseqs2. `table2asn` is optional.
@@ -129,3 +141,11 @@ is not a cross-compiler, so `.github/workflows/desktop-builds.yml` builds and
 smoke-tests macOS and Windows independently. macOS CI wraps `PhageMine.app` in a
 DMG. Windows CI uses Inno Setup to create a Start-menu/desktop installer. Neither
 job publishes a GitHub release.
+
+Both native jobs run the loopback-only Streamlit health check and exercise the
+frozen CLI against `examples/demo_phage.fasta`. macOS runs a scientific
+end-to-end annotation with bundled PHANOTATE 1.6.7 and verifies non-empty native
+annotation, evidence, protein/CDS FASTA, GFF3, and manifest outputs. Windows
+verifies the same native output pipeline only with the explicitly test-only demo
+caller, and separately asserts that doctor does not report Core Analysis READY.
+That is packaging evidence, not Windows production gene-calling validation.

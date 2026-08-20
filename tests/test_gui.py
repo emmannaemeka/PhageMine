@@ -9,6 +9,29 @@ from pathlib import Path
 import pytest
 
 
+def test_authoritative_release_candidate_version():
+    from phagemine import __version__, release_tag
+    assert __version__ == "1.1.0rc1"
+    assert release_tag() == "v1.1.0-rc.1"
+    pyproject = Path(__file__).parents[1] / "pyproject.toml"
+    assert 'dynamic = ["version"]' in pyproject.read_text()
+    assert "GITHUB_RUN_NUMBER" not in (Path(__file__).parents[1] / ".github/workflows/desktop-builds.yml").read_text()
+
+
+def test_native_workflow_distinguishes_scientific_and_preview_smokes():
+    workflow = (Path(__file__).parents[1] / ".github/workflows/desktop-builds.yml").read_text()
+    assert "v1.1.0-rc.1" in workflow
+    assert "smoke_packaged_analysis.py dist/PhageMine.app" in workflow
+    assert 'smoke_packaged_analysis.py "dist\\PhageMine\\PhageMine.exe" examples\\demo_phage.fasta --demo' in workflow
+    assert "Windows core analysis must not be READY" in workflow
+
+
+def test_packaged_smoke_never_uses_a_shell():
+    source = (Path(__file__).parents[1] / "scripts/smoke_packaged_analysis.py").read_text()
+    assert "shell=False" in source
+    assert "shell=True" not in source
+
+
 def test_gui_services_import_without_streamlit():
     import phagemine.gui
     from phagemine.gui.services import execution, results, status
@@ -194,10 +217,12 @@ def test_result_export_zip_preserves_native_files(tmp_path):
 
 def test_gui_subprocesses_explicitly_disable_shell_execution():
     from phagemine.gui.services import execution, runs
+    from phagemine import gene_prediction
     assert "shell=False" in inspect.getsource(execution.execute)
     assert "shell=False" in inspect.getsource(runs.start_run)
     assert "shell=True" not in inspect.getsource(execution)
     assert "shell=True" not in inspect.getsource(runs)
+    assert '"shell": False' in inspect.getsource(gene_prediction._subprocess_options)
 
 
 def test_frozen_execution_reenters_same_phagemine_cli(monkeypatch):
@@ -206,6 +231,33 @@ def test_frozen_execution_reenters_same_phagemine_cli(monkeypatch):
     monkeypatch.setattr(execution.sys, "executable", r"C:\Program Files\PhageMine\PhageMine.exe")
     assert execution.execution_argv(["phagemine", "run", "input with spaces.fa"]) == [
         r"C:\Program Files\PhageMine\PhageMine.exe", "--phagemine-cli", "run", "input with spaces.fa"]
+
+
+def test_frozen_phanotate_backend_is_resolved_as_separate_executable(monkeypatch, tmp_path):
+    from phagemine import gene_prediction
+    backend = tmp_path / "phagemine_backend" / "PhageMine-PHANOTATE.exe"
+    backend.parent.mkdir(); backend.write_bytes(b"backend")
+    monkeypatch.setattr(gene_prediction.sys, "frozen", True, raising=False)
+    monkeypatch.setattr(gene_prediction.sys, "_MEIPASS", str(tmp_path), raising=False)
+    monkeypatch.setattr(gene_prediction.sys, "platform", "win32")
+    assert gene_prediction.bundled_phanotate_executable() == str(backend)
+    assert gene_prediction.PHANOTATEPredictor().executable == str(backend)
+
+
+def test_bundled_backend_must_execute_before_doctor_reports_ready(monkeypatch, tmp_path):
+    from phagemine import preflight
+    executable = tmp_path / "PhageMine-PHANOTATE"
+    executable.write_bytes(b"backend"); executable.chmod(0o755)
+
+    class FailedProbe:
+        returncode = 1
+        stdout = ""
+        stderr = "backend failed"
+
+    monkeypatch.setattr(preflight.subprocess, "run", lambda *args, **kwargs: FailedProbe())
+    status = preflight.executable_status("phanotate.py", str(executable))
+    assert status["status"] == "ERROR"
+    assert status["version"] is None
 
 
 def test_desktop_entry_uses_package_launcher(monkeypatch):

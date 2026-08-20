@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches-ignore: [main]
+    tags: ["v1.1.0-rc.1"]
     paths:
       - "src/phagemine/**"
       - "tests/**"
@@ -37,24 +38,34 @@ jobs:
           cache: pip
       - name: Install test and desktop dependencies
         run: python -m pip install -e ".[desktop]" pytest
+      - name: Resolve authoritative release-candidate version
+        run: |
+          echo "PHAGEMINE_VERSION=$(python -c 'from phagemine import __version__; print(__version__)')" >> "$GITHUB_ENV"
+          test "$(python -c 'from phagemine import release_tag; print(release_tag())')" = "v1.1.0-rc.1"
       - name: Run GUI tests
         run: PYTHONPATH=src pytest -q tests/test_gui.py
       - name: Run full unit suite
         run: PYTHONPATH=src pytest -q
       - name: Build PhageMine.app
         run: python scripts/build_desktop.py
-      - name: Smoke-test packaged application
+      - name: Verify packaged application metadata
+        run: |
+          test "$(defaults read "$PWD/dist/PhageMine.app/Contents/Info" CFBundleShortVersionString)" = "$PHAGEMINE_VERSION"
+          dist/PhageMine.app/Contents/MacOS/PhageMine --phagemine-cli --version | grep -Fx "$PHAGEMINE_VERSION"
+      - name: Smoke-test packaged core annotation
+        run: python scripts/smoke_packaged_analysis.py dist/PhageMine.app/Contents/MacOS/PhageMine examples/demo_phage.fasta
+      - name: Smoke-test packaged local interface
         run: |
           dist/PhageMine.app/Contents/MacOS/PhageMine --no-browser --server.port=8765 &
           APP_PID=$!
           trap 'kill $APP_PID || true' EXIT
           python scripts/wait_for_health.py http://127.0.0.1:8765/_stcore/health
       - name: Create DMG
-        run: hdiutil create -volname PhageMine -srcfolder dist/PhageMine.app -ov -format UDZO "PhageMine-macOS-${GITHUB_SHA}.dmg"
+        run: hdiutil create -volname PhageMine -srcfolder dist/PhageMine.app -ov -format UDZO "PhageMine-macOS-${PHAGEMINE_VERSION}-${GITHUB_SHA}.dmg"
       - uses: actions/upload-artifact@v4
         with:
-          name: PhageMine-macOS-${{ github.sha }}
-          path: PhageMine-macOS-${{ github.sha }}.dmg
+          name: PhageMine-macOS-${{ env.PHAGEMINE_VERSION }}-${{ github.run_number }}-${{ github.sha }}
+          path: PhageMine-macOS-${{ env.PHAGEMINE_VERSION }}-${{ github.sha }}.dmg
           if-no-files-found: error
 
   windows-desktop:
@@ -69,13 +80,34 @@ jobs:
           cache: pip
       - name: Install test and desktop dependencies
         run: python -m pip install -e ".[desktop]" pytest
+      - name: Resolve authoritative release-candidate version
+        shell: pwsh
+        run: |
+          $version = python -c "from phagemine import __version__; print(__version__)"
+          $tag = python -c "from phagemine import release_tag; print(release_tag())"
+          if ($tag -ne "v1.1.0-rc.1") { throw "Unexpected release tag: $tag" }
+          "PHAGEMINE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Run GUI tests
         run: $env:PYTHONPATH="src"; pytest -q tests/test_gui.py
       - name: Run full unit suite
         run: $env:PYTHONPATH="src"; pytest -q
       - name: Build windowless desktop application
         run: python scripts/build_desktop.py
-      - name: Smoke-test packaged application
+      - name: Verify packaged application metadata
+        shell: pwsh
+        run: |
+          $productVersion = (Get-Item "dist\PhageMine\PhageMine.exe").VersionInfo.ProductVersion
+          if ($productVersion -ne $env:PHAGEMINE_VERSION) { throw "Executable version $productVersion does not match $env:PHAGEMINE_VERSION" }
+          $reported = & "dist\PhageMine\PhageMine.exe" --phagemine-cli --version
+          if ($reported -ne $env:PHAGEMINE_VERSION) { throw "CLI version $reported does not match $env:PHAGEMINE_VERSION" }
+      - name: Verify Windows core backend remains fail-closed
+        shell: pwsh
+        run: |
+          $doctor = (& "dist\PhageMine\PhageMine.exe" --phagemine-cli doctor --json | ConvertFrom-Json)
+          if ($doctor.capabilities.CORE_ANALYSIS -eq "READY") { throw "Windows core analysis must not be READY without a validated PHANOTATE backend" }
+      - name: Smoke-test packaged CLI output pipeline (technical preview)
+        run: python scripts/smoke_packaged_analysis.py "dist\PhageMine\PhageMine.exe" examples\demo_phage.fasta --demo
+      - name: Smoke-test packaged local interface
         shell: pwsh
         run: |
           $process = Start-Process -FilePath "dist\PhageMine\PhageMine.exe" -ArgumentList "--no-browser", "--server.port=8765" -PassThru
@@ -91,9 +123,9 @@ jobs:
         shell: pwsh
         run: |
           choco install innosetup --no-progress -y
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DMyAppVersion=1.1.0-rc.${env:GITHUB_RUN_NUMBER}" packaging\PhageMine.iss
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DMyAppVersion=${env:PHAGEMINE_VERSION}" packaging\PhageMine.iss
       - uses: actions/upload-artifact@v4
         with:
-          name: PhageMine-Windows-${{ github.sha }}
+          name: PhageMine-Windows-${{ env.PHAGEMINE_VERSION }}-${{ github.run_number }}-${{ github.sha }}
           path: installer-dist/PhageMine-Windows-Setup.exe
           if-no-files-found: error

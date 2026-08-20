@@ -2,10 +2,12 @@
 
 ## PhageMine Desktop
 
-PhageMine Desktop is the simplest route for researchers. Native release-candidate
-builds are produced for macOS and Windows by GitHub Actions; after review, signed
-installers will be attached to a future v1.1.0 release. Desktop users do not need
-Python, pip, Conda, Git, Streamlit, Terminal, or PowerShell for routine launch.
+PhageMine Desktop is the simplest route for researchers. Native `1.1.0rc1`
+builds are produced for macOS and Windows by GitHub Actions; after review,
+signed installers may be attached to a future v1.1.0 release. Desktop users do
+not need Python, pip, Conda, Git, Streamlit, Terminal, or PowerShell to launch
+the application. The macOS build also includes a validated PHANOTATE backend
+for core annotation; the Windows limitations are stated below.
 
 ### PhageMine Desktop — macOS
 
@@ -15,11 +17,14 @@ Mac and opens its local interface automatically.
 
 ### PhageMine Desktop — Windows
 
-Download `PhageMine-Windows-Setup.exe`, run the installer, and launch **PhageMine**
-from the Start menu or optional desktop shortcut. The application has no console
-window. Application installation and scientific-backend readiness are separate:
-full evidence workflows need validated scientific tools, and upstream HMMER is
-not natively supported on Windows. See [Desktop setup and Windows limitations](docs/desktop.md).
+PhageMine Desktop for Windows remains a **technical preview**. Download
+`PhageMine-Windows-Setup.exe`, run the installer, and launch **PhageMine** from
+the Start menu or optional desktop shortcut. Native Windows core annotation is
+not yet ready because PHANOTATE's `fastpath` dependency has no upstream Windows
+wheel and its source uses POSIX-only build headers. Discovery and evidence
+workflows also require separately configured tools and databases, and upstream
+HMMER is not natively supported on Windows.
+See [Desktop setup and Windows limitations](docs/desktop.md).
 
 ### First launch and drag-and-drop analysis
 

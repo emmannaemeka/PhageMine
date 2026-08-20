@@ -4,11 +4,29 @@ from __future__ import annotations
 import re
 import shutil
 import subprocess
+import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
 
 from .genome import predict_orfs, translate
 from .models import Protein
+
+
+def bundled_phanotate_executable() -> str | None:
+    """Return the separately frozen PHANOTATE backend when packaged."""
+    if not getattr(sys, "frozen", False):
+        return None
+    root = Path(getattr(sys, "_MEIPASS", Path(sys.executable).resolve().parent))
+    name = "PhageMine-PHANOTATE.exe" if sys.platform == "win32" else "PhageMine-PHANOTATE"
+    candidate = root / "phagemine_backend" / name
+    return str(candidate) if candidate.is_file() else None
+
+
+def _subprocess_options() -> dict:
+    options = {"capture_output": True, "text": True, "check": False, "shell": False}
+    if sys.platform == "win32":
+        options["creationflags"] = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    return options
 
 
 def reverse_complement(sequence: str) -> str:
@@ -60,7 +78,8 @@ class PHANOTATEPredictor(GenePredictor):
     name = "PHANOTATE"
 
     def __init__(self, executable: str | None = None, extra_args: list[str] | None = None):
-        self.executable = executable or shutil.which("phanotate.py") or shutil.which("phanotate")
+        self.executable = (executable or bundled_phanotate_executable()
+                           or shutil.which("phanotate.py") or shutil.which("phanotate"))
         self.extra_args = extra_args or []
 
     def available(self) -> bool:
@@ -70,7 +89,7 @@ class PHANOTATEPredictor(GenePredictor):
         if not self.available():
             return "unavailable"
         for flag in ("--version", "-v"):
-            result = subprocess.run([str(self.executable), flag], capture_output=True, text=True, check=False)
+            result = subprocess.run([str(self.executable), flag], **_subprocess_options())
             text = (result.stdout or result.stderr).strip()
             if text:
                 return text.splitlines()[0]
@@ -84,7 +103,10 @@ class PHANOTATEPredictor(GenePredictor):
             raise RuntimeError("PHANOTATE is required for production gene prediction but was not found. Install PHANOTATE locally and add phanotate.py (or phanotate) to PATH, or pass --phanotate /path/to/phanotate.py. The demo predictor is test-fixture only.")
         if input_fasta is None:
             raise ValueError("PHANOTATE requires the original FASTA path for reproducible external execution.")
-        completed = subprocess.run([str(self.executable), *self.extra_args, str(input_fasta)], capture_output=True, text=True, check=False)
+        completed = subprocess.run(
+            [str(self.executable), *self.extra_args, str(input_fasta)],
+            **_subprocess_options(),
+        )
         if completed.returncode:
             raise RuntimeError(f"PHANOTATE failed (exit {completed.returncode}): {(completed.stderr or completed.stdout).strip()}")
         return self.parse_output(genome_id, sequence, completed.stdout)

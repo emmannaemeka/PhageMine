@@ -1,12 +1,14 @@
 #define MyAppName "PhageMine"
 #ifndef MyAppVersion
-  #define MyAppVersion "release-candidate"
+  #error MyAppVersion must be supplied from phagemine.__version__
 #endif
 
 [Setup]
 AppId={{9C8E0934-99D5-48D2-853D-F4B8A56C1339}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
+VersionInfoVersion=1.1.0.1
+VersionInfoProductVersion={#MyAppVersion}
 DefaultDirName={autopf}\PhageMine
 DefaultGroupName=PhageMine
 OutputDir=..\installer-dist

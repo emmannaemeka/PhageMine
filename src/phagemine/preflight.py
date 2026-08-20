@@ -27,18 +27,26 @@ def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
         "python": [[resolved, "--version"]],
     }
     version = None
+    probe_succeeded = False
     for command in probes.get(name, [[resolved, "--version"], [resolved, "-h"]]):
         try:
-            result = subprocess.run(command, capture_output=True, text=True, timeout=10, check=False)
+            result = subprocess.run(command, capture_output=True, text=True, timeout=10, check=False, shell=False)
             text = (result.stdout or result.stderr).strip()
-            if text:
+            if result.returncode == 0:
+                probe_succeeded = True
+            if text and result.returncode == 0:
                 lines = [line.strip() for line in text.splitlines() if line.strip()]
                 # HMMER and Prodigal print useful version banners on stderr.
                 version = next((line for line in lines if any(token in line.lower() for token in ("version", "hmmer", "prodigal"))), lines[0])[:240]
                 break
         except (OSError, subprocess.SubprocessError):
             continue
-    return {"name": name, "status": "READY" if os.access(resolved, os.X_OK) else "INVALID", "path": resolved, "version": version}
+    status = "READY" if os.access(resolved, os.X_OK) else "INVALID"
+    # The packaged backend is an explicit path under the application. It must
+    # execute successfully; file presence alone is not scientific readiness.
+    if explicit and name == "phanotate.py" and not probe_succeeded:
+        status = "ERROR"
+    return {"name": name, "status": status, "path": resolved, "version": version}
 
 
 def preflight_resources(explicit: dict[str, dict[str, Any] | None], *, allow_degraded: bool = False) -> dict[str, Any]:
@@ -90,7 +98,9 @@ def preflight_profile(profile: str) -> dict[str, Any]:
 def doctor() -> dict[str, Any]:
     manager = EvidenceResourceManager()
     tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "table2asn"]
-    executables = [executable_status(tool) for tool in tools]
+    from .gene_prediction import bundled_phanotate_executable
+    bundled = bundled_phanotate_executable()
+    executables = [executable_status(tool, bundled if tool == "phanotate.py" else None) for tool in tools]
     resources = manager.validate_all(check_checksum=True)
     by_type = {kind: [r for r in resources if r.get("resource_type") == kind and r.get("status") == "READY"]
                for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")}
