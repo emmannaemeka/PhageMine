@@ -2,6 +2,15 @@ name: Desktop release-candidate builds
 
 on:
   workflow_dispatch:
+  push:
+    branches-ignore: [main]
+    paths:
+      - "src/phagemine/**"
+      - "tests/**"
+      - "packaging/**"
+      - "scripts/build_desktop.py"
+      - "pyproject.toml"
+      - ".github/workflows/desktop-builds.yml"
   pull_request:
     branches: [main]
     paths:
