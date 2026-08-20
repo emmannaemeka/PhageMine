@@ -163,9 +163,12 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
         source=str(self.metadata_path); stat=self.metadata_path.stat(); sha=hashlib.sha256(self.metadata_path.read_bytes()).hexdigest()
         index=self.metadata_path.with_suffix(self.metadata_path.suffix+'.sqlite')
         try:
-            with sqlite3.connect(index) as db:
+            db = sqlite3.connect(index)
+            try:
                 meta=db.execute("SELECT value FROM meta WHERE key='source_sha256'").fetchone()
                 if meta and meta[0]==sha: return index
+            finally:
+                db.close()
         except sqlite3.Error: pass
         tmp=index.with_name(index.name+'.tmp')
         if tmp.exists(): tmp.unlink()

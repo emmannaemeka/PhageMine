@@ -92,7 +92,7 @@ def table2asn_status(package_root: Path, executable: str | None = None) -> dict:
     output.mkdir(exist_ok=True)
     command = [executable, "-indir", str(package_root), "-outdir", str(output), "-t", str(package_root / "submission.sbt"), "-M", "n", "-Z", str(output / "table2asn.val")]
     completed = subprocess.run(command, capture_output=True, text=True, check=False)
-    files = sorted(str(path.relative_to(package_root)) for pattern in ("*.val", "*.stats", "*.gbf", "*.sqn") for path in output.glob(pattern))
+    files = sorted(path.relative_to(package_root).as_posix() for pattern in ("*.val", "*.stats", "*.gbf", "*.sqn") for path in output.glob(pattern))
     return {"performed": True, "state": "passed" if completed.returncode == 0 else "failed", "official_ncbi_validation": completed.returncode == 0, "command": command, "returncode": completed.returncode, "stdout": completed.stdout, "stderr": completed.stderr, "output_files": files, "message": "table2asn executed locally; inspect captured outputs before final NCBI submission."}
 
 
