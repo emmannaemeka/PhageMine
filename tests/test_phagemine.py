@@ -1131,6 +1131,14 @@ class PhageMineTests(unittest.TestCase):
         return SubmissionMetadata.from_dict(json.loads((ROOT / "examples/submission_metadata.json").read_text()))
 
     def _fake_table2asn(self, directory, exit_code=0):
+        if os.name == "nt":
+            script = Path(directory) / f"fake_table2asn_{exit_code}.cmd"
+            script.write_text(
+                f'@echo off\r\nmkdir "%~4" 2>nul\r\n'
+                f'echo validation>"%~4\\fake.val"\r\n'
+                f'echo stats>"%~4\\fake.stats"\r\nexit /b {exit_code}\r\n'
+            )
+            return str(script)
         script = Path(directory) / f"fake_table2asn_{exit_code}.sh"
         script.write_text(f"#!/bin/sh\nmkdir -p \"$4\"\necho validation > \"$4/fake.val\"\necho stats > \"$4/fake.stats\"\nexit {exit_code}\n")
         script.chmod(script.stat().st_mode | stat.S_IXUSR)

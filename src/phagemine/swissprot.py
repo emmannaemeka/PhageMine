@@ -169,7 +169,8 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
         except sqlite3.Error: pass
         tmp=index.with_name(index.name+'.tmp')
         if tmp.exists(): tmp.unlink()
-        with sqlite3.connect(tmp) as db:
+        db = sqlite3.connect(tmp)
+        try:
             db.execute('CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)'); db.execute('CREATE TABLE metadata (accession TEXT PRIMARY KEY, payload TEXT)')
             opener=gzip.open if self.metadata_path.suffix=='.gz' else open; current=[]; rows=[]
             with opener(self.metadata_path,'rt',encoding='utf-8',errors='replace') as handle:
@@ -183,6 +184,8 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
                     else: current.append(line.rstrip('\n'))
             db.executemany('INSERT OR REPLACE INTO metadata VALUES (?,?)',rows)
             db.executemany('INSERT INTO meta VALUES (?,?)',[('source_sha256',sha),('source_path',source),('source_size',str(stat.st_size)),('index_version','1')]); db.commit()
+        finally:
+            db.close()
         os.replace(tmp,index); return index
 
     @staticmethod
