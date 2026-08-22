@@ -145,7 +145,17 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
     (root / "proteins.faa").write_text("".join(f">{p.protein_id} genome={p.genome_id} start={p.start} end={p.end}\n{p.sequence}\n" for p in proteins))
     (root / "cds.fna").write_text("".join(f">{p.protein_id}\n{p.cds}\n" for p in proteins))
-    (root / "genes.gff3").write_text("##gff-version 3\n" + "".join(f"{representation.analysis_sequence_id}\tPhageMine\tCDS\t{p.start}\t{p.end}\t.\t{p.strand}\t0\tID={p.protein_id};Name={p.protein_id};calling_source={p.gene_call_source};coordinate_representation={representation.analysis_sequence_id};coordinate_system=1-based-inclusive;raw_start={p.gene_call_parameters.get("raw_start", p.start)};raw_end={p.gene_call_parameters.get("raw_end", p.end)}\n" for p in proteins))
+    gff_records = []
+    for p in proteins:
+        raw_start = p.gene_call_parameters.get("raw_start", p.start)
+        raw_end = p.gene_call_parameters.get("raw_end", p.end)
+        gff_records.append(
+            f"{representation.analysis_sequence_id}\tPhageMine\tCDS\t{p.start}\t{p.end}\t.\t{p.strand}\t0\t"
+            f"ID={p.protein_id};Name={p.protein_id};calling_source={p.gene_call_source};"
+            f"coordinate_representation={representation.analysis_sequence_id};coordinate_system=1-based-inclusive;"
+            f"raw_start={raw_start};raw_end={raw_end}\n"
+        )
+    (root / "genes.gff3").write_text("##gff-version 3\n" + "".join(gff_records))
     columns = ["analysis_sequence_id", "protein_id", "start", "end", "strand", "length", "annotation", "annotation_level", "functional_confidence", "biological_interest", "evidence_diversity"]
     with (root / "annotation.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
