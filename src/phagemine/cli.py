@@ -14,7 +14,7 @@ import json
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="PhageMine: annotation followed by cautious discovery mining")
+    parser = argparse.ArgumentParser(description="PhageMine: annotation followed by cautious discovery mining", epilog="After installation, run: phagemine databases install --all ; phagemine doctor")
     from . import __version__
     parser.add_argument("--version", action="version", version=__version__)
     subcommands = parser.add_subparsers(dest="command", required=True)
@@ -23,6 +23,10 @@ def main(argv: list[str] | None = None) -> int:
     doctor_command.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
     databases = subcommands.add_parser("databases", help="Manage registered local evidence resources")
     database_commands = databases.add_subparsers(dest="database_command", required=True)
+    install = database_commands.add_parser("install", help="Install versioned biological databases")
+    install.add_argument("database", nargs="?", choices=("pfam", "vogdb", "swissprot", "phrogs", "pmfdb", "inphared"))
+    install.add_argument("--all", action="store_true", help="Install all six databases")
+    install.add_argument("--dry-run", action="store_true", help="Show the resumable installation plan without downloading")
     register = database_commands.add_parser("register", help="Register a local evidence resource")
     register.add_argument("resource_type", choices=[item.value.lower() for item in ResourceType])
     register.add_argument("path")
@@ -221,6 +225,17 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "databases":
         manager = EvidenceResourceManager()
+        if args.database_command == "install":
+            from .database_installers import dry_run
+            if args.all and args.database:
+                parser.error("choose a database or --all, not both")
+            if not args.all and not args.database:
+                parser.error("provide a database name or --all")
+            selected = "all" if args.all else args.database
+            if not args.dry_run:
+                parser.error("download/install execution is not enabled in this build; use --dry-run or a managed release installer")
+            print(json.dumps(dry_run(selected), indent=2, sort_keys=True))
+            return 0
         if args.database_command == "register":
             name = args.name or args.resource_type.upper()
             provenance = {key: value for key, value in (("annotations_path", args.annotations), ("metadata_path", args.metadata)) if value}
