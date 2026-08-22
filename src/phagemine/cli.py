@@ -18,6 +18,7 @@ def main(argv: list[str] | None = None) -> int:
     from . import __version__
     parser.add_argument("--version", action="version", version=__version__)
     subcommands = parser.add_subparsers(dest="command", required=True)
+    gui_command = subcommands.add_parser("gui", help="Launch the optional local graphical interface")
     doctor_command = subcommands.add_parser("doctor", help="Validate executables and registered evidence resources")
     doctor_command.add_argument("--output", help="Optional JSON report path")
     doctor_command.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
@@ -119,6 +120,9 @@ def main(argv: list[str] | None = None) -> int:
     revise.add_argument("--corrections", required=True)
     revise.add_argument("--output", required=True)
     args = parser.parse_args(argv)
+    if args.command == "gui":
+        from .gui.launcher import main as gui_main
+        return gui_main([])
     if args.command == "doctor":
         from .preflight import doctor, doctor_text, write_doctor_report
         payload = write_doctor_report(args.output) if args.output else doctor()
