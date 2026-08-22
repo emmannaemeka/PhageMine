@@ -61,7 +61,7 @@ Reason: Multiple independent evidence sources support a DNA-packaging
 
 `genomes → cohort QC → PHANOTATE per genome → protein pooling → exact AA deduplication → pooled evidence → remapping → classification → PMF clustering → recurrence → genomic context/synteny → PMFDB → ranking → figures/report`
 
-A PMF is a homologous PhageMine protein family based on biological sequence similarity. Exact amino-acid deduplication is only a computational optimization and does not define a PMF. PMFDB is the PhageMine protein-family knowledgebase. Its conservative states are `CHARACTERIZED_HOMOLOG_FOUND`, `MATCHES_UNCHARACTERIZED`, `NO_EXTERNAL_MATCH`, and `EXTERNAL_MATCHES_MIXED`. `NO_EXTERNAL_MATCH` does not mean novel.
+A PMF is a homologous PhageMine protein family based on biological sequence similarity. Exact amino-acid deduplication is only a computational optimization and does not define a PMF. PMFDB is the PhageMine protein-family knowledgebase. Its conservative results distinguish experimentally characterized, predicted-function, uncharacterized, mixed, and metadata-incomplete matches. `NO_EXTERNAL_MATCH` does not mean novel, and an INPHARED product label is retained as a computational prediction rather than experimental evidence.
 
 ### Both mode
 
@@ -77,11 +77,45 @@ source .venv/bin/activate
 python -m pip install -e .
 ```
 
-Production runs require these executables on `PATH`: PHANOTATE, HMMER (`hmmscan`), MMseqs2 (`mmseqs`), and DIAMOND (`diamond`). `table2asn` is optional and never blocks the normal GenBank pre-submission package.
+Production runs require these executables on `PATH`: PHANOTATE, HMMER
+(`hmmscan`), MMseqs2 (`mmseqs`), DIAMOND (`diamond`), and Mash (`mash`) when
+whole-genome INPHARED comparison is installed. `table2asn` is optional and
+never blocks the normal GenBank pre-submission package.
+
+After installation, PhageMine displays the database setup commands in its
+top-level help. Install all evidence databases and validate the environment:
+
+```bash
+phagemine databases install --all
+phagemine doctor
+```
+
+The database installer reports an approximately 3.4 GiB compressed download
+before it begins. Prepared databases and temporary working files require
+additional disk space; keep at least 15–20 GiB free for `--all`.
 
 ## Database configuration
 
-Large databases are not bundled. Register local resources with the supported registry commands:
+Large databases are not bundled. Install one database at a time when preferred:
+
+```bash
+phagemine databases install pfam
+phagemine databases install vogdb
+phagemine databases install swissprot
+phagemine databases install phrogs
+phagemine databases install pmfdb
+phagemine databases install inphared
+phagemine doctor
+```
+
+Each installer downloads a provider release, verifies the published checksum
+where available, prepares the searchable database, writes an installation
+manifest, registers the resource, and requires it to pass validation before
+reporting `READY`. Downloads can be resumed from the persistent `.downloads`
+directory. Use `--directory`, `--force`, `--keep-downloads`, `--dry-run`, or
+`--json` as needed.
+
+Researchers with an existing local snapshot can register it without downloading:
 
 ```bash
 phagemine databases register pfam /path/to/Pfam-A.hmm --name Pfam-A
@@ -91,9 +125,17 @@ phagemine databases register swissprot /path/to/uniprot_sprot.dmnd \
   --name Swiss-Prot --metadata /path/to/uniprot_sprot.dat.gz
 phagemine databases register phrogs /path/to/phrogs_profile_db \
   --name PHROGs --annotations /path/to/phrog_annotations.tsv
+phagemine databases register pmfdb /path/to/PMFDB-INPHARED-2026-04-07 \
+  --name PMFDB-INPHARED
+phagemine databases register inphared_genomes /path/to/reference_phage_genomes.fna \
+  --name INPHARED-Genomes --metadata /path/to/genome_metadata.tsv
 ```
 
-PMFDB is supplied as a versioned release directory and is passed to the existing family validation workflow; it is not bundled in this repository. Check readiness and executable availability with:
+`pmfdb` converts the pinned 7 April 2026 INPHARED proteins, protein-to-genome
+mapping and host/taxonomy table into a versioned PMFDB release and builds its
+MMseqs2 index. `inphared` prepares the corresponding genome FASTA and Mash
+sketch. INPHARED product names remain computational predictions and are never
+promoted to experimental characterization. Check readiness with:
 
 ```bash
 phagemine databases status
@@ -138,6 +180,10 @@ Each record also links genomic context and, in discovery results, PMF membership
 Annotation outputs include `annotation.tsv`, `functional_classification.tsv/json`, `evidence.json`, `candidate_ranking.tsv`, `proteins.faa`, `cds.fna`, `genes.gff3`, `genomic_context.tsv/json`, `modules.tsv/json`, `quality_control.json`, `report.html`, `report.md`, `protein_details/`, `figures/`, `figure_data/`, and `genbank_submission/`.
 
 Discovery outputs include `pmf_families.tsv`, `pmf_members.tsv`, `family_recurrence.tsv`, `cohort_unknown_proteome.tsv`, `conserved_neighbourhoods.tsv`, `pmfdb_validation.tsv`, `discovery_ranking.tsv`, `discovery_report.html`, `discovery_report.md`, `figures/`, `figure_data/`, and `pooled_manifest.json`.
+
+When the INPHARED genome resource is READY, discovery also writes
+`inphared_nearest_phages.tsv/json`; Mash distance is screening evidence and
+requires confirmatory alignment or ANI.
 
 The TSV files are stable, machine-readable tables; JSON files preserve detailed evidence/provenance; reports provide navigable summaries and downloads.
 

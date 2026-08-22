@@ -18,6 +18,8 @@ class ResourceType(str, Enum):
     VOGDB = "VOGDB"
     PHROGS = "PHROGS"
     SWISSPROT = "SWISSPROT"
+    PMFDB = "PMFDB"
+    INPHARED_GENOMES = "INPHARED_GENOMES"
     REFSEQ = "REFSEQ"
     PHAGE_PROTEINS = "PHAGE_PROTEINS"
     CUSTOM = "CUSTOM"
@@ -30,7 +32,10 @@ class ResourceStatus(str, Enum):
     INVALID = "INVALID"
 
 
-REQUIRED_TOOLS = {"PFAM": "hmmscan", "VOGDB": "hmmscan", "SWISSPROT": "diamond", "PHROGS": "mmseqs"}
+REQUIRED_TOOLS = {
+    "PFAM": "hmmscan", "VOGDB": "hmmscan", "SWISSPROT": "diamond",
+    "PHROGS": "mmseqs", "PMFDB": "mmseqs", "INPHARED_GENOMES": "mash",
+}
 
 
 def default_registry_path() -> Path:
@@ -138,6 +143,49 @@ def validate_resource(resource: dict[str, Any], *, check_checksum: bool = True) 
             problems.append("PHROGs annotation mapping is not registered")
     if kind == "SWISSPROT" and not provenance.get("metadata_path"):
         problems.append("Swiss-Prot metadata is not registered")
+    if kind == "PMFDB":
+        root = path if path.is_dir() else path.parent
+        required = (
+            "reference_phage_proteins.faa", "reference_metadata.tsv",
+            "reference_qc.tsv", "reference_manifest.json",
+            "mmseqs/target_db.dbtype", "mmseqs/mmseqs_index_manifest.json",
+        )
+        for name in required:
+            if not (root / name).is_file():
+                problems.append(f"PMFDB required file is missing: {name}")
+        manifest_path = root / "reference_manifest.json"
+        if manifest_path.is_file():
+            try:
+                manifest = json.loads(manifest_path.read_text())
+                if str(manifest.get("schema_version")) != "1.0":
+                    problems.append("PMFDB manifest schema_version is unsupported")
+                for name, expected in (manifest.get("checksums") or {}).items():
+                    candidate = root / name
+                    if candidate.is_file() and _sha256(candidate) != expected:
+                        problems.append(f"PMFDB checksum mismatch: {name}")
+            except (OSError, ValueError, TypeError):
+                problems.append("PMFDB reference_manifest.json is invalid")
+    if kind == "INPHARED_GENOMES":
+        root = path.parent if path.is_file() else path
+        required = (
+            "reference_phage_genomes.fna", "genome_metadata.tsv", "genome_qc.tsv",
+            "genome_manifest.json", "inphared.msh",
+        )
+        for name in required:
+            if not (root / name).is_file():
+                problems.append(f"INPHARED required file is missing: {name}")
+        manifest_path = root / "genome_manifest.json"
+        if manifest_path.is_file():
+            try:
+                manifest = json.loads(manifest_path.read_text())
+                if str(manifest.get("schema_version")) != "1.0":
+                    problems.append("INPHARED manifest schema_version is unsupported")
+                for name, expected in (manifest.get("checksums") or {}).items():
+                    candidate = root / name
+                    if candidate.is_file() and _sha256(candidate) != expected:
+                        problems.append(f"INPHARED checksum mismatch: {name}")
+            except (OSError, ValueError, TypeError):
+                problems.append("INPHARED genome_manifest.json is invalid")
     result["status"] = ResourceStatus.INVALID.value if problems else ResourceStatus.READY.value
     result["validation_errors"] = problems
     return result

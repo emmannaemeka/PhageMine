@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+- Add `phagemine databases install pfam`, `vogdb`, `swissprot`, `phrogs`,
+  `pmfdb`, and `inphared`.
+- Add `phagemine databases install --all` with resumable downloads, published
+  checksum verification, database preparation, manifests, registration, and
+  fail-closed readiness validation.
+- Add post-install database guidance to top-level help, the Bioconda post-link
+  template, and `phagemine doctor` recommendations.
+- Build PMFDB and the whole-genome Mash resource from the checksum-pinned
+  INPHARED 7 April 2026 release, with conservative annotation semantics,
+  resource QC, provenance, automatic discovery use, and nearest-phage outputs.
+
 ## 1.0.0
 
 The first stable public release. This release provides evidence-based

@@ -53,7 +53,7 @@ def discovery_tables(root: str | Path) -> dict[str, list[dict]]:
         "families": "pmf_families.tsv", "members": "pmf_members.tsv",
         "recurrence": "family_recurrence.tsv", "unknown_proteome": "cohort_unknown_proteome.tsv",
         "neighbourhoods": "conserved_neighbourhoods.tsv", "validation": "pmfdb_validation.tsv",
-        "ranking": "discovery_ranking.tsv"}.items()}
+        "ranking": "discovery_ranking.tsv", "nearest_phages": "inphared_nearest_phages.tsv"}.items()}
 
 
 def figures(root: str | Path) -> list[Path]:
