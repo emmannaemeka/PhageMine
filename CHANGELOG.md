@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Add `phagemine databases install pfam`, `vogdb`, `swissprot`, and `phrogs`.
+- Add `phagemine databases install --all` with resumable downloads, published
+  checksum verification, database preparation, manifests, registration, and
+  fail-closed readiness validation.
+- Add post-install database guidance to top-level help, the Bioconda post-link
+  template, and `phagemine doctor` recommendations.
+
 ## 1.0.0
 
 The first stable public release. This release provides evidence-based

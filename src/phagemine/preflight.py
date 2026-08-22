@@ -103,8 +103,19 @@ def doctor() -> dict[str, Any]:
         "GENBANK_PRE_SUBMISSION": "READY",
         "NCBI_TABLE2ASN_VALIDATION": "READY" if table2asn_ready else "UNAVAILABLE",
     }
+    missing_resources = [kind.lower() for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS") if not by_type[kind]]
+    recommendations = []
+    if missing_resources:
+        recommendations.append({
+            "action": "INSTALL_EVIDENCE_DATABASES",
+            "missing": missing_resources,
+            "commands": [f"phagemine databases install {name}" for name in missing_resources],
+            "all_command": "phagemine databases install --all",
+            "verify_command": "phagemine doctor",
+        })
     return {"phagemine_version": __version__, "python": executable_status("python"),
-            "executables": executables, "resources": resources, "capabilities": capabilities}
+            "executables": executables, "resources": resources, "capabilities": capabilities,
+            "recommendations": recommendations}
 
 
 def write_doctor_report(path: str | Path) -> dict[str, Any]:
@@ -127,4 +138,12 @@ def doctor_text(payload: dict[str, Any]) -> str:
     lines += ["", "Capabilities"]
     for key, value in payload["capabilities"].items():
         lines.append(f"{key.replace('_', ' ').title():<28}{value}")
+    recommendations = payload.get("recommendations") or []
+    if recommendations:
+        recommendation = recommendations[0]
+        lines += ["", "Database setup required"]
+        lines.extend(f"  {command}" for command in recommendation["commands"])
+        lines += ["", "Or install every evidence database:",
+                  f"  {recommendation['all_command']}",
+                  "Then verify:", f"  {recommendation['verify_command']}"]
     return "\n".join(lines)

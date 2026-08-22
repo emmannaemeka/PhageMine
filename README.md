@@ -79,9 +79,38 @@ python -m pip install -e .
 
 Production runs require these executables on `PATH`: PHANOTATE, HMMER (`hmmscan`), MMseqs2 (`mmseqs`), and DIAMOND (`diamond`). `table2asn` is optional and never blocks the normal GenBank pre-submission package.
 
+After installation, PhageMine displays the database setup commands in its
+top-level help. Install all evidence databases and validate the environment:
+
+```bash
+phagemine databases install --all
+phagemine doctor
+```
+
+The database installer reports an approximately 2.4 GiB compressed download
+before it begins. Prepared databases and temporary working files require
+additional disk space.
+
 ## Database configuration
 
-Large databases are not bundled. Register local resources with the supported registry commands:
+Large databases are not bundled. Install one database at a time when preferred:
+
+```bash
+phagemine databases install pfam
+phagemine databases install vogdb
+phagemine databases install swissprot
+phagemine databases install phrogs
+phagemine doctor
+```
+
+Each installer downloads a provider release, verifies the published checksum
+where available, prepares the searchable database, writes an installation
+manifest, registers the resource, and requires it to pass validation before
+reporting `READY`. Downloads can be resumed from the persistent `.downloads`
+directory. Use `--directory`, `--force`, `--keep-downloads`, `--dry-run`, or
+`--json` as needed.
+
+Researchers with an existing local snapshot can register it without downloading:
 
 ```bash
 phagemine databases register pfam /path/to/Pfam-A.hmm --name Pfam-A

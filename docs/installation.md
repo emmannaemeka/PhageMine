@@ -1,11 +1,47 @@
 # Installation
 
-Install the release candidate in a clean environment:
+Install PhageMine in a clean environment. A Conda installation is recommended
+because it supplies PHANOTATE, HMMER, MMseqs2 and DIAMOND together:
+
+```bash
+conda create -n phagemine phagemine \
+  --channel conda-forge \
+  --channel bioconda \
+  --strict-channel-priority
+conda activate phagemine
+```
+
+For a local wheel:
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
 python -m pip install phagemine-1.0.0-py3-none-any.whl
+```
+
+## Required post-installation database setup
+
+The software package does not bundle the large biological evidence databases.
+Immediately after installing PhageMine, run:
+
+```bash
+phagemine databases install --all
+phagemine doctor
+```
+
+The Conda recipe uses the supplied `packaging/bioconda/post-link.sh` reminder.
+The same instructions appear when `phagemine` or `phagemine --help` is run.
+`phagemine doctor` repeats actionable installation commands for every missing
+resource.
+
+Install resources separately when bandwidth or storage is constrained:
+
+```bash
+phagemine databases install pfam
+phagemine databases install vogdb
+phagemine databases install swissprot
+phagemine databases install phrogs
+phagemine doctor
 ```
 
 Production gene prediction requires the external PHANOTATE script. Pass its
@@ -19,6 +55,6 @@ phagemine run genome.fasta --output results/run \
   --phanotate /path/to/phanotate.py
 ```
 
-Optional evidence executables and databases are installed separately and are
-not required for Core. Missing optional resources are reported and the Core
-workflow remains usable.
+Evidence databases are not required for Core. Missing resources are reported
+as unavailable and the Core workflow remains usable, but full evidence mode
+requires all four resources to be `READY` in `phagemine doctor`.

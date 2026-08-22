@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 from .pipeline import run
@@ -14,10 +15,22 @@ import json
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="PhageMine: annotation followed by cautious discovery mining")
+    parser = argparse.ArgumentParser(
+        description="PhageMine: annotation followed by cautious discovery mining",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""After installing PhageMine, install and verify the evidence databases:
+  phagemine databases install --all
+  phagemine doctor
+
+Individual installers are also available:
+  phagemine databases install pfam
+  phagemine databases install vogdb
+  phagemine databases install swissprot
+  phagemine databases install phrogs""",
+    )
     from . import __version__
     parser.add_argument("--version", action="version", version=__version__)
-    subcommands = parser.add_subparsers(dest="command", required=True)
+    subcommands = parser.add_subparsers(dest="command")
     gui_command = subcommands.add_parser("gui", help="Launch the optional local graphical interface")
     doctor_command = subcommands.add_parser("doctor", help="Validate executables and registered evidence resources")
     doctor_command.add_argument("--output", help="Optional JSON report path")
@@ -33,6 +46,14 @@ def main(argv: list[str] | None = None) -> int:
     register.add_argument("--notes")
     register.add_argument("--annotations", help="Optional annotation table path (used by VOGDB resources)")
     register.add_argument("--metadata", help="Optional metadata path (used by Swiss-Prot resources)")
+    install = database_commands.add_parser("install", help="Download, prepare, register, and validate evidence databases")
+    install.add_argument("resource", nargs="?", choices=("pfam", "vogdb", "swissprot", "phrogs"))
+    install.add_argument("--all", action="store_true", help="Install Pfam, VOGDB, Swiss-Prot, and PHROGs")
+    install.add_argument("--directory", help="Database installation root (default: platform user-data directory)")
+    install.add_argument("--force", action="store_true", help="Replace an existing installation of the selected release")
+    install.add_argument("--keep-downloads", action="store_true", help="Keep downloaded archives after successful installation")
+    install.add_argument("--dry-run", action="store_true", help="Show download estimates without installing")
+    install.add_argument("--json", action="store_true", help="Emit installation results as JSON")
     database_commands.add_parser("status", help="List registered evidence resources")
     remove = database_commands.add_parser("remove", help="Remove a resource registration")
     remove.add_argument("name")
@@ -120,6 +141,9 @@ def main(argv: list[str] | None = None) -> int:
     revise.add_argument("--corrections", required=True)
     revise.add_argument("--output", required=True)
     args = parser.parse_args(argv)
+    if args.command is None:
+        parser.print_help()
+        return 0
     if args.command == "gui":
         from .gui.launcher import main as gui_main
         return gui_main([])
@@ -224,6 +248,33 @@ def main(argv: list[str] | None = None) -> int:
         print(f"PhageMine resume complete: {count} predicted proteins. Outputs: {args.output}")
         return 0
     if args.command == "databases":
+        if args.database_command == "install":
+            from .database_installer import (
+                DatabaseInstallError, DatabaseInstaller, RESOURCE_ORDER,
+                installation_plan, results_json,
+            )
+            if bool(args.resource) == bool(args.all):
+                parser.error("choose one database name or --all")
+            selected = RESOURCE_ORDER if args.all else (args.resource,)
+            print(installation_plan(selected), file=sys.stderr)
+            if args.dry_run:
+                return 0
+            try:
+                results = DatabaseInstaller(
+                    args.directory,
+                    force=args.force,
+                    keep_downloads=args.keep_downloads,
+                ).install_many(selected)
+            except (OSError, DatabaseInstallError) as exc:
+                parser.error(str(exc))
+            if args.json:
+                print(results_json(results))
+            else:
+                for result in results:
+                    action = "installed" if result.installed else "already ready"
+                    print(f"{result.resource}: {result.status} ({action}) - {result.path}")
+                print("\nRun 'phagemine doctor' to verify the complete installation.")
+            return 0
         manager = EvidenceResourceManager()
         if args.database_command == "register":
             name = args.name or args.resource_type.upper()
