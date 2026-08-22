@@ -80,8 +80,6 @@ PMFDB is supplied as a versioned release directory and is passed to the existing
 ```bash
 phagemine databases status
 phagemine doctor --json
-
-After installation, run `phagemine databases install --all` and `phagemine doctor`.
 ```
 
 `READY` means the registered path and required sidecars/tools are available. An unavailable resource is reported conservatively and its evidence is not fabricated.

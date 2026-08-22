@@ -22,9 +22,3 @@ phagemine run genome.fasta --output results/run \
 Optional evidence executables and databases are installed separately and are
 not required for Core. Missing optional resources are reported and the Core
 workflow remains usable.
-## Managed databases
-
-After installing PhageMine, run `phagemine databases install --all` followed by
-`phagemine doctor`. Use `phagemine databases install --all --dry-run` to inspect
-the six-resource plan. Individual installers are available for Pfam, VOGDB,
-Swiss-Prot, PHROGs, PMFDB, and INPHARED.
