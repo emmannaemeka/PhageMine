@@ -1,7 +1,7 @@
 # Installation
 
 Install PhageMine in a clean environment. A Conda installation is recommended
-because it supplies PHANOTATE, HMMER, MMseqs2 and DIAMOND together:
+because it supplies PHANOTATE, HMMER, MMseqs2, DIAMOND and Mash together:
 
 ```bash
 conda create -n phagemine phagemine \
@@ -41,6 +41,8 @@ phagemine databases install pfam
 phagemine databases install vogdb
 phagemine databases install swissprot
 phagemine databases install phrogs
+phagemine databases install pmfdb
+phagemine databases install inphared
 phagemine doctor
 ```
 
@@ -57,4 +59,7 @@ phagemine run genome.fasta --output results/run \
 
 Evidence databases are not required for Core. Missing resources are reported
 as unavailable and the Core workflow remains usable, but full evidence mode
-requires all four resources to be `READY` in `phagemine doctor`.
+requires the four annotation resources to be `READY` in `phagemine doctor`.
+PMFDB and INPHARED enable the two comparative discovery capabilities. The
+complete six-resource download is approximately 3.4 GiB; keep at least
+15–20 GiB free during preparation.

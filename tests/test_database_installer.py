@@ -3,6 +3,8 @@ from __future__ import annotations
 import gzip
 import hashlib
 import io
+import csv
+import json
 import tarfile
 from pathlib import Path
 
@@ -30,7 +32,7 @@ def test_cli_exposes_exact_install_commands(capsys):
     assert cli.main(["databases", "install", "--all", "--dry-run"]) == 0
     text = capsys.readouterr().err
     assert "approximately" in text
-    assert "2.4 GiB" in text
+    assert "3.4 GiB" in text
 
 
 def test_no_argument_help_contains_post_install_guidance(capsys):
@@ -134,3 +136,90 @@ def test_uniprot_metalink_parser_reads_version_and_md5(tmp_path):
 def test_cli_requires_resource_or_all():
     with pytest.raises(SystemExit):
         cli.main(["databases", "install", "--dry-run"])
+
+
+def _gzip_text(path: Path, text: str) -> Path:
+    with gzip.open(path, "wt", encoding="utf-8", newline="") as handle:
+        handle.write(text)
+    return path
+
+
+def test_pmfdb_install_converts_inphared_and_preserves_prediction_status(tmp_path, monkeypatch):
+    proteins = _gzip_text(
+        tmp_path / "proteins.faa.gz",
+        ">A_00001 hypothetical protein\nMKT\n>A_00002 terminase large subunit\nMPEPTIDE\n",
+    )
+    mapping = _gzip_text(
+        tmp_path / "mapping.csv.gz",
+        "protein_id,contig_id,keywords\nA_00001,A,none\nA_00002,A,none\n",
+    )
+    metadata = _gzip_text(
+        tmp_path / "metadata.tsv.gz",
+        "Accession\tDescription\tGenome Length (KB)\tmolGC (%)\tGenus\tSub-family\tFamily\tHost\n"
+        '<a href="https://example.test/A">A</a>\tExample phage\t40\t50\tTestvirus\tTestvirinae\tTestviridae\tPseudomonas\n',
+    )
+    installer = DatabaseInstaller(
+        tmp_path / "databases", registry_path=tmp_path / "registry.json",
+        keep_downloads=True, reporter=lambda _message: None,
+    )
+
+    def fake_download(url, destination, **_kwargs):
+        if "proteins" in url:
+            return proteins
+        if "gene_to_genome" in url:
+            return mapping
+        return metadata
+
+    def fake_run(command):
+        if command[1] == "createdb":
+            target = Path(command[3])
+            target.write_bytes(b"db")
+            Path(str(target) + ".dbtype").write_bytes(b"type")
+
+    monkeypatch.setattr(installer, "_download", fake_download)
+    monkeypatch.setattr(installer, "_require_tool", lambda name: name)
+    monkeypatch.setattr(installer, "_run", fake_run)
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+    result = installer.install("pmfdb")
+    root = Path(result.path)
+    assert result.status == "READY"
+    records = list(csv.DictReader((root / "reference_metadata.tsv").open(), delimiter="\t"))
+    assert records[0]["annotation_status"] == "PREDICTED_UNCHARACTERIZED"
+    assert records[1]["annotation_status"] == "PREDICTED_FUNCTION"
+    assert {row["characterized"] for row in records} == {"false"}
+    manifest = json.loads((root / "reference_manifest.json").read_text())
+    assert manifest["source_database"] == "INPHARED"
+    assert manifest["protein_count"] == 2
+
+
+def test_inphared_install_builds_genome_mash_resource(tmp_path, monkeypatch):
+    genomes = _gzip_text(tmp_path / "genomes.fa.gz", ">A Example phage\nACGTACGT\n")
+    metadata = _gzip_text(
+        tmp_path / "metadata.tsv.gz",
+        "Accession\tDescription\tGenome Length (KB)\tmolGC (%)\tGenus\tSub-family\tFamily\tHost\n"
+        "A\tExample phage\t0.008\t50\tTestvirus\tTestvirinae\tTestviridae\tPseudomonas\n",
+    )
+    installer = DatabaseInstaller(
+        tmp_path / "databases", registry_path=tmp_path / "registry.json",
+        keep_downloads=True, reporter=lambda _message: None,
+    )
+
+    def fake_download(url, destination, **_kwargs):
+        return genomes if "genomes.fa" in url else metadata
+
+    def fake_run(command):
+        if command[1] == "sketch":
+            Path(command[command.index("-o") + 1] + ".msh").write_bytes(b"mash")
+
+    monkeypatch.setattr(installer, "_download", fake_download)
+    monkeypatch.setattr(installer, "_require_tool", lambda name: name)
+    monkeypatch.setattr(installer, "_run", fake_run)
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+    result = installer.install("inphared")
+    root = Path(result.path).parent
+    assert result.status == "READY"
+    assert (root / "inphared.msh").is_file()
+    manifest = json.loads((root / "genome_manifest.json").read_text())
+    assert manifest["genome_count"] == 1
+    install_manifest = json.loads((root / "install_manifest.json").read_text())
+    assert "-i" in install_manifest["preparation_commands"][0]

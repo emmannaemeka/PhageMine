@@ -16,6 +16,7 @@ from pathlib import Path
 from .family import build_database
 from .family_external import validate_external
 from .figures import generate_discovery_figures
+from .inphared import compare_genomes
 
 
 FAMILY_CONFIG = {"family_build": {"minimum_identity": 0.3, "minimum_coverage": 0.5,
@@ -175,7 +176,7 @@ def _ranking(families, context_status, validation):
     return candidates
 
 
-def _reports(root, samples, proteins, families, ranking, figures, evidence_reused, pmfdb_provenance):
+def _reports(root, samples, proteins, families, ranking, figures, evidence_reused, pmfdb_provenance, inphared_comparison):
     counts=Counter(p["functional_state"] for p in proteins)
     lines=["# PhageMine discovery report", "", "> PMF recurrence, genomic context, and database matches are computational evidence. No external match is not evidence of novelty.", "",
         f"- Genomes: **{len(samples)}**", f"- Protein occurrences: **{len(proteins)}**", f"- PMFs: **{len(families)}**",
@@ -188,13 +189,19 @@ def _reports(root, samples, proteins, families, ranking, figures, evidence_reuse
     for path in figures.get("created",[]): lines.append(f"- [{Path(path).name}]({Path(path).relative_to(root)})")
     for item in figures.get("skipped",[]): lines.append(f"- Skipped `{item['figure']}`: {item['reason']}")
     if pmfdb_provenance: lines += ["", "## PMFDB provenance", "", f"- Version: `{pmfdb_provenance.get('pmfdb_version')}`", f"- Reference: `{pmfdb_provenance.get('reference')}`"]
+    nearest=(inphared_comparison or {}).get("matches") or []
+    if nearest:
+        lines += ["", "## Nearest INPHARED phages", "", "> Mash results are screening evidence and require confirmatory alignment or ANI.", "", "| Query | Rank | Reference | Mash distance | Host | Taxon |", "|---|---:|---|---:|---|---|"]
+        for row in nearest:
+            taxon=row.get("phage_genus") or row.get("phage_family") or ""
+            lines.append(f"| {row['sample_id']} | {row['rank']} | {row['reference_accession']} | {row['mash_distance']} | {row.get('host_genus') or ''} | {taxon} |")
     markdown="\n".join(lines)+"\n"; (root/"discovery_report.md").write_text(markdown)
     figure_html="".join(f'<figure><a href="{html.escape(str(Path(path).relative_to(root)))}"><img src="{html.escape(str(Path(path).relative_to(root)))}" style="max-width:100%"></a><figcaption>{html.escape(Path(path).stem)}</figcaption></figure>' for path in figures.get("created",[]) if path.endswith('.png'))
     table_rows="".join(f"<tr><td>{r['rank']}</td><td>{r['pmf_id']}</td><td>{r['functional_state']}</td><td>{r['member_count']}</td><td>{r['genome_count']}</td><td>{r['context_conservation_state']}</td><td>{r['pmfdb_state']}</td></tr>" for r in ranking[:50])
     (root/"discovery_report.html").write_text(f"<!doctype html><html><head><meta charset='utf-8'><title>PhageMine discovery report</title><style>body{{font-family:Arial,sans-serif;max-width:1200px;margin:auto;padding:2rem}}table{{border-collapse:collapse}}th,td{{border:1px solid #bbb;padding:.35rem}}figure{{margin:2rem 0}}</style></head><body><h1>PhageMine discovery report</h1><p><strong>Scientific caution:</strong> context and homology are supporting evidence; NO_EXTERNAL_MATCH does not mean novel.</p><p>Genomes: {len(samples)}; proteins: {len(proteins)}; PMFs: {len(families)}.</p><table><thead><tr><th>Rank</th><th>PMF</th><th>State</th><th>Members</th><th>Genomes</th><th>Context</th><th>PMFDB</th></tr></thead><tbody>{table_rows}</tbody></table><h2>Figures</h2>{figure_html}</body></html>")
 
 
-def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None, progress=None,
+def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None, inphared=None, mash="mash", progress=None,
                             resume_existing=False, evidence_reused=False, source_mode="discover"):
     root=Path(output); root.mkdir(parents=True, exist_ok=True); started=time.monotonic(); timings={}
     checkpoints_path=root/"discovery_checkpoints.json"
@@ -257,6 +264,28 @@ def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None,
         (root/"pmfdb_validation.json").write_text(json.dumps({"provenance":{"status":"PMFDB_UNAVAILABLE"},"families":validation},indent=2,sort_keys=True))
     mark(stage,pmf_sig,[root/"pmfdb_validation.tsv",root/"pmfdb_validation.json"],reuse_pmf); emit("DONE" if pmfdb or reuse_pmf else "SKIPPED",stage,t,"reused" if reuse_pmf else (pmfdb_provenance.get("pmfdb_version") or "PMFDB not configured"))
 
+    stage="INPHARED genome comparison"; t=time.monotonic(); emit("RUNNING",stage)
+    inphared_comparison={"status":"INPHARED_UNAVAILABLE","matches":[]}
+    if inphared:
+        provenance=inphared.get("provenance") or {}
+        fastas={Path(sample).name:Path(sample)/"analysis_genome.fasta" for sample in sample_dirs if (Path(sample)/"analysis_genome.fasta").is_file()}
+        inphared_comparison=compare_genomes(
+            fastas,
+            mash_index=provenance.get("mash_index_path"),
+            metadata=provenance.get("metadata_path"),
+            output=root,
+            mash=mash,
+        )
+        inphared_comparison["resource_version"]=inphared.get("version")
+        inphared_comparison["resource_manifest"]=provenance.get("reference_manifest_path")
+        (root/"inphared_nearest_phages.json").write_text(json.dumps(inphared_comparison,indent=2,sort_keys=True)+"\n")
+        emit("DONE",stage,t,f"{len(inphared_comparison.get('matches') or [])} nearest-reference rows")
+    else:
+        _write_tsv(root/"inphared_nearest_phages.tsv",[],["sample_id","rank","reference_accession","mash_distance","mash_similarity_screen","p_value","matching_hashes","reference_description","host_genus","phage_genus","phage_subfamily","phage_family","interpretation"])
+        (root/"inphared_nearest_phages.json").write_text(json.dumps(inphared_comparison,indent=2,sort_keys=True)+"\n")
+        emit("SKIPPED",stage,t,"INPHARED genomes not configured")
+    mark(stage,_signature({"inputs":fingerprints,"inphared":str((inphared or {}).get('path'))}),[root/"inphared_nearest_phages.tsv",root/"inphared_nearest_phages.json"])
+
     stage="Discovery ranking"; t=time.monotonic(); emit("RUNNING",stage)
     ranking=_ranking(family_rows,context_status,validation)
     rank_cols=["rank","pmf_id","functional_state","member_count","genome_count","genomes_represented","context_conservation_state","context_conservation_support","pmfdb_state","characterized_homolog_count","evidence_sources","discovery_priority","reason_for_priority"]
@@ -267,12 +296,12 @@ def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None,
     figures=generate_discovery_figures(root,proteins,family_rows,member_rows,recurrence,ranking,neighbourhoods)
     emit("DONE" if not figures["failed"] else "FAILED",stage,t,f"{len(figures['created'])} files created")
     stage="Final output generation"; t=time.monotonic(); emit("RUNNING",stage)
-    _reports(root,samples,proteins,family_rows,ranking,figures,evidence_reused,pmfdb_provenance)
+    _reports(root,samples,proteins,family_rows,ranking,figures,evidence_reused,pmfdb_provenance,inphared_comparison)
     manifest={"pipeline":"PhageMine","mode":source_mode,"created_at":datetime.now(timezone.utc).isoformat(),"input_fingerprints":fingerprints,
         "samples":samples,"genome_count":len(samples),"total_proteins":len(proteins),"exact_unique_proteins":len({p['sequence_sha256'] for p in proteins}),
         "pmf_count":len(family_rows),"recurrent_pmf_count":sum(r["genome_count"]>1 for r in recurrence),"evidence_reused":evidence_reused,
         "family_clustering":{"backend":"MMSEQS2","thresholds":FAMILY_CONFIG["family_build"],"mmseqs_version":_mmseqs_version(mmseqs)},
-        "pmfdb":pmfdb_provenance or {"status":"PMFDB_UNAVAILABLE"},"figures":figures,"stage_timings_seconds":timings,
+        "pmfdb":pmfdb_provenance or {"status":"PMFDB_UNAVAILABLE"},"inphared":inphared_comparison,"figures":figures,"stage_timings_seconds":timings,
         "scientific_interpretation":{"no_external_match":"does not mean novel","genomic_context":"supporting evidence, not proof of function"},
         "total_runtime_seconds":time.monotonic()-started}
     (root/"pooled_manifest.json").write_text(json.dumps(manifest,indent=2,sort_keys=True)); mark(stage,input_signature,[root/"pooled_manifest.json",root/"discovery_report.html",root/"discovery_report.md"]); emit("DONE",stage,t)

@@ -22,6 +22,7 @@ def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
         "hmmscan": [[resolved, "-h"]],
         "mmseqs": [[resolved, "version"]],
         "diamond": [[resolved, "version"]],
+        "mash": [[resolved, "--version"]],
         "phanotate.py": [[resolved, "--version"], [resolved, "-h"]],
         "table2asn": [[resolved, "-version"], [resolved, "-h"]],
         "python": [[resolved, "--version"]],
@@ -89,21 +90,27 @@ def preflight_profile(profile: str) -> dict[str, Any]:
 
 def doctor() -> dict[str, Any]:
     manager = EvidenceResourceManager()
-    tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "table2asn"]
+    tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "mash", "table2asn"]
     executables = [executable_status(tool) for tool in tools]
     resources = manager.validate_all(check_checksum=True)
     by_type = {kind: [r for r in resources if r.get("resource_type") == kind and r.get("status") == "READY"]
-               for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")}
+               for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS", "PMFDB", "INPHARED_GENOMES")}
     tool_by_name = {item["name"]: item for item in executables}
     table2asn_ready = tool_by_name["table2asn"]["status"] == "READY"
     capabilities = {
         "CORE_ANALYSIS": "READY" if tool_by_name["phanotate.py"]["status"] == "READY" else "UNAVAILABLE",
         "STANDARD_EVIDENCE": "READY" if by_type["PHROGS"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
-        "FULL_EVIDENCE": "READY" if all(by_type[k] for k in by_type) and all(tool_by_name[t]["status"] == "READY" for t in ("hmmscan", "mmseqs", "diamond")) else "UNAVAILABLE",
+        "FULL_EVIDENCE": "READY" if all(by_type[k] for k in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")) and all(tool_by_name[t]["status"] == "READY" for t in ("hmmscan", "mmseqs", "diamond")) else "UNAVAILABLE",
+        "PMF_REFERENCE_COMPARISON": "READY" if by_type["PMFDB"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
+        "WHOLE_GENOME_REFERENCE_COMPARISON": "READY" if by_type["INPHARED_GENOMES"] and tool_by_name["mash"]["status"] == "READY" else "UNAVAILABLE",
         "GENBANK_PRE_SUBMISSION": "READY",
         "NCBI_TABLE2ASN_VALIDATION": "READY" if table2asn_ready else "UNAVAILABLE",
     }
-    missing_resources = [kind.lower() for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS") if not by_type[kind]]
+    install_names = {
+        "PFAM": "pfam", "VOGDB": "vogdb", "SWISSPROT": "swissprot", "PHROGS": "phrogs",
+        "PMFDB": "pmfdb", "INPHARED_GENOMES": "inphared",
+    }
+    missing_resources = [install_names[kind] for kind in install_names if not by_type[kind]]
     recommendations = []
     if missing_resources:
         recommendations.append({
@@ -126,12 +133,12 @@ def write_doctor_report(path: str | Path) -> dict[str, Any]:
 
 def doctor_text(payload: dict[str, Any]) -> str:
     lines = [f"PhageMine {payload['phagemine_version']}", "", "Executables"]
-    labels = {"phanotate.py": "PHANOTATE", "prodigal": "Prodigal", "hmmscan": "HMMER", "mmseqs": "MMseqs2", "diamond": "DIAMOND", "table2asn": "table2asn"}
+    labels = {"phanotate.py": "PHANOTATE", "prodigal": "Prodigal", "hmmscan": "HMMER", "mmseqs": "MMseqs2", "diamond": "DIAMOND", "mash": "Mash", "table2asn": "table2asn"}
     for item in payload["executables"]:
         status = item["status"] if item["name"] != "table2asn" or item["status"] == "READY" else "OPTIONAL/MISSING"
         lines.append(f"{labels[item['name']]:<14}{status:<17}{item.get('version') or ''}")
     lines += ["", "Evidence Resources"]
-    labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs"}
+    labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs", "PMFDB": "PMFDB", "INPHARED_GENOMES": "INPHARED genomes"}
     for kind, label in labels.items():
         ready = [r for r in payload["resources"] if r.get("resource_type") == kind and r.get("status") == "READY"]
         lines.append(f"{label:<14}{'READY' if len(ready) == 1 else ('AMBIGUOUS' if len(ready) > 1 else 'UNAVAILABLE')}")

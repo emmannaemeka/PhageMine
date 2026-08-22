@@ -10,6 +10,7 @@ validate them before running full evidence mode:
   phagemine databases install --all
   phagemine doctor
 
-Individual installers are available for pfam, vogdb, swissprot and phrogs.
+Individual installers are available for pfam, vogdb, swissprot, phrogs,
+pmfdb and inphared.
 
 EOF

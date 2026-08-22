@@ -24,6 +24,7 @@ from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from typing import Callable, Iterable
 
+from .inphared import INPHARED_RELEASE, build_genome_reference, build_pmfdb
 from .resources import EvidenceResourceManager, ResourceType
 
 
@@ -47,12 +48,37 @@ PHROGS_ARCHIVE = "pharokka_v1.11.0_databases.tar.gz"
 PHROGS_URL = f"https://zenodo.org/records/21755221/files/{PHROGS_ARCHIVE}"
 PHROGS_MD5 = "143bb375ddb0b0653e5cb5671f4a7629"
 
-RESOURCE_ORDER = ("pfam", "vogdb", "swissprot", "phrogs")
+INPHARED_BASE = "https://s3.climb.ac.uk/millardlab-inphared/2026"
+INPHARED_FILES = {
+    "7Apr2026_vConTACT2_proteins.faa.gz": {
+        "md5": "e1551f1ffde752da8fc8d48d6ca7330c", "size": 329085310,
+    },
+    "7Apr2026_vConTACT2_gene_to_genome.csv.gz": {
+        "md5": "32ab9c366d2c7e9580ae8fffc322fc70", "size": 5984549,
+    },
+    "7Apr2026_millardlab_website_table.txt.gz": {
+        "md5": "7ca76b6d60f077a07d75e4c6ea635ea4", "size": 681798,
+    },
+    "7Apr2026_genomes.fa.gz": {
+        "md5": "5fadc36048ced47f431fe510557cc797", "size": 714521461,
+    },
+}
+
+RESOURCE_ORDER = ("pfam", "vogdb", "swissprot", "phrogs", "pmfdb", "inphared")
 DOWNLOAD_ESTIMATES = {
     "pfam": 399 * 1024**2,
     "vogdb": 574 * 1024**2,
     "swissprot": 756 * 1024**2,
     "phrogs": 735 * 1024**2,
+    "pmfdb": sum(INPHARED_FILES[name]["size"] for name in (
+        "7Apr2026_vConTACT2_proteins.faa.gz",
+        "7Apr2026_vConTACT2_gene_to_genome.csv.gz",
+        "7Apr2026_millardlab_website_table.txt.gz",
+    )),
+    "inphared": sum(INPHARED_FILES[name]["size"] for name in (
+        "7Apr2026_genomes.fa.gz",
+        "7Apr2026_millardlab_website_table.txt.gz",
+    )),
 }
 
 
@@ -108,12 +134,14 @@ class DatabaseInstaller:
         registry_path: str | Path | None = None,
         force: bool = False,
         keep_downloads: bool = False,
+        threads: int = 1,
         reporter: Callable[[str], None] | None = None,
     ):
         self.directory = Path(directory).expanduser().resolve() if directory else default_database_root()
         self.manager = EvidenceResourceManager(registry_path)
         self.force = force
         self.keep_downloads = keep_downloads
+        self.threads = max(1, int(threads))
         self.reporter = reporter or (lambda message: print(message, file=sys.stderr, flush=True))
         self.download_dir = self.directory / ".downloads"
 
@@ -127,6 +155,8 @@ class DatabaseInstaller:
             "vogdb": self._install_vogdb,
             "swissprot": self._install_swissprot,
             "phrogs": self._install_phrogs,
+            "pmfdb": self._install_pmfdb,
+            "inphared": self._install_inphared,
         }
         if name not in installers:
             raise DatabaseInstallError(f"unsupported database: {resource}")
@@ -185,9 +215,9 @@ class DatabaseInstaller:
             raise
 
         provenance = dict(details.get("provenance") or {})
-        for key in ("annotations_path", "metadata_path"):
-            if provenance.get(key):
-                provenance[key] = str(target / provenance[key])
+        for key, value in list(provenance.items()):
+            if key.endswith("_path") and value and not Path(str(value)).is_absolute():
+                provenance[key] = str(target / str(value))
         provenance["install_manifest"] = str(target / "install_manifest.json")
         provenance["installer"] = "phagemine databases install"
         primary = target / details["primary_path"]
@@ -489,6 +519,101 @@ class DatabaseInstaller:
             version=PHROGS_VERSION, required_tools=["mmseqs"], prepare=prepare,
         )
         self._cleanup([archive])
+        return result
+
+    @staticmethod
+    def _inphared_artifact(name: str) -> dict:
+        definition = INPHARED_FILES[name]
+        return {"url": f"{INPHARED_BASE}/{name}", "md5": definition["md5"], "bytes": definition["size"]}
+
+    def _inphared_download(self, name: str) -> Path:
+        return self._download(
+            f"{INPHARED_BASE}/{name}",
+            self.download_dir / name,
+            expected=INPHARED_FILES[name]["md5"],
+        )
+
+    def _install_pmfdb(self) -> InstallResult:
+        ready = self._already_ready("PMFDB-INPHARED", "pmfdb")
+        if ready:
+            return ready
+        protein_name = "7Apr2026_vConTACT2_proteins.faa.gz"
+        mapping_name = "7Apr2026_vConTACT2_gene_to_genome.csv.gz"
+        metadata_name = "7Apr2026_millardlab_website_table.txt.gz"
+        proteins = self._inphared_download(protein_name)
+        mapping = self._inphared_download(mapping_name)
+        metadata = self._inphared_download(metadata_name)
+        mmseqs = self._require_tool("mmseqs")
+        artifacts = [self._inphared_artifact(name) for name in (protein_name, mapping_name, metadata_name)]
+
+        def prepare(stage: Path) -> dict:
+            manifest = build_pmfdb(
+                proteins, mapping, metadata, stage,
+                mmseqs=mmseqs, run=self._run, threads=self.threads,
+                source_artifacts=artifacts, release=INPHARED_RELEASE,
+            )
+            return {
+                "primary_path": ".",
+                "source_artifacts": artifacts,
+                "preparation_commands": [
+                    ["mmseqs", "createdb", "reference_phage_proteins.faa", "mmseqs/target_db"],
+                    ["mmseqs", "createindex", "mmseqs/target_db", "mmseqs/tmp", "--threads", str(self.threads)],
+                ],
+                "provenance": {
+                    "provider": "INPHARED",
+                    "release": INPHARED_RELEASE,
+                    "pmfdb_version": manifest["pmfdb_version"],
+                    "metadata_path": "reference_metadata.tsv",
+                    "qc_path": "reference_qc.tsv",
+                    "reference_manifest_path": "reference_manifest.json",
+                    "mmseqs_target_path": "mmseqs/target_db",
+                },
+            }
+
+        result = self._transaction(
+            resource="pmfdb", registry_name="PMFDB-INPHARED", resource_type=ResourceType.PMFDB,
+            version=INPHARED_RELEASE, required_tools=["mmseqs"], prepare=prepare,
+        )
+        self._cleanup([proteins, mapping, metadata])
+        return result
+
+    def _install_inphared(self) -> InstallResult:
+        ready = self._already_ready("INPHARED-Genomes", "inphared")
+        if ready:
+            return ready
+        genome_name = "7Apr2026_genomes.fa.gz"
+        metadata_name = "7Apr2026_millardlab_website_table.txt.gz"
+        genomes = self._inphared_download(genome_name)
+        metadata = self._inphared_download(metadata_name)
+        mash = self._require_tool("mash")
+        artifacts = [self._inphared_artifact(name) for name in (genome_name, metadata_name)]
+
+        def prepare(stage: Path) -> dict:
+            manifest = build_genome_reference(
+                genomes, metadata, stage, mash=mash, run=self._run,
+                source_artifacts=artifacts, release=INPHARED_RELEASE,
+            )
+            return {
+                "primary_path": "reference_phage_genomes.fna",
+                "source_artifacts": artifacts,
+                "preparation_commands": [["mash", "sketch", "-i", "-o", "inphared", "reference_phage_genomes.fna"]],
+                "provenance": {
+                    "provider": "INPHARED",
+                    "release": INPHARED_RELEASE,
+                    "database_version": manifest["database_version"],
+                    "metadata_path": "genome_metadata.tsv",
+                    "qc_path": "genome_qc.tsv",
+                    "reference_manifest_path": "genome_manifest.json",
+                    "mash_index_path": "inphared.msh",
+                },
+            }
+
+        result = self._transaction(
+            resource="inphared", registry_name="INPHARED-Genomes",
+            resource_type=ResourceType.INPHARED_GENOMES,
+            version=INPHARED_RELEASE, required_tools=["mash"], prepare=prepare,
+        )
+        self._cleanup([genomes, metadata])
         return result
 
     @staticmethod

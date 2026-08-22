@@ -7,7 +7,7 @@ from pathlib import Path
 
 def doctor_rows(payload: dict) -> list[dict]:
     executable_labels = {"phanotate.py": "PHANOTATE", "hmmscan": "HMMER / hmmscan",
-                         "mmseqs": "MMseqs2", "diamond": "DIAMOND", "table2asn": "table2asn"}
+                         "mmseqs": "MMseqs2", "diamond": "DIAMOND", "mash": "Mash", "table2asn": "table2asn"}
     rows = []
     for item in payload.get("executables", []):
         if item.get("name") not in executable_labels:
@@ -16,7 +16,7 @@ def doctor_rows(payload: dict) -> list[dict]:
         state = "OPTIONAL" if item.get("name") == "table2asn" and raw != "READY" else ("READY" if raw == "READY" else "NOT READY")
         rows.append({"component": executable_labels[item["name"]], "state": state,
                      "detail": item.get("version") or item.get("path") or "Not found"})
-    labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs", "PMFDB": "PMFDB"}
+    labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs", "PMFDB": "PMFDB", "INPHARED_GENOMES": "INPHARED genomes"}
     resources = payload.get("resources", [])
     for kind, label in labels.items():
         matches = [r for r in resources if str(r.get("resource_type", "")).upper() == kind]

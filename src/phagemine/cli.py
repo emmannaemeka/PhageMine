@@ -26,7 +26,9 @@ Individual installers are also available:
   phagemine databases install pfam
   phagemine databases install vogdb
   phagemine databases install swissprot
-  phagemine databases install phrogs""",
+  phagemine databases install phrogs
+  phagemine databases install pmfdb
+  phagemine databases install inphared""",
     )
     from . import __version__
     parser.add_argument("--version", action="version", version=__version__)
@@ -47,13 +49,14 @@ Individual installers are also available:
     register.add_argument("--annotations", help="Optional annotation table path (used by VOGDB resources)")
     register.add_argument("--metadata", help="Optional metadata path (used by Swiss-Prot resources)")
     install = database_commands.add_parser("install", help="Download, prepare, register, and validate evidence databases")
-    install.add_argument("resource", nargs="?", choices=("pfam", "vogdb", "swissprot", "phrogs"))
-    install.add_argument("--all", action="store_true", help="Install Pfam, VOGDB, Swiss-Prot, and PHROGs")
+    install.add_argument("resource", nargs="?", choices=("pfam", "vogdb", "swissprot", "phrogs", "pmfdb", "inphared"))
+    install.add_argument("--all", action="store_true", help="Install every annotation and comparative database")
     install.add_argument("--directory", help="Database installation root (default: platform user-data directory)")
     install.add_argument("--force", action="store_true", help="Replace an existing installation of the selected release")
     install.add_argument("--keep-downloads", action="store_true", help="Keep downloaded archives after successful installation")
     install.add_argument("--dry-run", action="store_true", help="Show download estimates without installing")
     install.add_argument("--json", action="store_true", help="Emit installation results as JSON")
+    install.add_argument("--threads", type=int, default=1, help="Preparation threads for MMseqs2 indexes")
     database_commands.add_parser("status", help="List registered evidence resources")
     remove = database_commands.add_parser("remove", help="Remove a resource registration")
     remove.add_argument("name")
@@ -264,6 +267,7 @@ Individual installers are also available:
                     args.directory,
                     force=args.force,
                     keep_downloads=args.keep_downloads,
+                    threads=args.threads,
                 ).install_many(selected)
             except (OSError, DatabaseInstallError) as exc:
                 parser.error(str(exc))

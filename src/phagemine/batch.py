@@ -49,6 +49,14 @@ SUMMARY_FIELDS = ("sample_id", "input_file", "status", "error_message", "genome_
                   "UNRESOLVED", "module_count", "output_directory")
 
 
+def _comparative_resources() -> tuple[str | None, dict | None]:
+    """Resolve only fully validated comparative resources for automatic use."""
+    resources = EvidenceResourceManager().validate_all(check_checksum=True)
+    pmfdb = next((item for item in resources if item.get("resource_type") == "PMFDB" and item.get("status") == "READY"), None)
+    inphared = next((item for item in resources if item.get("resource_type") == "INPHARED_GENOMES" and item.get("status") == "READY"), None)
+    return (pmfdb.get("path") if pmfdb else None), inphared
+
+
 def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predictor="phanotate", phanotate=None, progress=None, resume_existing=False):
     """Run gene prediction per genome, then each requested adapter once on exact representatives."""
     from .preflight import preflight_profile
@@ -280,7 +288,8 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
         # always materialize PMFs, recurrence, context, PMFDB validation, ranking,
         # reports, and figures from the completed per-genome artifacts.
         sample_dirs = [project / _sample_id(path) for path in inputs]
-        build_discovery_outputs(sample_dirs, project, progress=progress,
+        pmfdb, inphared = _comparative_resources()
+        build_discovery_outputs(sample_dirs, project, progress=progress, pmfdb=pmfdb, inphared=inphared,
                                 resume_existing=resume_existing, source_mode="discover")
         return rows
     if mode == "both":
@@ -289,7 +298,8 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
               evidence_profile, mode="annotate")
         samples = discovery_from_annotation(project / "annotation", project / "discovery")
         sample_dirs = [project / "discovery" / _sample_id(path) for path in inputs]
-        build_discovery_outputs(sample_dirs, project / "discovery", progress=progress,
+        pmfdb, inphared = _comparative_resources()
+        build_discovery_outputs(sample_dirs, project / "discovery", progress=progress, pmfdb=pmfdb, inphared=inphared,
                                 resume_existing=resume_existing, evidence_reused=True,
                                 source_mode="both")
         return samples

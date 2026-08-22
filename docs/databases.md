@@ -1,6 +1,7 @@
 # External databases and executables
 
-PhageMine Core does not bundle Pfam, VOGDB, PHROGs, Swiss-Prot, or PMFDB.
+PhageMine Core does not bundle Pfam, VOGDB, PHROGs, Swiss-Prot, PMFDB, or
+INPHARED genomes.
 These independently installed, versioned resources are supplied only when
 evidence-enhanced annotation or external PMF validation is requested.
 
@@ -19,6 +20,8 @@ phagemine databases install pfam
 phagemine databases install vogdb
 phagemine databases install swissprot
 phagemine databases install phrogs
+phagemine databases install pmfdb
+phagemine databases install inphared
 
 # Equivalent complete installation
 phagemine databases install --all
@@ -32,8 +35,9 @@ The default database root is the platform user-data directory:
 - Windows: `%LOCALAPPDATA%\PhageMine\databases`
 
 Use `--directory PATH` to select another disk. `--dry-run` displays the
-estimated compressed download before network access. The complete download is
-approximately 2.4 GiB; preparation requires more temporary and final storage.
+estimated compressed download before network access. The complete six-resource
+download is approximately 3.4 GiB; keep at least 15–20 GiB free during
+preparation.
 
 ## Installation behavior and provenance
 
@@ -43,6 +47,14 @@ approximately 2.4 GiB; preparation requires more temporary and final storage.
 | VOGDB | Pinned VOGDB release 235 | deterministic HMM concatenation and `hmmpress` | `vog.annotations.tsv.gz` |
 | Swiss-Prot | Provider-described current UniProtKB release | `diamond makedb` | `uniprot_sprot.dat.gz` |
 | PHROGs | PHROGs v4 from the checksum-pinned Pharokka 1.11.0 distribution | extract MMseqs2 profile database | `phrog_annot_v4.tsv` |
+| PMFDB | Pinned INPHARED 7 April 2026 proteins, mapping and metadata | schema conversion plus `mmseqs createdb/createindex` | reference metadata, QC and manifest |
+| INPHARED genomes | Pinned INPHARED 7 April 2026 genome FASTA and metadata | per-genome `mash sketch -i` | genome metadata, QC and manifest |
+
+PMFDB and INPHARED serve different comparisons. PMFDB searches cohort protein
+families against reference phage proteins. The genome resource screens for
+nearest reference phages using Mash. Neither a predicted product label nor a
+Mash neighbour is treated as experimental functional evidence, formal ANI or
+taxonomic proof.
 
 Each completed directory contains `install_manifest.json` with release,
 provider, source URL, checksum and preparation information. Registration occurs
