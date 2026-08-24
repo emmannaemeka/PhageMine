@@ -50,7 +50,7 @@ def default_registry_path() -> Path:
 @dataclass
 class EvidenceResource:
     name: str
-    resource_type: ResourceType
+    resource_type: ResourceType | str
     path: str
     version: str | None = None
     checksum: str | None = None
@@ -76,7 +76,7 @@ class EvidenceResource:
 
     def metadata(self, check_checksum: bool = False) -> dict[str, Any]:
         data = asdict(self)
-        data["resource_type"] = self.resource_type.value
+        data["resource_type"] = self.resource_type.value if isinstance(self.resource_type, ResourceType) else str(self.resource_type)
         data["status"] = self.status(check_checksum).value
         data["registry_checksum_policy"] = "checksum is optional and is not computed automatically"
         return data
@@ -199,7 +199,22 @@ class EvidenceResourceManager:
         if not self.registry_path.exists():
             return {}
         payload = json.loads(self.registry_path.read_text())
-        return {name: EvidenceResource(name=name, resource_type=ResourceType(item["resource_type"]), **{key: value for key, value in item.items() if key not in {"name", "resource_type", "status", "registry_checksum_policy"}}) for name, item in payload.get("resources", {}).items()}
+        resources: dict[str, EvidenceResource] = {}
+        for name, item in payload.get("resources", {}).items():
+            raw_type = str(item["resource_type"]).upper()
+            try:
+                resource_type: ResourceType | str = ResourceType(raw_type)
+            except ValueError:
+                # Preserve forward compatibility: an entry written by a newer
+                # PhageMine must not prevent older, known resources from loading.
+                resource_type = raw_type
+            resources[name] = EvidenceResource(
+                name=name,
+                resource_type=resource_type,
+                **{key: value for key, value in item.items()
+                   if key not in {"name", "resource_type", "status", "registry_checksum_policy"}},
+            )
+        return resources
 
     def _save(self, resources: dict[str, EvidenceResource]) -> None:
         self.registry_path.parent.mkdir(parents=True, exist_ok=True)

@@ -11,6 +11,12 @@ conda create -n phagemine phagemine \
 conda activate phagemine
 ```
 
+The Bioconda recipe for PhageMine 1.0.1 requires PHANOTATE, HMMER, MMseqs2,
+DIAMOND and Mash. Do not treat package installation alone as proof that these
+compiled programs run on the host. `phagemine doctor` executes each program
+and reports `BROKEN` when a version probe fails, including dynamic-linker
+errors.
+
 For a local wheel:
 
 ```bash
@@ -28,6 +34,12 @@ Immediately after installing PhageMine, run:
 phagemine databases install --all
 phagemine doctor
 ```
+
+All required executables and requested capabilities must report `READY` before
+a production full-evidence run. `BLOCKED/INVALID` means that a database is
+registered but cannot currently operate, commonly because a required
+executable is missing or broken; it does not mean the database must be
+downloaded again.
 
 The Conda recipe uses the supplied `packaging/bioconda/post-link.sh` reminder.
 The same instructions appear when `phagemine` or `phagemine --help` is run.

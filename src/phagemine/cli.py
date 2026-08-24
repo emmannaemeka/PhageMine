@@ -154,7 +154,9 @@ Individual installers are also available:
         from .preflight import doctor, doctor_text, write_doctor_report
         payload = write_doctor_report(args.output) if args.output else doctor()
         print(json.dumps(payload, indent=2, sort_keys=True) if args.json or args.output else doctor_text(payload))
-        return 0 if all(x.get("status") in {"READY", "MISSING"} for x in payload["executables"]) else 1
+        required = {"phanotate.py", "hmmscan", "mmseqs", "diamond", "mash"}
+        return 0 if all(x.get("status") == "READY" for x in payload["executables"]
+                        if x.get("name") in required) else 1
     if args.command == "families":
         from .family import build_database, assign_protein_family, write_assignments, _fasta
         if args.families_command == 'build':

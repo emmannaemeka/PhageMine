@@ -90,6 +90,12 @@ phagemine databases install --all
 phagemine doctor
 ```
 
+Do not proceed from executable presence alone. Doctor requires each executable
+probe to exit successfully and reports runtime/linker failures as `BROKEN`.
+An installed database that is unusable because its required executable is
+missing or broken is shown as `BLOCKED/INVALID`, not as an instruction to
+download the database again.
+
 The database installer reports an approximately 3.4 GiB compressed download
 before it begins. Prepared databases and temporary working files require
 additional disk space; keep at least 15–20 GiB free for `--all`.
@@ -210,4 +216,6 @@ The `genbank_submission/` package contains genome FASTA, CDS/protein outputs, fe
 
 ## Development and citation
 
-Run the test suite with `PYTHONPATH=src pytest -q`. See `CHANGELOG.md`, `CITATION.cff`, and `LICENSE` for release metadata and terms.
+Run the test suite with `PYTHONPATH=src pytest -q`. See
+`docs/release-checklist.md` before publishing an artifact, and see
+`CHANGELOG.md`, `CITATION.cff`, and `LICENSE` for release metadata and terms.
