@@ -15,7 +15,7 @@ from phagemine.genome import predict_orfs, translate
 from phagemine.gene_prediction import DemoORFPredictor, PHANOTATEPredictor
 from phagemine.io import read_fasta
 from phagemine.models import Evidence, EvidenceLevel, Protein
-from phagemine.pipeline import run
+from phagemine.pipeline import _evidence_progress_summary, run
 from phagemine.genbank import feature_table, product_name, table2asn_status, validate, write_package
 from phagemine.annotation import MockEvidenceBackend
 from phagemine.cli import main
@@ -613,6 +613,21 @@ class PhageMineTests(unittest.TestCase):
         self.assertIn("RUNNING: Pfam", text)
         self.assertIn("DONE: Pfam", text)
         self.assertIn("2 accepted hits", text)
+
+    def test_unavailable_evidence_progress_is_not_reported_as_zero_hits(self):
+        result = EvidenceAdapterResult(
+            "PfamHMMAdapter",
+            "UNAVAILABLE",
+            message="Pfam/HMMER unavailable; no domain evidence was fabricated.",
+        )
+        summary = _evidence_progress_summary(result, "Pfam/HMMER unavailable")
+        self.assertIn("UNAVAILABLE", summary)
+        self.assertNotIn("0 accepted hits", summary)
+
+    def test_completed_zero_hit_search_remains_distinct_from_unavailable(self):
+        result = EvidenceAdapterResult("PfamHMMAdapter", "SUCCESS_NO_HIT")
+        summary = _evidence_progress_summary(result, "Pfam/HMMER unavailable")
+        self.assertEqual(summary, "0 accepted hits / 0 proteins")
 
     def test_progress_quiet_mode(self):
         stream = StringIO()

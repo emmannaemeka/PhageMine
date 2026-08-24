@@ -28,6 +28,15 @@ from .adjudication import adjudicate, write_adjudication
 from .alternative_evidence import alternative_models, acquire_alternative_evidence, write_alternative_evidence
 
 
+def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
+    """Keep resource absence distinct from a completed zero-hit search."""
+    if result.status == "UNAVAILABLE":
+        return f"UNAVAILABLE — {result.message or unavailable_fallback}"
+    accepted = [evidence for evidence in result.evidence if evidence.supports]
+    proteins = {evidence.provenance.get("protein_id") for evidence in accepted}
+    return f"{len(accepted)} accepted hits / {len(proteins)} proteins"
+
+
 def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
     progress = progress or ProgressReporter(quiet=True)
     timings = {}
@@ -96,7 +105,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": pfam_result.adapter, "status": pfam_result.status, "provenance": pfam_result.provenance, "message": pfam_result.message})
     write_stage_checkpoint(Path(output) / "checkpoints", "pfam", [asdict(e) for e in pfam_result.evidence], pfam_result.provenance)
-    progress.finish(f"{sum(e.supports for e in pfam_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in pfam_result.evidence if e.supports})} proteins")
+    progress.finish(_evidence_progress_summary(pfam_result, "Pfam/HMMER unavailable"))
     timed_end("pfam")
     vog_origin = "explicit_cli" if vog_path else "unavailable"
     vog_version = None
@@ -119,7 +128,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": vog_result.adapter, "status": vog_result.status, "provenance": vog_result.provenance, "message": vog_result.message})
     write_stage_checkpoint(Path(output) / "checkpoints", "vogdb", [asdict(e) for e in vog_result.evidence], vog_result.provenance)
-    progress.finish(f"{sum(e.supports for e in vog_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in vog_result.evidence if e.supports})} proteins")
+    progress.finish(_evidence_progress_summary(vog_result, "VOGDB/HMMER unavailable"))
     timed_end("vogdb")
     swiss_origin = "explicit_cli" if swissprot_path else "unavailable"
     swiss_version = None
@@ -142,10 +151,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": swiss_result.adapter, "status": swiss_result.status, "provenance": swiss_result.provenance, "message": swiss_result.message})
     write_stage_checkpoint(Path(output) / "checkpoints", "swissprot", [asdict(e) for e in swiss_result.evidence], swiss_result.provenance)
-    if swiss_result.status == "UNAVAILABLE":
-        progress.finish(f"UNAVAILABLE — {swiss_result.message or 'resource or DIAMOND unavailable'}")
-    else:
-        progress.finish(f"{sum(e.supports for e in swiss_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in swiss_result.evidence if e.supports})} proteins")
+    progress.finish(_evidence_progress_summary(swiss_result, "Swiss-Prot/DIAMOND unavailable"))
     timed_end("swissprot")
     phrogs_origin = "explicit_cli" if phrogs_path else "unavailable"
     phrogs_version = None
@@ -181,7 +187,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         progress.start("ORF adjudication")
         write_adjudication(output, adjudicate(reconciliation_rows, evidence_map), {"input_sha256": checksum(fasta), "observational": True})
         progress.finish("adjudication persisted")
-    progress.finish(f"{sum(e.supports for e in phrogs_result.evidence)} accepted hits / {len({e.provenance.get('protein_id') for e in phrogs_result.evidence if e.supports})} proteins")
+    progress.finish(_evidence_progress_summary(phrogs_result, "PHROGs/MMseqs2 unavailable"))
     timed_end("phrogs")
     progress.start("evidence integration")
     timed_start("evidence_fusion")
