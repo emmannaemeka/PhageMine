@@ -1076,6 +1076,12 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(result.status, "UNAVAILABLE")
         self.assertEqual(result.evidence, [])
 
+    def test_swissprot_diamond_fields_precede_threads_option(self):
+        adapter = SwissProtEvidenceAdapter("swissprot.dmnd", diamond="diamond", threads=4)
+        command = adapter._search_command(Path("proteins.faa"), Path("diamond.tsv"))
+        self.assertLess(command.index("bitscore"), command.index("--threads"))
+        self.assertEqual(command[command.index("--threads") + 1], "4")
+
     @pytest.mark.integration
     def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):
         with tempfile.TemporaryDirectory() as temp:
