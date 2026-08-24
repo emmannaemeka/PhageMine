@@ -28,18 +28,29 @@ def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
         "python": [[resolved, "--version"]],
     }
     version = None
+    diagnostics: list[str] = []
     for command in probes.get(name, [[resolved, "--version"], [resolved, "-h"]]):
         try:
             result = subprocess.run(command, capture_output=True, text=True, timeout=10, check=False)
-            text = (result.stdout or result.stderr).strip()
-            if text:
-                lines = [line.strip() for line in text.splitlines() if line.strip()]
+            output = "\n".join(part.strip() for part in (result.stdout, result.stderr) if part and part.strip())
+            if result.returncode == 0:
+                lines = [line.strip() for line in output.splitlines() if line.strip()]
                 # HMMER and Prodigal print useful version banners on stderr.
-                version = next((line for line in lines if any(token in line.lower() for token in ("version", "hmmer", "prodigal"))), lines[0])[:240]
+                if lines:
+                    version = next((line for line in lines if any(token in line.lower() for token in ("version", "hmmer", "prodigal"))), lines[0])[:240]
                 break
-        except (OSError, subprocess.SubprocessError):
-            continue
-    return {"name": name, "status": "READY" if os.access(resolved, os.X_OK) else "INVALID", "path": resolved, "version": version}
+            diagnostic = output or f"probe exited with status {result.returncode}"
+            diagnostics.append(diagnostic[:500])
+        except (OSError, subprocess.SubprocessError) as exc:
+            diagnostics.append(str(exc)[:500])
+    if not os.access(resolved, os.X_OK):
+        status = "INVALID"
+    elif version is not None:
+        status = "READY"
+    else:
+        status = "BROKEN"
+    return {"name": name, "status": status, "path": resolved, "version": version,
+            "diagnostic": diagnostics[-1] if diagnostics and status != "READY" else None}
 
 
 def preflight_resources(explicit: dict[str, dict[str, Any] | None], *, allow_degraded: bool = False) -> dict[str, Any]:
@@ -110,7 +121,9 @@ def doctor() -> dict[str, Any]:
         "PFAM": "pfam", "VOGDB": "vogdb", "SWISSPROT": "swissprot", "PHROGS": "phrogs",
         "PMFDB": "pmfdb", "INPHARED_GENOMES": "inphared",
     }
-    missing_resources = [install_names[kind] for kind in install_names if not by_type[kind]]
+    registered_by_type = {kind: [r for r in resources if r.get("resource_type") == kind]
+                          for kind in install_names}
+    missing_resources = [install_names[kind] for kind in install_names if not registered_by_type[kind]]
     recommendations = []
     if missing_resources:
         recommendations.append({
@@ -118,6 +131,33 @@ def doctor() -> dict[str, Any]:
             "missing": missing_resources,
             "commands": [f"phagemine databases install {name}" for name in missing_resources],
             "all_command": "phagemine databases install --all",
+            "verify_command": "phagemine doctor",
+        })
+    repair_resources = []
+    for kind, entries in registered_by_type.items():
+        if by_type[kind] or not entries:
+            continue
+        errors = [str(error) for entry in entries for error in entry.get("validation_errors", [])]
+        if any(not error.startswith("required executable unavailable:") for error in errors):
+            repair_resources.append(install_names[kind])
+    if repair_resources:
+        recommendations.append({
+            "action": "REPAIR_EVIDENCE_DATABASES",
+            "resources": repair_resources,
+            "commands": [f"phagemine databases install {name} --force" for name in repair_resources],
+            "verify_command": "phagemine doctor",
+        })
+    broken_tools = [item for item in executables
+                    if item["name"] != "table2asn" and item["status"] != "READY"]
+    if broken_tools:
+        conda_packages = {"phanotate.py": "phanotate", "prodigal": "prodigal", "hmmscan": "hmmer",
+                          "mmseqs": "mmseqs2", "diamond": "diamond", "mash": "mash"}
+        packages = [conda_packages[item["name"]] for item in broken_tools if item["name"] in conda_packages]
+        recommendations.append({
+            "action": "INSTALL_OR_REPAIR_EXECUTABLES",
+            "tools": [{"name": item["name"], "status": item["status"],
+                       "diagnostic": item.get("diagnostic")} for item in broken_tools],
+            "command": "conda install --channel conda-forge --channel bioconda --strict-channel-priority " + " ".join(packages),
             "verify_command": "phagemine doctor",
         })
     return {"phagemine_version": __version__, "python": executable_status("python"),
@@ -137,20 +177,35 @@ def doctor_text(payload: dict[str, Any]) -> str:
     for item in payload["executables"]:
         status = item["status"] if item["name"] != "table2asn" or item["status"] == "READY" else "OPTIONAL/MISSING"
         lines.append(f"{labels[item['name']]:<14}{status:<17}{item.get('version') or ''}")
+        if item.get("diagnostic") and item["name"] != "table2asn":
+            lines.append(f"  Error: {item['diagnostic']}")
     lines += ["", "Evidence Resources"]
     labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs", "PMFDB": "PMFDB", "INPHARED_GENOMES": "INPHARED genomes"}
     for kind, label in labels.items():
-        ready = [r for r in payload["resources"] if r.get("resource_type") == kind and r.get("status") == "READY"]
-        lines.append(f"{label:<14}{'READY' if len(ready) == 1 else ('AMBIGUOUS' if len(ready) > 1 else 'UNAVAILABLE')}")
+        registered = [r for r in payload["resources"] if r.get("resource_type") == kind]
+        ready = [r for r in registered if r.get("status") == "READY"]
+        state = "READY" if len(ready) == 1 else ("AMBIGUOUS" if len(ready) > 1 else ("BLOCKED/INVALID" if registered else "NOT INSTALLED"))
+        lines.append(f"{label:<18}{state}")
     lines += ["", "Capabilities"]
     for key, value in payload["capabilities"].items():
         lines.append(f"{key.replace('_', ' ').title():<28}{value}")
     recommendations = payload.get("recommendations") or []
-    if recommendations:
-        recommendation = recommendations[0]
+    database_recommendation = next((r for r in recommendations if r.get("action") == "INSTALL_EVIDENCE_DATABASES"), None)
+    if database_recommendation:
+        recommendation = database_recommendation
         lines += ["", "Database setup required"]
         lines.extend(f"  {command}" for command in recommendation["commands"])
         lines += ["", "Or install every evidence database:",
                   f"  {recommendation['all_command']}",
                   "Then verify:", f"  {recommendation['verify_command']}"]
+    repair_recommendation = next((r for r in recommendations if r.get("action") == "REPAIR_EVIDENCE_DATABASES"), None)
+    if repair_recommendation:
+        lines += ["", "Database repair required"]
+        lines.extend(f"  {command}" for command in repair_recommendation["commands"])
+        lines += ["Then verify:", f"  {repair_recommendation['verify_command']}"]
+    tool_recommendation = next((r for r in recommendations if r.get("action") == "INSTALL_OR_REPAIR_EXECUTABLES"), None)
+    if tool_recommendation:
+        lines += ["", "Executable setup or repair required",
+                  f"  {tool_recommendation['command']}",
+                  "Then verify:", f"  {tool_recommendation['verify_command']}"]
     return "\n".join(lines)

@@ -1,6 +1,22 @@
 # Changelog
 
-## Unreleased
+## 1.0.1
+
+- Synchronize the release version with the post-1.0.0 database installer and
+  INPHARED functionality published on GitHub.
+- Make executable validation fail closed: a binary is `READY` only when its
+  version/help probe exits successfully. Dynamic-linker failures and other
+  runtime errors are now reported as `BROKEN` with their diagnostic text.
+- Make `phagemine doctor` return a non-zero process status when a required
+  production executable is missing or broken; Prodigal and table2asn remain
+  optional for the normal annotation and pre-submission workflows.
+- Distinguish an installed-but-blocked database from a database that is not
+  installed, and recommend executable repair instead of unnecessary database
+  reinstallation.
+- Load unknown future registry resource types without crashing access to all
+  existing registered databases.
+- Require Mash in the Bioconda run dependencies for whole-genome INPHARED
+  comparison.
 
 - Add `phagemine databases install pfam`, `vogdb`, `swissprot`, `phrogs`,
   `pmfdb`, and `inphared`.
