@@ -485,6 +485,38 @@ class PhageMineTests(unittest.TestCase):
         self.assertIn("PHROGs", result["confidence_reasons"][0])
         self.assertIn("MODERATE", result["confidence_reasons"][0])
 
+    def test_fusion_reduces_mitochondrial_bcs1_to_family_level(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("VOGDB", "sp|P32839|BCS1_YEAST Mitochondrial chaperone BCS1"),
+            self._fusion_e("Pfam", "ATPase family associated with various cellular activities (AAA)"),
+        ]))
+        self.assertEqual(result["proposed_function"], "bcs1-like aaa-family atpase")
+        self.assertNotIn("mitochondrial", result["proposed_function"])
+        self.assertTrue(any("organelle-specific" in flag for flag in result["ambiguity_flags"]))
+
+    def test_fusion_removes_mimivirus_locus_from_band7_product(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("VOGDB", "sp|Q5UP73|YR614_MIMIV Putative band 7 family protein R614"),
+            self._fusion_e("Pfam", "SPFH domain / Band 7 family"),
+        ]))
+        self.assertEqual(result["proposed_function"], "band 7/spfh family protein")
+        self.assertNotIn("r614", result["proposed_function"])
+
+    def test_fusion_reduces_opg_locus_to_independent_kelch_architecture(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("VOGDB", "sp|A0A7H0DN20|PG047_MONPV Immune evasion protein OPG047"),
+            self._fusion_e("Pfam", "Kelch-repeats beta-propeller domain"),
+        ]))
+        self.assertEqual(result["proposed_function"], "kelch-repeat beta-propeller protein")
+        self.assertNotIn("immune evasion", result["proposed_function"])
+
+    def test_fusion_suppresses_uncorroborated_opg_function(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("VOGDB", "Immune evasion protein OPG047"),
+        ]))
+        self.assertIsNone(result["proposed_function"])
+        self.assertEqual(result["functional_state"], "CONSERVED_UNKNOWN")
+
     def test_fusion_outputs_cover_integration_fixture(self):
         proteins = [self._fusion_protein() for _ in range(99)]
         for i, protein in enumerate(proteins, 1): protein.protein_id = f"P{i:03d}"

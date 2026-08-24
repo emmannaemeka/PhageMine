@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.0"
+FUSION_RULES_VERSION = "1.1"
 MODALITY_FAMILIES = {
     "Pfam": "DOMAIN", "domain": "DOMAIN",
     "Swiss-Prot": "CURATED_SEQUENCE_HOMOLOGY", "sequence_homology": "CURATED_SEQUENCE_HOMOLOGY",
@@ -35,8 +35,39 @@ def normalize_function(description: str | None) -> str | None:
     value = re.sub(r"\s+", " ", description.strip().lower())
     value = re.sub(r"^refseq\s+", "", value)
     value = re.sub(r"^sp\|[^|]+\|", "", value)
+    # Swiss-Prot descriptions sometimes retain an entry name (for example
+    # ``YR614_MIMIV``) after the accession has been removed.  Entry/locus names
+    # identify a database record, not a transferable biological function.
+    value = re.sub(r"^[a-z0-9]+_[a-z0-9]+\s+", "", value)
     value = re.sub(r"\s*\{eco:[^}]+\}\s*$", "", value, flags=re.IGNORECASE).strip()
     return None if value in UNKNOWN_LABELS else value
+
+
+def _conservative_label(label: str | None, accepted: list[Evidence]) -> tuple[str | None, str | None]:
+    """Prevent taxon-, organelle-, and locus-specific over-annotation.
+
+    A significant homology/orthology match establishes relatedness.  It does
+    not, by itself, establish that a phage protein performs the exact role of a
+    named mitochondrial, chloroplast, or eukaryotic-virus database member.
+    Return a defensible family-level label and an audit flag when independent
+    domain evidence permits one; otherwise suppress the unsafe specific label.
+    """
+    if not label:
+        return None, None
+    evidence_text = " ".join(
+        filter(None, (normalize_function(item.description) for item in accepted))
+    )
+    if "bcs1" in label and any(term in evidence_text for term in ("aaa", "atpase")):
+        return "bcs1-like aaa-family atpase", "organelle-specific BCS1 label reduced to a family-level ATPase annotation"
+    if "band 7" in label or "spfh" in label:
+        return "band 7/spfh family protein", "record-specific Band 7 label reduced to a family-level annotation"
+    if re.search(r"\bopg\d+\b", label) or "immune evasion protein opg" in label:
+        if "kelch" in evidence_text or "beta-propeller" in evidence_text:
+            return "kelch-repeat beta-propeller protein", "eukaryotic-virus locus/function label reduced to the independently supported domain architecture"
+        return None, "eukaryotic-virus locus/function label suppressed because its specific function lacks independent support"
+    if any(term in label for term in ("mitochondrial", "chloroplastic", "chloroplast")):
+        return None, "organelle-specific product label suppressed because its biological context lacks independent support"
+    return label, None
 
 
 def _category(evidence: Evidence) -> str | None:
@@ -58,7 +89,18 @@ def _conservation(evidence: list[Evidence]) -> str:
 
 def classify_protein(protein: Protein) -> dict[str, Any]:
     accepted = [e for e in protein.evidence if e.supports]
-    informative = [(i, e, normalize_function(e.description)) for i, e in enumerate(accepted) if normalize_function(e.description)]
+    conservative_flags: list[str] = []
+    conservative_rewrites: list[str] = []
+    informative = []
+    for i, evidence in enumerate(accepted):
+        original_label = normalize_function(evidence.description)
+        label, flag = _conservative_label(original_label, accepted)
+        if flag and flag not in conservative_flags:
+            conservative_flags.append(flag)
+        if flag and label and label != original_label:
+            conservative_rewrites.append(label)
+        if label:
+            informative.append((i, evidence, label))
     strong_info = [(i, e, label) for i, e, label in informative if e.evidence_strength == "STRONG"]
     categories = sorted({_category(e) for e in accepted if _category(e)})
     support_ids = [f"{e.source}:{e.identifier or e.family_name or i}" for i, e in enumerate(accepted)]
@@ -74,7 +116,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
                                    any(any(term in label for term in other) for label in strong_labels)
                                    for index, group in enumerate(INCOMPATIBLE_FUNCTION_GROUPS)
                                    for other in INCOMPATIBLE_FUNCTION_GROUPS[index + 1:])
-    ambiguity = []
+    ambiguity = list(conservative_flags)
     if len(strong_labels) > 1 and not compatible and not explicit_incompatibility:
         ambiguity.append("distinct strong labels could not be confidently established as biologically incompatible")
     if len(strong_labels) > 1 and len(labels_by_source) > 1 and explicit_incompatibility:
@@ -83,7 +125,10 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     conflict_sources = sorted({e.source for _, e, _ in conflicting})
     conflict_descriptions = [e.description for _, e, _ in conflicting if e.description]
     labels = sorted({label for _, _, label in informative})
-    proposed = labels[0] if len(labels) == 1 else None
+    rewrite_labels = sorted(set(conservative_rewrites))
+    # A safety rewrite is deliberately more conservative than the matched
+    # member name and therefore takes precedence over ancillary domain labels.
+    proposed = rewrite_labels[0] if len(rewrite_labels) == 1 else (labels[0] if len(labels) == 1 else None)
     independent_strong = len({e.source for _, e, _ in strong_info}) >= 2
     swiss_strong = any(e.source == "Swiss-Prot" for _, e, _ in strong_info)
     strong_families = {MODALITY_FAMILIES.get(e.source, MODALITY_FAMILIES.get(e.modality, e.modality)) for _, e, _ in strong_info}
