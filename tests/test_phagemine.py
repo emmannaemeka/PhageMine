@@ -517,6 +517,30 @@ class PhageMineTests(unittest.TestCase):
         self.assertIsNone(result["proposed_function"])
         self.assertEqual(result["functional_state"], "CONSERVED_UNKNOWN")
 
+    def test_fusion_never_promotes_domain_only_evidence_to_probable_function(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "Anthrax toxin lethal factor, middle domain"),
+        ]))
+        self.assertEqual(result["functional_state"], "FUNCTIONAL_CLASS_ONLY")
+        self.assertIsNone(result["proposed_function"])
+        self.assertIn("hypothetical protein containing", result["display_product"])
+
+    def test_fusion_suppresses_taxon_specific_products_but_preserves_raw_evidence(self):
+        for unsafe in ("Interferon gamma", "Apolipoprotein CIII", "Centromere kinetochore component CENP-T", "Male sterility protein"):
+            evidence = self._fusion_e("VOGDB", unsafe)
+            result = classify_protein(self._fusion_protein([evidence]))
+            self.assertNotEqual(result["functional_state"], "PROBABLE_FUNCTION")
+            self.assertIsNone(result["proposed_function"])
+            self.assertEqual(evidence.description, unsafe)
+
+    def test_probable_function_always_has_a_defensible_product(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("PHROGs", "portal protein"),
+            self._fusion_e("VOGDB", "major capsid protein"),
+        ]))
+        self.assertNotEqual(result["functional_state"], "PROBABLE_FUNCTION")
+        self.assertIsNone(result["proposed_function"])
+
     def test_fusion_outputs_cover_integration_fixture(self):
         proteins = [self._fusion_protein() for _ in range(99)]
         for i, protein in enumerate(proteins, 1): protein.protein_id = f"P{i:03d}"
@@ -628,6 +652,28 @@ class PhageMineTests(unittest.TestCase):
         result = EvidenceAdapterResult("PfamHMMAdapter", "SUCCESS_NO_HIT")
         summary = _evidence_progress_summary(result, "Pfam/HMMER unavailable")
         self.assertEqual(summary, "0 accepted hits / 0 proteins")
+
+    def test_single_run_consumes_registered_pmfdb_and_inphared_resources(self):
+        from phagemine.resources import ResourceType
+        def registered(_manager, kind):
+            if kind == ResourceType.PMFDB:
+                return {"path": "/db/pmfdb", "resource_type": "PMFDB"}
+            if kind == ResourceType.INPHARED_GENOMES:
+                return {"path": "/db/inphared", "resource_type": "INPHARED_GENOMES", "provenance": {}}
+            return None
+        comparative = {"pmfdb": {"status": "COMPLETE"}, "inphared": {"status": "COMPLETE", "matches": []}}
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.resources.EvidenceResourceManager.find", new=registered), \
+             patch("phagemine.discovery.build_discovery_outputs", return_value=comparative) as build:
+            output = Path(temp) / "run"
+            run(ROOT / "examples/demo_phage.fasta", output, command="run", predictor=DemoORFPredictor())
+            self.assertTrue(build.called)
+            kwargs = build.call_args.kwargs
+            self.assertEqual(kwargs["pmfdb"], "/db/pmfdb")
+            self.assertEqual(kwargs["inphared"]["resource_type"], "INPHARED_GENOMES")
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["comparative_analysis"]["pmfdb"]["status"], "COMPLETE")
+            self.assertEqual(manifest["comparative_analysis"]["inphared"]["status"], "COMPLETE")
 
     def test_progress_quiet_mode(self):
         stream = StringIO()

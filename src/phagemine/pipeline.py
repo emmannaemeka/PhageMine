@@ -8,7 +8,7 @@ from dataclasses import asdict
 from .gene_prediction import GenePredictor, create_predictor
 from .io import checksum, read_fasta
 from .genbank import write_package
-from .models import SubmissionMetadata
+from .models import EvidenceLevel, SubmissionMetadata
 from .mining import mine, ranked_candidates
 from .reporting import write_outputs, write_checkpoint_snapshot, write_stage_checkpoint
 from .quality import assess
@@ -200,6 +200,21 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     progress.finish(f"{sum(len(p.evidence) for p in proteins)} evidence records")
     timed_end("evidence_fusion")
     classifications = classify_proteins(proteins)
+    classification_by_id = {item["protein_id"]: item for item in classifications}
+    # Keep every public output on the same final product vocabulary.  The
+    # previous pipeline left Protein.annotation at its constructor default,
+    # causing ranking and annotation.tsv to say "Hypothetical protein" even
+    # when evidence fusion had selected a defensible product.
+    for protein in proteins:
+        classification = classification_by_id[protein.protein_id]
+        protein.annotation = classification["display_product"]
+        protein.functional_confidence = classification["confidence"].title()
+        if classification["functional_state"] == "KNOWN_FUNCTION":
+            protein.annotation_level = EvidenceLevel.CURATED
+        elif classification["functional_state"] in {"PROBABLE_FUNCTION", "FUNCTIONAL_CLASS_ONLY", "CONSERVED_UNKNOWN"}:
+            protein.annotation_level = EvidenceLevel.COMPUTATIONAL
+        else:
+            protein.annotation_level = EvidenceLevel.HYPOTHESIS
     context_records, modules = build_context(proteins, classifications)
     progress.start("candidate ranking/mining")
     timed_start("ranking_mining")
@@ -216,6 +231,26 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta, classifications, context_records, modules)
     progress.finish(f"outputs written to {output}")
     timed_end("reporting")
+    # ``run`` is the complete single-genome workflow.  Installed comparative
+    # resources must be consumed, not merely reported as READY by ``doctor``.
+    if command == "run":
+        from .discovery import build_discovery_outputs
+        manager = EvidenceResourceManager()
+        pmfdb_resource = manager.find(ResourceType.PMFDB)
+        inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
+        comparative = build_discovery_outputs(
+            [Path(output)], Path(output) / "comparative",
+            mmseqs=mmseqs or "mmseqs",
+            pmfdb=pmfdb_resource.get("path") if pmfdb_resource else None,
+            inphared=inphared_resource,
+            progress=progress,
+            source_mode="single-run",
+        )
+        manifest["comparative_analysis"] = {
+            "output_directory": str(Path(output) / "comparative"),
+            "pmfdb": comparative.get("pmfdb"),
+            "inphared": comparative.get("inphared"),
+        }
     # Local package generation follows annotation, mining, ranking, and QC evidence collection.
     progress.start("GenBank pre-submission package")
     timed_start("genbank")
