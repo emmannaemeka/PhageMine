@@ -178,6 +178,10 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     strong_info = [(i, e, label) for i, e, label in informative if e.evidence_strength == "STRONG"]
     categories = sorted({_category(e) for e in accepted if _category(e)})
     support_ids = [f"{e.source}:{e.identifier or e.family_name or i}" for i, e in enumerate(accepted)]
+    ortholog_groups = sorted({
+        str(e.identifier or e.family_name) for e in accepted
+        if e.source in {"PHROGs", "VOGDB"} and (e.identifier or e.family_name)
+    })
     supporting_sources = sorted({e.source for e in accepted})
     supporting_modalities = sorted({MODALITY_FAMILIES.get(e.source, MODALITY_FAMILIES.get(e.modality, e.modality)) for e in accepted})
     conflicting = []
@@ -252,6 +256,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         "supporting_sources": supporting_sources, "supporting_modalities": supporting_modalities,
         "supporting_source_count": len(supporting_sources), "supporting_modality_count": len(supporting_modalities), "supporting_record_count": len(informative),
         "supporting_evidence_ids": support_ids,
+        "ortholog_groups": ortholog_groups,
         "conflicting_sources": conflict_sources, "conflicting_evidence_ids": conflict_ids,
         "conflict_descriptions": conflict_descriptions, "ambiguity_flags": ambiguity,
         "reasoning_summary": "; ".join(reasons) + ".", "fusion_rules_version": FUSION_RULES_VERSION,
@@ -267,10 +272,10 @@ def write_classification(root: str | Path, proteins: list[Protein], results: lis
     by_id = {p.protein_id: p for p in proteins}
     path = Path(root)
     (path / "functional_classification.json").write_text(json.dumps(results, indent=2, sort_keys=True))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "proposed_function", "display_product", "domain_summary", "functional_category", "confidence", "conservation_status", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "proposed_function", "display_product", "domain_summary", "functional_category", "confidence", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
     with (path / "functional_classification.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()
         for result in results:
             protein = by_id[result["protein_id"]]
-            writer.writerow({**{key: result.get(key) for key in columns}, "start": protein.start, "end": protein.end, "strand": protein.strand, "length_aa": protein.length, "supporting_sources": ";".join(result["supporting_sources"]), "conflict": bool(result["conflicting_evidence_ids"])})
+            writer.writerow({**{key: result.get(key) for key in columns}, "start": protein.start, "end": protein.end, "strand": protein.strand, "length_aa": protein.length, "ortholog_groups": ";".join(result["ortholog_groups"]), "supporting_sources": ";".join(result["supporting_sources"]), "conflict": bool(result["conflicting_evidence_ids"])})
