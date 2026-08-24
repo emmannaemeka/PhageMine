@@ -178,8 +178,8 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     strong_info = [(i, e, label) for i, e, label in informative if e.evidence_strength == "STRONG"]
     categories = sorted({_category(e) for e in accepted if _category(e)})
     support_ids = [f"{e.source}:{e.identifier or e.family_name or i}" for i, e in enumerate(accepted)]
-    supporting_sources = sorted({e.source for _, e, _ in informative})
-    supporting_modalities = sorted({MODALITY_FAMILIES.get(e.source, MODALITY_FAMILIES.get(e.modality, e.modality)) for _, e, _ in informative})
+    supporting_sources = sorted({e.source for e in accepted})
+    supporting_modalities = sorted({MODALITY_FAMILIES.get(e.source, MODALITY_FAMILIES.get(e.modality, e.modality)) for e in accepted})
     conflicting = []
     labels_by_source: dict[str, set[str]] = {}
     for _, e, label in strong_info:
@@ -233,10 +233,19 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         reasons = ["accepted PHROGs/VOGDB orthology supports conservation but no accepted informative functional evidence is present"]
     else:
         state, confidence, reasons = "UNRESOLVED", "NONE", ["no accepted evidence establishes a function, category, or meaningful conservation"]
+    if selected_product:
+        interpretation = "Defensible computational product hypothesis; review supporting alignments before biological assertion."
+    elif domain_summary:
+        interpretation = "A conserved domain was detected, but it does not establish the complete protein function."
+    elif conservation in {"STRONGLY_CONSERVED", "CONSERVED"}:
+        interpretation = "Viral/phage orthology supports conservation, but the biological function remains unknown."
+    else:
+        interpretation = "Predicted coding sequence with no accepted functional or conservation evidence; function remains unknown."
     return {
         "protein_id": protein.protein_id, "functional_state": state,
         "proposed_function": selected_product, "normalized_function": selected_product,
         "display_product": display_product, "domain_summary": domain_summary,
+        "scientific_interpretation": interpretation,
         "functional_category": categories[0] if len(categories) == 1 else ("; ".join(categories) if categories else None),
         "confidence": confidence, "confidence_reasons": reasons,
         "conservation_status": conservation,
@@ -258,7 +267,7 @@ def write_classification(root: str | Path, proteins: list[Protein], results: lis
     by_id = {p.protein_id: p for p in proteins}
     path = Path(root)
     (path / "functional_classification.json").write_text(json.dumps(results, indent=2, sort_keys=True))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "proposed_function", "display_product", "domain_summary", "functional_category", "confidence", "conservation_status", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "reasoning_summary"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "proposed_function", "display_product", "domain_summary", "functional_category", "confidence", "conservation_status", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
     with (path / "functional_classification.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()

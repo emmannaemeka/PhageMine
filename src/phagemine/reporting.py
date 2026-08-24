@@ -156,12 +156,28 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
             f"raw_start={raw_start};raw_end={raw_end}\n"
         )
     (root / "genes.gff3").write_text("##gff-version 3\n" + "".join(gff_records))
-    columns = ["analysis_sequence_id", "protein_id", "start", "end", "strand", "length", "annotation", "annotation_level", "functional_confidence", "biological_interest", "evidence_diversity"]
+    cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
+    columns = ["analysis_sequence_id", "protein_id", "start", "end", "strand", "length", "annotation", "functional_state", "confidence", "functional_category", "domain_summary", "conservation_status", "supporting_sources", "scientific_interpretation", "annotation_level", "biological_interest", "evidence_diversity"]
     with (root / "annotation.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()
         for p in proteins:
-            writer.writerow({key: p.genome_id if key == "analysis_sequence_id" else (p.annotation_level.value if key == "annotation_level" else getattr(p, key)) for key in columns})
+            c = cls_by_id.get(p.protein_id, {})
+            writer.writerow({
+                "analysis_sequence_id": p.genome_id, "protein_id": p.protein_id,
+                "start": p.start, "end": p.end, "strand": p.strand, "length": p.length,
+                "annotation": c.get("display_product") or p.annotation,
+                "functional_state": c.get("functional_state") or "UNRESOLVED",
+                "confidence": c.get("confidence") or "NONE",
+                "functional_category": c.get("functional_category") or "not established",
+                "domain_summary": c.get("domain_summary") or "none detected",
+                "conservation_status": c.get("conservation_status") or "NOT_ESTABLISHED",
+                "supporting_sources": ";".join(c.get("supporting_sources") or []),
+                "scientific_interpretation": c.get("scientific_interpretation") or "Function remains unknown.",
+                "annotation_level": p.annotation_level.value,
+                "biological_interest": p.biological_interest,
+                "evidence_diversity": p.evidence_diversity,
+            })
     with (root / "candidate_ranking.tsv").open("w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t")
         writer.writerow(["rank", "protein_id", "annotation", "biological_interest", "functional_confidence", "evidence_diversity", "score_components"])
@@ -182,11 +198,11 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     markdown = _markdown(representation, sequencing_provenance, proteins, candidates, manifest)
     (root / "report.md").write_text(markdown)
     rows = []
-    cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
     for protein in proteins:
         c = cls_by_id.get(protein.protein_id, {})
-        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}-{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{html.escape(str(c.get('functional_state') or 'UNRESOLVED'))}</td><td>{html.escape(str(c.get('display_product') or c.get('proposed_function') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td></tr>")
-    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1400px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%}}td,th{{border:1px solid #bbb;padding:.3em}}th{{background:#eee}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Classification</th><th>Proposed product</th><th>Confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
+        sources = "; ".join(c.get("supporting_sources") or []) or "none"
+        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}-{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{protein.length}</td><td>{html.escape(str(c.get('display_product') or c.get('proposed_function') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('functional_state') or 'UNRESOLVED'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td><td>{html.escape(str(c.get('functional_category') or 'not established'))}</td><td>{html.escape(str(c.get('domain_summary') or 'none detected'))}</td><td>{html.escape(str(c.get('conservation_status') or 'NOT_ESTABLISHED'))}</td><td>{html.escape(sources)}</td><td>{html.escape(str(c.get('scientific_interpretation') or 'Function remains unknown.'))}</td></tr>")
+    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1800px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}td,th{{border:1px solid #bbb;padding:.35em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Product names are computational hypotheses constrained by the evidence shown.</p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Length (aa)</th><th>Proposed product</th><th>Functional state</th><th>Confidence</th><th>Functional category</th><th>Domain architecture</th><th>Viral conservation</th><th>Supporting sources</th><th>Scientific interpretation</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
     (root / "report.html").write_text(report_html)
 
 
