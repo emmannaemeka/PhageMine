@@ -189,12 +189,15 @@ def _reports(root, samples, proteins, families, ranking, figures, evidence_reuse
     for path in figures.get("created",[]): lines.append(f"- [{Path(path).name}]({Path(path).relative_to(root)})")
     for item in figures.get("skipped",[]): lines.append(f"- Skipped `{item['figure']}`: {item['reason']}")
     if pmfdb_provenance: lines += ["", "## PMFDB provenance", "", f"- Version: `{pmfdb_provenance.get('pmfdb_version')}`", f"- Reference: `{pmfdb_provenance.get('reference')}`"]
-    nearest=(inphared_comparison or {}).get("matches") or []
+    nearest=(inphared_comparison or {}).get("unique_reference_summaries") or (inphared_comparison or {}).get("matches") or []
     if nearest:
         lines += ["", "## Nearest INPHARED phages", "", "> Mash results are screening evidence and require confirmatory alignment or ANI.", "", "| Query | Rank | Reference | Mash distance | Host | Taxon |", "|---|---:|---|---:|---|---|"]
         for row in nearest:
             taxon=row.get("phage_genus") or row.get("phage_family") or ""
-            lines.append(f"| {row['sample_id']} | {row['rank']} | {row['reference_accession']} | {row['mash_distance']} | {row.get('host_genus') or ''} | {taxon} |")
+            reference=row.get("reference_description") or row.get("reference_accession") or ""
+            distance=row.get("best_mash_distance", row.get("mash_distance"))
+            rank=row.get("rank", "unique")
+            lines.append(f"| {row['sample_id']} | {rank} | {reference} | {distance} | {row.get('host_genus') or ''} | {taxon} |")
     markdown="\n".join(lines)+"\n"; (root/"discovery_report.md").write_text(markdown)
     figure_html="".join(f'<figure><a href="{html.escape(str(Path(path).relative_to(root)))}"><img src="{html.escape(str(Path(path).relative_to(root)))}" style="max-width:100%"></a><figcaption>{html.escape(Path(path).stem)}</figcaption></figure>' for path in figures.get("created",[]) if path.endswith('.png'))
     table_rows="".join(f"<tr><td>{r['rank']}</td><td>{r['pmf_id']}</td><td>{r['functional_state']}</td><td>{r['member_count']}</td><td>{r['genome_count']}</td><td>{r['context_conservation_state']}</td><td>{r['pmfdb_state']}</td></tr>" for r in ranking[:50])
@@ -275,16 +278,18 @@ def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None,
             metadata=provenance.get("metadata_path"),
             output=root,
             mash=mash,
+            reference_fasta=inphared.get("path"),
         )
         inphared_comparison["resource_version"]=inphared.get("version")
         inphared_comparison["resource_manifest"]=provenance.get("reference_manifest_path")
         (root/"inphared_nearest_phages.json").write_text(json.dumps(inphared_comparison,indent=2,sort_keys=True)+"\n")
         emit("DONE",stage,t,f"{len(inphared_comparison.get('matches') or [])} nearest-reference rows")
     else:
-        _write_tsv(root/"inphared_nearest_phages.tsv",[],["sample_id","rank","reference_accession","mash_distance","mash_similarity_screen","p_value","matching_hashes","reference_description","host_genus","phage_genus","phage_subfamily","phage_family","interpretation"])
+        _write_tsv(root/"inphared_nearest_phages.tsv",[],["sample_id","rank","reference_accession","mash_distance","mash_similarity_screen","p_value","matching_hashes","reference_description","host_genus","phage_genus","phage_subfamily","phage_family","sequence_confirmation","confirmed_identity","confirmation_method","interpretation"])
+        _write_tsv(root/"inphared_summary.tsv",[],["sample_id","relationship","reference_description","reference_accessions","best_mash_distance","best_mash_similarity_screen","matching_hashes","sequence_confirmation","confirmed_identity","host_genus","phage_genus","phage_subfamily","phage_family","interpretation"])
         (root/"inphared_nearest_phages.json").write_text(json.dumps(inphared_comparison,indent=2,sort_keys=True)+"\n")
         emit("SKIPPED",stage,t,"INPHARED genomes not configured")
-    mark(stage,_signature({"inputs":fingerprints,"inphared":str((inphared or {}).get('path'))}),[root/"inphared_nearest_phages.tsv",root/"inphared_nearest_phages.json"])
+    mark(stage,_signature({"inputs":fingerprints,"inphared":str((inphared or {}).get('path'))}),[root/"inphared_nearest_phages.tsv",root/"inphared_summary.tsv",root/"inphared_nearest_phages.json"])
 
     stage="Discovery ranking"; t=time.monotonic(); emit("RUNNING",stage)
     ranking=_ranking(family_rows,context_status,validation)

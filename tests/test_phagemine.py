@@ -32,18 +32,20 @@ from phagemine.fusion import classify_protein, classify_proteins, normalize_func
 from phagemine.context import build_context, write_context
 from phagemine.compare import compare
 from phagemine.batch import discover_inputs, batch
-from phagemine.reconciliation import GeneModel, reconcile_models
+from phagemine.reconciliation import GeneModel, gene_call_review, reconcile_models
 from phagemine.adjudication import adjudicate
 from phagemine.alternative_evidence import alternative_models, extract_translation, cache_key
 from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.phrogs import PHROGSMMseqsAdapter
-from phagemine.benchmark import import_prokka, import_pharokka, import_phagemine, compare_models, metrics
+from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics
 from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
+from phagemine.hallmarks import assess_hallmarks
+from phagemine.review import build_annotation_review
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,6 +65,37 @@ class PhageMineTests(unittest.TestCase):
         p=GeneModel("PHANOTATE","P1",100,400,"+"); d=GeneModel("Prodigal","D1",800,1000,"+")
         rows=reconcile_models([p],[d]); self.assertEqual({r["conflict_type"] for r in rows},{"PHANOTATE_ONLY","PRODIGAL_ONLY"})
         self.assertEqual(rows,reconcile_models([p],[d]))
+
+    def test_orf_reconciliation_handles_unsorted_prodigal_models(self):
+        phanotate=[GeneModel("PHANOTATE","P1",100,400,"+")]
+        prodigal=[GeneModel("Prodigal","D2",800,1000,"+"),GeneModel("Prodigal","D1",100,400,"+")]
+        rows=reconcile_models(phanotate,prodigal)
+        self.assertEqual(rows[0]["prodigal_id"],"D1")
+        self.assertEqual([row["prodigal_id"] for row in rows if row["conflict_type"]=="PRODIGAL_ONLY"],["D2"])
+
+    def test_gene_call_review_flags_short_unsupported_caller_specific_orf(self):
+        rows=reconcile_models([GeneModel("PHANOTATE","P1",100,180,"+")],[])
+        review=gene_call_review(rows, {"P1": []}, {"P1": 27})[0]
+        self.assertEqual(review["gene_call_confidence"], "LOW")
+        self.assertEqual(review["review_flag"], "POSSIBLE_FALSE_CALL")
+
+    def test_gene_call_review_preserves_exact_concordant_orf(self):
+        rows=reconcile_models([GeneModel("PHANOTATE","P1",100,400,"+")],[GeneModel("Prodigal","D1",100,400,"+")])
+        review=gene_call_review(rows, {}, {"P1": 100})[0]
+        self.assertEqual(review["gene_call_confidence"], "HIGH")
+        self.assertEqual(review["review_flag"], "NONE")
+
+    def test_hallmark_check_never_converts_non_detection_to_absence(self):
+        rows=assess_hallmarks([{"protein_id":"P1","functional_state":"PROBABLE_FUNCTION","display_product":"major capsid protein","confidence":"MODERATE"}])
+        by_name={row["hallmark"]:row for row in rows}
+        self.assertEqual(by_name["major_capsid"]["status"],"DETECTED")
+        self.assertEqual(by_name["portal"]["status"],"NOT_ESTABLISHED")
+        self.assertIn("not evidence of biological absence",by_name["portal"]["interpretation"])
+
+    def test_annotation_review_combines_function_gene_call_and_hallmark_flags(self):
+        protein=self._fusion_protein(); classification=classify_protein(protein)
+        review=build_annotation_review([protein],[classification],[{"review_flag":"POSSIBLE_FALSE_CALL","protein_id":"P","phanotate_id":"P","gene_call_confidence":"LOW","rationale":"short unsupported"}],[{"hallmark":"major_capsid","status":"NOT_ESTABLISHED","interpretation":"not established"}])
+        self.assertEqual({row["review_type"] for row in review},{"FUNCTION_ASSIGNMENT","GENE_CALL","HALLMARK_NOT_ESTABLISHED"})
 
     def test_orf_adjudication_is_observational_and_model_specific(self):
         row=reconcile_models([GeneModel("PHANOTATE","P1",100,400,"+")],[GeneModel("Prodigal","D1",130,400,"+")])[0]
@@ -199,6 +232,19 @@ class PhageMineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             g=Path(temp)/"x.gff"; g.write_text("##gff-version 3\ng\tProkka\tCDS\t100\t400\t.\t+\t0\tID=x1;product=hypothetical protein\n")
             a=import_prokka(g); b=import_pharokka(g); self.assertEqual(compare_models(a,b)[0]["relationship"],"EXACT_MATCH"); self.assertEqual(metrics(a,b)["exact_f1"],1.0)
+
+    def test_benchmark_imports_phold_genbank_and_compares_products(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); gbk=root/"phold.gbk"
+            gbk.write_text('LOCUS       test\nFEATURES             Location/Qualifiers\n     CDS             complement(100..400)\n                     /locus_tag="P1"\n                     /product="major capsid protein"\n                     /translation="MPEP\n                     TIDE"\nORIGIN\n//\n')
+            phold=import_phold(gbk)
+            self.assertEqual((phold[0]["start"],phold[0]["end"],phold[0]["strand"]),(100,400,"-"))
+            self.assertEqual(phold[0]["product"],"major capsid protein")
+            self.assertEqual(phold[0]["protein_length"],8)
+            other=[{**phold[0],"tool":"PHAGEMINE","locus_id":"PM_1","product":"putative major capsid protein"}]
+            benchmark({"PHAGEMINE":other,"Phold":phold},root/"comparison")
+            rows=list(csv.DictReader((root/"comparison"/"functional_comparison.tsv").open(),delimiter="\t"))
+            self.assertEqual(rows[0]["status"],"PRODUCT_AGREEMENT")
 
     def test_benchmark_exact_match_precedes_boundary_contact(self):
         a=[{'start':2,'end':313,'strand':'-','locus_id':'A'},{'start':313,'end':894,'strand':'-','locus_id':'B'}]
@@ -454,6 +500,9 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(orthology_pair["supporting_modality_count"], 2)
         known = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "major capsid protein"), self._fusion_e("PHROGs", "Major capsid protein {ECO:0001}", identifier="y")]))
         self.assertEqual(known["functional_state"], "KNOWN_FUNCTION")
+        self.assertEqual(known["display_classification"], "Specific function strongly supported")
+        self.assertIn("PHROGs:y", known["best_evidence"])
+        self.assertEqual((known["evidence_tier"],known["evidence_tier_label"]),(2,"Curated and independently corroborated function"))
         broad = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="head and packaging")]))
         self.assertEqual(broad["functional_state"], "FUNCTIONAL_CLASS_ONLY")
         unresolved = classify_protein(self._fusion_protein())
@@ -689,6 +738,17 @@ class PhageMineTests(unittest.TestCase):
             run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor(), progress=ProgressReporter(stream=StringIO()))
             self.assertNotIn("RUNNING", (output / "run_manifest.json").read_text())
             self.assertNotIn("DONE", (output / "annotation.tsv").read_text())
+
+    def test_run_defaults_to_current_directory_and_orf_reconciliation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            fasta=Path(temp)/"ijeoma.fasta"; fasta.write_text(">Ijeoma\nATGAAATAG\n")
+            captured={}
+            def fake_run(*args, **kwargs):
+                captured["output"]=args[1]; captured["reconcile_orfs"]=kwargs["reconcile_orfs"]; return 1
+            with patch("phagemine.cli.run", side_effect=fake_run), patch("phagemine.preflight.preflight_resources"), patch("phagemine.cli.Path.cwd", return_value=Path(temp)):
+                self.assertEqual(main(["run",str(fasta),"--gene-predictor","demo","--quiet"]),0)
+            self.assertEqual(captured["output"],str(Path(temp)/"ijeoma_phagemine_results"))
+            self.assertTrue(captured["reconcile_orfs"])
     def test_translation(self):
         self.assertEqual(translate("ATGGCTTAA"), "MA")
 
@@ -714,8 +774,13 @@ class PhageMineTests(unittest.TestCase):
             output = Path(temp) / "run"
             count = run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
             self.assertEqual(count, 5)
-            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
+            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "annotated_proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "hallmark_completeness.tsv", "annotation_review.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
                 self.assertTrue((output / filename).exists(), filename)
+            with (output / "annotation.tsv").open() as handle:
+                self.assertEqual(next(csv.reader(handle, delimiter="\t")), ["protein_id", "start", "end", "strand", "length_aa", "classification", "proposed_function", "confidence", "best_evidence", "review_flag"])
+            named_headers=[line for line in (output / "annotated_proteins.faa").read_text().splitlines() if line.startswith(">")]
+            self.assertEqual(len(named_headers), count)
+            self.assertTrue(all(" product=\"" in line and " coordinates=" in line and " strand=" in line for line in named_headers))
             report = (output / "report.md").read_text()
             self.assertIn("Computational hypothesis only", report)
             evidence = json.loads((output / "evidence.json").read_text())
@@ -832,9 +897,8 @@ class PhageMineTests(unittest.TestCase):
             gff = (output / "genes.gff3").read_text()
             self.assertIn(representation.analysis_sequence_id + "\tPhageMine\tCDS", gff)
             self.assertIn("Analysis sequence", (output / "report.md").read_text())
-            annotations = (output / "annotation.tsv").read_text()
-            self.assertIn("analysis_sequence_id", annotations)
-            self.assertIn(representation.analysis_sequence_id, annotations)
+            annotations = list(csv.DictReader((output / "annotation.tsv").open(), delimiter="\t"))
+            self.assertTrue(all(row["start"] and row["end"] and row["strand"] for row in annotations))
 
     def test_illumina_provenance(self):
         provenance = SequencingProvenance.from_dict({"sequencing_platform": "ILLUMINA", "assembler": "SPAdes"})

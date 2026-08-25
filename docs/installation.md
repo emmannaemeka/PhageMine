@@ -1,7 +1,7 @@
 # Installation
 
 Install PhageMine in a clean environment. A Conda installation is recommended
-because it supplies PHANOTATE, HMMER, MMseqs2, DIAMOND and Mash together:
+because it supplies PHANOTATE, Prodigal, HMMER, MMseqs2, DIAMOND and Mash together:
 
 ```bash
 conda create -n phagemine phagemine \
@@ -11,8 +11,8 @@ conda create -n phagemine phagemine \
 conda activate phagemine
 ```
 
-The Bioconda recipe for PhageMine 1.0.1 requires PHANOTATE, HMMER, MMseqs2,
-DIAMOND and Mash. Do not treat package installation alone as proof that these
+The Bioconda recipe for PhageMine 1.0.2 requires PHANOTATE, Prodigal, HMMER,
+MMseqs2, DIAMOND and Mash. Do not treat package installation alone as proof that these
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
 errors.
@@ -65,9 +65,15 @@ path explicitly when it is not available as `phanotate` on `PATH`, for example
 Minimal Core run:
 
 ```bash
-phagemine run genome.fasta --output results/run \
+phagemine run genome.fasta \
   --phanotate /path/to/phanotate.py
 ```
+
+Without `--output`, PhageMine writes
+`./genome_phagemine_results` in the directory where the command is run. Use an
+absolute `--output` path when a different location is required. The complete
+`run` workflow also compares PHANOTATE and Prodigal calls and writes review
+tables; it does not automatically discard discordant ORFs.
 
 Evidence databases are not required for Core. Missing resources are reported
 as unavailable and the Core workflow remains usable, but full evidence mode

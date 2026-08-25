@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.0.2
+
+- Simplify the primary annotation table to protein ID, coordinates, strand,
+  length, plain-language classification, proposed function, confidence, best
+  evidence, and a review flag. Detailed evidence remains in the dedicated
+  classification and protein-detail outputs.
+- Add `annotated_proteins.faa` with the proposed product, coordinates, strand,
+  and confidence in every FASTA header.
+- Make full single-genome `run` perform PHANOTATE/Prodigal comparison and write
+  explicit gene-call confidence and review tables without silently deleting
+  caller-specific ORFs.
+- Place results in `./<input stem>_phagemine_results` when `--output` is not
+  supplied; an explicit output path continues to take precedence.
+- Add a duplicate-collapsed INPHARED summary and distinguish exact sketch
+  matches from nearest-neighbour screens while retaining the accession-level
+  audit table.
+- Extend annotation comparison imports to Pharokka, Phold, multiPhATE2, and
+  Prokka, with separate gene-model and product-name comparisons.
+- Add an explicit six-tier evidence hierarchy to the detailed classification
+  output; the hierarchy contains no structural-search dependency.
+- Add conservative hallmark-system checks and a single prioritized
+  `annotation_review.tsv` combining function conflicts, disputed gene calls,
+  and hallmark components not established by current evidence.
+- Confirm zero-distance INPHARED matches by built-in exact nucleotide,
+  reverse-complement, and rotation-equivalence checks when the reference
+  sequence is available; do not infer ANI or taxonomy from Mash.
+- Record checksummed external-tool inputs and hallmark-name comparisons in the
+  reproducible annotation benchmark output.
+- Do not infer or report phage lifestyle.
+
 ## 1.0.1
 
 - Synchronize the release version with the post-1.0.0 database installer and

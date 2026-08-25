@@ -44,6 +44,39 @@ def _accession(value: str) -> str:
     return re.sub(r"<[^>]+>", "", text).strip()
 
 
+def _single_fasta_sequence(path: str|Path) -> str:
+    sequence=[]
+    for line in Path(path).read_text().splitlines():
+        line=line.strip()
+        if line and not line.startswith(">"):
+            sequence.append(line.upper().replace("-",""))
+    return "".join(sequence)
+
+
+def _reference_sequences(path: str|Path, accessions: set[str]) -> dict[str,str]:
+    selected={}
+    if not path or not Path(path).is_file() or not accessions:
+        return selected
+    with Path(path).open() as handle:
+        for accession, _description, sequence in _fasta_records(handle):
+            if accession in accessions:
+                selected[accession]=sequence.upper().replace("-","")
+                if len(selected)==len(accessions): break
+    return selected
+
+
+def _confirm_sequence(query: str, reference: str) -> tuple[str, float|None]:
+    if not query or not reference or len(query)!=len(reference):
+        return "NOT_IDENTICAL_LENGTH_OR_SEQUENCE", None
+    complement=str.maketrans("ACGTRYSWKMBDHVN", "TGCAYRSWMKVHDBN")
+    reverse=reference.translate(complement)[::-1]
+    if query==reference: return "CONFIRMED_IDENTICAL_SEQUENCE", 1.0
+    if query==reverse: return "CONFIRMED_REVERSE_COMPLEMENT_SEQUENCE", 1.0
+    if query in reference+reference: return "CONFIRMED_ROTATION_EQUIVALENT_SEQUENCE", 1.0
+    if query in reverse+reverse: return "CONFIRMED_REVERSE_COMPLEMENT_ROTATION_EQUIVALENT", 1.0
+    return "NOT_IDENTICAL_LENGTH_OR_SEQUENCE", None
+
+
 def _annotation_state(annotation: str) -> str:
     if not annotation or UNKNOWN_ANNOTATION.search(annotation):
         return "PREDICTED_UNCHARACTERIZED"
@@ -411,6 +444,7 @@ def compare_genomes(
     output: str | Path,
     mash: str = "mash",
     top_n: int = 10,
+    reference_fasta: str | Path | None = None,
 ) -> dict:
     """Find nearest INPHARED references and retain conservative provenance."""
     executable = str(Path(mash)) if Path(mash).is_file() else shutil.which(mash)
@@ -461,23 +495,78 @@ def compare_genomes(
                 "phage_family": details.get("phage_family"),
                 "interpretation": "SCREENING_ONLY_REQUIRES_CONFIRMATORY_ALIGNMENT_OR_ANI",
             })
+    # Confirm zero-distance Mash results by direct nucleotide comparison when
+    # the prepared reference FASTA is available.  Rotation equivalence is a
+    # sequence observation and does not itself establish circular topology.
+    zero_accessions={row["reference_accession"] for row in rows if row["mash_distance"]==0.0}
+    reference_sequences=_reference_sequences(reference_fasta,zero_accessions)
+    query_sequences={sample_id:_single_fasta_sequence(path) for sample_id,path in sample_fastas.items()}
+    for row in rows:
+        if row["mash_distance"]!=0.0:
+            confirmation, identity="NOT_RUN_MASH_DISTANCE_NONZERO", None
+        elif row["reference_accession"] not in reference_sequences:
+            confirmation, identity="NOT_RUN_REFERENCE_SEQUENCE_UNAVAILABLE", None
+        else:
+            confirmation, identity=_confirm_sequence(query_sequences.get(row["sample_id"],""),reference_sequences[row["reference_accession"]])
+        row["sequence_confirmation"]=confirmation
+        row["confirmed_identity"]=identity
+        row["confirmation_method"]="built-in exact nucleotide comparison; no ANI inferred"
     destination = Path(output)
     destination.mkdir(parents=True, exist_ok=True)
     columns = [
         "sample_id", "rank", "reference_accession", "mash_distance", "mash_similarity_screen",
         "p_value", "matching_hashes", "reference_description", "host_genus", "phage_genus",
-        "phage_subfamily", "phage_family", "interpretation",
+        "phage_subfamily", "phage_family", "sequence_confirmation", "confirmed_identity", "confirmation_method", "interpretation",
     ]
     with (destination / "inphared_nearest_phages.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()
         writer.writerows(rows)
+    # The detailed table intentionally retains accession-level records.  A
+    # biological genome can, however, be represented by both GenBank and
+    # RefSeq accessions.  This second table groups those duplicates so that a
+    # researcher does not mistake them for independent nearest neighbours.
+    unique = []
+    grouped = {}
+    for row in rows:
+        key = (
+            row["sample_id"], (row.get("reference_description") or "").strip().lower(),
+            row.get("host_genus") or "", row.get("phage_genus") or "",
+            row.get("phage_subfamily") or "", row.get("phage_family") or "",
+        )
+        grouped.setdefault(key, []).append(row)
+    for group_rows in grouped.values():
+        best = min(group_rows, key=lambda item: (item["mash_distance"], item["rank"]))
+        shared = str(best.get("matching_hashes") or "")
+        parts = shared.split("/", 1)
+        exact_hashes = len(parts) == 2 and parts[0] == parts[1] and parts[0] not in {"", "0"}
+        sequence_confirmed=str(best.get("sequence_confirmation") or "").startswith("CONFIRMED_")
+        unique.append({
+            "sample_id": best["sample_id"],
+            "relationship": "CONFIRMED_SEQUENCE_EQUIVALENT_REFERENCE" if sequence_confirmed else ("EXACT_MASH_SKETCH_MATCH" if best["mash_distance"] == 0.0 and exact_hashes else "NEAREST_NEIGHBOUR_SCREEN"),
+            "reference_description": best.get("reference_description"),
+            "reference_accessions": ";".join(sorted({item["reference_accession"] for item in group_rows})),
+            "best_mash_distance": best["mash_distance"],
+            "best_mash_similarity_screen": best["mash_similarity_screen"],
+            "matching_hashes": best["matching_hashes"],
+            "sequence_confirmation": best.get("sequence_confirmation"),
+            "confirmed_identity": best.get("confirmed_identity"),
+            "host_genus": best.get("host_genus"), "phage_genus": best.get("phage_genus"),
+            "phage_subfamily": best.get("phage_subfamily"), "phage_family": best.get("phage_family"),
+            "interpretation": "NUCLEOTIDE_SEQUENCE_EQUIVALENCE_CONFIRMED; TAXONOMY_NOT_INFERRED" if sequence_confirmed else ("EXACT_SKETCH_MATCH_REQUIRES_SEQUENCE_CONFIRMATION" if best["mash_distance"] == 0.0 and exact_hashes else "SCREENING_ONLY_REQUIRES_CONFIRMATORY_ALIGNMENT_OR_ANI"),
+        })
+    unique.sort(key=lambda item: (item["sample_id"], item["best_mash_distance"], item["reference_description"] or ""))
+    summary_columns = ["sample_id", "relationship", "reference_description", "reference_accessions", "best_mash_distance", "best_mash_similarity_screen", "matching_hashes", "sequence_confirmation", "confirmed_identity", "host_genus", "phage_genus", "phage_subfamily", "phage_family", "interpretation"]
+    with (destination / "inphared_summary.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=summary_columns, delimiter="\t")
+        writer.writeheader(); writer.writerows(unique)
     payload = {
         "status": "COMPLETE",
         "database": "INPHARED",
         "commands": commands,
         "scientific_interpretation": "Mash distance is nearest-neighbour screening evidence, not ANI or a taxonomic assignment.",
         "matches": rows,
+        "unique_reference_summaries": unique,
     }
     (destination / "inphared_nearest_phages.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     return payload

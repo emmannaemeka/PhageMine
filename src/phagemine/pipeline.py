@@ -23,9 +23,12 @@ from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
 from .fusion import classify_proteins
 from .context import build_context
-from .reconciliation import GeneModel, ProdigalPredictor, reconcile_models, write_reconciliation
+from .reconciliation import GeneModel, ProdigalPredictor, gene_call_review, reconcile_models, write_gene_call_review, write_reconciliation
 from .adjudication import adjudicate, write_adjudication
 from .alternative_evidence import alternative_models, acquire_alternative_evidence, write_alternative_evidence
+from . import __version__
+from .hallmarks import assess_hallmarks, write_hallmarks
+from .review import build_annotation_review, write_annotation_review
 
 
 def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
@@ -67,6 +70,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "gene_prediction", representation, sequencing_provenance, proteins, gene_manifest, fasta)
     reconciliation_rows = None
     prodigal_models = None
+    gene_review_records = []
     if reconcile_orfs:
         progress.start("Prodigal secondary gene prediction")
         prodigal_models = ProdigalPredictor(prodigal).predict(fasta, representation.analysis_sequence)
@@ -186,12 +190,16 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         evidence_map.update({m["caller_id"]: m.get("evidence",[]) for m in alt})
         progress.start("ORF adjudication")
         write_adjudication(output, adjudicate(reconciliation_rows, evidence_map), {"input_sha256": checksum(fasta), "observational": True})
+        lengths = {protein.protein_id: protein.length for protein in proteins}
+        lengths.update({model["caller_id"]: len(model.get("protein_sequence", "")) for model in alt})
+        gene_review_records = gene_call_review(reconciliation_rows, evidence_map, lengths)
+        write_gene_call_review(output, gene_review_records)
         progress.finish("adjudication persisted")
     progress.finish(_evidence_progress_summary(phrogs_result, "PHROGs/MMseqs2 unavailable"))
     timed_end("phrogs")
     progress.start("evidence integration")
     timed_start("evidence_fusion")
-    checkpoint_manifest = {"pipeline": "PhageMine", "pipeline_version": "0.1.0", "command": command,
+    checkpoint_manifest = {"pipeline": "PhageMine", "pipeline_version": __version__, "command": command,
                            "input": str(fasta), "input_sha256": checksum(fasta),
                            "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()},
                            "evidence_adapters": evidence_adapters}
@@ -216,6 +224,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         else:
             protein.annotation_level = EvidenceLevel.HYPOTHESIS
     context_records, modules = build_context(proteins, classifications)
+    hallmarks = assess_hallmarks(classifications)
+    write_hallmarks(output, hallmarks)
+    annotation_review = build_annotation_review(proteins, classifications, gene_review_records, hallmarks)
+    write_annotation_review(output, annotation_review)
     progress.start("candidate ranking/mining")
     timed_start("ranking_mining")
     mine(proteins, mock=use_mock_evidence)
@@ -223,7 +235,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"} for protein in candidates for e in protein.evidence) else "RANKED"
     progress.finish(f"{len(candidates)} candidates; {ranking_status}")
     timed_end("ranking_mining")
-    manifest = {"pipeline": "PhageMine", "pipeline_version": "0.1.0", "command": command, "input": str(fasta), "input_sha256": checksum(fasta), "genome_representation": representation.manifest(), "sequencing_provenance": sequencing_provenance.manifest(), "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "evidence_adapters": evidence_adapters, "discovery_ranking": {"status": ranking_status, "message": "Candidate prioritization was not performed because sufficient evidence was unavailable." if ranking_status == "INSUFFICIENT_EVIDENCE" else "Candidates ranked by available evidence."}}
+    manifest = {"pipeline": "PhageMine", "pipeline_version": __version__, "command": command, "input": str(fasta), "input_sha256": checksum(fasta), "genome_representation": representation.manifest(), "sequencing_provenance": sequencing_provenance.manifest(), "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "evidence_adapters": evidence_adapters, "discovery_ranking": {"status": ranking_status, "message": "Candidate prioritization was not performed because sufficient evidence was unavailable." if ranking_status == "INSUFFICIENT_EVIDENCE" else "Candidates ranked by available evidence."}}
+    manifest["hallmark_summary"] = {row["hallmark"]: row["status"] for row in hallmarks}
+    manifest["annotation_review"] = {"records": len(annotation_review), "high_priority": sum(row["priority"]=="HIGH" for row in annotation_review), "path": str(Path(output)/"annotation_review.tsv")}
     progress.start("QC/report generation")
     timed_start("reporting")
     quality_control = assess(representation.analysis_sequence, proteins)

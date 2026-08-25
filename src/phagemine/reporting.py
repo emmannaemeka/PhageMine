@@ -157,31 +157,23 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
         )
     (root / "genes.gff3").write_text("##gff-version 3\n" + "".join(gff_records))
     cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
-    columns = ["analysis_sequence_id", "protein_id", "locus_tag", "feature_type", "coordinates", "start", "end", "strand", "length_bp", "length_aa", "gene", "EC_number", "COG", "viral_ortholog_groups", "proposed_function", "classification", "confidence", "functional_category", "domain_architecture", "conservation_status", "supporting_sources", "scientific_interpretation", "annotation_level", "biological_interest", "evidence_diversity"]
+    (root / "annotated_proteins.faa").write_text("".join(
+        f'>{p.protein_id} product="{(cls_by_id.get(p.protein_id, {}).get("display_product") or "hypothetical protein").replace(chr(34), "")}" coordinates={p.start}..{p.end} strand={p.strand} confidence={cls_by_id.get(p.protein_id, {}).get("confidence") or "NONE"}\n{p.sequence}\n'
+        for p in proteins
+    ))
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "classification", "proposed_function", "confidence", "best_evidence", "review_flag"]
     with (root / "annotation.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()
         for p in proteins:
             c = cls_by_id.get(p.protein_id, {})
-            writer.writerow({
-                "analysis_sequence_id": p.genome_id, "protein_id": p.protein_id,
-                "locus_tag": p.locus_tag or p.protein_id, "feature_type": "CDS",
-                "coordinates": f"{p.start}..{p.end}", "start": p.start, "end": p.end,
-                "strand": p.strand, "length_bp": len(p.cds), "length_aa": p.length,
-                "gene": "not assigned", "EC_number": "not assigned", "COG": "not assigned",
-                "viral_ortholog_groups": ";".join(c.get("ortholog_groups") or []) or "none detected",
+            writer.writerow({"protein_id": p.protein_id, "start": p.start, "end": p.end,
+                "strand": p.strand, "length_aa": p.length,
+                "classification": c.get("display_classification") or "No reliable function identified",
                 "proposed_function": c.get("display_product") or p.annotation,
-                "classification": c.get("functional_state") or "UNRESOLVED",
                 "confidence": c.get("confidence") or "NONE",
-                "functional_category": c.get("functional_category") or "not established",
-                "domain_architecture": c.get("domain_summary") or "none detected",
-                "conservation_status": c.get("conservation_status") or "NOT_ESTABLISHED",
-                "supporting_sources": ";".join(c.get("supporting_sources") or []),
-                "scientific_interpretation": c.get("scientific_interpretation") or "Function remains unknown.",
-                "annotation_level": p.annotation_level.value,
-                "biological_interest": p.biological_interest,
-                "evidence_diversity": p.evidence_diversity,
-            })
+                "best_evidence": c.get("best_evidence") or "No accepted evidence",
+                "review_flag": c.get("review_flag") or "NONE"})
     with (root / "candidate_ranking.tsv").open("w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t")
         writer.writerow(["rank", "protein_id", "annotation", "biological_interest", "functional_confidence", "evidence_diversity", "score_components"])
@@ -204,10 +196,8 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     rows = []
     for protein in proteins:
         c = cls_by_id.get(protein.protein_id, {})
-        sources = "; ".join(c.get("supporting_sources") or []) or "none"
-        groups = "; ".join(c.get("ortholog_groups") or []) or "none detected"
-        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{html.escape(protein.locus_tag or protein.protein_id)}</td><td>CDS</td><td>{protein.start}..{protein.end}</td><td>{protein.start}</td><td>{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{len(protein.cds)}</td><td>{protein.length}</td><td>not assigned</td><td>not assigned</td><td>not assigned</td><td>{html.escape(groups)}</td><td>{html.escape(str(c.get('display_product') or c.get('proposed_function') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('functional_state') or 'UNRESOLVED'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td><td>{html.escape(str(c.get('functional_category') or 'not established'))}</td><td>{html.escape(str(c.get('domain_summary') or 'none detected'))}</td><td>{html.escape(str(c.get('conservation_status') or 'NOT_ESTABLISHED'))}</td><td>{html.escape(sources)}</td><td>{html.escape(str(c.get('scientific_interpretation') or 'Function remains unknown.'))}</td></tr>")
-    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:2200px;margin:auto;padding:2em}}.table-wrap{{overflow-x:auto}}table{{border-collapse:collapse;width:100%;font-size:.85rem;white-space:normal}}td,th{{border:1px solid #bbb;padding:.35em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Product names are computational hypotheses constrained by the evidence shown.</p><h2>Protein annotation table</h2><div class='table-wrap'><table><tr><th>Protein</th><th>Locus tag</th><th>Feature type</th><th>Coordinates</th><th>Start</th><th>End</th><th>Strand</th><th>Length (bp)</th><th>Length (aa)</th><th>Gene</th><th>EC number</th><th>COG</th><th>Viral ortholog groups</th><th>Proposed function</th><th>Classification</th><th>Confidence</th><th>Functional category</th><th>Domain architecture</th><th>Viral conservation</th><th>Supporting sources</th><th>Scientific interpretation</th></tr>{''.join(rows)}</table></div><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
+        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}..{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{protein.length}</td><td>{html.escape(str(c.get('display_classification') or 'No reliable function identified'))}</td><td>{html.escape(str(c.get('display_product') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td></tr>")
+    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1500px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}td,th{{border:1px solid #bbb;padding:.4em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Select a protein identifier to inspect its domains, orthologs, alignments, and reasoning.</p><p><a href='hallmark_completeness.tsv'>Hallmark-system check</a> · <a href='annotation_review.tsv'>Manual-review queue</a> · <a href='annotated_proteins.faa'>Product-labelled protein FASTA</a></p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Length (aa)</th><th>Classification</th><th>Proposed function</th><th>Confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
     (root / "report.html").write_text(report_html)
 
 
@@ -218,7 +208,11 @@ def _markdown(representation: GenomeRepresentation, sequencing_provenance: Seque
     ranking = manifest.get("discovery_ranking", {})
     ranking_status = ranking.get("status", "RANKED")
     ranking_message = ranking.get("message", "Candidates ranked by available evidence.")
-    lines = [f"# PhageMine report: {representation.analysis_sequence_id}", "", warning, "", "## Genome representation", "", f"- Original input sequence: `{representation.original_sequence_id}`", f"- Analysis sequence: `{representation.analysis_sequence_id}`", f"- Topology: `{representation.topology.value}`", f"- Orientation: `{representation.orientation.value}`", f"- Rotation: `{representation.rotation.value}`", "- All reported gene, protein, neighborhood, and annotation coordinates are relative to the analysis sequence.", "", "### Explicit transformation history", *transforms, "", "## Sequencing provenance", "", f"- Sequencing platform: `{sequencing_provenance.sequencing_platform.value}`", f"- Assembler: `{sequencing_provenance.assembler or 'UNKNOWN'}`", f"- Polishing method: `{sequencing_provenance.polishing_method or 'UNKNOWN'}`", "- Sequencing provenance does not determine genome topology, orientation, or rotation.", "", f"Predicted proteins: **{len(proteins)}**  ", f"Poorly characterised proteins: **{len(candidates)}**", "", "## Figures", ""]
+    lines = [f"# PhageMine report: {representation.analysis_sequence_id}", "", warning, "", "## Genome representation", "", f"- Original input sequence: `{representation.original_sequence_id}`", f"- Analysis sequence: `{representation.analysis_sequence_id}`", f"- Topology: `{representation.topology.value}`", f"- Orientation: `{representation.orientation.value}`", f"- Rotation: `{representation.rotation.value}`", "- All reported gene, protein, neighborhood, and annotation coordinates are relative to the analysis sequence.", "", "### Explicit transformation history", *transforms, "", "## Sequencing provenance", "", f"- Sequencing platform: `{sequencing_provenance.sequencing_platform.value}`", f"- Assembler: `{sequencing_provenance.assembler or 'UNKNOWN'}`", f"- Polishing method: `{sequencing_provenance.polishing_method or 'UNKNOWN'}`", "- Sequencing provenance does not determine genome topology, orientation, or rotation.", "", f"Predicted proteins: **{len(proteins)}**  ", f"Poorly characterised proteins: **{len(candidates)}**", "", "## Hallmark-system check", "", "> `NOT_ESTABLISHED` means the current evidence did not identify the component; it does not establish biological absence."]
+    for hallmark, status in sorted((manifest.get("hallmark_summary") or {}).items()):
+        lines.append(f"- {hallmark.replace('_', ' ').title()}: **{status}**")
+    review = manifest.get("annotation_review") or {}
+    lines += ["", "## Manual-review queue", "", f"- Records requiring review: **{review.get('records', 0)}**", f"- High-priority records: **{review.get('high_priority', 0)}**", "- See `annotation_review.tsv`; PhageMine does not automatically delete disputed ORFs.", "", "## Figures", ""]
     for figure in manifest.get("figures", {}).get("created", []):
         try: lines.append(f"- [{Path(figure).name}]({Path(figure).relative_to(Path(manifest.get('output', '.')) if manifest.get('output') else Path(figure).parent.parent)})")
         except ValueError: lines.append(f"- `{figure}`")

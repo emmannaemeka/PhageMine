@@ -10,6 +10,15 @@ from typing import Any
 from .models import Evidence, Protein
 
 FUSION_RULES_VERSION = "1.2"
+EVIDENCE_HIERARCHY_VERSION = "1.0"
+DISPLAY_STATES = {
+    "KNOWN_FUNCTION": "Specific function strongly supported",
+    "PROBABLE_FUNCTION": "Likely function supported by evidence",
+    "FUNCTIONAL_CLASS_ONLY": "Protein domain detected; full function unknown",
+    "CONSERVED_UNKNOWN": "Conserved in phages; function unknown",
+    "UNRESOLVED": "No reliable function identified",
+    "CONFLICTING_EVIDENCE": "Conflicting evidence; review required",
+}
 MODALITY_FAMILIES = {
     "Pfam": "DOMAIN", "domain": "DOMAIN",
     "Swiss-Prot": "CURATED_SEQUENCE_HOMOLOGY", "sequence_homology": "CURATED_SEQUENCE_HOMOLOGY",
@@ -245,11 +254,41 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         interpretation = "Viral/phage orthology supports conservation, but the biological function remains unknown."
     else:
         interpretation = "Predicted coding sequence with no accepted functional or conservation evidence; function remains unknown."
+    strength_rank = {"EXPERIMENTAL": 4, "STRONG": 3, "MODERATE": 2, "WEAK": 1, None: 0}
+    source_rank = {"PHROGs": 4, "VOGDB": 3, "Swiss-Prot": 2, "Pfam": 1}
+    ranked_evidence = sorted(
+        accepted,
+        key=lambda e: (-strength_rank.get(e.evidence_strength, 0), -source_rank.get(e.source, 0), str(e.identifier or e.family_name or "")),
+    )
+    best = ranked_evidence[0] if ranked_evidence else None
+    best_evidence = (
+        f"{best.source}:{best.identifier or best.family_name or 'match'}"
+        + (f" — {best.description}" if best.description else "")
+        if best else "No accepted evidence"
+    )
+    review_flag = "REVIEW_REQUIRED" if state in {"CONFLICTING_EVIDENCE", "UNRESOLVED"} else "NONE"
+    experimental = any(e.evidence_strength == "EXPERIMENTAL" or e.level.value == "experimentally established" for e in accepted)
+    if experimental and selected_product:
+        evidence_tier, evidence_tier_label = 1, "Experimentally supported database evidence"
+    elif state == "KNOWN_FUNCTION":
+        evidence_tier, evidence_tier_label = 2, "Curated and independently corroborated function"
+    elif state == "PROBABLE_FUNCTION" and len(supporting_sources) >= 2:
+        evidence_tier, evidence_tier_label = 3, "Independent computational sources support the same function"
+    elif state in {"PROBABLE_FUNCTION", "FUNCTIONAL_CLASS_ONLY"}:
+        evidence_tier, evidence_tier_label = 4, "Single-source function or protein-domain support"
+    elif state == "CONSERVED_UNKNOWN":
+        evidence_tier, evidence_tier_label = 5, "Phage conservation established; function unknown"
+    else:
+        evidence_tier, evidence_tier_label = 6, "Function unresolved or conflicting"
     return {
         "protein_id": protein.protein_id, "functional_state": state,
+        "display_classification": DISPLAY_STATES[state],
         "proposed_function": selected_product, "normalized_function": selected_product,
         "display_product": display_product, "domain_summary": domain_summary,
         "scientific_interpretation": interpretation,
+        "best_evidence": best_evidence, "review_flag": review_flag,
+        "evidence_tier": evidence_tier, "evidence_tier_label": evidence_tier_label,
+        "evidence_hierarchy_version": EVIDENCE_HIERARCHY_VERSION,
         "functional_category": categories[0] if len(categories) == 1 else ("; ".join(categories) if categories else None),
         "confidence": confidence, "confidence_reasons": reasons,
         "conservation_status": conservation,
@@ -272,7 +311,7 @@ def write_classification(root: str | Path, proteins: list[Protein], results: lis
     by_id = {p.protein_id: p for p in proteins}
     path = Path(root)
     (path / "functional_classification.json").write_text(json.dumps(results, indent=2, sort_keys=True))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "proposed_function", "display_product", "domain_summary", "functional_category", "confidence", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "display_classification", "proposed_function", "display_product", "confidence", "evidence_tier", "evidence_tier_label", "best_evidence", "review_flag", "domain_summary", "functional_category", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
     with (path / "functional_classification.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()

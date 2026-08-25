@@ -35,6 +35,40 @@ def test_compare_genomes_writes_ranked_conservative_results(tmp_path, monkeypatc
     assert payload["matches"][0]["interpretation"] == "SCREENING_ONLY_REQUIRES_CONFIRMATORY_ALIGNMENT_OR_ANI"
     rows = list(csv.DictReader((tmp_path / "output" / "inphared_nearest_phages.tsv").open(), delimiter="\t"))
     assert rows[0]["host_genus"] == "Pseudomonas"
+    summary = list(csv.DictReader((tmp_path / "output" / "inphared_summary.tsv").open(), delimiter="\t"))
+    assert summary[0]["relationship"] == "NEAREST_NEIGHBOUR_SCREEN"
+
+
+def test_compare_genomes_groups_duplicate_accessions_and_labels_exact_sketch_match(tmp_path, monkeypatch):
+    mash = tmp_path / "mash"; mash.write_text("fixture")
+    index = tmp_path / "inphared.msh"; index.write_bytes(b"index")
+    metadata = tmp_path / "genome_metadata.tsv"
+    metadata.write_text(
+        "accession\tdescription\tgenome_length_kb\tgc_percent\tphage_genus\tphage_subfamily\tphage_family\thost_genus\tsource_database\tsource_release\n"
+        "GB1\tPhage Ijeoma\t42\t50\tJerseyvirus\tGuernseyvirinae\tSarkviridae\tSalmonella\tINPHARED\t2026-04-07\n"
+        "RS1\tPhage Ijeoma\t42\t50\tJerseyvirus\tGuernseyvirinae\tSarkviridae\tSalmonella\tINPHARED\t2026-04-07\n"
+    )
+    query = tmp_path / "query.fna"; query.write_text(">query\nACGT\n")
+    monkeypatch.setattr("phagemine.inphared.subprocess.run", lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout="GB1\tq\t0\t0\t1000/1000\nRS1\tq\t0\t0\t1000/1000\n", stderr=""))
+    payload = compare_genomes({"Ijeoma": query}, mash_index=index, metadata=metadata, output=tmp_path / "output", mash=str(mash))
+    assert len(payload["matches"]) == 2
+    assert len(payload["unique_reference_summaries"]) == 1
+    summary = payload["unique_reference_summaries"][0]
+    assert summary["relationship"] == "EXACT_MASH_SKETCH_MATCH"
+    assert summary["reference_accessions"] == "GB1;RS1"
+
+
+def test_compare_genomes_confirms_rotation_equivalent_reference_sequence(tmp_path, monkeypatch):
+    mash=tmp_path/"mash"; mash.write_text("fixture")
+    index=tmp_path/"inphared.msh"; index.write_bytes(b"index")
+    metadata=tmp_path/"metadata.tsv"; metadata.write_text("accession\tdescription\tphage_genus\tphage_subfamily\tphage_family\thost_genus\nREF1\tReference\tTestvirus\t\t\tHost\n")
+    reference=tmp_path/"references.fna"; reference.write_text(">REF1\nAAACCCGGG\n")
+    query=tmp_path/"query.fna"; query.write_text(">query\nCCCGGGAAA\n")
+    monkeypatch.setattr("phagemine.inphared.subprocess.run",lambda *_args,**_kwargs:SimpleNamespace(returncode=0,stdout="REF1\tq\t0\t0\t1000/1000\n",stderr=""))
+    payload=compare_genomes({"sample":query},mash_index=index,metadata=metadata,output=tmp_path/"out",mash=str(mash),reference_fasta=reference)
+    match=payload["matches"][0]
+    assert match["sequence_confirmation"]=="CONFIRMED_ROTATION_EQUIVALENT_SEQUENCE"
+    assert payload["unique_reference_summaries"][0]["relationship"]=="CONFIRMED_SEQUENCE_EQUIVALENT_REFERENCE"
 
 
 def test_batch_resolves_only_validated_comparative_resources(monkeypatch):
