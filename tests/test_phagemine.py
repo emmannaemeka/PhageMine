@@ -15,7 +15,7 @@ from phagemine.genome import predict_orfs, translate
 from phagemine.gene_prediction import DemoORFPredictor, PHANOTATEPredictor
 from phagemine.io import read_fasta
 from phagemine.models import Evidence, EvidenceLevel, Protein
-from phagemine.pipeline import run
+from phagemine.pipeline import _evidence_progress_summary, run
 from phagemine.genbank import feature_table, product_name, table2asn_status, validate, write_package
 from phagemine.annotation import MockEvidenceBackend
 from phagemine.cli import main
@@ -27,23 +27,25 @@ from phagemine.vog import VOGHMMAdapter
 from phagemine.phrogs import MMSEQS_FORMAT, PHROGSMMseqsAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
-from phagemine.resume import _load_source, RESUME_STAGES, checkpoint_reusable
+from phagemine.resume import _load_source, RESUME_STAGES, checkpoint_reusable, reclassify
 from phagemine.fusion import classify_protein, classify_proteins, normalize_function, write_classification
 from phagemine.context import build_context, write_context
 from phagemine.compare import compare
 from phagemine.batch import discover_inputs, batch
-from phagemine.reconciliation import GeneModel, reconcile_models
+from phagemine.reconciliation import GeneModel, gene_call_review, reconcile_models
 from phagemine.adjudication import adjudicate
 from phagemine.alternative_evidence import alternative_models, extract_translation, cache_key
 from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.phrogs import PHROGSMMseqsAdapter
-from phagemine.benchmark import import_prokka, import_pharokka, import_phagemine, compare_models, metrics
-from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts
+from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics, classify_product_relation
+from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts, update_comparative_report
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
+from phagemine.hallmarks import assess_hallmarks
+from phagemine.review import build_annotation_review
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +53,33 @@ RESUME_SOURCE_FIXTURE = ROOT / "tests" / "fixtures" / "resume_source"
 
 
 class PhageMineTests(unittest.TestCase):
+    def test_hoc_like_product_is_preserved_with_separate_display_note(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("PHROGs", "Hoc-like head decoration", identifier="phrog_2973")
+        ]))
+        self.assertEqual(result["display_product"], "hoc-like head decoration protein")
+        self.assertIn("capsid-display candidate", result["biotechnology_relevance"])
+
+    def test_major_head_synonym_normalizes_to_major_capsid(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("PHROGs", "major head protein", identifier="phrog_247")
+        ]))
+        self.assertEqual(result["display_product"], "major capsid protein")
+
+    def test_primary_html_receives_completed_inphared_numerical_taxonomy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root / "report.html").write_text("<html><body><h1>Report</h1></body></html>")
+            update_comparative_report(root, {"inphared": {"unique_reference_summaries": [{
+                "reference_description": "Reference phage", "reference_accessions": "AB123",
+                "host_genus": "Salmonella", "phage_family": "Sarkviridae", "phage_genus": "Jerseyvirus",
+                "intergenomic_similarity_percent": 96.2, "query_aligned_percent": 99.0,
+                "reference_aligned_percent": 98.0, "taxonomic_interpretation": "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD",
+            }]}})
+            report = (root / "report.html").read_text()
+            self.assertIn("Whole-genome numerical taxonomy", report)
+            self.assertIn("96.20%", report)
+            self.assertIn("Mash distance is not converted to similarity", report)
+
     def test_orf_reconciliation_boundary_and_strand_categories(self):
         p=GeneModel("PHANOTATE","P1",100,400,"+")
         self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",100,400,"+")])[0]["conflict_type"],"EXACT_CONCORDANCE")
@@ -63,6 +92,37 @@ class PhageMineTests(unittest.TestCase):
         p=GeneModel("PHANOTATE","P1",100,400,"+"); d=GeneModel("Prodigal","D1",800,1000,"+")
         rows=reconcile_models([p],[d]); self.assertEqual({r["conflict_type"] for r in rows},{"PHANOTATE_ONLY","PRODIGAL_ONLY"})
         self.assertEqual(rows,reconcile_models([p],[d]))
+
+    def test_orf_reconciliation_handles_unsorted_prodigal_models(self):
+        phanotate=[GeneModel("PHANOTATE","P1",100,400,"+")]
+        prodigal=[GeneModel("Prodigal","D2",800,1000,"+"),GeneModel("Prodigal","D1",100,400,"+")]
+        rows=reconcile_models(phanotate,prodigal)
+        self.assertEqual(rows[0]["prodigal_id"],"D1")
+        self.assertEqual([row["prodigal_id"] for row in rows if row["conflict_type"]=="PRODIGAL_ONLY"],["D2"])
+
+    def test_gene_call_review_flags_short_unsupported_caller_specific_orf(self):
+        rows=reconcile_models([GeneModel("PHANOTATE","P1",100,180,"+")],[])
+        review=gene_call_review(rows, {"P1": []}, {"P1": 27})[0]
+        self.assertEqual(review["gene_call_confidence"], "LOW")
+        self.assertEqual(review["review_flag"], "POSSIBLE_FALSE_CALL")
+
+    def test_gene_call_review_preserves_exact_concordant_orf(self):
+        rows=reconcile_models([GeneModel("PHANOTATE","P1",100,400,"+")],[GeneModel("Prodigal","D1",100,400,"+")])
+        review=gene_call_review(rows, {}, {"P1": 100})[0]
+        self.assertEqual(review["gene_call_confidence"], "HIGH")
+        self.assertEqual(review["review_flag"], "NONE")
+
+    def test_hallmark_check_never_converts_non_detection_to_absence(self):
+        rows=assess_hallmarks([{"protein_id":"P1","functional_state":"PROBABLE_FUNCTION","display_product":"major capsid protein","confidence":"MODERATE"}])
+        by_name={row["hallmark"]:row for row in rows}
+        self.assertEqual(by_name["major_capsid"]["status"],"DETECTED")
+        self.assertEqual(by_name["portal"]["status"],"NOT_ESTABLISHED")
+        self.assertIn("not evidence of biological absence",by_name["portal"]["interpretation"])
+
+    def test_annotation_review_combines_function_gene_call_and_hallmark_flags(self):
+        protein=self._fusion_protein(); classification=classify_protein(protein)
+        review=build_annotation_review([protein],[classification],[{"review_flag":"POSSIBLE_FALSE_CALL","protein_id":"P","phanotate_id":"P","gene_call_confidence":"LOW","rationale":"short unsupported"}],[{"hallmark":"major_capsid","status":"NOT_ESTABLISHED","interpretation":"not established"}])
+        self.assertEqual({row["review_type"] for row in review},{"FUNCTION_ASSIGNMENT","GENE_CALL","HALLMARK_NOT_ESTABLISHED"})
 
     def test_orf_adjudication_is_observational_and_model_specific(self):
         row=reconcile_models([GeneModel("PHANOTATE","P1",100,400,"+")],[GeneModel("Prodigal","D1",130,400,"+")])[0]
@@ -199,6 +259,19 @@ class PhageMineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             g=Path(temp)/"x.gff"; g.write_text("##gff-version 3\ng\tProkka\tCDS\t100\t400\t.\t+\t0\tID=x1;product=hypothetical protein\n")
             a=import_prokka(g); b=import_pharokka(g); self.assertEqual(compare_models(a,b)[0]["relationship"],"EXACT_MATCH"); self.assertEqual(metrics(a,b)["exact_f1"],1.0)
+
+    def test_benchmark_imports_phold_genbank_and_compares_products(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); gbk=root/"phold.gbk"
+            gbk.write_text('LOCUS       test\nFEATURES             Location/Qualifiers\n     CDS             complement(100..400)\n                     /locus_tag="P1"\n                     /product="major capsid protein"\n                     /translation="MPEP\n                     TIDE"\nORIGIN\n//\n')
+            phold=import_phold(gbk)
+            self.assertEqual((phold[0]["start"],phold[0]["end"],phold[0]["strand"]),(100,400,"-"))
+            self.assertEqual(phold[0]["product"],"major capsid protein")
+            self.assertEqual(phold[0]["protein_length"],8)
+            other=[{**phold[0],"tool":"PHAGEMINE","locus_id":"PM_1","product":"putative major capsid protein"}]
+            benchmark({"PHAGEMINE":other,"Phold":phold},root/"comparison")
+            rows=list(csv.DictReader((root/"comparison"/"functional_comparison.tsv").open(),delimiter="\t"))
+            self.assertEqual(rows[0]["status"],"EXACT_PRODUCT_AGREEMENT")
 
     def test_benchmark_exact_match_precedes_boundary_contact(self):
         a=[{'start':2,'end':313,'strand':'-','locus_id':'A'},{'start':313,'end':894,'strand':'-','locus_id':'B'}]
@@ -454,6 +527,9 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(orthology_pair["supporting_modality_count"], 2)
         known = classify_protein(self._fusion_protein([self._fusion_e("Swiss-Prot", "major capsid protein"), self._fusion_e("PHROGs", "Major capsid protein {ECO:0001}", identifier="y")]))
         self.assertEqual(known["functional_state"], "KNOWN_FUNCTION")
+        self.assertEqual(known["display_classification"], "Specific function strongly supported")
+        self.assertIn("PHROGs:y", known["best_evidence"])
+        self.assertEqual((known["evidence_tier"],known["evidence_tier_label"]),(2,"Curated and independently corroborated function"))
         broad = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "unknown function", category="head and packaging")]))
         self.assertEqual(broad["functional_state"], "FUNCTIONAL_CLASS_ONLY")
         unresolved = classify_protein(self._fusion_protein())
@@ -517,6 +593,31 @@ class PhageMineTests(unittest.TestCase):
         self.assertIsNone(result["proposed_function"])
         self.assertEqual(result["functional_state"], "CONSERVED_UNKNOWN")
 
+    def test_fusion_never_promotes_domain_only_evidence_to_probable_function(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "Anthrax toxin lethal factor, middle domain"),
+        ]))
+        self.assertEqual(result["functional_state"], "FUNCTIONAL_CLASS_ONLY")
+        self.assertIsNone(result["proposed_function"])
+        self.assertEqual(result["display_product"], "hypothetical protein")
+        self.assertIsNone(result["domain_summary"])
+
+    def test_fusion_suppresses_taxon_specific_products_but_preserves_raw_evidence(self):
+        for unsafe in ("Interferon gamma", "Apolipoprotein CIII", "Centromere kinetochore component CENP-T", "Male sterility protein"):
+            evidence = self._fusion_e("VOGDB", unsafe)
+            result = classify_protein(self._fusion_protein([evidence]))
+            self.assertNotEqual(result["functional_state"], "PROBABLE_FUNCTION")
+            self.assertIsNone(result["proposed_function"])
+            self.assertEqual(evidence.description, unsafe)
+
+    def test_probable_function_always_has_a_defensible_product(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("PHROGs", "portal protein"),
+            self._fusion_e("VOGDB", "major capsid protein"),
+        ]))
+        self.assertNotEqual(result["functional_state"], "PROBABLE_FUNCTION")
+        self.assertIsNone(result["proposed_function"])
+
     def test_fusion_outputs_cover_integration_fixture(self):
         proteins = [self._fusion_protein() for _ in range(99)]
         for i, protein in enumerate(proteins, 1): protein.protein_id = f"P{i:03d}"
@@ -556,6 +657,120 @@ class PhageMineTests(unittest.TestCase):
         result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "DNA-dependent RNA polymerase"), self._fusion_e("VOGDB", "T7 RNA polymerase")]))
         self.assertNotEqual(result["functional_state"], "CONFLICTING_EVIDENCE")
         self.assertTrue(result["ambiguity_flags"])
+
+    def test_fusion_quantitative_phrogs_winner_drives_product_and_best_evidence(self):
+        weak = self._fusion_e("PHROGs", "head closure Hc1", identifier="phrog_161")
+        weak.metrics.update({"percent_identity": 0.31, "query_coverage": 0.55, "bit_score": 80, "evalue": 1e-18})
+        winner = self._fusion_e("PHROGs", "tail completion or Neck1 protein", identifier="phrog_17193")
+        winner.metrics.update({"percent_identity": 0.849, "query_coverage": 0.95, "bit_score": 231, "evalue": 2.5e-68})
+        result = classify_protein(self._fusion_protein([weak, winner]))
+        self.assertEqual(result["proposed_function"], "tail completion or neck1 protein")
+        self.assertIn("phrog_17193", result["best_evidence"])
+        self.assertEqual(len(result["product_alternatives"]), 2)
+
+    def test_fusion_phrogs_major_head_normalizes_to_major_capsid(self):
+        evidence = self._fusion_e("PHROGs", "major head protein", identifier="phrog_247")
+        evidence.metrics.update({"percent_identity": 0.546, "query_coverage": 0.9, "bit_score": 397, "evalue": 1e-118})
+        result = classify_protein(self._fusion_protein([evidence]))
+        self.assertEqual(result["proposed_function"], "major capsid protein")
+
+    def test_fusion_hoc_product_is_separate_from_immunoglobulin_domain_note(self):
+        phrog = self._fusion_e("PHROGs", "Hoc-like head decoration", identifier="phrog_2973")
+        phrog.metrics.update({"percent_identity": 0.772, "query_coverage": 0.9, "bit_score": 212, "evalue": 3e-63})
+        result = classify_protein(self._fusion_protein([phrog, self._fusion_e("Pfam", "immunoglobulin I-set domain")]))
+        self.assertEqual(result["proposed_function"], "hoc-like head decoration protein")
+        self.assertIn("immunoglobulin", result["domain_summary"])
+        self.assertIn("capsid-display", result["biotechnology_relevance"])
+
+    def test_fusion_suppresses_ijeoma_taxon_inappropriate_domain_summaries(self):
+        for description in (
+            "fungal deubiquitinating enzyme PH domain",
+            "apoptosis antagonizing transcription factor",
+            "spore coat protein U domain",
+            "protein involved in starch initiation 1 C-terminal domain",
+            "ZNF598 C2H2 zinc finger domain",
+            "queuosine salvage protein",
+        ):
+            result = classify_protein(self._fusion_protein([self._fusion_e("Pfam", description)]))
+            self.assertNotIn(description.lower(), result["display_product"])
+
+    def test_ijeoma_diagnostic_domain_and_compatible_function_rules(self):
+        polymerase = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "DNA polymerase family A")
+        ]))
+        self.assertEqual(polymerase["proposed_function"], "family-a dna polymerase")
+        self.assertEqual(polymerase["confidence"], "MODERATE")
+
+        resolvase_phrog = self._fusion_e("PHROGs", "Holliday junction resolvase", identifier="phrog_5702")
+        resolvase_phrog.metrics.update({"percent_identity": 0.648, "query_coverage": 0.8, "bit_score": 120, "evalue": 4e-23})
+        endonuclease = self._fusion_e("PHROGs", "endonuclease", identifier="phrog_93")
+        endonuclease.metrics.update({"percent_identity": 0.7, "query_coverage": 0.9, "bit_score": 140, "evalue": 1e-30})
+        resolvase = classify_protein(self._fusion_protein([
+            resolvase_phrog, endonuclease, self._fusion_e("Pfam", "VRR-Nuc domain")
+        ]))
+        self.assertEqual(resolvase["proposed_function"], "holliday junction resolvase")
+        self.assertIn("VRR-Nuc", resolvase["diagnostic_domain_rule"])
+
+    def test_ijeoma_regulatory_and_ssdna_rules(self):
+        excisionase = self._fusion_e("PHROGs", "excisionase and transcriptional regulator", identifier="phrog_66", category="integration and excision")
+        terminase = self._fusion_e("VOGDB", "terminase small subunit", identifier="VOG04175")
+        result = classify_protein(self._fusion_protein([
+            excisionase, terminase, self._fusion_e("Pfam", "helix-turn-helix domain")
+        ]))
+        self.assertEqual(result["proposed_function"], "excisionase and transcriptional regulator")
+        self.assertTrue(result["conflict_resolved_by_corroboration"])
+        ssdna = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "Enterobacter phage Enc34, ssDNA-binding protein")
+        ]))
+        self.assertEqual(ssdna["proposed_function"], "single-stranded dna-binding protein")
+        self.assertEqual(ssdna["confidence"], "LOW")
+
+    def test_ijeoma_unsafe_mixed_domains_are_rewritten_and_short_enzyme_orf_flagged(self):
+        ninh = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "phage NinH protein"),
+            self._fusion_e("Pfam", "transposase"),
+        ]))
+        self.assertEqual(ninh["display_product"], "hypothetical protein containing ninh-like domain")
+        short = self._fusion_protein([self._fusion_e("Pfam", "P-type ATPase actuator domain and DISARM protein DrmE, C-terminal domain")])
+        short.sequence = "M" * 63
+        result = classify_protein(short)
+        self.assertEqual(result["display_product"], "hypothetical protein containing atpase-related domain")
+        self.assertEqual(result["review_flag"], "POSSIBLE_PARTIAL_OR_FALSE_ORF")
+
+    def test_context_refinement_never_invents_minor_tail_without_candidate(self):
+        proteins=[]
+        for index,(description,start) in enumerate((("tail protein",1),("unknown function",301),("minor tail protein",601)),1):
+            evidence=self._fusion_e("PHROGs",description,identifier=f"p{index}")
+            protein=self._fusion_protein([evidence]); protein.protein_id=f"P{index}"; protein.start=start; protein.end=start+299
+            proteins.append(protein)
+        results=classify_proteins(proteins)
+        self.assertEqual(results[1]["proposed_function"],"putative tail-associated protein")
+        self.assertEqual(results[1]["confidence"],"LOW")
+        self.assertEqual(results[1]["context_support"]["module"],"tail")
+
+    def test_context_refinement_uses_minor_tail_only_when_candidate_exists(self):
+        left=self._fusion_protein([self._fusion_e("PHROGs","tail protein")]); left.protein_id="P1"; left.start=1; left.end=300
+        target=self._fusion_protein([
+            self._fusion_e("PHROGs","minor tail protein",identifier="minor"),
+            self._fusion_e("VOGDB","portal protein",identifier="portal"),
+        ]); target.protein_id="P2"; target.start=301; target.end=600
+        right=self._fusion_protein([self._fusion_e("PHROGs","tail terminator")]); right.protein_id="P3"; right.start=601; right.end=900
+        result=classify_proteins([left,target,right])[1]
+        self.assertEqual(result["proposed_function"],"putative minor tail protein")
+
+    def test_specific_head_morphogenesis_term_beats_broad_head_term(self):
+        broad=self._fusion_e("PHROGs","head protein",identifier="broad")
+        broad.metrics.update({"percent_identity":0.6,"query_coverage":0.9,"bit_score":220,"evalue":1e-60})
+        specific=self._fusion_e("PHROGs","head morphogenesis",identifier="specific")
+        specific.metrics.update({"percent_identity":0.42,"query_coverage":0.8,"bit_score":180,"evalue":1e-50})
+        result=classify_protein(self._fusion_protein([broad,specific]))
+        self.assertEqual(result["proposed_function"],"head morphogenesis protein")
+
+    def test_benchmark_product_semantics_do_not_reward_domain_verbosity(self):
+        self.assertEqual(classify_product_relation("major capsid protein","major head protein"),"EXACT_PRODUCT_AGREEMENT")
+        self.assertEqual(classify_product_relation("conserved phage protein of unknown function","hypothetical protein"),"BOTH_FUNCTION_UNKNOWN")
+        self.assertEqual(classify_product_relation("hypothetical protein containing ASCH domain","hypothetical protein"),"PHAGEMINE_DOMAIN_INFORMATION_ONLY")
+        self.assertEqual(classify_product_relation("single-stranded DNA-binding protein","Gp2.5-like ssDNA binding protein and ssDNA annealing protein"),"EQUIVALENT_FUNCTION")
 
     def test_fusion_resume_output_layer_regenerates_both_files(self):
         proteins = [self._fusion_protein()]
@@ -604,6 +819,30 @@ class PhageMineTests(unittest.TestCase):
             (source / "evidence.json").unlink()
             with self.assertRaisesRegex(ValueError, "missing source artifacts"):
                 _load_source(source)
+
+    def test_reclassify_reuses_evidence_without_database_adapters(self):
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.phrogs.PHROGSMMseqsAdapter.analyze") as phrogs, \
+             patch("phagemine.swissprot.SwissProtEvidenceAdapter.analyze") as swissprot, \
+             patch("phagemine.pfam.PfamHMMAdapter.analyze") as pfam, \
+             patch("phagemine.vog.VOGHMMAdapter.analyze") as vog:
+            output = Path(temp) / "reclassified"
+            count = reclassify(RESUME_SOURCE_FIXTURE, output)
+            self.assertEqual(count, 2)
+            self.assertTrue((output / "annotation.tsv").is_file())
+            self.assertTrue((output / "functional_classification.json").is_file())
+            self.assertTrue((output / "annotated_proteins.faa").is_file())
+            self.assertTrue((output / "genbank_submission").is_dir())
+            self.assertFalse(phrogs.called or swissprot.called or pfam.called or vog.called)
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["command"], "reclassify")
+            self.assertEqual(manifest["reclassification"]["database_searches_run"], [])
+
+    def test_reclassify_cli_is_visible_and_requires_new_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "reclassified"
+            self.assertEqual(main(["reclassify", str(RESUME_SOURCE_FIXTURE), "--output", str(output)]), 0)
+            self.assertTrue((output / "annotation.tsv").is_file())
     def test_progress_stage_transitions_and_non_tty_output(self):
         stream = StringIO()
         progress = ProgressReporter(stream=stream)
@@ -613,6 +852,43 @@ class PhageMineTests(unittest.TestCase):
         self.assertIn("RUNNING: Pfam", text)
         self.assertIn("DONE: Pfam", text)
         self.assertIn("2 accepted hits", text)
+
+    def test_unavailable_evidence_progress_is_not_reported_as_zero_hits(self):
+        result = EvidenceAdapterResult(
+            "PfamHMMAdapter",
+            "UNAVAILABLE",
+            message="Pfam/HMMER unavailable; no domain evidence was fabricated.",
+        )
+        summary = _evidence_progress_summary(result, "Pfam/HMMER unavailable")
+        self.assertIn("UNAVAILABLE", summary)
+        self.assertNotIn("0 accepted hits", summary)
+
+    def test_completed_zero_hit_search_remains_distinct_from_unavailable(self):
+        result = EvidenceAdapterResult("PfamHMMAdapter", "SUCCESS_NO_HIT")
+        summary = _evidence_progress_summary(result, "Pfam/HMMER unavailable")
+        self.assertEqual(summary, "0 accepted hits / 0 proteins")
+
+    def test_single_run_consumes_registered_pmfdb_and_inphared_resources(self):
+        from phagemine.resources import ResourceType
+        def registered(_manager, kind):
+            if kind == ResourceType.PMFDB:
+                return {"path": "/db/pmfdb", "resource_type": "PMFDB"}
+            if kind == ResourceType.INPHARED_GENOMES:
+                return {"path": "/db/inphared", "resource_type": "INPHARED_GENOMES", "provenance": {}}
+            return None
+        comparative = {"pmfdb": {"status": "COMPLETE"}, "inphared": {"status": "COMPLETE", "matches": []}}
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.resources.EvidenceResourceManager.find", new=registered), \
+             patch("phagemine.discovery.build_discovery_outputs", return_value=comparative) as build:
+            output = Path(temp) / "run"
+            run(ROOT / "examples/demo_phage.fasta", output, command="run", predictor=DemoORFPredictor())
+            self.assertTrue(build.called)
+            kwargs = build.call_args.kwargs
+            self.assertEqual(kwargs["pmfdb"], "/db/pmfdb")
+            self.assertEqual(kwargs["inphared"]["resource_type"], "INPHARED_GENOMES")
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["comparative_analysis"]["pmfdb"]["status"], "COMPLETE")
+            self.assertEqual(manifest["comparative_analysis"]["inphared"]["status"], "COMPLETE")
 
     def test_progress_quiet_mode(self):
         stream = StringIO()
@@ -628,6 +904,17 @@ class PhageMineTests(unittest.TestCase):
             run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor(), progress=ProgressReporter(stream=StringIO()))
             self.assertNotIn("RUNNING", (output / "run_manifest.json").read_text())
             self.assertNotIn("DONE", (output / "annotation.tsv").read_text())
+
+    def test_run_defaults_to_current_directory_and_orf_reconciliation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            fasta=Path(temp)/"ijeoma.fasta"; fasta.write_text(">Ijeoma\nATGAAATAG\n")
+            captured={}
+            def fake_run(*args, **kwargs):
+                captured["output"]=args[1]; captured["reconcile_orfs"]=kwargs["reconcile_orfs"]; return 1
+            with patch("phagemine.cli.run", side_effect=fake_run), patch("phagemine.preflight.preflight_resources"), patch("phagemine.cli.Path.cwd", return_value=Path(temp)):
+                self.assertEqual(main(["run",str(fasta),"--gene-predictor","demo","--quiet"]),0)
+            self.assertEqual(captured["output"],str(Path(temp)/"ijeoma_phagemine_results"))
+            self.assertTrue(captured["reconcile_orfs"])
     def test_translation(self):
         self.assertEqual(translate("ATGGCTTAA"), "MA")
 
@@ -653,8 +940,13 @@ class PhageMineTests(unittest.TestCase):
             output = Path(temp) / "run"
             count = run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
             self.assertEqual(count, 5)
-            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
+            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "annotated_proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "hallmark_completeness.tsv", "annotation_review.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
                 self.assertTrue((output / filename).exists(), filename)
+            with (output / "annotation.tsv").open() as handle:
+                self.assertEqual(next(csv.reader(handle, delimiter="\t")), ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function", "EC_number", "classification", "confidence", "evidence_sources", "best_evidence", "biotechnology_relevance", "review_flag"])
+            named_headers=[line for line in (output / "annotated_proteins.faa").read_text().splitlines() if line.startswith(">")]
+            self.assertEqual(len(named_headers), count)
+            self.assertTrue(all(" product=\"" in line and " coordinates=" in line and " strand=" in line for line in named_headers))
             report = (output / "report.md").read_text()
             self.assertIn("Computational hypothesis only", report)
             evidence = json.loads((output / "evidence.json").read_text())
@@ -771,9 +1063,8 @@ class PhageMineTests(unittest.TestCase):
             gff = (output / "genes.gff3").read_text()
             self.assertIn(representation.analysis_sequence_id + "\tPhageMine\tCDS", gff)
             self.assertIn("Analysis sequence", (output / "report.md").read_text())
-            annotations = (output / "annotation.tsv").read_text()
-            self.assertIn("analysis_sequence_id", annotations)
-            self.assertIn(representation.analysis_sequence_id, annotations)
+            annotations = list(csv.DictReader((output / "annotation.tsv").open(), delimiter="\t"))
+            self.assertTrue(all(row["start"] and row["end"] and row["strand"] for row in annotations))
 
     def test_illumina_provenance(self):
         provenance = SequencingProvenance.from_dict({"sequencing_platform": "ILLUMINA", "assembler": "SPAdes"})
@@ -1060,6 +1351,12 @@ class PhageMineTests(unittest.TestCase):
         result = SwissProtEvidenceAdapter("/missing/db.dmnd", diamond="/missing/diamond").analyze([])
         self.assertEqual(result.status, "UNAVAILABLE")
         self.assertEqual(result.evidence, [])
+
+    def test_swissprot_diamond_fields_precede_threads_option(self):
+        adapter = SwissProtEvidenceAdapter("swissprot.dmnd", diamond="diamond", threads=4)
+        command = adapter._search_command(Path("proteins.faa"), Path("diamond.tsv"))
+        self.assertLess(command.index("bitscore"), command.index("--threads"))
+        self.assertEqual(command[command.index("--threads") + 1], "4")
 
     @pytest.mark.integration
     def test_pipeline_manifest_marks_pfam_unavailable_and_no_mock_by_default(self):

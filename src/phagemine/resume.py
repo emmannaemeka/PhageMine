@@ -16,10 +16,10 @@ from .genbank import write_package
 from .io import checksum, read_fasta
 from .mining import mine, ranked_candidates
 from .models import Evidence, EvidenceLevel, Protein
-from .phrogs import PHROGSMMseqsAdapter
+from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
 from .progress import ProgressReporter
 from .quality import assess
-from .reporting import write_outputs
+from .reporting import update_comparative_report, write_outputs
 from .resources import EvidenceResourceManager, ResourceType
 from .sequencing_provenance import SequencingProvenance
 from .fusion import classify_proteins
@@ -28,6 +28,83 @@ from .context import build_context
 
 REUSED = ("input/genome validation", "genome representation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot")
 RESUME_STAGES = REUSED + ("PHROGs", "evidence integration", "candidate ranking/mining", "QC/report generation", "GenBank package")
+
+
+def reclassify(source: str | Path, output: str | Path,
+               progress: ProgressReporter | None = None) -> int:
+    """Regenerate annotation products from persisted evidence without searches.
+
+    This is intentionally separate from ``resume``: resume acquires missing or
+    explicitly refreshed evidence, whereas reclassify never instantiates or
+    invokes an evidence adapter.
+    """
+    source, output = Path(source).resolve(), Path(output).resolve()
+    if source == output or output.exists():
+        raise ValueError("Reclassify output must be a new, non-existent directory")
+    manifest, representation, proteins, _, sequencing = _load_source(source)
+    progress = progress or ProgressReporter(quiet=True)
+    progress.STAGES = ("persisted evidence validation", "functional classification",
+                       "genomic context", "candidate ranking", "report generation",
+                       "GenBank package")
+    progress.start("persisted evidence validation"); progress.finish(f"{len(proteins)} proteins validated")
+    progress.start("functional classification")
+    classifications = classify_proteins(proteins)
+    progress.finish("regenerated without database searches")
+    progress.start("genomic context")
+    context_records, modules = build_context(proteins, classifications)
+    progress.finish("regenerated")
+    progress.start("candidate ranking")
+    mine(proteins); candidates = ranked_candidates(proteins)
+    progress.finish("regenerated")
+    quality = assess(representation.analysis_sequence, proteins)
+    ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(
+        e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"}
+        for protein in candidates for e in protein.evidence
+    ) else "RANKED"
+    new_manifest = {
+        **manifest,
+        "command": "reclassify",
+        "input": str(source / "original_input.fasta"),
+        "input_sha256": checksum(source / "original_input.fasta"),
+        "stage_status": {
+            "input/genome validation": "REUSED", "gene prediction": "REUSED",
+            "Pfam": "REUSED", "VOGDB": "REUSED", "Swiss-Prot": "REUSED",
+            "PHROGs": "REUSED", "functional classification": "RUN",
+            "genomic context/modules": "RUN", "candidate ranking/mining": "RUN",
+            "QC/report generation": "RUN", "GenBank package": "RUN",
+        },
+        "reclassification": {
+            "source": str(source), "database_searches_run": [],
+            "evidence_reused": True, "source_manifest_preserved": True,
+        },
+        "quality_control": quality,
+        "discovery_ranking": {"status": ranking_status,
+                              "message": "Candidates re-ranked from persisted evidence."},
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temp = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(output.parent)))
+    try:
+        progress.start("report generation")
+        write_outputs(temp, representation, sequencing, proteins, candidates,
+                      new_manifest, quality, source / "original_input.fasta",
+                      classifications, context_records, modules)
+        comparative_source = source / "comparative"
+        if comparative_source.is_dir():
+            shutil.copytree(comparative_source, temp / "comparative")
+            inphared_json = temp / "comparative" / "inphared_nearest_phages.json"
+            if inphared_json.is_file():
+                update_comparative_report(temp, {"inphared": json.loads(inphared_json.read_text())})
+        progress.finish("regenerated")
+        progress.start("GenBank package")
+        write_package(temp, representation.analysis_sequence_id,
+                      representation.analysis_sequence, proteins, new_manifest,
+                      sequencing_provenance=sequencing)
+        progress.finish("regenerated")
+        os.replace(temp, output)
+    except Exception:
+        shutil.rmtree(temp, ignore_errors=True)
+        raise
+    return len(proteins)
 
 def checkpoint_reusable(checkpoint: dict, current_provenance: dict | None) -> bool:
     """A previously unavailable resource is never reusable once requested now."""
@@ -168,8 +245,10 @@ def recover_evidence_complete(source: str | Path, progress: ProgressReporter | N
 def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = False,
            refresh_evidence: str | None = None, mmseqs: str | None = None,
            phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None,
+           phrogs_hmm_path: str | Path | None = None,
            phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5,
-           phrogs_score: float | None = None, progress: ProgressReporter | None = None) -> int:
+           phrogs_score: float | None = None, progress: ProgressReporter | None = None,
+           threads: int = 1) -> int:
     source, output = Path(source).resolve(), Path(output).resolve()
     if source == output or output.exists():
         raise ValueError("Resume output must be a new, non-existent directory")
@@ -178,18 +257,26 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
     old_by_name = {item.get("adapter"): item for item in adapters}
     should_run = run_missing_evidence or refresh_evidence == "PHROGS"
     old_phrogs = old_by_name.get("PHROGSMMseqsAdapter", {})
-    if not should_run and old_phrogs.get("status") != "UNAVAILABLE":
+    old_hmm = old_by_name.get("PHROGSPyHMMERAdapter", {})
+    if not should_run and old_phrogs.get("status") != "UNAVAILABLE" and old_hmm.get("status") != "UNAVAILABLE":
         raise ValueError("No missing PHROGs adapter to run; use --refresh-evidence PHROGS to force refresh")
     manager = EvidenceResourceManager()
     registered = manager.find(ResourceType.PHROGS)
+    explicit_hmm = phrogs_hmm_path is not None
     if phrogs_path is None and registered:
-        phrogs_path, phrogs_annotations = registered["path"], phrogs_annotations or registered.get("provenance", {}).get("annotations_path")
+        provenance = registered.get("provenance", {})
+        phrogs_path = registered["path"]
+        phrogs_annotations = phrogs_annotations or provenance.get("annotations_path")
+        phrogs_hmm_path = phrogs_hmm_path or provenance.get("hmm_profiles_path")
     if phrogs_path is None:
         raise ValueError("Resume validation failed; PHROGs database is unavailable")
     phrogs_version = registered.get("version") if registered else None
-    adapter = PHROGSMMseqsAdapter(phrogs_path, phrogs_annotations, mmseqs, phrogs_version, phrogs_evalue, phrogs_coverage, phrogs_score)
-    if not adapter.available():
-        raise ValueError("Resume validation failed; PHROGs MMseqs2 database or executable is unavailable")
+    adapter = PHROGSMMseqsAdapter(
+        phrogs_path, phrogs_annotations, mmseqs, phrogs_version,
+        phrogs_evalue, phrogs_coverage, phrogs_score, threads=threads)
+    hmm_adapter = PHROGSPyHMMERAdapter(
+        phrogs_hmm_path, phrogs_annotations, phrogs_version,
+        phrogs_evalue, phrogs_coverage, phrogs_score, threads=threads)
     progress = progress or ProgressReporter(quiet=True)
     # Resume has its own eleven-stage ledger; normal run progress is unchanged.
     progress.STAGES = RESUME_STAGES
@@ -197,13 +284,24 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
         progress.start(f"REUSED: {stage}"); progress.finish("validated")
     progress.start("PHROGs")
     phrogs_result = adapter.analyze(proteins)
-    if phrogs_result.status != "REAL":
-        raise ValueError(f"PHROGs resume failed: {phrogs_result.message}")
+    hmm_result = hmm_adapter.analyze(proteins)
+    if phrogs_result.status != "REAL" and hmm_result.status != "REAL":
+        raise ValueError(
+            f"PHROGs resume failed: MMseqs2: {phrogs_result.message}; PyHMMER: {hmm_result.message}")
+    if explicit_hmm and hmm_result.status != "REAL":
+        raise ValueError(f"Explicit PHROGs HMM refresh failed: {hmm_result.message}")
+    merged_phrogs = merge_phrogs_evidence(phrogs_result.evidence, hmm_result.evidence)
     by_id = {protein.protein_id: protein for protein in proteins}
-    for evidence in phrogs_result.evidence:
+    # A refresh replaces prior PHROGs calls. Retaining them would silently
+    # duplicate evidence and could overweight the same biological source.
+    for protein in proteins:
+        protein.evidence = [evidence for evidence in protein.evidence if evidence.source != "PHROGs"]
+    for evidence in merged_phrogs:
         protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
         if protein_id in by_id: by_id[protein_id].evidence.append(evidence)
-    progress.finish(f"{sum(e.supports for e in phrogs_result.evidence)} accepted hits")
+    progress.finish(
+        f"{sum(e.supports for e in merged_phrogs)} accepted deduplicated hits; "
+        f"MMseqs2={phrogs_result.state.value}; PyHMMER={hmm_result.state.value}")
     stages = ["evidence integration", "candidate ranking/mining", "QC/report generation", "GenBank package"]
     progress.start("evidence integration")
     progress.finish("integrated")
@@ -218,8 +316,10 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
     quality = assess(representation.analysis_sequence, proteins)
     progress.finish("regenerated")
     stage_status = {stage: "REUSED" for stage in REUSED} | {"PHROGs": "RUN", **{stage: "RUN" for stage in stages}}
-    new_adapters = [item for item in adapters if item.get("adapter") != "PHROGSMMseqsAdapter"]
+    new_adapters = [item for item in adapters if item.get("adapter") not in {
+        "PHROGSMMseqsAdapter", "PHROGSPyHMMERAdapter"}]
     new_adapters.append({"adapter": phrogs_result.adapter, "status": phrogs_result.status, "provenance": phrogs_result.provenance, "message": phrogs_result.message})
+    new_adapters.append({"adapter": hmm_result.adapter, "status": hmm_result.status, "provenance": hmm_result.provenance, "message": hmm_result.message})
     new_manifest = {**manifest, "command": "resume", "input": str(source / "original_input.fasta"), "input_sha256": checksum(source / "original_input.fasta"), "evidence_adapters": new_adapters, "stage_status": stage_status, "resume": {"source": str(source), "reused_stages": [*REUSED], "run_stages": ["PHROGs", *stages]}, "discovery_ranking": {"status": ranking_status, "message": "Candidates ranked by available evidence."}}
     new_manifest["quality_control"] = quality
     temp = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(output.parent)))

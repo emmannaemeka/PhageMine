@@ -497,11 +497,14 @@ class DatabaseInstaller:
         def prepare(stage: Path) -> dict:
             extracted = self._extract_phrogs(archive, stage)
             primary = stage / "phrogs_profile_db"
+            hmm_profiles = stage / "all_phrogs.h3m"
             annotations = stage / "phrog_annot_v4.tsv"
             if not primary.is_file() or not Path(str(primary) + ".dbtype").is_file():
                 raise DatabaseInstallError("PHROGs bundle does not contain a prepared MMseqs2 profile database")
             if not annotations.is_file():
                 raise DatabaseInstallError("PHROGs bundle does not contain phrog_annot_v4.tsv")
+            if not hmm_profiles.is_file():
+                raise DatabaseInstallError("PHROGs bundle does not contain all_phrogs.h3m")
             return {
                 "primary_path": primary.name,
                 "source_artifacts": [{"url": PHROGS_URL, "md5": PHROGS_MD5}],
@@ -511,6 +514,7 @@ class DatabaseInstaller:
                     "provider": "PHROGs", "release": "v4",
                     "distribution": "Pharokka database 1.11.0",
                     "annotations_path": annotations.name,
+                    "hmm_profiles_path": hmm_profiles.name,
                 },
             }
 
@@ -675,6 +679,7 @@ class DatabaseInstaller:
                 basename = PurePosixPath(member.name).name
                 wanted = (
                     basename == "phrog_annot_v4.tsv"
+                    or basename == "all_phrogs.h3m"
                     or basename.startswith("phrogs_profile_db")
                     or basename == "VERSION_1_11_0"
                 )

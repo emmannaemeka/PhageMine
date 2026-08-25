@@ -1,7 +1,7 @@
 # Installation
 
 Install PhageMine in a clean environment. A Conda installation is recommended
-because it supplies PHANOTATE, HMMER, MMseqs2, DIAMOND and Mash together:
+because it supplies PHANOTATE, Prodigal, HMMER, MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN together:
 
 ```bash
 conda create -n phagemine phagemine \
@@ -11,8 +11,8 @@ conda create -n phagemine phagemine \
 conda activate phagemine
 ```
 
-The Bioconda recipe for PhageMine 1.0.1 requires PHANOTATE, HMMER, MMseqs2,
-DIAMOND and Mash. Do not treat package installation alone as proof that these
+The Bioconda recipe for PhageMine 1.0.4 must require PHANOTATE, Prodigal, HMMER,
+MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do not treat package installation alone as proof that these
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
 errors.
@@ -65,13 +65,22 @@ path explicitly when it is not available as `phanotate` on `PATH`, for example
 Minimal Core run:
 
 ```bash
-phagemine run genome.fasta --output results/run \
+phagemine run genome.fasta \
   --phanotate /path/to/phanotate.py
 ```
+
+Without `--output`, PhageMine writes
+`./genome_phagemine_results` in the directory where the command is run. Use an
+absolute `--output` path when a different location is required. The complete
+`run` workflow also compares PHANOTATE and Prodigal calls and writes review
+tables; it does not automatically discard discordant ORFs.
 
 Evidence databases are not required for Core. Missing resources are reported
 as unavailable and the Core workflow remains usable, but full evidence mode
 requires the four annotation resources to be `READY` in `phagemine doctor`.
 PMFDB and INPHARED enable the two comparative discovery capabilities. The
+INPHARED workflow uses Mash only to shortlist references and BLASTN to compute
+VIRIDIC-compatible whole-genome intergenomic similarity; Mash distance is
+never converted into percentage similarity. The
 complete six-resource download is approximately 3.4 GiB; keep at least
 15–20 GiB free during preparation.

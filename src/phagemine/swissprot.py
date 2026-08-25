@@ -67,18 +67,28 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
             fasta = Path(temp) / "proteins.faa"
             output = Path(temp) / "diamond.tsv"
             fasta.write_text("".join(f">{p.protein_id}\n{p.sequence}\n" for p in proteins))
-            fields = "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
-            command = [str(self.diamond), "blastp", "--db", str(self.database_path), "--query", str(fasta),
-                       "--out", str(output), "--outfmt", "6", "--threads", str(self.threads), *fields.split()]
+            command = self._search_command(fasta, output)
             result = subprocess.run(command, capture_output=True, text=True, check=False)
             provenance["search_command"] = command
-            provenance["search_parameters"] = {"outfmt": fields}
+            provenance["search_parameters"] = {"outfmt": " ".join(self.output_fields())}
             if result.returncode:
                 return EvidenceAdapterResult(self.name, "UNAVAILABLE", provenance=provenance,
                     message=f"DIAMOND failed with exit code {result.returncode}: {(result.stderr or result.stdout).strip()}")
             hits = self.parse_tabular(output.read_text(), proteins, provenance)
         self._mark_conflicts(hits)
         return EvidenceAdapterResult(self.name, "REAL", evidence=hits, provenance=provenance)
+
+    @staticmethod
+    def output_fields() -> list[str]:
+        return "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore".split()
+
+    def _search_command(self, fasta: Path, output: Path) -> list[str]:
+        # DIAMOND consumes the field names following ``--outfmt 6`` until the
+        # next option.  Fields placed after --threads are parsed as extra thread
+        # values and cause "Invalid parameter count for option '-p/--threads'".
+        return [str(self.diamond), "blastp", "--db", str(self.database_path),
+                "--query", str(fasta), "--out", str(output), "--outfmt", "6",
+                *self.output_fields(), "--threads", str(self.threads)]
 
     def _classify(self, identity: float, qcov: float, scov: float, evalue: float, length: int) -> str:
         if evalue > self.evalue_threshold or length < self.min_alignment_length:

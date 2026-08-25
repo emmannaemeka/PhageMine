@@ -27,7 +27,7 @@ Phage genomes contain many hypothetical or uncharacterized proteins. Conventiona
 ## Key features
 
 - PHANOTATE CDS prediction and genome validation
-- Pfam, VOGDB, Swiss-Prot, and PHROGs evidence
+- Pfam, VOGDB, Swiss-Prot, and dual-backend PHROGs evidence (MMseqs2 plus PyHMMER)
 - deterministic evidence fusion, functional state, proposed function, and confidence
 - genomic context, modules, candidate ranking, QC, and GenBank pre-submission files
 - batch annotation and HTML reports with linked protein records
@@ -78,8 +78,10 @@ python -m pip install -e .
 ```
 
 Production runs require these executables on `PATH`: PHANOTATE, HMMER
-(`hmmscan`), MMseqs2 (`mmseqs`), DIAMOND (`diamond`), and Mash (`mash`) when
-whole-genome INPHARED comparison is installed. `table2asn` is optional and
+(`hmmscan`), MMseqs2 (`mmseqs`), PyHMMER, DIAMOND (`diamond`), Mash (`mash`) and BLASTN
+(`blastn`) when whole-genome INPHARED comparison is installed. Mash selects
+candidate references; BLASTN supplies VIRIDIC-compatible intergenomic
+similarity. `table2asn` is optional and
 never blocks the normal GenBank pre-submission package.
 
 After installation, PhageMine displays the database setup commands in its
@@ -153,7 +155,10 @@ phagemine doctor --json
 ## Quick start
 
 ```bash
-phagemine run genome.fasta --output results/genome
+phagemine run genome.fasta
+
+# Optional: choose a different destination explicitly.
+phagemine run genome.fasta --output /path/to/results/genome
 
 phagemine batch genomes/ --output results/annotation --mode annotate \
   --evidence full --threads 8
@@ -167,7 +172,7 @@ phagemine batch genomes/ --output results/both --mode both \
 
 ## Interpreting annotation
 
-Classification answers “how well is this protein functionally resolved?”. Proposed function answers “what does PhageMine think it does?”. Evidence answers “why?”. Confidence answers “how strongly is the assignment supported?”. Canonical states include `KNOWN_FUNCTION`, `PROBABLE_FUNCTION`, `FUNCTIONAL_CLASS_ONLY`, `CONSERVED_UNKNOWN`, `CONFLICTING_EVIDENCE`, and `UNRESOLVED`. A prediction is not experimental confirmation.
+The main table uses plain-language classifications such as “Specific function strongly supported”, “Likely function supported by evidence”, “Protein domain detected; full function unknown”, “Conserved in phages; function unknown”, and “No reliable function identified”. Proposed function answers “what does PhageMine think it does?”, while confidence and best evidence explain how strongly and why. Machine-readable states remain in `functional_classification.tsv`. A prediction is not experimental confirmation. PhageMine does not infer lifestyle.
 
 Batch tables include protein ID, coordinates, strand, classification, proposed function, confidence, evidence summaries, and PMF where available. Protein IDs link to detailed records rather than reducing a row to a state label alone.
 
@@ -183,13 +188,44 @@ Each record also links genomic context and, in discovery results, PMF membership
 
 ## Important outputs
 
-Annotation outputs include `annotation.tsv`, `functional_classification.tsv/json`, `evidence.json`, `candidate_ranking.tsv`, `proteins.faa`, `cds.fna`, `genes.gff3`, `genomic_context.tsv/json`, `modules.tsv/json`, `quality_control.json`, `report.html`, `report.md`, `protein_details/`, `figures/`, `figure_data/`, and `genbank_submission/`.
+Annotation outputs include the concise `annotation.tsv`, detailed `functional_classification.tsv/json`, `evidence.json`, `candidate_ranking.tsv`, ID-only `proteins.faa`, product-labelled `annotated_proteins.faa`, `cds.fna`, `genes.gff3`, `gene_call_confidence.tsv`, `gene_calls_for_review.tsv`, `genomic_context.tsv/json`, `modules.tsv/json`, `quality_control.json`, `report.html`, `report.md`, `protein_details/`, `figures/`, `figure_data/`, and `genbank_submission/`.
+
+`hallmark_completeness.tsv` checks whether the current evidence establishes
+major capsid, portal, terminase, tail, tape-measure, replication and lysis
+components. `NOT_ESTABLISHED` never means biological absence.
+`annotation_review.tsv` is the short manual-curation queue combining uncertain
+functions, disputed gene models and unresolved hallmark components. Detailed
+classification records also state the evidence tier used for each conclusion.
 
 Discovery outputs include `pmf_families.tsv`, `pmf_members.tsv`, `family_recurrence.tsv`, `cohort_unknown_proteome.tsv`, `conserved_neighbourhoods.tsv`, `pmfdb_validation.tsv`, `discovery_ranking.tsv`, `discovery_report.html`, `discovery_report.md`, `figures/`, `figure_data/`, and `pooled_manifest.json`.
 
 When the INPHARED genome resource is READY, discovery also writes
-`inphared_nearest_phages.tsv/json`; Mash distance is screening evidence and
-requires confirmatory alignment or ANI.
+`inphared_nearest_phages.tsv` as the accession-level audit trail and
+`inphared_summary.tsv` as the duplicate-collapsed researcher summary.
+For zero-distance Mash hits, PhageMine directly compares the query and
+reference nucleotide sequences, including reverse-complement and
+rotation-equivalent representations. Near-reference Mash hits still require a
+formal alignment or ANI workflow; taxonomy is not inferred.
+
+## Independent annotation comparison
+
+PhageMine can import public standard-tool outputs without running or modifying
+those tools:
+
+```bash
+phagemine benchmark --output comparison \
+  --phagemine-results ./genome_phagemine_results \
+  --pharokka-gff /path/to/pharokka.gff \
+  --phold-genbank /path/to/phold.gbk \
+  --multiphate-gff /path/to/multiPhATE2.gff \
+  --prokka-gff /path/to/prokka.gff
+```
+
+The comparison reports coordinate agreement separately from product-name
+agreement. Agreement between tools is supporting computational evidence, not
+experimental validation.
+It also writes `hallmark_comparison.tsv` and a checksummed
+`benchmark_manifest.json`. No structural-search software is required.
 
 The TSV files are stable, machine-readable tables; JSON files preserve detailed evidence/provenance; reports provide navigable summaries and downloads.
 

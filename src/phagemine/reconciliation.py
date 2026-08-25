@@ -26,6 +26,7 @@ def _classify(p: GeneModel|None, d: GeneModel|None, overlap: int) -> str:
 
 def reconcile_models(phanotate: list[GeneModel], prodigal: list[GeneModel], genome_sha256: str | None = None) -> list[dict]:
     rows=[]; used_d=set(); locus=0
+    prodigal=sorted(prodigal,key=lambda x:(x.start,x.end,x.identifier))
     for p in sorted(phanotate,key=lambda x:(x.start,x.end,x.identifier)):
         candidates=[(i,d,_overlap(p,d)) for i,d in enumerate(prodigal) if _overlap(p,d)>0]
         substantial=[(i,d,o) for i,d,o in candidates if o/max(p.end-p.start+1,d.end-d.start+1)>=0.5]
@@ -36,7 +37,7 @@ def reconcile_models(phanotate: list[GeneModel], prodigal: list[GeneModel], geno
         else:
             d=None; o=0; conflict="PHANOTATE_ONLY"
         locus+=1; rows.append(_row(locus,p,d,o,conflict,genome_sha256))
-    for i,d in enumerate(sorted(prodigal,key=lambda x:(x.start,x.end,x.identifier))):
+    for i,d in enumerate(prodigal):
         if i not in used_d:
             locus+=1; rows.append(_row(locus,None,d,0,"PRODIGAL_ONLY",genome_sha256))
     return rows
@@ -50,6 +51,55 @@ def write_reconciliation(root: str|Path, rows: list[dict], provenance: dict) -> 
     cols=list(rows[0]) if rows else ["locus_id","conflict_type"]
     with (root/"orf_reconciliation.tsv").open("w",newline="") as h:
         w=csv.DictWriter(h,fieldnames=cols,delimiter="\t"); w.writeheader(); w.writerows(rows)
+
+def gene_call_review(rows: list[dict], evidence_by_candidate: dict[str, list[dict]], protein_lengths: dict[str, int]) -> list[dict]:
+    """Summarise caller agreement without silently deleting predicted CDSs.
+
+    ``POSSIBLE_FALSE_CALL`` is deliberately a review flag rather than an
+    automatic rejection: short, caller-specific phage genes can be real.
+    """
+    reviewed=[]
+    for row in rows:
+        phanotate_id=row.get("phanotate_id"); prodigal_id=row.get("prodigal_id")
+        protein_id=phanotate_id or prodigal_id
+        evidence=evidence_by_candidate.get(protein_id, [])
+        accepted=[item for item in evidence if item.get("supports")]
+        strong=[item for item in accepted if item.get("evidence_strength") in {"STRONG", "EXPERIMENTAL"}]
+        length=protein_lengths.get(protein_id)
+        conflict=row["conflict_type"]
+        if conflict == "EXACT_CONCORDANCE":
+            confidence, flag, rationale = "HIGH", "NONE", "PHANOTATE and Prodigal agree on both CDS boundaries and strand."
+        elif conflict in {"START_DISCORDANCE", "STOP_DISCORDANCE", "START_AND_STOP_DISCORDANCE"}:
+            confidence, flag, rationale = "MODERATE", "REVIEW_BOUNDARIES", "Both callers detect an overlapping CDS but disagree on one or both boundaries."
+        elif conflict == "STRAND_DISCORDANCE":
+            confidence, flag, rationale = "LOW", "REVIEW_STRAND", "The callers place the overlapping CDS on opposite strands."
+        elif strong:
+            confidence, flag, rationale = "MODERATE", "REVIEW_CALLER_SPECIFIC", "Only one caller predicts this CDS, but independent strong functional evidence supports a translated product."
+        elif conflict == "PHANOTATE_ONLY" and length is not None and length < 40:
+            confidence, flag, rationale = "LOW", "POSSIBLE_FALSE_CALL", "Short PHANOTATE-only CDS has no accepted strong functional evidence; retain pending manual review."
+        else:
+            confidence, flag, rationale = "LOW", "REVIEW_CALLER_SPECIFIC", "Only one caller predicts this CDS and strong independent support is absent."
+        best = strong[0] if strong else (accepted[0] if accepted else None)
+        reviewed.append({
+            "locus_id": row["locus_id"], "protein_id": protein_id,
+            "phanotate_id": phanotate_id, "prodigal_id": prodigal_id,
+            "conflict_type": conflict, "length_aa": length,
+            "accepted_evidence_count": len(accepted),
+            "strong_evidence_count": len(strong),
+            "best_evidence": (f"{best.get('source')}:{best.get('identifier') or best.get('family_name') or 'match'}" if best else "No accepted evidence"),
+            "gene_call_confidence": confidence, "review_flag": flag,
+            "rationale": rationale,
+        })
+    return reviewed
+
+def write_gene_call_review(root: str|Path, records: list[dict]) -> None:
+    root=Path(root)
+    columns=["locus_id","protein_id","phanotate_id","prodigal_id","conflict_type","length_aa","accepted_evidence_count","strong_evidence_count","best_evidence","gene_call_confidence","review_flag","rationale"]
+    with (root/"gene_call_confidence.tsv").open("w", newline="") as handle:
+        writer=csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader(); writer.writerows(records)
+    flagged=[record for record in records if record["review_flag"] != "NONE"]
+    with (root/"gene_calls_for_review.tsv").open("w", newline="") as handle:
+        writer=csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader(); writer.writerows(flagged)
 
 class ProdigalPredictor:
     name="Prodigal"

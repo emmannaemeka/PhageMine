@@ -9,7 +9,7 @@ the source checkout, passes these checks.
 3. Create the release tag from the exact reviewed commit. Do not add documented
    functionality to `main` under an already published version number.
 4. Update the Bioconda recipe to the new tag and checksum. Its run dependencies
-   must include `phanotate`, `hmmer`, `mmseqs2`, `diamond`, and `mash`.
+   must include `phanotate`, `hmmer`, `mmseqs2`, `diamond`, `mash`, and `blast`.
 5. In clean Linux, Intel macOS, and Apple-silicon macOS environments, install
    the Bioconda artifact using the documented command.
 6. Run each binary directly and require a zero exit status: PHANOTATE, HMMER,
@@ -22,5 +22,11 @@ the source checkout, passes these checks.
 9. Run the bundled demo genome through Core and full-evidence annotation, and
    run a small cohort through discovery/Both mode. Verify expected reports,
    tables, figures, provenance, and GenBank pre-submission outputs.
-10. Publish the release only after the clean-install evidence and exact package
+10. On at least one real phage with a reviewed reference annotation, compare
+    PhageMine gene calls and products with Pharokka plus Phold and multiPhATE2;
+    include Prokka as a general prokaryotic baseline. Record exact-coordinate
+    agreement, caller-specific ORFs, boundary differences, hallmark-product
+    agreement, and unresolved disagreements. Do not treat tool consensus as
+    experimental validation or infer phage lifestyle.
+11. Publish the release only after the clean-install evidence and exact package
     versions are recorded in the release notes.

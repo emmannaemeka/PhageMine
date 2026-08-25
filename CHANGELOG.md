@@ -1,5 +1,76 @@
 # Changelog
 
+## 1.0.4
+
+- Add sensitive PHROGs profile-HMM searching through PyHMMER while retaining
+  the existing MMseqs2 search.
+- Extract and register the existing `all_phrogs.h3m` from the checksum-pinned
+  Pharokka PHROGs distribution; no additional database download is required.
+- Deduplicate identical PHROG calls across MMseqs2 and PyHMMER so one
+  biological source cannot be counted twice, while recording backend
+  corroboration and search-specific statistics.
+- Add `phagemine databases attach-phrogs-hmm` for attaching an already
+  installed Pharokka `all_phrogs.h3m` to an existing PHROGs registration.
+- Extend PHROGs refresh/resume to replace older PHROGs evidence rather than
+  silently duplicating it, and allow targeted profile-HMM refreshes without
+  rerunning gene prediction or unrelated database searches.
+- Report PyHMMER and sensitive PHROGs profile-search readiness explicitly in
+  `phagemine doctor`.
+
+## 1.0.3
+
+- Replace the invalid `1 - Mash distance` pseudo-similarity with Mash-only
+  candidate screening followed by VIRIDIC-compatible bidirectional BLASTN
+  whole-genome intergenomic similarity.
+- Report query/reference aligned fractions, genome-length ratio, explicit
+  species/genus thresholds, threshold provenance, and cautious numerical-
+  taxonomy interpretations.
+- Add the completed INPHARED numerical-taxonomy table and downloads to the
+  primary `report.html` after comparative discovery finishes.
+- Add simple Prokka-style `gene`, `product`, `EC_number`, evidence-source and
+  biotechnology-relevance columns. Gene symbols and EC numbers are transferred
+  only from explicit, strong, non-conflicting evidence.
+- Normalize defensible phage terms including major capsid, Hoc-like head
+  decoration, head-scaffolding, terminase, endolysin and helicase products;
+  suppress unsupported fungal, apoptosis and bacterial-envelope labels.
+- Identify Hoc-like decoration proteins as potential capsid-display candidates
+  in a separate application note that explicitly requires experimental
+  confirmation.
+- Correct the progress denominator for runs that include PHANOTATE/Prodigal
+  reconciliation and alternative-ORF adjudication.
+- Allow Core `run` to complete without invoking MMseqs2 discovery when no
+  comparative resources are registered.
+
+## 1.0.2
+
+- Simplify the primary annotation table to protein ID, coordinates, strand,
+  length, plain-language classification, proposed function, confidence, best
+  evidence, and a review flag. Detailed evidence remains in the dedicated
+  classification and protein-detail outputs.
+- Add `annotated_proteins.faa` with the proposed product, coordinates, strand,
+  and confidence in every FASTA header.
+- Make full single-genome `run` perform PHANOTATE/Prodigal comparison and write
+  explicit gene-call confidence and review tables without silently deleting
+  caller-specific ORFs.
+- Place results in `./<input stem>_phagemine_results` when `--output` is not
+  supplied; an explicit output path continues to take precedence.
+- Add a duplicate-collapsed INPHARED summary and distinguish exact sketch
+  matches from nearest-neighbour screens while retaining the accession-level
+  audit table.
+- Extend annotation comparison imports to Pharokka, Phold, multiPhATE2, and
+  Prokka, with separate gene-model and product-name comparisons.
+- Add an explicit six-tier evidence hierarchy to the detailed classification
+  output; the hierarchy contains no structural-search dependency.
+- Add conservative hallmark-system checks and a single prioritized
+  `annotation_review.tsv` combining function conflicts, disputed gene calls,
+  and hallmark components not established by current evidence.
+- Confirm zero-distance INPHARED matches by built-in exact nucleotide,
+  reverse-complement, and rotation-equivalence checks when the reference
+  sequence is available; do not infer ANI or taxonomy from Mash.
+- Record checksummed external-tool inputs and hallmark-name comparisons in the
+  reproducible annotation benchmark output.
+- Do not infer or report phage lifestyle.
+
 ## 1.0.1
 
 - Synchronize the release version with the post-1.0.0 database installer and

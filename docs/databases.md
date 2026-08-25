@@ -6,7 +6,7 @@ These independently installed, versioned resources are supplied only when
 evidence-enhanced annotation or external PMF validation is requested.
 
 Optional components include HMMER (`hmmscan`) with Pfam/VOGDB HMM files,
-PHROGs profiles and annotations with MMseqs2, DIAMOND with Swiss-Prot and
+PHROGs profiles and annotations with MMseqs2 plus PyHMMER, DIAMOND with Swiss-Prot and
 matching metadata, and MMseqs2 with a PMFDB target database/index.
 
 Record paths, versions, and checksums in run provenance. Missing optional
@@ -46,7 +46,7 @@ preparation.
 | Pfam | Provider-described current Pfam release | decompress and `hmmpress` | release and checksum files |
 | VOGDB | Pinned VOGDB release 235 | deterministic HMM concatenation and `hmmpress` | `vog.annotations.tsv.gz` |
 | Swiss-Prot | Provider-described current UniProtKB release | `diamond makedb` | `uniprot_sprot.dat.gz` |
-| PHROGs | PHROGs v4 from the checksum-pinned Pharokka 1.11.0 distribution | extract MMseqs2 profile database | `phrog_annot_v4.tsv` |
+| PHROGs | PHROGs v4 from the checksum-pinned Pharokka 1.11.0 distribution | extract MMseqs2 database and `all_phrogs.h3m` | `phrog_annot_v4.tsv` |
 | PMFDB | Pinned INPHARED 7 April 2026 proteins, mapping and metadata | schema conversion plus `mmseqs createdb/createindex` | reference metadata, QC and manifest |
 | INPHARED genomes | Pinned INPHARED 7 April 2026 genome FASTA and metadata | per-genome `mash sketch -i` | genome metadata, QC and manifest |
 
@@ -69,3 +69,32 @@ Existing locally prepared snapshots remain supported through `phagemine
 databases register`. Automatic updates are intentionally not silent: rerun an
 installer with `--force` only after reviewing the new release and preserving
 the older manifest needed for reproducibility.
+
+If Pharokka's database bundle is already installed, attach its existing HMM
+file without downloading it again:
+
+```bash
+phagemine databases attach-phrogs-hmm \
+  "$HOME/pharokka_databases/all_phrogs.h3m"
+phagemine doctor
+```
+
+The annotation mapping remains the registered PHROGs `phrog_annot_v4.tsv`.
+MMseqs2 and PyHMMER hits to the same protein/PHROG pair are represented once
+in evidence output, with both search backends recorded.
+
+To add the sensitive PHROGs search to an existing completed run without
+rerunning gene prediction, Pfam, VOGDB or Swiss-Prot, use a new output
+directory:
+
+```bash
+phagemine resume OLD_RESULTS \
+  --output NEW_RESULTS \
+  --refresh-evidence PHROGS \
+  --threads 4
+```
+
+When the HMM file has not been attached to the registry, add
+`--phrogs-hmm "$HOME/pharokka_databases/all_phrogs.h3m"`. Refresh replaces
+the previous PHROGs evidence before reclassification; it does not append a
+second copy of the same evidence.
