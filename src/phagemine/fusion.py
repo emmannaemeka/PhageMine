@@ -11,6 +11,7 @@ from .models import Evidence, Protein
 
 FUSION_RULES_VERSION = "1.4"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
+DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 DISPLAY_STATES = {
     "KNOWN_FUNCTION": "Specific function strongly supported",
     "PROBABLE_FUNCTION": "Likely function supported by evidence",
@@ -106,6 +107,12 @@ def _domain_summary(accepted: list[Evidence]) -> str | None:
         if evidence.source != "Pfam" and evidence.modality != "domain":
             continue
         label = normalize_function(evidence.description)
+        if label and "phage ninh protein and transposase" in label:
+            label = "ninh-like domain"
+        elif label and "enterobacter phage enc34, ssdna-binding protein" in label:
+            label = "single-stranded dna-binding domain"
+        elif label and "disarm protein drme" in label:
+            label = "atpase-related domain"
         if label and not any(term in label for term in TAXON_SPECIFIC_TERMS) and label not in labels:
             labels.append(label)
     if not labels:
@@ -200,6 +207,40 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
     if len(ranked) == 1 or overlapping or (quantified and winner_score - runner_score >= 8.0):
         return label, winner, alternatives
     return None, None, alternatives
+
+
+def _diagnostic_product(accepted: list[Evidence]) -> tuple[str | None, Evidence | None, str | None]:
+    """Promote only narrowly reviewed domain/orthology combinations.
+
+    This is deliberately a small allow-list.  It prevents arbitrary Pfam text
+    from becoming a product while allowing diagnostic enzyme families and
+    compatible phage orthology to yield useful, qualified annotations.
+    """
+    records = [(e, normalize_function(e.description)) for e in accepted]
+    records = [(e, label) for e, label in records if label]
+    pfam = [(e, label) for e, label in records if e.source == "Pfam" or e.modality == "domain"]
+    phrogs = [(e, label) for e, label in records if e.source == "PHROGs"]
+    categories = " ".join(filter(None, (_category(e) for e in accepted))).lower()
+    domain_text = " ".join(label for _, label in pfam)
+
+    if "dna polymerase family a" in domain_text:
+        evidence = next(e for e, label in pfam if "dna polymerase family a" in label)
+        return "family-a dna polymerase", evidence, "diagnostic DNA polymerase family A domain"
+    if "enterobacter phage enc34, ssdna-binding protein" in domain_text or "single-stranded dna-binding" in domain_text:
+        evidence = next(e for e, label in pfam if "ssdna-binding" in label or "single-stranded dna-binding" in label)
+        return "single-stranded dna-binding protein", evidence, "diagnostic phage ssDNA-binding domain"
+    if "vrr-nuc" in domain_text:
+        resolvase = next(((e, label) for e, label in phrogs if "holliday junction resolvase" in label), None)
+        if resolvase:
+            return "holliday junction resolvase", resolvase[0], "VRR-Nuc domain corroborated by PHROGs resolvase orthology"
+    hth = "helix-turn-helix" in domain_text
+    excisionase = next(((e, label) for e, label in phrogs if "excisionase" in label and "transcriptional regulator" in label), None)
+    if hth and excisionase and "integration and excision" in categories:
+        return "excisionase and transcriptional regulator", excisionase[0], "HTH domains and integration/excision category corroborate PHROGs orthology"
+    regulator = next(((e, label) for e, label in records if "transcriptional regulator" in label), None)
+    if hth and regulator:
+        return "helix-turn-helix transcriptional regulator", regulator[0], "HTH domains corroborate a broad transcriptional-regulator assignment"
+    return None, None, None
 
 
 def _gene_and_ec(accepted: list[Evidence]) -> tuple[str | None, str | None]:
@@ -311,7 +352,13 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     # A safety rewrite is deliberately more conservative than the matched
     # member name and therefore takes precedence over ancillary domain labels.
     selected_product, selected_evidence, product_alternatives = _select_product(informative)
-    if conflicting:
+    diagnostic_product, diagnostic_evidence, diagnostic_reason = _diagnostic_product(accepted)
+    conflict_resolved = bool(conflicting and diagnostic_product)
+    if diagnostic_product:
+        selected_product, selected_evidence = diagnostic_product, diagnostic_evidence
+        if diagnostic_reason and diagnostic_reason not in ambiguity:
+            ambiguity.append(diagnostic_reason)
+    elif conflicting:
         selected_product, selected_evidence = None, None
     if len(rewrite_labels) == 1:
         selected_product = rewrite_labels[0]
@@ -324,7 +371,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     strong_families = {MODALITY_FAMILIES.get(e.source, MODALITY_FAMILIES.get(e.modality, e.modality)) for _, e, _ in strong_info}
     orthology_only = strong_families and strong_families <= {"PHAGE_ORTHOLOGY", "VIRAL_ORTHOLOGY"}
     agreeing_sources = len({e.source for _, e, label in informative if selected_product and label == selected_product})
-    if conflicting:
+    if conflicting and not conflict_resolved:
         state, confidence, reasons = "CONFLICTING_EVIDENCE", "LOW", ["accepted STRONG informative evidence supports incompatible normalized functions"]
     elif strong_info and (independent_strong or (swiss_strong and agreeing_sources >= 2)) and len(strong_families) >= 2 and not orthology_only and not ambiguity:
         state, confidence = "KNOWN_FUNCTION", "HIGH"
@@ -332,12 +379,14 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         if independent_strong:
             reasons.append("independent agreeing source corroboration")
         reasons.append("no accepted strong conflict")
-    elif selected_product and (strong_info or informative):
-        state, confidence = "PROBABLE_FUNCTION", "MODERATE" if strong_info else "LOW"
+    elif selected_product:
+        state, confidence = "PROBABLE_FUNCTION", "MODERATE" if strong_info or diagnostic_product else "LOW"
         reasons = [
             f"accepted {e.evidence_strength or 'informative'} {e.source} evidence supports a functional interpretation"
             for _, e, _ in informative
         ]
+        if diagnostic_reason:
+            reasons.append(diagnostic_reason)
     elif categories or domain_summary or any(e.source == "Pfam" or e.modality == "domain" for e in accepted):
         state, confidence = "FUNCTIONAL_CLASS_ONLY", "LOW"
         reasons = ["accepted evidence supports domain architecture or a broad functional category, but not a complete protein function"]
@@ -370,7 +419,12 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         + (f" — {best.description}" if best.description else "")
         if best else "No accepted evidence"
     )
-    review_flag = "REVIEW_REQUIRED" if state in {"CONFLICTING_EVIDENCE", "UNRESOLVED"} else "NONE"
+    enzyme_domain = any(term in " ".join(filter(None, (normalize_function(e.description) for e in accepted if e.source == "Pfam" or e.modality == "domain")))
+                        for term in ("atpase", "polymerase", "helicase", "nuclease", "transposase"))
+    if protein.length < 80 and enzyme_domain:
+        review_flag = "POSSIBLE_PARTIAL_OR_FALSE_ORF"
+    else:
+        review_flag = "REVIEW_REQUIRED" if state in {"CONFLICTING_EVIDENCE", "UNRESOLVED"} else "NONE"
     experimental = any(e.evidence_strength == "EXPERIMENTAL" or e.level.value == "experimentally established" for e in accepted)
     if experimental and selected_product:
         evidence_tier, evidence_tier_label = 1, "Experimentally supported database evidence"
@@ -394,6 +448,9 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         "scientific_interpretation": interpretation,
         "best_evidence": best_evidence, "review_flag": review_flag,
         "product_alternatives": product_alternatives,
+        "diagnostic_domain_rule": diagnostic_reason,
+        "diagnostic_domain_rules_version": DIAGNOSTIC_DOMAIN_RULES_VERSION,
+        "conflict_resolved_by_corroboration": conflict_resolved,
         "evidence_tier": evidence_tier, "evidence_tier_label": evidence_tier_label,
         "evidence_hierarchy_version": EVIDENCE_HIERARCHY_VERSION,
         "functional_category": categories[0] if len(categories) == 1 else ("; ".join(categories) if categories else None),

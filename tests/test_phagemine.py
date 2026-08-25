@@ -694,6 +694,47 @@ class PhageMineTests(unittest.TestCase):
             result = classify_protein(self._fusion_protein([self._fusion_e("Pfam", description)]))
             self.assertNotIn(description.lower(), result["display_product"])
 
+    def test_ijeoma_diagnostic_domain_and_compatible_function_rules(self):
+        polymerase = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "DNA polymerase family A")
+        ]))
+        self.assertEqual(polymerase["proposed_function"], "family-a dna polymerase")
+        self.assertEqual(polymerase["confidence"], "MODERATE")
+
+        resolvase_phrog = self._fusion_e("PHROGs", "Holliday junction resolvase", identifier="phrog_5702")
+        resolvase_phrog.metrics.update({"percent_identity": 0.648, "query_coverage": 0.8, "bit_score": 120, "evalue": 4e-23})
+        endonuclease = self._fusion_e("PHROGs", "endonuclease", identifier="phrog_93")
+        endonuclease.metrics.update({"percent_identity": 0.7, "query_coverage": 0.9, "bit_score": 140, "evalue": 1e-30})
+        resolvase = classify_protein(self._fusion_protein([
+            resolvase_phrog, endonuclease, self._fusion_e("Pfam", "VRR-Nuc domain")
+        ]))
+        self.assertEqual(resolvase["proposed_function"], "holliday junction resolvase")
+        self.assertIn("VRR-Nuc", resolvase["diagnostic_domain_rule"])
+
+    def test_ijeoma_regulatory_and_ssdna_rules(self):
+        excisionase = self._fusion_e("PHROGs", "excisionase and transcriptional regulator", identifier="phrog_66", category="integration and excision")
+        terminase = self._fusion_e("VOGDB", "terminase small subunit", identifier="VOG04175")
+        result = classify_protein(self._fusion_protein([
+            excisionase, terminase, self._fusion_e("Pfam", "helix-turn-helix domain")
+        ]))
+        self.assertEqual(result["proposed_function"], "excisionase and transcriptional regulator")
+        self.assertTrue(result["conflict_resolved_by_corroboration"])
+        ssdna = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "Enterobacter phage Enc34, ssDNA-binding protein")
+        ]))
+        self.assertEqual(ssdna["proposed_function"], "single-stranded dna-binding protein")
+
+    def test_ijeoma_unsafe_mixed_domains_are_rewritten_and_short_enzyme_orf_flagged(self):
+        ninh = classify_protein(self._fusion_protein([
+            self._fusion_e("Pfam", "phage NinH protein and transposase")
+        ]))
+        self.assertEqual(ninh["display_product"], "hypothetical protein containing ninh-like domain")
+        short = self._fusion_protein([self._fusion_e("Pfam", "P-type ATPase actuator domain and DISARM protein DrmE, C-terminal domain")])
+        short.sequence = "M" * 63
+        result = classify_protein(short)
+        self.assertEqual(result["display_product"], "hypothetical protein containing atpase-related domain")
+        self.assertEqual(result["review_flag"], "POSSIBLE_PARTIAL_OR_FALSE_ORF")
+
     def test_fusion_resume_output_layer_regenerates_both_files(self):
         proteins = [self._fusion_protein()]
         with tempfile.TemporaryDirectory() as temp:
