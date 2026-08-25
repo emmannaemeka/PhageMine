@@ -115,6 +115,12 @@ def _domain_summary(accepted: list[Evidence]) -> str | None:
             label = "atpase-related domain"
         if label and not any(term in label for term in TAXON_SPECIFIC_TERMS) and label not in labels:
             labels.append(label)
+    if any("ninh" in label for label in labels):
+        labels = [label for label in labels if "transposase" not in label and "ninh" not in label]
+        labels.insert(0, "ninh-like domain")
+    if any("atpase-related domain" in label for label in labels):
+        labels = [label for label in labels if "p-type atpase actuator" not in label and "atpase-related domain" not in label]
+        labels.insert(0, "atpase-related domain")
     if not labels:
         return None
     shown = labels[:2]
@@ -380,7 +386,12 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
             reasons.append("independent agreeing source corroboration")
         reasons.append("no accepted strong conflict")
     elif selected_product:
-        state, confidence = "PROBABLE_FUNCTION", "MODERATE" if strong_info or diagnostic_product else "LOW"
+        low_diagnostic = diagnostic_reason in {
+            "diagnostic phage ssDNA-binding domain",
+            "HTH domains corroborate a broad transcriptional-regulator assignment",
+        }
+        state = "PROBABLE_FUNCTION"
+        confidence = "LOW" if low_diagnostic else ("MODERATE" if strong_info or diagnostic_product else "LOW")
         reasons = [
             f"accepted {e.evidence_strength or 'informative'} {e.source} evidence supports a functional interpretation"
             for _, e, _ in informative

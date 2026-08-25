@@ -723,10 +723,12 @@ class PhageMineTests(unittest.TestCase):
             self._fusion_e("Pfam", "Enterobacter phage Enc34, ssDNA-binding protein")
         ]))
         self.assertEqual(ssdna["proposed_function"], "single-stranded dna-binding protein")
+        self.assertEqual(ssdna["confidence"], "LOW")
 
     def test_ijeoma_unsafe_mixed_domains_are_rewritten_and_short_enzyme_orf_flagged(self):
         ninh = classify_protein(self._fusion_protein([
-            self._fusion_e("Pfam", "phage NinH protein and transposase")
+            self._fusion_e("Pfam", "phage NinH protein"),
+            self._fusion_e("Pfam", "transposase"),
         ]))
         self.assertEqual(ninh["display_product"], "hypothetical protein containing ninh-like domain")
         short = self._fusion_protein([self._fusion_e("Pfam", "P-type ATPase actuator domain and DISARM protein DrmE, C-terminal domain")])
