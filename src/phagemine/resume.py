@@ -19,7 +19,7 @@ from .models import Evidence, EvidenceLevel, Protein
 from .phrogs import PHROGSMMseqsAdapter
 from .progress import ProgressReporter
 from .quality import assess
-from .reporting import write_outputs
+from .reporting import update_comparative_report, write_outputs
 from .resources import EvidenceResourceManager, ResourceType
 from .sequencing_provenance import SequencingProvenance
 from .fusion import classify_proteins
@@ -28,6 +28,83 @@ from .context import build_context
 
 REUSED = ("input/genome validation", "genome representation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot")
 RESUME_STAGES = REUSED + ("PHROGs", "evidence integration", "candidate ranking/mining", "QC/report generation", "GenBank package")
+
+
+def reclassify(source: str | Path, output: str | Path,
+               progress: ProgressReporter | None = None) -> int:
+    """Regenerate annotation products from persisted evidence without searches.
+
+    This is intentionally separate from ``resume``: resume acquires missing or
+    explicitly refreshed evidence, whereas reclassify never instantiates or
+    invokes an evidence adapter.
+    """
+    source, output = Path(source).resolve(), Path(output).resolve()
+    if source == output or output.exists():
+        raise ValueError("Reclassify output must be a new, non-existent directory")
+    manifest, representation, proteins, _, sequencing = _load_source(source)
+    progress = progress or ProgressReporter(quiet=True)
+    progress.STAGES = ("persisted evidence validation", "functional classification",
+                       "genomic context", "candidate ranking", "report generation",
+                       "GenBank package")
+    progress.start("persisted evidence validation"); progress.finish(f"{len(proteins)} proteins validated")
+    progress.start("functional classification")
+    classifications = classify_proteins(proteins)
+    progress.finish("regenerated without database searches")
+    progress.start("genomic context")
+    context_records, modules = build_context(proteins, classifications)
+    progress.finish("regenerated")
+    progress.start("candidate ranking")
+    mine(proteins); candidates = ranked_candidates(proteins)
+    progress.finish("regenerated")
+    quality = assess(representation.analysis_sequence, proteins)
+    ranking_status = "INSUFFICIENT_EVIDENCE" if candidates and not any(
+        e.supports and e.evidence_strength in {"STRONG", "EXPERIMENTAL"}
+        for protein in candidates for e in protein.evidence
+    ) else "RANKED"
+    new_manifest = {
+        **manifest,
+        "command": "reclassify",
+        "input": str(source / "original_input.fasta"),
+        "input_sha256": checksum(source / "original_input.fasta"),
+        "stage_status": {
+            "input/genome validation": "REUSED", "gene prediction": "REUSED",
+            "Pfam": "REUSED", "VOGDB": "REUSED", "Swiss-Prot": "REUSED",
+            "PHROGs": "REUSED", "functional classification": "RUN",
+            "genomic context/modules": "RUN", "candidate ranking/mining": "RUN",
+            "QC/report generation": "RUN", "GenBank package": "RUN",
+        },
+        "reclassification": {
+            "source": str(source), "database_searches_run": [],
+            "evidence_reused": True, "source_manifest_preserved": True,
+        },
+        "quality_control": quality,
+        "discovery_ranking": {"status": ranking_status,
+                              "message": "Candidates re-ranked from persisted evidence."},
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temp = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(output.parent)))
+    try:
+        progress.start("report generation")
+        write_outputs(temp, representation, sequencing, proteins, candidates,
+                      new_manifest, quality, source / "original_input.fasta",
+                      classifications, context_records, modules)
+        comparative_source = source / "comparative"
+        if comparative_source.is_dir():
+            shutil.copytree(comparative_source, temp / "comparative")
+            inphared_json = temp / "comparative" / "inphared_nearest_phages.json"
+            if inphared_json.is_file():
+                update_comparative_report(temp, {"inphared": json.loads(inphared_json.read_text())})
+        progress.finish("regenerated")
+        progress.start("GenBank package")
+        write_package(temp, representation.analysis_sequence_id,
+                      representation.analysis_sequence, proteins, new_manifest,
+                      sequencing_provenance=sequencing)
+        progress.finish("regenerated")
+        os.replace(temp, output)
+    except Exception:
+        shutil.rmtree(temp, ignore_errors=True)
+        raise
+    return len(proteins)
 
 def checkpoint_reusable(checkpoint: dict, current_provenance: dict | None) -> bool:
     """A previously unavailable resource is never reusable once requested now."""

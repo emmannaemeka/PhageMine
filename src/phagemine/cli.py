@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from .pipeline import run
-from .resume import resume
+from .resume import reclassify, resume
 from .models import SubmissionMetadata
 from .resources import EvidenceResourceManager, ResourceType
 from .compare import compare
@@ -71,6 +71,12 @@ Individual installers are also available:
     resume_command.add_argument("--phrogs-evalue", type=float, default=1e-5)
     resume_command.add_argument("--phrogs-coverage", type=float, default=0.5)
     resume_command.add_argument("--phrogs-score", type=float)
+    reclassify_command = subcommands.add_parser(
+        "reclassify",
+        help="Regenerate annotations from persisted evidence without database searches",
+    )
+    reclassify_command.add_argument("source")
+    reclassify_command.add_argument("--output", required=True)
     stage_command = subcommands.add_parser("resume-stage", help="Recover from validated mixed stage checkpoints")
     stage_command.add_argument("source"); stage_command.add_argument("--swissprot"); stage_command.add_argument("--diamond")
     compare_command = subcommands.add_parser("compare", help="Compare completed PhageMine result directories offline")
@@ -255,6 +261,14 @@ Individual installers are also available:
         except (OSError, ValueError, RuntimeError) as exc:
             parser.error(str(exc))
         print(f"PhageMine resume complete: {count} predicted proteins. Outputs: {args.output}")
+        return 0
+    if args.command == "reclassify":
+        try:
+            count = reclassify(args.source, args.output, ProgressReporter(quiet=False))
+        except (OSError, ValueError, RuntimeError) as exc:
+            parser.error(str(exc))
+        print(f"PhageMine reclassification complete: {count} predicted proteins. Outputs: {args.output}")
+        print("Database searches run: none; persisted evidence was reused.")
         return 0
     if args.command == "databases":
         if args.database_command == "install":

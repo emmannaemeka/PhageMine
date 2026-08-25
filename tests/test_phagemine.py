@@ -27,7 +27,7 @@ from phagemine.vog import VOGHMMAdapter
 from phagemine.phrogs import MMSEQS_FORMAT, PHROGSMMseqsAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
-from phagemine.resume import _load_source, RESUME_STAGES, checkpoint_reusable
+from phagemine.resume import _load_source, RESUME_STAGES, checkpoint_reusable, reclassify
 from phagemine.fusion import classify_protein, classify_proteins, normalize_function, write_classification
 from phagemine.context import build_context, write_context
 from phagemine.compare import compare
@@ -741,6 +741,30 @@ class PhageMineTests(unittest.TestCase):
             (source / "evidence.json").unlink()
             with self.assertRaisesRegex(ValueError, "missing source artifacts"):
                 _load_source(source)
+
+    def test_reclassify_reuses_evidence_without_database_adapters(self):
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.phrogs.PHROGSMMseqsAdapter.analyze") as phrogs, \
+             patch("phagemine.swissprot.SwissProtEvidenceAdapter.analyze") as swissprot, \
+             patch("phagemine.pfam.PfamHMMAdapter.analyze") as pfam, \
+             patch("phagemine.vog.VOGHMMAdapter.analyze") as vog:
+            output = Path(temp) / "reclassified"
+            count = reclassify(RESUME_SOURCE_FIXTURE, output)
+            self.assertEqual(count, 2)
+            self.assertTrue((output / "annotation.tsv").is_file())
+            self.assertTrue((output / "functional_classification.json").is_file())
+            self.assertTrue((output / "annotated_proteins.faa").is_file())
+            self.assertTrue((output / "genbank_submission").is_dir())
+            self.assertFalse(phrogs.called or swissprot.called or pfam.called or vog.called)
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["command"], "reclassify")
+            self.assertEqual(manifest["reclassification"]["database_searches_run"], [])
+
+    def test_reclassify_cli_is_visible_and_requires_new_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "reclassified"
+            self.assertEqual(main(["reclassify", str(RESUME_SOURCE_FIXTURE), "--output", str(output)]), 0)
+            self.assertTrue((output / "annotation.tsv").is_file())
     def test_progress_stage_transitions_and_non_tty_output(self):
         stream = StringIO()
         progress = ProgressReporter(stream=stream)
