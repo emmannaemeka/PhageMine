@@ -39,7 +39,7 @@ from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.phrogs import PHROGSMMseqsAdapter
-from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics
+from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics, classify_product_relation
 from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts, update_comparative_report
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
@@ -271,7 +271,7 @@ class PhageMineTests(unittest.TestCase):
             other=[{**phold[0],"tool":"PHAGEMINE","locus_id":"PM_1","product":"putative major capsid protein"}]
             benchmark({"PHAGEMINE":other,"Phold":phold},root/"comparison")
             rows=list(csv.DictReader((root/"comparison"/"functional_comparison.tsv").open(),delimiter="\t"))
-            self.assertEqual(rows[0]["status"],"PRODUCT_AGREEMENT")
+            self.assertEqual(rows[0]["status"],"EXACT_PRODUCT_AGREEMENT")
 
     def test_benchmark_exact_match_precedes_boundary_contact(self):
         a=[{'start':2,'end':313,'strand':'-','locus_id':'A'},{'start':313,'end':894,'strand':'-','locus_id':'B'}]
@@ -736,6 +736,41 @@ class PhageMineTests(unittest.TestCase):
         result = classify_protein(short)
         self.assertEqual(result["display_product"], "hypothetical protein containing atpase-related domain")
         self.assertEqual(result["review_flag"], "POSSIBLE_PARTIAL_OR_FALSE_ORF")
+
+    def test_context_refinement_never_invents_minor_tail_without_candidate(self):
+        proteins=[]
+        for index,(description,start) in enumerate((("tail protein",1),("unknown function",301),("minor tail protein",601)),1):
+            evidence=self._fusion_e("PHROGs",description,identifier=f"p{index}")
+            protein=self._fusion_protein([evidence]); protein.protein_id=f"P{index}"; protein.start=start; protein.end=start+299
+            proteins.append(protein)
+        results=classify_proteins(proteins)
+        self.assertEqual(results[1]["proposed_function"],"putative tail-associated protein")
+        self.assertEqual(results[1]["confidence"],"LOW")
+        self.assertEqual(results[1]["context_support"]["module"],"tail")
+
+    def test_context_refinement_uses_minor_tail_only_when_candidate_exists(self):
+        left=self._fusion_protein([self._fusion_e("PHROGs","tail protein")]); left.protein_id="P1"; left.start=1; left.end=300
+        target=self._fusion_protein([
+            self._fusion_e("PHROGs","minor tail protein",identifier="minor"),
+            self._fusion_e("VOGDB","portal protein",identifier="portal"),
+        ]); target.protein_id="P2"; target.start=301; target.end=600
+        right=self._fusion_protein([self._fusion_e("PHROGs","tail terminator")]); right.protein_id="P3"; right.start=601; right.end=900
+        result=classify_proteins([left,target,right])[1]
+        self.assertEqual(result["proposed_function"],"putative minor tail protein")
+
+    def test_specific_head_morphogenesis_term_beats_broad_head_term(self):
+        broad=self._fusion_e("PHROGs","head protein",identifier="broad")
+        broad.metrics.update({"percent_identity":0.6,"query_coverage":0.9,"bit_score":220,"evalue":1e-60})
+        specific=self._fusion_e("PHROGs","head morphogenesis",identifier="specific")
+        specific.metrics.update({"percent_identity":0.42,"query_coverage":0.8,"bit_score":180,"evalue":1e-50})
+        result=classify_protein(self._fusion_protein([broad,specific]))
+        self.assertEqual(result["proposed_function"],"head morphogenesis protein")
+
+    def test_benchmark_product_semantics_do_not_reward_domain_verbosity(self):
+        self.assertEqual(classify_product_relation("major capsid protein","major head protein"),"EXACT_PRODUCT_AGREEMENT")
+        self.assertEqual(classify_product_relation("conserved phage protein of unknown function","hypothetical protein"),"BOTH_FUNCTION_UNKNOWN")
+        self.assertEqual(classify_product_relation("hypothetical protein containing ASCH domain","hypothetical protein"),"PHAGEMINE_DOMAIN_INFORMATION_ONLY")
+        self.assertEqual(classify_product_relation("single-stranded DNA-binding protein","Gp2.5-like ssDNA binding protein and ssDNA annealing protein"),"EQUIVALENT_FUNCTION")
 
     def test_fusion_resume_output_layer_regenerates_both_files(self):
         proteins = [self._fusion_protein()]

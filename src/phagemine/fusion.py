@@ -204,6 +204,20 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
     if not ranked:
         return None, None, alternatives
     _, winner, label, winner_score = ranked[0]
+    # Prefer a supported specific phage role over its own broad parent term.
+    # This is a terminology hierarchy, not a score override between unrelated
+    # biological functions.
+    specific = {
+        "head protein": "head morphogenesis protein",
+        "nuclease": "holliday junction resolvase",
+        "endonuclease": "holliday junction resolvase",
+    }
+    labels_present = {item[2] for item in ranked}
+    preferred = specific.get(label)
+    if preferred and preferred in labels_present:
+        chosen = next(item for item in ranked if item[2] == preferred)
+        _, winner, label, winner_score = chosen
+        return label, winner, alternatives
     runner_score = ranked[1][3] if len(ranked) > 1 else float("-inf")
     overlapping = all(label == item[2] or label in item[2] or item[2] in label for item in ranked[1:])
     quantified = any(_numeric_metric(winner, name) is not None for name in (
@@ -478,7 +492,50 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
 
 
 def classify_proteins(proteins: list[Protein]) -> list[dict[str, Any]]:
-    return [classify_protein(protein) for protein in proteins]
+    results = [classify_protein(protein) for protein in proteins]
+    by_id = {item["protein_id"]: item for item in results}
+    ordered = sorted(proteins, key=lambda p: (p.start, p.end, p.protein_id))
+
+    def tail_signal(item: dict[str, Any]) -> bool:
+        text = " ".join(str(item.get(key) or "") for key in
+                        ("proposed_function", "functional_category")).lower()
+        return any(term in text for term in
+                   ("tail", "baseplate", "fiber", "spike", "neck", "connector"))
+
+    for index, protein in enumerate(ordered):
+        item = by_id[protein.protein_id]
+        if item.get("proposed_function"):
+            continue
+        neighbors = ordered[max(0, index - 2):index] + ordered[index + 1:index + 3]
+        anchors = [by_id[p.protein_id] for p in neighbors if tail_signal(by_id[p.protein_id])]
+        if len(anchors) < 2 or item.get("conservation_status") not in {"CONSERVED", "STRONGLY_CONSERVED"}:
+            continue
+        alternatives = item.get("product_alternatives") or []
+        minor_tail = next((candidate for candidate in alternatives
+                           if candidate.get("label") == "minor tail protein"), None)
+        domain_text = str(item.get("domain_summary") or "").lower()
+        if minor_tail:
+            product = "putative minor tail protein"
+            basis = "accepted minor-tail candidate supported by a conserved tail-module neighbourhood"
+        elif any(term in domain_text for term in ("tail tube", "tail protein", "mbg domain")) or item.get("functional_state") == "CONSERVED_UNKNOWN":
+            product = "putative tail-associated protein"
+            basis = "phage conservation and two or more neighbouring tail-module anchors; exact role remains unresolved"
+        else:
+            continue
+        item.update({
+            "proposed_function": product, "normalized_function": product,
+            "display_product": product, "functional_state": "PROBABLE_FUNCTION",
+            "display_classification": DISPLAY_STATES["PROBABLE_FUNCTION"],
+            "confidence": "LOW", "review_flag": "NONE",
+            "context_support": {
+                "module": "tail", "neighboring_proteins": [anchor["protein_id"] for anchor in anchors],
+                "neighboring_functions": [anchor.get("display_product") for anchor in anchors],
+                "effect": f"upgraded to {product}", "context_rules_version": "1.0",
+                "basis": basis,
+            },
+            "reasoning_summary": item.get("reasoning_summary", "") + " " + basis + ".",
+        })
+    return results
 
 
 def write_classification(root: str | Path, proteins: list[Protein], results: list[dict[str, Any]] | None = None) -> None:

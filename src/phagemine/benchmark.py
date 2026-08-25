@@ -105,6 +105,33 @@ def metrics(predicted, reference):
     exact=sum(r['relationship']=='EXACT_MATCH' for r in compare_models(predicted,reference)); p=len(predicted); r=len(reference); precision=exact/p if p else 0; recall=exact/r if r else 0
     return {'predicted':p,'reference':r,'exact_matches':exact,'exact_precision':precision,'exact_recall':recall,'exact_f1':2*precision*recall/(precision+recall) if precision+recall else 0}
 
+def classify_product_relation(left, right, left_state=None, right_state=None):
+    """Classify biological product relationships without rewarding verbosity."""
+    def clean(value):
+        value=re.sub(r'\b(putative|probable|predicted)\b','',str(value or '').lower())
+        value=re.sub(r'\bhoc-like head decoration\b','hoc-like head decoration protein',value)
+        value=re.sub(r'\bmajor head protein\b','major capsid protein',value)
+        value=re.sub(r'\bterminase protein\b','terminase',value)
+        value=re.sub(r'\bfamily-a dna polymerase\b','dna polymerase',value)
+        value=re.sub(r'\bhelix-turn-helix transcriptional regulator\b','transcriptional regulator',value)
+        return re.sub(r'[^a-z0-9]+',' ',value).strip()
+    def unknown(value):
+        text=clean(value)
+        return not text or text in {'hypothetical protein','conserved phage protein of unknown function','unknown function','uncharacterized protein'}
+    def domain_only(value):
+        return str(value or '').lower().startswith('hypothetical protein containing ')
+    a,b=clean(left),clean(right)
+    if a==b and a: return 'EXACT_PRODUCT_AGREEMENT'
+    if unknown(left) and unknown(right): return 'BOTH_FUNCTION_UNKNOWN'
+    if domain_only(left) and unknown(right): return 'PHAGEMINE_DOMAIN_INFORMATION_ONLY'
+    if domain_only(right) and unknown(left): return 'OTHER_METHOD_DOMAIN_INFORMATION_ONLY'
+    if a==b: return 'EQUIVALENT_FUNCTION'
+    broad_pairs=(('single stranded dna binding protein','gp2 5 like ssdna binding protein and ssdna annealing protein'),)
+    if any((a==x and b==y) or (a==y and b==x) for x,y in broad_pairs): return 'EQUIVALENT_FUNCTION'
+    if unknown(left) and not unknown(right): return 'OTHER_METHOD_FUNCTIONALLY_MORE_INFORMATIVE'
+    if unknown(right) and not unknown(left): return 'PHAGEMINE_FUNCTIONALLY_MORE_INFORMATIVE'
+    return 'GENUINE_FUNCTIONAL_DISAGREEMENT'
+
 def benchmark(methods, output, references=None):
     output=Path(output); output.mkdir(parents=True,exist_ok=True); references=references or {}
     comparisons=[]; summary=[]; metric_rows=[]
@@ -138,7 +165,7 @@ def benchmark(methods, output, references=None):
             for relation in compare_models(methods[a],methods[b]):
                 if relation['relationship']!='EXACT_MATCH': continue
                 left=relation['method_a'].get('product'); right=relation['method_b'].get('product')
-                status='ONE_OR_BOTH_UNANNOTATED' if not left or not right else ('PRODUCT_AGREEMENT' if norm(left)==norm(right) else 'PRODUCT_DIFFERENCE_REQUIRES_REVIEW')
+                status=classify_product_relation(left,right,relation['method_a'].get('functional_state'),relation['method_b'].get('functional_state'))
                 functional.append({'method_a':a,'method_b':b,'method_a_locus':relation['method_a']['locus_id'],'method_b_locus':relation['method_b']['locus_id'],'coordinates':f"{relation['method_a']['start']}..{relation['method_a']['end']}",'method_a_product':left,'method_b_product':right,'status':status})
     (output/'functional_comparison.json').write_text(json.dumps(functional,indent=2,sort_keys=True))
     functional_columns=['method_a','method_b','method_a_locus','method_b_locus','coordinates','method_a_product','method_b_product','status']
