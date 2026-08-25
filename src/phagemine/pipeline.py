@@ -18,7 +18,7 @@ from .annotation import MockEvidenceBackend
 from .pfam import PfamHMMAdapter
 from .vog import VOGHMMAdapter
 from .swissprot import SwissProtEvidenceAdapter
-from .phrogs import PHROGSMMseqsAdapter
+from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
 from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
 from .fusion import classify_proteins
@@ -40,7 +40,7 @@ def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
     return f"{len(accepted)} accepted hits / {len(proteins)} proteins"
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
     progress = progress or ProgressReporter(quiet=True)
     if reconcile_orfs:
         progress.STAGES = ("input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
@@ -163,6 +163,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     progress.finish(_evidence_progress_summary(swiss_result, "Swiss-Prot/DIAMOND unavailable"))
     timed_end("swissprot")
     phrogs_origin = "explicit_cli" if phrogs_path else "unavailable"
+    phrogs_hmm_origin = "explicit_cli" if phrogs_hmm_path else "unavailable"
     phrogs_version = None
     if phrogs_path is None:
         registered_phrogs = EvidenceResourceManager().find(ResourceType.PHROGS)
@@ -170,19 +171,33 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             phrogs_path = registered_phrogs["path"]
             phrogs_origin = "registered_resource"
             phrogs_version = registered_phrogs.get("version")
-            phrogs_annotations = phrogs_annotations or registered_phrogs.get("provenance", {}).get("annotations_path")
+            registered_provenance = registered_phrogs.get("provenance", {})
+            phrogs_annotations = phrogs_annotations or registered_provenance.get("annotations_path")
+            if phrogs_hmm_path is None and registered_provenance.get("hmm_profiles_path"):
+                phrogs_hmm_path = registered_provenance["hmm_profiles_path"]
+                phrogs_hmm_origin = "registered_resource"
     phrogs_adapter = PHROGSMMseqsAdapter(phrogs_path, phrogs_annotations, mmseqs, phrogs_version, phrogs_evalue, phrogs_coverage, phrogs_score, phrogs_identity, phrogs_alignment_length, threads=threads)
+    phrogs_hmm_adapter = PHROGSPyHMMERAdapter(
+        phrogs_hmm_path, phrogs_annotations, phrogs_version,
+        phrogs_evalue, phrogs_coverage, phrogs_score, threads=threads)
     progress.start("PHROGs")
     timed_start("phrogs")
     phrogs_result = phrogs_adapter.analyze(proteins)
     phrogs_result.provenance["resource_origin"] = phrogs_origin
-    for evidence in phrogs_result.evidence:
+    phrogs_hmm_result = phrogs_hmm_adapter.analyze(proteins)
+    phrogs_hmm_result.provenance["resource_origin"] = phrogs_hmm_origin
+    merged_phrogs = merge_phrogs_evidence(phrogs_result.evidence, phrogs_hmm_result.evidence)
+    for evidence in merged_phrogs:
         protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
         if protein_id in proteins_by_id:
             evidence.provenance.setdefault("protein_id", protein_id)
             proteins_by_id[protein_id].evidence.append(evidence)
     evidence_adapters.append({"adapter": phrogs_result.adapter, "status": phrogs_result.status, "provenance": phrogs_result.provenance, "message": phrogs_result.message})
-    write_stage_checkpoint(Path(output) / "checkpoints", "phrogs", [asdict(e) for e in phrogs_result.evidence], phrogs_result.provenance)
+    evidence_adapters.append({"adapter": phrogs_hmm_result.adapter, "status": phrogs_hmm_result.status, "provenance": phrogs_hmm_result.provenance, "message": phrogs_hmm_result.message})
+    write_stage_checkpoint(
+        Path(output) / "checkpoints", "phrogs", [asdict(e) for e in merged_phrogs],
+        {"backends": [phrogs_result.provenance, phrogs_hmm_result.provenance],
+         "deduplicated_evidence_count": len(merged_phrogs)})
     if reconcile_orfs:
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
@@ -200,7 +215,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         gene_review_records = gene_call_review(reconciliation_rows, evidence_map, lengths)
         write_gene_call_review(output, gene_review_records)
         progress.finish("adjudication persisted")
-    progress.finish(_evidence_progress_summary(phrogs_result, "PHROGs/MMseqs2 unavailable"))
+    accepted = sum(e.supports for e in merged_phrogs)
+    backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
+    progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
     timed_end("phrogs")
     progress.start("evidence integration")
     timed_start("evidence_fusion")

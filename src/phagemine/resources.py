@@ -121,7 +121,7 @@ def validate_resource(resource: dict[str, Any], *, check_checksum: bool = True) 
     declared_tools = list(resource.get("required_tools") or [])
     if required_tool and required_tool not in declared_tools:
         declared_tools.append(required_tool)
-    for key in ("annotations_path", "metadata_path"):
+    for key in ("annotations_path", "metadata_path", "hmm_profiles_path"):
         value = provenance.get(key)
         if value and not Path(value).expanduser().is_file():
             problems.append(f"{key} does not exist")

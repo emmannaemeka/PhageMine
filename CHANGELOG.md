@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.4
+
+- Add sensitive PHROGs profile-HMM searching through PyHMMER while retaining
+  the existing MMseqs2 search.
+- Extract and register the existing `all_phrogs.h3m` from the checksum-pinned
+  Pharokka PHROGs distribution; no additional database download is required.
+- Deduplicate identical PHROG calls across MMseqs2 and PyHMMER so one
+  biological source cannot be counted twice, while recording backend
+  corroboration and search-specific statistics.
+- Add `phagemine databases attach-phrogs-hmm` for attaching an already
+  installed Pharokka `all_phrogs.h3m` to an existing PHROGs registration.
+- Extend PHROGs refresh/resume to replace older PHROGs evidence rather than
+  silently duplicating it, and allow targeted profile-HMM refreshes without
+  rerunning gene prediction or unrelated database searches.
+- Report PyHMMER and sensitive PHROGs profile-search readiness explicitly in
+  `phagemine doctor`.
+
 ## 1.0.3
 
 - Replace the invalid `1 - Mash distance` pseudo-similarity with Mash-only

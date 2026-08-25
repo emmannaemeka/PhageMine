@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import importlib
+import importlib.util
 import os
 import shutil
 import subprocess
@@ -10,6 +12,18 @@ from typing import Any
 
 from . import __version__
 from .resources import EvidenceResourceManager, ResourceStatus, validate_resource
+
+
+def python_module_status(name: str) -> dict[str, Any]:
+    try:
+        if importlib.util.find_spec(name) is None:
+            return {"name": name, "status": "MISSING", "version": None, "diagnostic": None}
+        module = importlib.import_module(name)
+        return {"name": name, "status": "READY",
+                "version": str(getattr(module, "__version__", "unknown")), "diagnostic": None}
+    except Exception as exc:
+        return {"name": name, "status": "BROKEN", "version": None,
+                "diagnostic": f"{type(exc).__name__}: {exc}"}
 
 
 def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
@@ -104,15 +118,21 @@ def doctor() -> dict[str, Any]:
     manager = EvidenceResourceManager()
     tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "mash", "blastn", "table2asn"]
     executables = [executable_status(tool) for tool in tools]
+    python_modules = [python_module_status("pyhmmer")]
     resources = manager.validate_all(check_checksum=True)
     by_type = {kind: [r for r in resources if r.get("resource_type") == kind and r.get("status") == "READY"]
                for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS", "PMFDB", "INPHARED_GENOMES")}
     tool_by_name = {item["name"]: item for item in executables}
     table2asn_ready = tool_by_name["table2asn"]["status"] == "READY"
+    pyhmmer_ready = python_modules[0]["status"] == "READY"
+    phrogs_hmm_ready = any(
+        Path(str(resource.get("provenance", {}).get("hmm_profiles_path", ""))).expanduser().is_file()
+        for resource in by_type["PHROGS"])
     capabilities = {
         "CORE_ANALYSIS": "READY" if tool_by_name["phanotate.py"]["status"] == "READY" else "UNAVAILABLE",
         "STANDARD_EVIDENCE": "READY" if by_type["PHROGS"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
         "FULL_EVIDENCE": "READY" if all(by_type[k] for k in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")) and all(tool_by_name[t]["status"] == "READY" for t in ("hmmscan", "mmseqs", "diamond")) else "UNAVAILABLE",
+        "SENSITIVE_PHROGS_PROFILE_SEARCH": "READY" if phrogs_hmm_ready and pyhmmer_ready else "UNAVAILABLE",
         "PMF_REFERENCE_COMPARISON": "READY" if by_type["PMFDB"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
         "WHOLE_GENOME_REFERENCE_COMPARISON": "READY" if by_type["INPHARED_GENOMES"] and all(tool_by_name[t]["status"] == "READY" for t in ("mash", "blastn")) else "UNAVAILABLE",
         "GENBANK_PRE_SUBMISSION": "READY",
@@ -161,8 +181,15 @@ def doctor() -> dict[str, Any]:
             "command": "conda install --channel conda-forge --channel bioconda --strict-channel-priority " + " ".join(packages),
             "verify_command": "phagemine doctor",
         })
+    if not pyhmmer_ready:
+        recommendations.append({
+            "action": "INSTALL_PYTHON_MODULES", "modules": ["pyhmmer"],
+            "command": "python -m pip install 'pyhmmer>=0.10,<0.13'",
+            "verify_command": "phagemine doctor",
+        })
     return {"phagemine_version": __version__, "python": executable_status("python"),
-            "executables": executables, "resources": resources, "capabilities": capabilities,
+            "executables": executables, "python_modules": python_modules,
+            "resources": resources, "capabilities": capabilities,
             "recommendations": recommendations}
 
 
@@ -180,6 +207,12 @@ def doctor_text(payload: dict[str, Any]) -> str:
         lines.append(f"{labels[item['name']]:<14}{status:<17}{item.get('version') or ''}")
         if item.get("diagnostic") and item["name"] != "table2asn":
             lines.append(f"  Error: {item['diagnostic']}")
+    if payload.get("python_modules"):
+        lines += ["", "Python modules"]
+        for item in payload["python_modules"]:
+            lines.append(f"{item['name']:<14}{item['status']:<17}{item.get('version') or ''}")
+            if item.get("diagnostic"):
+                lines.append(f"  Error: {item['diagnostic']}")
     lines += ["", "Evidence Resources"]
     labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs", "PMFDB": "PMFDB", "INPHARED_GENOMES": "INPHARED genomes"}
     for kind, label in labels.items():
@@ -209,4 +242,9 @@ def doctor_text(payload: dict[str, Any]) -> str:
         lines += ["", "Executable setup or repair required",
                   f"  {tool_recommendation['command']}",
                   "Then verify:", f"  {tool_recommendation['verify_command']}"]
+    module_recommendation = next((r for r in recommendations if r.get("action") == "INSTALL_PYTHON_MODULES"), None)
+    if module_recommendation:
+        lines += ["", "Python module setup required",
+                  f"  {module_recommendation['command']}",
+                  "Then verify:", f"  {module_recommendation['verify_command']}"]
     return "\n".join(lines)

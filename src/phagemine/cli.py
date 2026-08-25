@@ -48,6 +48,7 @@ Individual installers are also available:
     register.add_argument("--notes")
     register.add_argument("--annotations", help="Optional annotation table path (used by VOGDB resources)")
     register.add_argument("--metadata", help="Optional metadata path (used by Swiss-Prot resources)")
+    register.add_argument("--hmm-profiles", help="Optional PHROGs all_phrogs.h3m path")
     install = database_commands.add_parser("install", help="Download, prepare, register, and validate evidence databases")
     install.add_argument("resource", nargs="?", choices=("pfam", "vogdb", "swissprot", "phrogs", "pmfdb", "inphared"))
     install.add_argument("--all", action="store_true", help="Install every annotation and comparative database")
@@ -58,6 +59,9 @@ Individual installers are also available:
     install.add_argument("--json", action="store_true", help="Emit installation results as JSON")
     install.add_argument("--threads", type=int, default=1, help="Preparation threads for MMseqs2 indexes")
     database_commands.add_parser("status", help="List registered evidence resources")
+    attach_hmm = database_commands.add_parser(
+        "attach-phrogs-hmm", help="Attach an existing all_phrogs.h3m to the registered PHROGs resource")
+    attach_hmm.add_argument("path")
     remove = database_commands.add_parser("remove", help="Remove a resource registration")
     remove.add_argument("name")
     resume_command = subcommands.add_parser("resume", help="Resume from a completed run and run missing evidence")
@@ -68,9 +72,11 @@ Individual installers are also available:
     resume_command.add_argument("--mmseqs")
     resume_command.add_argument("--phrogs")
     resume_command.add_argument("--phrogs-annotations")
+    resume_command.add_argument("--phrogs-hmm", help="Existing all_phrogs.h3m profile database")
     resume_command.add_argument("--phrogs-evalue", type=float, default=1e-5)
     resume_command.add_argument("--phrogs-coverage", type=float, default=0.5)
     resume_command.add_argument("--phrogs-score", type=float)
+    resume_command.add_argument("--threads", type=int, default=1)
     reclassify_command = subcommands.add_parser(
         "reclassify",
         help="Regenerate annotations from persisted evidence without database searches",
@@ -137,6 +143,7 @@ Individual installers are also available:
         command.add_argument("--swissprot-evalue", type=float, default=1e-5, help="Swiss-Prot E-value threshold")
         command.add_argument("--phrogs", help="Optional prepared PHROGs MMseqs2 profile database prefix")
         command.add_argument("--phrogs-annotations", help="Optional PHROGs annotation table path")
+        command.add_argument("--phrogs-hmm", help="Optional existing all_phrogs.h3m profile database for sensitive PyHMMER search")
         command.add_argument("--mmseqs", help="Optional MMseqs2 executable path for PHROGs")
         command.add_argument("--phrogs-evalue", type=float, default=1e-5, help="Manual PHROGs E-value threshold")
         command.add_argument("--phrogs-coverage", type=float, default=0.5, help="Manual PHROGs query coverage threshold (0-1)")
@@ -257,7 +264,10 @@ Individual installers are also available:
         return 0
     if args.command == "resume":
         try:
-            count = resume(args.source, args.output, args.run_missing_evidence, args.refresh_evidence, args.mmseqs, args.phrogs, args.phrogs_annotations, args.phrogs_evalue, args.phrogs_coverage, args.phrogs_score, ProgressReporter(quiet=False))
+            count = resume(args.source, args.output, args.run_missing_evidence, args.refresh_evidence,
+                           args.mmseqs, args.phrogs, args.phrogs_annotations, args.phrogs_hmm,
+                           args.phrogs_evalue, args.phrogs_coverage, args.phrogs_score,
+                           ProgressReporter(quiet=False), threads=args.threads)
         except (OSError, ValueError, RuntimeError) as exc:
             parser.error(str(exc))
         print(f"PhageMine resume complete: {count} predicted proteins. Outputs: {args.output}")
@@ -302,12 +312,33 @@ Individual installers are also available:
         manager = EvidenceResourceManager()
         if args.database_command == "register":
             name = args.name or args.resource_type.upper()
-            provenance = {key: value for key, value in (("annotations_path", args.annotations), ("metadata_path", args.metadata)) if value}
+            provenance = {key: value for key, value in (("annotations_path", args.annotations),
+                          ("metadata_path", args.metadata), ("hmm_profiles_path", args.hmm_profiles)) if value}
             resource = manager.register(name, args.resource_type, args.path, version=args.version, checksum=args.checksum, notes=args.notes, provenance=provenance)
             print(json.dumps(resource.metadata(), indent=2, sort_keys=True))
             return 0
         if args.database_command == "status":
             print(json.dumps(manager.list(), indent=2, sort_keys=True))
+            return 0
+        if args.database_command == "attach-phrogs-hmm":
+            hmm_path = Path(args.path).expanduser().resolve()
+            if not hmm_path.is_file():
+                parser.error(f"PHROGs HMM profile database does not exist: {hmm_path}")
+            current = manager.find(ResourceType.PHROGS)
+            if current is None:
+                parser.error("No PHROGs resource is registered; install or register PHROGs first")
+            provenance = {**(current.get("provenance") or {}), "hmm_profiles_path": str(hmm_path)}
+            manager.register(
+                current["name"], ResourceType.PHROGS, current["path"],
+                version=current.get("version"), checksum=current.get("checksum"),
+                required_tools=current.get("required_tools"),
+                preparation_status=current.get("preparation_status", "prepared"),
+                notes=current.get("notes"), provenance=provenance)
+            checked = manager.validate(current["name"])
+            if checked is None or checked.get("status") != "READY":
+                parser.error("PHROGs resource failed validation after attaching HMM profiles: " +
+                             "; ".join((checked or {}).get("validation_errors", [])))
+            print(f"Attached PHROGs profile HMM database: {hmm_path}")
             return 0
         removed = manager.unregister(args.name)
         print(f"Removed {args.name}" if removed else f"No registration found for {args.name}")
@@ -319,7 +350,7 @@ Individual installers are also available:
             "PFAM": {"path": args.pfam, "required_tools": [args.pfam_hmmscan or "hmmscan"]} if args.pfam else None,
             "VOGDB": {"path": args.vogdb, "required_tools": [args.vog_hmmscan or "hmmscan"], "provenance": {"annotations_path": args.vog_annotations}} if args.vogdb else None,
             "SWISSPROT": {"path": args.swissprot, "required_tools": [args.diamond or "diamond"], "provenance": {"metadata_path": args.swissprot_metadata}} if args.swissprot else None,
-            "PHROGS": {"path": args.phrogs, "required_tools": [args.mmseqs or "mmseqs"], "provenance": {"annotations_path": args.phrogs_annotations}} if args.phrogs else None,
+            "PHROGS": {"path": args.phrogs, "required_tools": [args.mmseqs or "mmseqs"], "provenance": {"annotations_path": args.phrogs_annotations, "hmm_profiles_path": args.phrogs_hmm}} if args.phrogs else None,
         })
         metadata = SubmissionMetadata.from_dict(json.loads(Path(args.metadata).read_text())) if args.metadata else None
         from .sequencing_provenance import SequencingProvenance
@@ -329,7 +360,7 @@ Individual installers are also available:
         # comparison automatically.  Other workflows retain the explicit
         # switch because they may intentionally be annotation-only.
         reconcile_orfs = args.reconcile_orfs or args.command == "run"
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress))
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

@@ -1,7 +1,7 @@
 # Installation
 
 Install PhageMine in a clean environment. A Conda installation is recommended
-because it supplies PHANOTATE, Prodigal, HMMER, MMseqs2, DIAMOND, Mash and BLASTN together:
+because it supplies PHANOTATE, Prodigal, HMMER, MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN together:
 
 ```bash
 conda create -n phagemine phagemine \
@@ -11,8 +11,8 @@ conda create -n phagemine phagemine \
 conda activate phagemine
 ```
 
-The Bioconda recipe for PhageMine 1.0.3 must require PHANOTATE, Prodigal, HMMER,
-MMseqs2, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do not treat package installation alone as proof that these
+The Bioconda recipe for PhageMine 1.0.4 must require PHANOTATE, Prodigal, HMMER,
+MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do not treat package installation alone as proof that these
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
 errors.

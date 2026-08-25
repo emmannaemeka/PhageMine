@@ -27,7 +27,7 @@ Phage genomes contain many hypothetical or uncharacterized proteins. Conventiona
 ## Key features
 
 - PHANOTATE CDS prediction and genome validation
-- Pfam, VOGDB, Swiss-Prot, and PHROGs evidence
+- Pfam, VOGDB, Swiss-Prot, and dual-backend PHROGs evidence (MMseqs2 plus PyHMMER)
 - deterministic evidence fusion, functional state, proposed function, and confidence
 - genomic context, modules, candidate ranking, QC, and GenBank pre-submission files
 - batch annotation and HTML reports with linked protein records
@@ -78,7 +78,7 @@ python -m pip install -e .
 ```
 
 Production runs require these executables on `PATH`: PHANOTATE, HMMER
-(`hmmscan`), MMseqs2 (`mmseqs`), DIAMOND (`diamond`), Mash (`mash`) and BLASTN
+(`hmmscan`), MMseqs2 (`mmseqs`), PyHMMER, DIAMOND (`diamond`), Mash (`mash`) and BLASTN
 (`blastn`) when whole-genome INPHARED comparison is installed. Mash selects
 candidate references; BLASTN supplies VIRIDIC-compatible intergenomic
 similarity. `table2asn` is optional and

@@ -35,7 +35,8 @@ from .pooled import deduplicate_proteins, sequence_sha256
 from .pfam import PfamHMMAdapter
 from .vog import VOGHMMAdapter
 from .swissprot import SwissProtEvidenceAdapter
-from .phrogs import PHROGSMMseqsAdapter
+from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
+from .evidence import EvidenceAdapterResult
 from .resources import EvidenceResourceManager, ResourceType
 from .hmmer_chunking import run_chunked
 from .discovery import build_discovery_outputs
@@ -135,7 +136,21 @@ def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predict
         if reusable and checkpoints.get(kind, {}).get("state") == "COMPLETE" and state.get("evidence", {}).get(kind) is not None:
             result = state["evidence"][kind]
         else:
-            result = adapter.analyze(representatives)
+            if kind == "PHROGS":
+                mmseqs_result = adapter.analyze(representatives)
+                hmm_result = PHROGSPyHMMERAdapter(
+                    prov.get("hmm_profiles_path"), prov.get("annotations_path"),
+                    database_version="unknown", threads=threads).analyze(representatives)
+                evidence = merge_phrogs_evidence(mmseqs_result.evidence, hmm_result.evidence)
+                result = EvidenceAdapterResult(
+                    "PHROGSCombinedAdapter",
+                    "REAL" if "REAL" in {mmseqs_result.status, hmm_result.status} else "UNAVAILABLE",
+                    evidence=evidence,
+                    provenance={"backends": [mmseqs_result.provenance, hmm_result.provenance],
+                                "deduplicated_evidence_count": len(evidence)},
+                    message=f"MMseqs2={mmseqs_result.state.value}; PyHMMER={hmm_result.state.value}")
+            else:
+                result = adapter.analyze(representatives)
             state.setdefault("evidence", {})[kind] = result
             state_path.write_bytes(pickle.dumps(state))
             mark(kind)

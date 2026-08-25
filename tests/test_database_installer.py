@@ -16,6 +16,7 @@ from phagemine.database_installer import (
     RESOURCE_ORDER,
     installation_plan,
 )
+from phagemine.resources import EvidenceResourceManager, ResourceType
 
 
 def _tar(path: Path, files: dict[str, bytes]) -> None:
@@ -108,6 +109,7 @@ def test_phrogs_extraction_selects_only_required_safe_basenames(tmp_path):
         "bundle/phrogs_profile_db": b"db",
         "bundle/phrogs_profile_db.dbtype": b"type",
         "bundle/phrogs_profile_db.index": b"index",
+        "bundle/all_phrogs.h3m": b"hmm profiles",
         "bundle/phrog_annot_v4.tsv": b"phrog\tannot\n",
         "../../not_selected.txt": b"unsafe",
     })
@@ -115,7 +117,7 @@ def test_phrogs_extraction_selects_only_required_safe_basenames(tmp_path):
     output.mkdir()
     extracted = DatabaseInstaller._extract_phrogs(archive, output)
     assert extracted == [
-        "phrog_annot_v4.tsv", "phrogs_profile_db",
+        "all_phrogs.h3m", "phrog_annot_v4.tsv", "phrogs_profile_db",
         "phrogs_profile_db.dbtype", "phrogs_profile_db.index",
     ]
     assert not (tmp_path / "not_selected.txt").exists()
@@ -136,6 +138,29 @@ def test_uniprot_metalink_parser_reads_version_and_md5(tmp_path):
 def test_cli_requires_resource_or_all():
     with pytest.raises(SystemExit):
         cli.main(["databases", "install", "--dry-run"])
+
+
+def test_cli_attaches_existing_phrogs_hmm_without_download(tmp_path, monkeypatch):
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    database = tmp_path / "phrogs_profile_db"
+    database.write_bytes(b"db")
+    Path(str(database) + ".dbtype").write_bytes(b"type")
+    annotations = tmp_path / "phrog_annot_v4.tsv"
+    annotations.write_text("phrog\tannot\n")
+    hmm = tmp_path / "all_phrogs.h3m"
+    hmm.write_bytes(b"profiles")
+    manager = EvidenceResourceManager()
+    manager.register(
+        "PHROGs", ResourceType.PHROGS, database, version="v4",
+        required_tools=["mmseqs"], preparation_status="prepared",
+        provenance={"annotations_path": str(annotations)})
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+
+    assert cli.main(["databases", "attach-phrogs-hmm", str(hmm)]) == 0
+
+    registered = manager.validate("PHROGs")
+    assert registered["status"] == "READY"
+    assert registered["provenance"]["hmm_profiles_path"] == str(hmm.resolve())
 
 
 def _gzip_text(path: Path, text: str) -> Path:
