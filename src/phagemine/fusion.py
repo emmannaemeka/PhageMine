@@ -9,8 +9,8 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.3"
-EVIDENCE_HIERARCHY_VERSION = "1.0"
+FUSION_RULES_VERSION = "1.4"
+EVIDENCE_HIERARCHY_VERSION = "1.1"
 DISPLAY_STATES = {
     "KNOWN_FUNCTION": "Specific function strongly supported",
     "PROBABLE_FUNCTION": "Likely function supported by evidence",
@@ -46,6 +46,8 @@ TAXON_SPECIFIC_TERMS = (
     "chloroplast", "chloroplastic", "arabidopsis", "human ", "mouse ",
     "anthrax toxin", "lethal factor", "ino80", "balf1", "arabinogalactan",
     "fungal", "apoptosis", "outer membrane lipoprotein",
+    "spore coat", "starch initiation", "znf598", "plant ", "animal ",
+    "queuosine salvage protein",
 )
 PHAGE_SAFE_FUNCTION_TERMS = (
     "phage", "virion", "capsid", "portal", "terminase", "tail", "baseplate",
@@ -104,7 +106,7 @@ def _domain_summary(accepted: list[Evidence]) -> str | None:
         if evidence.source != "Pfam" and evidence.modality != "domain":
             continue
         label = normalize_function(evidence.description)
-        if label and label not in labels:
+        if label and not any(term in label for term in TAXON_SPECIFIC_TERMS) and label not in labels:
             labels.append(label)
     if not labels:
         return None
@@ -132,9 +134,72 @@ def normalize_function(description: str | None) -> str | None:
         "dna helicase": "dna helicase",
         "terminase large subunit": "terminase large subunit",
         "endolysin": "endolysin",
+        "tail spike": "tail spike protein",
+        "head morphogenesis": "head morphogenesis protein",
+        "terminase": "terminase protein",
     }
     value = canonical.get(value, value)
     return None if value in UNKNOWN_LABELS else value
+
+
+def _numeric_metric(evidence: Evidence, *names: str) -> float | None:
+    for name in names:
+        value = evidence.metrics.get(name)
+        try:
+            if value not in (None, "", "No_PHROG", "No_PHROGs_HMM"):
+                return float(value)
+        except (TypeError, ValueError):
+            pass
+    return None
+
+
+def _candidate_score(evidence: Evidence, label: str) -> float:
+    """Rank product hypotheses using provenance and alignment support."""
+    source = {"Swiss-Prot": 50.0, "PHROGs": 45.0, "VOGDB": 30.0}.get(evidence.source, 10.0)
+    strength = {"EXPERIMENTAL": 40.0, "STRONG": 25.0, "MODERATE": 12.0, "WEAK": 0.0}.get(evidence.evidence_strength, 0.0)
+    identity = _numeric_metric(evidence, "percent_identity", "sequence_identity", "identity")
+    if identity is not None and identity > 1:
+        identity /= 100.0
+    qcov = _numeric_metric(evidence, "query_coverage", "qcov")
+    if qcov is not None and qcov > 1:
+        qcov /= 100.0
+    bits = _numeric_metric(evidence, "bit_score", "bitscore", "mmseqs_score", "score")
+    evalue = _numeric_metric(evidence, "evalue")
+    score = source + strength
+    score += 20.0 * max(0.0, min(identity or 0.0, 1.0))
+    score += 15.0 * max(0.0, min(qcov or 0.0, 1.0))
+    score += min(max(bits or 0.0, 0.0) / 50.0, 12.0)
+    if evalue is not None and evalue <= 1e-20:
+        score += 8.0
+    if any(term in label for term in PHAGE_SAFE_FUNCTION_TERMS):
+        score += 8.0
+    return score
+
+
+def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str | None, Evidence | None, list[dict[str, Any]]]:
+    """Select one auditable product or abstain when evidence is unresolved."""
+    ranked = sorted(
+        ((i, evidence, label, _candidate_score(evidence, label)) for i, evidence, label in informative),
+        key=lambda item: (-item[3], item[2], item[0]),
+    )
+    alternatives = [
+        {"label": label, "source": evidence.source,
+         "identifier": evidence.identifier or evidence.family_name,
+         "adjudication_score": round(score, 3)}
+        for _, evidence, label, score in ranked
+    ]
+    if not ranked:
+        return None, None, alternatives
+    _, winner, label, winner_score = ranked[0]
+    runner_score = ranked[1][3] if len(ranked) > 1 else float("-inf")
+    overlapping = all(label == item[2] or label in item[2] or item[2] in label for item in ranked[1:])
+    quantified = any(_numeric_metric(winner, name) is not None for name in (
+        "percent_identity", "sequence_identity", "identity", "query_coverage",
+        "qcov", "bit_score", "bitscore", "mmseqs_score", "score", "evalue",
+    ))
+    if len(ranked) == 1 or overlapping or (quantified and winner_score - runner_score >= 8.0):
+        return label, winner, alternatives
+    return None, None, alternatives
 
 
 def _gene_and_ec(accepted: list[Evidence]) -> tuple[str | None, str | None]:
@@ -245,7 +310,12 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     rewrite_labels = sorted(set(conservative_rewrites))
     # A safety rewrite is deliberately more conservative than the matched
     # member name and therefore takes precedence over ancillary domain labels.
-    selected_product = rewrite_labels[0] if len(rewrite_labels) == 1 else (labels[0] if len(labels) == 1 else None)
+    selected_product, selected_evidence, product_alternatives = _select_product(informative)
+    if conflicting:
+        selected_product, selected_evidence = None, None
+    if len(rewrite_labels) == 1:
+        selected_product = rewrite_labels[0]
+        selected_evidence = next((e for _, e, label in informative if label == selected_product), selected_evidence)
     domain_summary = _domain_summary(accepted)
     conservation = _conservation(protein.evidence)
     display_product = selected_product or domain_summary or ("conserved phage protein of unknown function" if conservation in {"STRONGLY_CONSERVED", "CONSERVED"} else "hypothetical protein")
@@ -268,7 +338,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
             f"accepted {e.evidence_strength or 'informative'} {e.source} evidence supports a functional interpretation"
             for _, e, _ in informative
         ]
-    elif categories or domain_summary:
+    elif categories or domain_summary or any(e.source == "Pfam" or e.modality == "domain" for e in accepted):
         state, confidence = "FUNCTIONAL_CLASS_ONLY", "LOW"
         reasons = ["accepted evidence supports domain architecture or a broad functional category, but not a complete protein function"]
     elif conservation in {"STRONGLY_CONSERVED", "CONSERVED"}:
@@ -290,7 +360,11 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         accepted,
         key=lambda e: (-strength_rank.get(e.evidence_strength, 0), -source_rank.get(e.source, 0), str(e.identifier or e.family_name or "")),
     )
-    best = ranked_evidence[0] if ranked_evidence else None
+    matching_phrogs = next(
+        (e for _, e, label in informative if selected_product and label == selected_product and e.source == "PHROGs"),
+        None,
+    )
+    best = matching_phrogs or selected_evidence or (ranked_evidence[0] if ranked_evidence else None)
     best_evidence = (
         f"{best.source}:{best.identifier or best.family_name or 'match'}"
         + (f" — {best.description}" if best.description else "")
@@ -319,6 +393,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         "biotechnology_relevance": "Potential capsid-display candidate; experimental confirmation required." if "hoc-like head decoration protein" in display_product else None,
         "scientific_interpretation": interpretation,
         "best_evidence": best_evidence, "review_flag": review_flag,
+        "product_alternatives": product_alternatives,
         "evidence_tier": evidence_tier, "evidence_tier_label": evidence_tier_label,
         "evidence_hierarchy_version": EVIDENCE_HIERARCHY_VERSION,
         "functional_category": categories[0] if len(categories) == 1 else ("; ".join(categories) if categories else None),

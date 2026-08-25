@@ -599,7 +599,8 @@ class PhageMineTests(unittest.TestCase):
         ]))
         self.assertEqual(result["functional_state"], "FUNCTIONAL_CLASS_ONLY")
         self.assertIsNone(result["proposed_function"])
-        self.assertIn("hypothetical protein containing", result["display_product"])
+        self.assertEqual(result["display_product"], "hypothetical protein")
+        self.assertIsNone(result["domain_summary"])
 
     def test_fusion_suppresses_taxon_specific_products_but_preserves_raw_evidence(self):
         for unsafe in ("Interferon gamma", "Apolipoprotein CIII", "Centromere kinetochore component CENP-T", "Male sterility protein"):
@@ -656,6 +657,42 @@ class PhageMineTests(unittest.TestCase):
         result = classify_protein(self._fusion_protein([self._fusion_e("PHROGs", "DNA-dependent RNA polymerase"), self._fusion_e("VOGDB", "T7 RNA polymerase")]))
         self.assertNotEqual(result["functional_state"], "CONFLICTING_EVIDENCE")
         self.assertTrue(result["ambiguity_flags"])
+
+    def test_fusion_quantitative_phrogs_winner_drives_product_and_best_evidence(self):
+        weak = self._fusion_e("PHROGs", "head closure Hc1", identifier="phrog_161")
+        weak.metrics.update({"percent_identity": 0.31, "query_coverage": 0.55, "bit_score": 80, "evalue": 1e-18})
+        winner = self._fusion_e("PHROGs", "tail completion or Neck1 protein", identifier="phrog_17193")
+        winner.metrics.update({"percent_identity": 0.849, "query_coverage": 0.95, "bit_score": 231, "evalue": 2.5e-68})
+        result = classify_protein(self._fusion_protein([weak, winner]))
+        self.assertEqual(result["proposed_function"], "tail completion or neck1 protein")
+        self.assertIn("phrog_17193", result["best_evidence"])
+        self.assertEqual(len(result["product_alternatives"]), 2)
+
+    def test_fusion_phrogs_major_head_normalizes_to_major_capsid(self):
+        evidence = self._fusion_e("PHROGs", "major head protein", identifier="phrog_247")
+        evidence.metrics.update({"percent_identity": 0.546, "query_coverage": 0.9, "bit_score": 397, "evalue": 1e-118})
+        result = classify_protein(self._fusion_protein([evidence]))
+        self.assertEqual(result["proposed_function"], "major capsid protein")
+
+    def test_fusion_hoc_product_is_separate_from_immunoglobulin_domain_note(self):
+        phrog = self._fusion_e("PHROGs", "Hoc-like head decoration", identifier="phrog_2973")
+        phrog.metrics.update({"percent_identity": 0.772, "query_coverage": 0.9, "bit_score": 212, "evalue": 3e-63})
+        result = classify_protein(self._fusion_protein([phrog, self._fusion_e("Pfam", "immunoglobulin I-set domain")]))
+        self.assertEqual(result["proposed_function"], "hoc-like head decoration protein")
+        self.assertIn("immunoglobulin", result["domain_summary"])
+        self.assertIn("capsid-display", result["biotechnology_relevance"])
+
+    def test_fusion_suppresses_ijeoma_taxon_inappropriate_domain_summaries(self):
+        for description in (
+            "fungal deubiquitinating enzyme PH domain",
+            "apoptosis antagonizing transcription factor",
+            "spore coat protein U domain",
+            "protein involved in starch initiation 1 C-terminal domain",
+            "ZNF598 C2H2 zinc finger domain",
+            "queuosine salvage protein",
+        ):
+            result = classify_protein(self._fusion_protein([self._fusion_e("Pfam", description)]))
+            self.assertNotIn(description.lower(), result["display_product"])
 
     def test_fusion_resume_output_layer_regenerates_both_files(self):
         proteins = [self._fusion_protein()]
