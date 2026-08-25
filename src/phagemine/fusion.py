@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.2"
+FUSION_RULES_VERSION = "1.3"
 EVIDENCE_HIERARCHY_VERSION = "1.0"
 DISPLAY_STATES = {
     "KNOWN_FUNCTION": "Specific function strongly supported",
@@ -45,6 +45,7 @@ TAXON_SPECIFIC_TERMS = (
     "male sterility", "cerebellar degeneration", "baculovirus", "mitochondrial",
     "chloroplast", "chloroplastic", "arabidopsis", "human ", "mouse ",
     "anthrax toxin", "lethal factor", "ino80", "balf1", "arabinogalactan",
+    "fungal", "apoptosis", "outer membrane lipoprotein",
 )
 PHAGE_SAFE_FUNCTION_TERMS = (
     "phage", "virion", "capsid", "portal", "terminase", "tail", "baseplate",
@@ -123,7 +124,35 @@ def normalize_function(description: str | None) -> str | None:
     # identify a database record, not a transferable biological function.
     value = re.sub(r"^[a-z0-9]+_[a-z0-9]+\s+", "", value)
     value = re.sub(r"\s*\{eco:[^}]+\}\s*$", "", value, flags=re.IGNORECASE).strip()
+    canonical = {
+        "major head protein": "major capsid protein",
+        "hoc-like head decoration": "hoc-like head decoration protein",
+        "head scaffolding protein": "head scaffolding protein",
+        "head closure hc1": "head closure protein hc1",
+        "dna helicase": "dna helicase",
+        "terminase large subunit": "terminase large subunit",
+        "endolysin": "endolysin",
+    }
+    value = canonical.get(value, value)
     return None if value in UNKNOWN_LABELS else value
+
+
+def _gene_and_ec(accepted: list[Evidence]) -> tuple[str | None, str | None]:
+    """Transfer identifiers only from strong, accepted, explicit records."""
+    genes: list[str] = []; ecs: list[str] = []
+    for evidence in accepted:
+        if evidence.evidence_strength not in {"STRONG", "EXPERIMENTAL"}:
+            continue
+        gene = evidence.metrics.get("gene") or evidence.metrics.get("gene_name")
+        ec = evidence.metrics.get("ec_number") or evidence.metrics.get("ec")
+        if gene and re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]{0,19}", str(gene)):
+            genes.append(str(gene))
+        if ec:
+            match = re.search(r"\b\d+\.(?:\d+|-)\.(?:\d+|-)\.(?:\d+|-)\b", str(ec))
+            if match:
+                ecs.append(match.group(0))
+    return (genes[0] if genes and len(set(genes)) == 1 else None,
+            ecs[0] if ecs and len(set(ecs)) == 1 else None)
 
 
 def _conservative_label(label: str | None, accepted: list[Evidence]) -> tuple[str | None, str | None]:
@@ -172,6 +201,7 @@ def _conservation(evidence: list[Evidence]) -> str:
 
 def classify_protein(protein: Protein) -> dict[str, Any]:
     accepted = [e for e in protein.evidence if e.supports]
+    gene, ec_number = _gene_and_ec(accepted)
     conservative_flags: list[str] = []
     conservative_rewrites: list[str] = []
     informative = []
@@ -285,6 +315,8 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         "display_classification": DISPLAY_STATES[state],
         "proposed_function": selected_product, "normalized_function": selected_product,
         "display_product": display_product, "domain_summary": domain_summary,
+        "gene": gene, "ec_number": ec_number,
+        "biotechnology_relevance": "Potential capsid-display candidate; experimental confirmation required." if "hoc-like head decoration protein" in display_product else None,
         "scientific_interpretation": interpretation,
         "best_evidence": best_evidence, "review_flag": review_flag,
         "evidence_tier": evidence_tier, "evidence_tier_label": evidence_tier_label,
@@ -311,7 +343,7 @@ def write_classification(root: str | Path, proteins: list[Protein], results: lis
     by_id = {p.protein_id: p for p in proteins}
     path = Path(root)
     (path / "functional_classification.json").write_text(json.dumps(results, indent=2, sort_keys=True))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "functional_state", "display_classification", "proposed_function", "display_product", "confidence", "evidence_tier", "evidence_tier_label", "best_evidence", "review_flag", "domain_summary", "functional_category", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "gene", "ec_number", "functional_state", "display_classification", "proposed_function", "display_product", "confidence", "evidence_tier", "evidence_tier_label", "best_evidence", "review_flag", "domain_summary", "functional_category", "biotechnology_relevance", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
     with (path / "functional_classification.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()

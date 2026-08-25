@@ -10,6 +10,7 @@ import re
 import shutil
 import sqlite3
 import subprocess
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Iterable, Iterator
@@ -22,6 +23,80 @@ UNKNOWN_ANNOTATION = re.compile(
     re.IGNORECASE,
 )
 VALID_AA = set("ABCDEFGHIKLMNPQRSTVWXYZJUO*")
+ICTV_SPECIES_THRESHOLD = 95.0
+ICTV_DEFAULT_GENUS_THRESHOLD = 70.0
+ICTV_FAMILY_GENUS_THRESHOLDS = {"Herelleviridae": 60.0}
+ICTV_METHOD = "VIRIDIC-compatible bidirectional BLASTN whole-genome similarity"
+
+
+def _covered_length(intervals: list[tuple[int, int]]) -> int:
+    merged: list[list[int]] = []
+    for start, end in sorted((min(a, b), max(a, b)) for a, b in intervals):
+        if not merged or start > merged[-1][1] + 1:
+            merged.append([start, end])
+        else:
+            merged[-1][1] = max(merged[-1][1], end)
+    return sum(end - start + 1 for start, end in merged)
+
+
+def _directional_blast_identity(blastn: str, query: Path, subject: Path) -> tuple[float, int, list[str]]:
+    """Return non-overlapping identical bases and query coverage."""
+    command = [blastn, "-query", str(query), "-subject", str(subject),
+               "-word_size", "7", "-reward", "2", "-penalty", "-3",
+               "-gapopen", "5", "-gapextend", "2",
+               "-outfmt", "6 qstart qend length nident bitscore"]
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or "BLASTN intergenomic comparison failed")
+    hsps = []
+    for line in result.stdout.splitlines():
+        fields = line.split("\t")
+        if len(fields) != 5:
+            continue
+        try:
+            start, end, length, nident = map(int, fields[:4]); score = float(fields[4])
+        except ValueError:
+            continue
+        hsps.append((score, min(start, end), max(start, end), length, nident))
+    occupied: set[int] = set(); identical = 0.0; intervals = []
+    for _score, start, end, length, nident in sorted(hsps, reverse=True):
+        uncovered = sum(position not in occupied for position in range(start, end + 1))
+        if not uncovered or not length:
+            continue
+        identical += nident * (uncovered / length)
+        occupied.update(range(start, end + 1)); intervals.append((start, end))
+    return identical, _covered_length(intervals), command
+
+
+def _ictv_interpretation(similarity: float | None, family: str | None) -> tuple[float, float, str, str]:
+    genus = ICTV_FAMILY_GENUS_THRESHOLDS.get(family or "", ICTV_DEFAULT_GENUS_THRESHOLD)
+    source = "ICTV family-specific genus threshold" if family in ICTV_FAMILY_GENUS_THRESHOLDS else "general ICTV Bacterial Viruses Subcommittee working threshold"
+    if similarity is None:
+        label = "NOT_CALCULATED"
+    elif similarity >= ICTV_SPECIES_THRESHOLD:
+        label = "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD"
+    elif similarity >= genus:
+        label = "CONSISTENT_WITH_SAME_GENUS_DIFFERENT_SPECIES"
+    else:
+        label = "SAME_GENUS_NOT_SUPPORTED_BY_NUCLEOTIDE_THRESHOLD"
+    return ICTV_SPECIES_THRESHOLD, genus, source, label
+
+
+def _calculate_intergenomic_similarity(query: str, reference: str, blastn: str) -> dict:
+    with tempfile.TemporaryDirectory(prefix="phagemine-ictv-") as temporary:
+        root = Path(temporary); query_path = root / "query.fna"; reference_path = root / "reference.fna"
+        query_path.write_text(f">query\n{query}\n"); reference_path.write_text(f">reference\n{reference}\n")
+        id_ab, aligned_query, command_ab = _directional_blast_identity(blastn, query_path, reference_path)
+        id_ba, aligned_reference, command_ba = _directional_blast_identity(blastn, reference_path, query_path)
+    denominator = len(query) + len(reference)
+    return {
+        "intergenomic_similarity_percent": ((id_ab + id_ba) * 100.0 / denominator) if denominator else None,
+        "query_aligned_percent": aligned_query * 100.0 / len(query) if query else None,
+        "reference_aligned_percent": aligned_reference * 100.0 / len(reference) if reference else None,
+        "genome_length_ratio": min(len(query), len(reference)) / max(len(query), len(reference)) if query and reference else None,
+        "similarity_method": ICTV_METHOD,
+        "similarity_commands": [command_ab, command_ba],
+    }
 
 
 class INPHAREDPreparationError(RuntimeError):
@@ -445,8 +520,9 @@ def compare_genomes(
     mash: str = "mash",
     top_n: int = 10,
     reference_fasta: str | Path | None = None,
+    blastn: str = "blastn",
 ) -> dict:
-    """Find nearest INPHARED references and retain conservative provenance."""
+    """Screen INPHARED with Mash, then calculate ICTV-compatible similarity."""
     executable = str(Path(mash)) if Path(mash).is_file() else shutil.which(mash)
     if not executable:
         raise RuntimeError("Mash unavailable; install mash or provide its executable path")
@@ -485,7 +561,6 @@ def compare_genomes(
                 "rank": rank,
                 "reference_accession": reference,
                 "mash_distance": distance,
-                "mash_similarity_screen": 1.0 - distance,
                 "p_value": pvalue,
                 "matching_hashes": shared,
                 "reference_description": details.get("description"),
@@ -493,14 +568,15 @@ def compare_genomes(
                 "phage_genus": details.get("phage_genus"),
                 "phage_subfamily": details.get("phage_subfamily"),
                 "phage_family": details.get("phage_family"),
-                "interpretation": "SCREENING_ONLY_REQUIRES_CONFIRMATORY_ALIGNMENT_OR_ANI",
+                "interpretation": "MASH_SCREENING_ONLY",
             })
     # Confirm zero-distance Mash results by direct nucleotide comparison when
     # the prepared reference FASTA is available.  Rotation equivalence is a
     # sequence observation and does not itself establish circular topology.
-    zero_accessions={row["reference_accession"] for row in rows if row["mash_distance"]==0.0}
-    reference_sequences=_reference_sequences(reference_fasta,zero_accessions)
+    accessions={row["reference_accession"] for row in rows}
+    reference_sequences=_reference_sequences(reference_fasta,accessions)
     query_sequences={sample_id:_single_fasta_sequence(path) for sample_id,path in sample_fastas.items()}
+    blastn_executable = str(Path(blastn)) if Path(blastn).is_file() else shutil.which(blastn)
     for row in rows:
         if row["mash_distance"]!=0.0:
             confirmation, identity="NOT_RUN_MASH_DISTANCE_NONZERO", None
@@ -511,12 +587,25 @@ def compare_genomes(
         row["sequence_confirmation"]=confirmation
         row["confirmed_identity"]=identity
         row["confirmation_method"]="built-in exact nucleotide comparison; no ANI inferred"
+        comparison = None
+        if blastn_executable and row["reference_accession"] in reference_sequences:
+            comparison = _calculate_intergenomic_similarity(query_sequences.get(row["sample_id"], ""), reference_sequences[row["reference_accession"]], blastn_executable)
+        row.update(comparison or {"intergenomic_similarity_percent": None, "query_aligned_percent": None,
+            "reference_aligned_percent": None, "genome_length_ratio": None,
+            "similarity_method": "NOT_CALCULATED_BLASTN_OR_REFERENCE_UNAVAILABLE", "similarity_commands": []})
+        species_cutoff, genus_cutoff, threshold_source, taxonomic_interpretation = _ictv_interpretation(row["intergenomic_similarity_percent"], row.get("phage_family"))
+        row.update({"species_threshold_percent": species_cutoff, "genus_threshold_percent": genus_cutoff,
+                    "threshold_source": threshold_source, "taxonomic_interpretation": taxonomic_interpretation})
+        row["interpretation"] = taxonomic_interpretation if comparison else "MASH_SCREENING_ONLY; ICTV_SIMILARITY_NOT_CALCULATED"
     destination = Path(output)
     destination.mkdir(parents=True, exist_ok=True)
     columns = [
-        "sample_id", "rank", "reference_accession", "mash_distance", "mash_similarity_screen",
+        "sample_id", "rank", "reference_accession", "mash_distance",
         "p_value", "matching_hashes", "reference_description", "host_genus", "phage_genus",
-        "phage_subfamily", "phage_family", "sequence_confirmation", "confirmed_identity", "confirmation_method", "interpretation",
+        "phage_subfamily", "phage_family", "intergenomic_similarity_percent", "query_aligned_percent",
+        "reference_aligned_percent", "genome_length_ratio", "similarity_method", "species_threshold_percent",
+        "genus_threshold_percent", "threshold_source", "taxonomic_interpretation", "sequence_confirmation",
+        "confirmed_identity", "confirmation_method", "interpretation", "similarity_commands",
     ]
     with (destination / "inphared_nearest_phages.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
@@ -547,16 +636,24 @@ def compare_genomes(
             "reference_description": best.get("reference_description"),
             "reference_accessions": ";".join(sorted({item["reference_accession"] for item in group_rows})),
             "best_mash_distance": best["mash_distance"],
-            "best_mash_similarity_screen": best["mash_similarity_screen"],
             "matching_hashes": best["matching_hashes"],
+            "intergenomic_similarity_percent": best.get("intergenomic_similarity_percent"),
+            "query_aligned_percent": best.get("query_aligned_percent"),
+            "reference_aligned_percent": best.get("reference_aligned_percent"),
+            "genome_length_ratio": best.get("genome_length_ratio"),
+            "similarity_method": best.get("similarity_method"),
+            "species_threshold_percent": best.get("species_threshold_percent"),
+            "genus_threshold_percent": best.get("genus_threshold_percent"),
+            "threshold_source": best.get("threshold_source"),
+            "taxonomic_interpretation": best.get("taxonomic_interpretation"),
             "sequence_confirmation": best.get("sequence_confirmation"),
             "confirmed_identity": best.get("confirmed_identity"),
             "host_genus": best.get("host_genus"), "phage_genus": best.get("phage_genus"),
             "phage_subfamily": best.get("phage_subfamily"), "phage_family": best.get("phage_family"),
-            "interpretation": "NUCLEOTIDE_SEQUENCE_EQUIVALENCE_CONFIRMED; TAXONOMY_NOT_INFERRED" if sequence_confirmed else ("EXACT_SKETCH_MATCH_REQUIRES_SEQUENCE_CONFIRMATION" if best["mash_distance"] == 0.0 and exact_hashes else "SCREENING_ONLY_REQUIRES_CONFIRMATORY_ALIGNMENT_OR_ANI"),
+            "interpretation": best.get("interpretation"),
         })
     unique.sort(key=lambda item: (item["sample_id"], item["best_mash_distance"], item["reference_description"] or ""))
-    summary_columns = ["sample_id", "relationship", "reference_description", "reference_accessions", "best_mash_distance", "best_mash_similarity_screen", "matching_hashes", "sequence_confirmation", "confirmed_identity", "host_genus", "phage_genus", "phage_subfamily", "phage_family", "interpretation"]
+    summary_columns = ["sample_id", "relationship", "reference_description", "reference_accessions", "best_mash_distance", "matching_hashes", "intergenomic_similarity_percent", "query_aligned_percent", "reference_aligned_percent", "genome_length_ratio", "similarity_method", "species_threshold_percent", "genus_threshold_percent", "threshold_source", "taxonomic_interpretation", "sequence_confirmation", "confirmed_identity", "host_genus", "phage_genus", "phage_subfamily", "phage_family", "interpretation"]
     with (destination / "inphared_summary.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=summary_columns, delimiter="\t")
         writer.writeheader(); writer.writerows(unique)
@@ -564,7 +661,7 @@ def compare_genomes(
         "status": "COMPLETE",
         "database": "INPHARED",
         "commands": commands,
-        "scientific_interpretation": "Mash distance is nearest-neighbour screening evidence, not ANI or a taxonomic assignment.",
+        "scientific_interpretation": "Mash selects candidate references only. Taxonomic interpretation uses VIRIDIC-compatible bidirectional BLASTN similarity normalized to both complete genome lengths; it remains computational evidence, not an ICTV assignment.",
         "matches": rows,
         "unique_reference_summaries": unique,
     }

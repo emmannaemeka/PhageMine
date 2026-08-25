@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.0.3
+
+- Replace the invalid `1 - Mash distance` pseudo-similarity with Mash-only
+  candidate screening followed by VIRIDIC-compatible bidirectional BLASTN
+  whole-genome intergenomic similarity.
+- Report query/reference aligned fractions, genome-length ratio, explicit
+  species/genus thresholds, threshold provenance, and cautious numerical-
+  taxonomy interpretations.
+- Add the completed INPHARED numerical-taxonomy table and downloads to the
+  primary `report.html` after comparative discovery finishes.
+- Add simple Prokka-style `gene`, `product`, `EC_number`, evidence-source and
+  biotechnology-relevance columns. Gene symbols and EC numbers are transferred
+  only from explicit, strong, non-conflicting evidence.
+- Normalize defensible phage terms including major capsid, Hoc-like head
+  decoration, head-scaffolding, terminase, endolysin and helicase products;
+  suppress unsupported fungal, apoptosis and bacterial-envelope labels.
+- Identify Hoc-like decoration proteins as potential capsid-display candidates
+  in a separate application note that explicitly requires experimental
+  confirmation.
+- Correct the progress denominator for runs that include PHANOTATE/Prodigal
+  reconciliation and alternative-ORF adjudication.
+- Allow Core `run` to complete without invoking MMseqs2 discovery when no
+  comparative resources are registered.
+
 ## 1.0.2
 
 - Simplify the primary annotation table to protein ID, coordinates, strand,

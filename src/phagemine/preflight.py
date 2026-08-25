@@ -23,6 +23,7 @@ def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
         "mmseqs": [[resolved, "version"]],
         "diamond": [[resolved, "version"]],
         "mash": [[resolved, "--version"]],
+        "blastn": [[resolved, "-version"]],
         "phanotate.py": [[resolved, "--version"], [resolved, "-h"]],
         "table2asn": [[resolved, "-version"], [resolved, "-h"]],
         "python": [[resolved, "--version"]],
@@ -101,7 +102,7 @@ def preflight_profile(profile: str) -> dict[str, Any]:
 
 def doctor() -> dict[str, Any]:
     manager = EvidenceResourceManager()
-    tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "mash", "table2asn"]
+    tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "mash", "blastn", "table2asn"]
     executables = [executable_status(tool) for tool in tools]
     resources = manager.validate_all(check_checksum=True)
     by_type = {kind: [r for r in resources if r.get("resource_type") == kind and r.get("status") == "READY"]
@@ -113,7 +114,7 @@ def doctor() -> dict[str, Any]:
         "STANDARD_EVIDENCE": "READY" if by_type["PHROGS"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
         "FULL_EVIDENCE": "READY" if all(by_type[k] for k in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")) and all(tool_by_name[t]["status"] == "READY" for t in ("hmmscan", "mmseqs", "diamond")) else "UNAVAILABLE",
         "PMF_REFERENCE_COMPARISON": "READY" if by_type["PMFDB"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
-        "WHOLE_GENOME_REFERENCE_COMPARISON": "READY" if by_type["INPHARED_GENOMES"] and tool_by_name["mash"]["status"] == "READY" else "UNAVAILABLE",
+        "WHOLE_GENOME_REFERENCE_COMPARISON": "READY" if by_type["INPHARED_GENOMES"] and all(tool_by_name[t]["status"] == "READY" for t in ("mash", "blastn")) else "UNAVAILABLE",
         "GENBANK_PRE_SUBMISSION": "READY",
         "NCBI_TABLE2ASN_VALIDATION": "READY" if table2asn_ready else "UNAVAILABLE",
     }
@@ -151,7 +152,7 @@ def doctor() -> dict[str, Any]:
                     if item["name"] != "table2asn" and item["status"] != "READY"]
     if broken_tools:
         conda_packages = {"phanotate.py": "phanotate", "prodigal": "prodigal", "hmmscan": "hmmer",
-                          "mmseqs": "mmseqs2", "diamond": "diamond", "mash": "mash"}
+                          "mmseqs": "mmseqs2", "diamond": "diamond", "mash": "mash", "blastn": "blast"}
         packages = [conda_packages[item["name"]] for item in broken_tools if item["name"] in conda_packages]
         recommendations.append({
             "action": "INSTALL_OR_REPAIR_EXECUTABLES",
@@ -173,7 +174,7 @@ def write_doctor_report(path: str | Path) -> dict[str, Any]:
 
 def doctor_text(payload: dict[str, Any]) -> str:
     lines = [f"PhageMine {payload['phagemine_version']}", "", "Executables"]
-    labels = {"phanotate.py": "PHANOTATE", "prodigal": "Prodigal", "hmmscan": "HMMER", "mmseqs": "MMseqs2", "diamond": "DIAMOND", "mash": "Mash", "table2asn": "table2asn"}
+    labels = {"phanotate.py": "PHANOTATE", "prodigal": "Prodigal", "hmmscan": "HMMER", "mmseqs": "MMseqs2", "diamond": "DIAMOND", "mash": "Mash", "blastn": "BLASTN", "table2asn": "table2asn"}
     for item in payload["executables"]:
         status = item["status"] if item["name"] != "table2asn" or item["status"] == "READY" else "OPTIONAL/MISSING"
         lines.append(f"{labels[item['name']]:<14}{status:<17}{item.get('version') or ''}")

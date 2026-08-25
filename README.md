@@ -78,8 +78,10 @@ python -m pip install -e .
 ```
 
 Production runs require these executables on `PATH`: PHANOTATE, HMMER
-(`hmmscan`), MMseqs2 (`mmseqs`), DIAMOND (`diamond`), and Mash (`mash`) when
-whole-genome INPHARED comparison is installed. `table2asn` is optional and
+(`hmmscan`), MMseqs2 (`mmseqs`), DIAMOND (`diamond`), Mash (`mash`) and BLASTN
+(`blastn`) when whole-genome INPHARED comparison is installed. Mash selects
+candidate references; BLASTN supplies VIRIDIC-compatible intergenomic
+similarity. `table2asn` is optional and
 never blocks the normal GenBank pre-submission package.
 
 After installation, PhageMine displays the database setup commands in its

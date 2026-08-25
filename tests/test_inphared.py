@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 from phagemine.batch import _comparative_resources
 from phagemine.family_external import validate_external
-from phagemine.inphared import compare_genomes
+from phagemine.inphared import compare_genomes, _calculate_intergenomic_similarity, _ictv_interpretation
 
 
 def test_compare_genomes_writes_ranked_conservative_results(tmp_path, monkeypatch):
@@ -32,7 +32,8 @@ def test_compare_genomes_writes_ranked_conservative_results(tmp_path, monkeypatc
     )
     assert payload["status"] == "COMPLETE"
     assert payload["matches"][0]["reference_accession"] == "REF1"
-    assert payload["matches"][0]["interpretation"] == "SCREENING_ONLY_REQUIRES_CONFIRMATORY_ALIGNMENT_OR_ANI"
+    assert payload["matches"][0]["interpretation"] == "MASH_SCREENING_ONLY; ICTV_SIMILARITY_NOT_CALCULATED"
+    assert "mash_similarity_screen" not in payload["matches"][0]
     rows = list(csv.DictReader((tmp_path / "output" / "inphared_nearest_phages.tsv").open(), delimiter="\t"))
     assert rows[0]["host_genus"] == "Pseudomonas"
     summary = list(csv.DictReader((tmp_path / "output" / "inphared_summary.tsv").open(), delimiter="\t"))
@@ -56,6 +57,22 @@ def test_compare_genomes_groups_duplicate_accessions_and_labels_exact_sketch_mat
     summary = payload["unique_reference_summaries"][0]
     assert summary["relationship"] == "EXACT_MASH_SKETCH_MATCH"
     assert summary["reference_accessions"] == "GB1;RS1"
+
+
+def test_ictv_interpretation_uses_species_and_family_specific_genus_thresholds():
+    assert _ictv_interpretation(96.0, "Sarkviridae")[3] == "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD"
+    assert _ictv_interpretation(65.0, "Herelleviridae")[3] == "CONSISTENT_WITH_SAME_GENUS_DIFFERENT_SPECIES"
+    assert _ictv_interpretation(65.0, "Sarkviridae")[3] == "SAME_GENUS_NOT_SUPPORTED_BY_NUCLEOTIDE_THRESHOLD"
+
+
+def test_bidirectional_similarity_is_normalized_to_both_complete_genomes(tmp_path, monkeypatch):
+    blastn = tmp_path / "blastn"; blastn.write_text("fixture")
+    outputs = iter(["1\t8\t8\t8\t80\n", "1\t8\t8\t8\t80\n"])
+    monkeypatch.setattr("phagemine.inphared.subprocess.run", lambda *_a, **_k: SimpleNamespace(returncode=0, stdout=next(outputs), stderr=""))
+    result = _calculate_intergenomic_similarity("ACGTACGT", "ACGTACGT", str(blastn))
+    assert result["intergenomic_similarity_percent"] == 100.0
+    assert result["query_aligned_percent"] == 100.0
+    assert result["reference_aligned_percent"] == 100.0
 
 
 def test_compare_genomes_confirms_rotation_equivalent_reference_sequence(tmp_path, monkeypatch):

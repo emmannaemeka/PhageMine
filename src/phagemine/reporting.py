@@ -18,6 +18,44 @@ from .context import write_context
 from .figures import generate_annotation_figures
 
 
+def update_comparative_report(output: str | Path, comparative: dict) -> None:
+    """Insert completed PMFDB/INPHARED results into the primary HTML report."""
+    root = Path(output); report = root / "report.html"
+    if not report.is_file():
+        return
+    inphared = comparative.get("inphared") or {}
+    rows = inphared.get("unique_reference_summaries") or inphared.get("matches") or []
+    table_rows = []
+    for rank, row in enumerate(rows, 1):
+        similarity = row.get("intergenomic_similarity_percent")
+        query_aligned = row.get("query_aligned_percent")
+        reference_aligned = row.get("reference_aligned_percent")
+        def number(value):
+            return "Not calculated" if value in (None, "") else f"{float(value):.2f}%"
+        accession = row.get("reference_accessions") or row.get("reference_accession") or "Not available"
+        accession_link = html.escape(str(accession))
+        if ";" not in str(accession) and accession != "Not available":
+            accession_link = f"<a href='https://www.ncbi.nlm.nih.gov/nuccore/{html.escape(str(accession))}'>{html.escape(str(accession))}</a>"
+        table_rows.append("<tr>" + "".join([
+            f"<td>{rank}</td>", f"<td>{html.escape(str(row.get('reference_description') or 'Not available in INPHARED metadata'))}</td>",
+            f"<td>{accession_link}</td>", f"<td>{html.escape(str(row.get('host_genus') or 'Not available'))}</td>",
+            f"<td>{html.escape(str(row.get('phage_family') or 'Not available'))}</td>", f"<td>{html.escape(str(row.get('phage_genus') or 'Not available'))}</td>",
+            f"<td>{number(similarity)}</td>", f"<td>{number(query_aligned)}</td>", f"<td>{number(reference_aligned)}</td>",
+            f"<td>{html.escape(str(row.get('taxonomic_interpretation') or 'Screening result only'))}</td>",
+        ]) + "</tr>")
+    if table_rows:
+        table = "<table><thead><tr><th>Rank</th><th>Reference phage</th><th>Accession</th><th>Host</th><th>ICTV family</th><th>ICTV genus</th><th>Intergenomic similarity</th><th>Query aligned</th><th>Reference aligned</th><th>Interpretation</th></tr></thead><tbody>" + "".join(table_rows) + "</tbody></table>"
+    else:
+        table = "<p>No INPHARED reference comparison was available.</p>"
+    section = ("<section id='inphared-numerical-taxonomy'><h2>Whole-genome numerical taxonomy: INPHARED and ICTV comparison</h2>"
+        "<p><b>Method:</b> Mash is used only to select candidate references. Reported similarity is calculated by a VIRIDIC-compatible bidirectional BLASTN method and normalized across both complete genome lengths. Mash distance is not converted to similarity.</p>"
+        "<p><b>Taxonomic caution:</b> Threshold agreement is computational support, not a formal ICTV assignment. Taxon-specific ICTV demarcation criteria take precedence.</p>"
+        + table + "<p><a href='comparative/inphared_nearest_phages.tsv'>Download accession-level results</a> · <a href='comparative/inphared_summary.tsv'>Download numerical-taxonomy summary</a> · <a href='comparative/discovery_report.html'>Open comparative report</a></p></section>")
+    content = report.read_text()
+    content = content.replace("</body>", section + "</body>")
+    report.write_text(content)
+
+
 def _evidence_lines(protein: Protein) -> list[str]:
     by_source = {"Pfam": [], "VOGDB": [], "PHROGs": [], "Swiss-Prot": []}
     for evidence in protein.evidence:
@@ -161,7 +199,7 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
         f'>{p.protein_id} product="{(cls_by_id.get(p.protein_id, {}).get("display_product") or "hypothetical protein").replace(chr(34), "")}" coordinates={p.start}..{p.end} strand={p.strand} confidence={cls_by_id.get(p.protein_id, {}).get("confidence") or "NONE"}\n{p.sequence}\n'
         for p in proteins
     ))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "classification", "proposed_function", "confidence", "best_evidence", "review_flag"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function", "EC_number", "classification", "confidence", "evidence_sources", "best_evidence", "biotechnology_relevance", "review_flag"]
     with (root / "annotation.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()
@@ -169,10 +207,14 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
             c = cls_by_id.get(p.protein_id, {})
             writer.writerow({"protein_id": p.protein_id, "start": p.start, "end": p.end,
                 "strand": p.strand, "length_aa": p.length,
-                "classification": c.get("display_classification") or "No reliable function identified",
+                "gene": c.get("gene") or "", "product": c.get("display_product") or "hypothetical protein",
                 "proposed_function": c.get("display_product") or p.annotation,
+                "EC_number": c.get("ec_number") or "",
+                "classification": c.get("display_classification") or "No reliable function identified",
                 "confidence": c.get("confidence") or "NONE",
+                "evidence_sources": ";".join(c.get("supporting_sources") or []),
                 "best_evidence": c.get("best_evidence") or "No accepted evidence",
+                "biotechnology_relevance": c.get("biotechnology_relevance") or "",
                 "review_flag": c.get("review_flag") or "NONE"})
     with (root / "candidate_ranking.tsv").open("w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t")

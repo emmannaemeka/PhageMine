@@ -10,7 +10,7 @@ from .io import checksum, read_fasta
 from .genbank import write_package
 from .models import EvidenceLevel, SubmissionMetadata
 from .mining import mine, ranked_candidates
-from .reporting import write_outputs, write_checkpoint_snapshot, write_stage_checkpoint
+from .reporting import write_outputs, write_checkpoint_snapshot, write_stage_checkpoint, update_comparative_report
 from .quality import assess
 from .genome_representation import GenomeRepresentation
 from .sequencing_provenance import SequencingProvenance
@@ -42,6 +42,11 @@ def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
 
 def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
     progress = progress or ProgressReporter(quiet=True)
+    if reconcile_orfs:
+        progress.STAGES = ("input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
+            "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
+            "ORF adjudication", "evidence integration", "candidate ranking/mining", "QC/report generation",
+            "GenBank pre-submission package")
     timings = {}
     def timed_start(name): timings[name] = {"start": time.time()}
     def timed_end(name): timings[name]["end"] = time.time(); timings[name]["seconds"] = timings[name]["end"] - timings[name]["start"]
@@ -252,19 +257,23 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         manager = EvidenceResourceManager()
         pmfdb_resource = manager.find(ResourceType.PMFDB)
         inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
-        comparative = build_discovery_outputs(
-            [Path(output)], Path(output) / "comparative",
-            mmseqs=mmseqs or "mmseqs",
-            pmfdb=pmfdb_resource.get("path") if pmfdb_resource else None,
-            inphared=inphared_resource,
-            progress=progress,
-            source_mode="single-run",
-        )
+        comparative = {"pmfdb": {"status": "PMFDB_UNAVAILABLE"},
+                       "inphared": {"status": "INPHARED_UNAVAILABLE", "matches": []}}
+        if pmfdb_resource or inphared_resource:
+            comparative = build_discovery_outputs(
+                [Path(output)], Path(output) / "comparative",
+                mmseqs=mmseqs or "mmseqs",
+                pmfdb=pmfdb_resource.get("path") if pmfdb_resource else None,
+                inphared=inphared_resource,
+                progress=progress,
+                source_mode="single-run",
+            )
         manifest["comparative_analysis"] = {
             "output_directory": str(Path(output) / "comparative"),
             "pmfdb": comparative.get("pmfdb"),
             "inphared": comparative.get("inphared"),
         }
+        update_comparative_report(output, comparative)
     # Local package generation follows annotation, mining, ranking, and QC evidence collection.
     progress.start("GenBank pre-submission package")
     timed_start("genbank")

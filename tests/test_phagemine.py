@@ -40,7 +40,7 @@ from phagemine.vog import VOGHMMAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.phrogs import PHROGSMMseqsAdapter
 from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics
-from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts
+from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts, update_comparative_report
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
 from phagemine.resources import EvidenceResourceManager, ResourceStatus, ResourceType, default_registry_path
@@ -53,6 +53,33 @@ RESUME_SOURCE_FIXTURE = ROOT / "tests" / "fixtures" / "resume_source"
 
 
 class PhageMineTests(unittest.TestCase):
+    def test_hoc_like_product_is_preserved_with_separate_display_note(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("PHROGs", "Hoc-like head decoration", identifier="phrog_2973")
+        ]))
+        self.assertEqual(result["display_product"], "hoc-like head decoration protein")
+        self.assertIn("capsid-display candidate", result["biotechnology_relevance"])
+
+    def test_major_head_synonym_normalizes_to_major_capsid(self):
+        result = classify_protein(self._fusion_protein([
+            self._fusion_e("PHROGs", "major head protein", identifier="phrog_247")
+        ]))
+        self.assertEqual(result["display_product"], "major capsid protein")
+
+    def test_primary_html_receives_completed_inphared_numerical_taxonomy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); (root / "report.html").write_text("<html><body><h1>Report</h1></body></html>")
+            update_comparative_report(root, {"inphared": {"unique_reference_summaries": [{
+                "reference_description": "Reference phage", "reference_accessions": "AB123",
+                "host_genus": "Salmonella", "phage_family": "Sarkviridae", "phage_genus": "Jerseyvirus",
+                "intergenomic_similarity_percent": 96.2, "query_aligned_percent": 99.0,
+                "reference_aligned_percent": 98.0, "taxonomic_interpretation": "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD",
+            }]}})
+            report = (root / "report.html").read_text()
+            self.assertIn("Whole-genome numerical taxonomy", report)
+            self.assertIn("96.20%", report)
+            self.assertIn("Mash distance is not converted to similarity", report)
+
     def test_orf_reconciliation_boundary_and_strand_categories(self):
         p=GeneModel("PHANOTATE","P1",100,400,"+")
         self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",100,400,"+")])[0]["conflict_type"],"EXACT_CONCORDANCE")
@@ -777,7 +804,7 @@ class PhageMineTests(unittest.TestCase):
             for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "annotated_proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "hallmark_completeness.tsv", "annotation_review.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
                 self.assertTrue((output / filename).exists(), filename)
             with (output / "annotation.tsv").open() as handle:
-                self.assertEqual(next(csv.reader(handle, delimiter="\t")), ["protein_id", "start", "end", "strand", "length_aa", "classification", "proposed_function", "confidence", "best_evidence", "review_flag"])
+                self.assertEqual(next(csv.reader(handle, delimiter="\t")), ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function", "EC_number", "classification", "confidence", "evidence_sources", "best_evidence", "biotechnology_relevance", "review_flag"])
             named_headers=[line for line in (output / "annotated_proteins.faa").read_text().splitlines() if line.startswith(">")]
             self.assertEqual(len(named_headers), count)
             self.assertTrue(all(" product=\"" in line and " coordinates=" in line and " strand=" in line for line in named_headers))
