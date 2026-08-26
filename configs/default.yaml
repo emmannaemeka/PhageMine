@@ -1,4 +1,4 @@
-# This MVP intentionally defaults to deterministic mock evidence. It is not biological annotation.
+# Production defaults. Mock evidence is available only through an explicit test/demo flag.
 gene_prediction:
   predictor: phanotate
   # PHANOTATE is an external phage-oriented gene caller. Demo ORF calling is fixture-only.

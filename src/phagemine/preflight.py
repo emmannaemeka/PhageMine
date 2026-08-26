@@ -114,7 +114,36 @@ def preflight_profile(profile: str) -> dict[str, Any]:
     return {"profile": profile, "resources": resources, "status": "READY"}
 
 
-def doctor() -> dict[str, Any]:
+def _deep_phrogs_checks(resources: list[dict[str, Any]], mmseqs_path: str | None,
+                        pyhmmer_ready: bool) -> list[dict[str, Any]]:
+    checks: list[dict[str, Any]] = []
+    for resource in resources:
+        if resource.get("resource_type") != "PHROGS" or resource.get("status") != "READY":
+            continue
+        if mmseqs_path:
+            try:
+                result = subprocess.run([mmseqs_path, "dbtype", str(resource["path"])],
+                                        capture_output=True, text=True, timeout=30, check=False)
+                checks.append({"name": "PHROGs MMseqs2 database", "status": "READY" if result.returncode == 0 else "BROKEN",
+                               "diagnostic": None if result.returncode == 0 else (result.stderr or result.stdout).strip()[:500]})
+            except (OSError, subprocess.SubprocessError) as exc:
+                checks.append({"name": "PHROGs MMseqs2 database", "status": "BROKEN", "diagnostic": str(exc)})
+        hmm_path = (resource.get("provenance") or {}).get("hmm_profiles_path")
+        if hmm_path and pyhmmer_ready:
+            try:
+                import pyhmmer
+                alphabet = pyhmmer.easel.Alphabet.amino()
+                with pyhmmer.plan7.HMMFile(str(Path(hmm_path).expanduser()), alphabet=alphabet) as profiles:
+                    first = next(profiles)
+                profile_name = first.name.decode() if isinstance(first.name, bytes) else str(first.name)
+                checks.append({"name": "PHROGs PyHMMER database", "status": "READY",
+                               "diagnostic": None, "first_profile": profile_name})
+            except (OSError, ValueError, StopIteration) as exc:
+                checks.append({"name": "PHROGs PyHMMER database", "status": "BROKEN", "diagnostic": f"{type(exc).__name__}: {exc}"})
+    return checks
+
+
+def doctor(*, deep: bool = False) -> dict[str, Any]:
     manager = EvidenceResourceManager()
     tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "mash", "blastn", "table2asn"]
     executables = [executable_status(tool) for tool in tools]
@@ -128,11 +157,15 @@ def doctor() -> dict[str, Any]:
     phrogs_hmm_ready = any(
         Path(str(resource.get("provenance", {}).get("hmm_profiles_path", ""))).expanduser().is_file()
         for resource in by_type["PHROGS"])
+    deep_checks = (_deep_phrogs_checks(resources, tool_by_name["mmseqs"].get("path"), pyhmmer_ready)
+                   if deep else [])
+    deep_hmm = next((item for item in deep_checks if item["name"] == "PHROGs PyHMMER database"), None)
     capabilities = {
         "CORE_ANALYSIS": "READY" if tool_by_name["phanotate.py"]["status"] == "READY" else "UNAVAILABLE",
         "STANDARD_EVIDENCE": "READY" if by_type["PHROGS"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
         "FULL_EVIDENCE": "READY" if all(by_type[k] for k in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")) and all(tool_by_name[t]["status"] == "READY" for t in ("hmmscan", "mmseqs", "diamond")) else "UNAVAILABLE",
-        "SENSITIVE_PHROGS_PROFILE_SEARCH": "READY" if phrogs_hmm_ready and pyhmmer_ready else "UNAVAILABLE",
+        "SENSITIVE_PHROGS_PROFILE_SEARCH": ("READY" if phrogs_hmm_ready and pyhmmer_ready and
+                                             (deep_hmm is None or deep_hmm["status"] == "READY") else "UNAVAILABLE"),
         "PMF_REFERENCE_COMPARISON": "READY" if by_type["PMFDB"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
         "WHOLE_GENOME_REFERENCE_COMPARISON": "READY" if by_type["INPHARED_GENOMES"] and all(tool_by_name[t]["status"] == "READY" for t in ("mash", "blastn")) else "UNAVAILABLE",
         "GENBANK_PRE_SUBMISSION": "READY",
@@ -190,11 +223,12 @@ def doctor() -> dict[str, Any]:
     return {"phagemine_version": __version__, "python": executable_status("python"),
             "executables": executables, "python_modules": python_modules,
             "resources": resources, "capabilities": capabilities,
+            "deep_checks": deep_checks,
             "recommendations": recommendations}
 
 
-def write_doctor_report(path: str | Path) -> dict[str, Any]:
-    payload = doctor()
+def write_doctor_report(path: str | Path, *, deep: bool = False) -> dict[str, Any]:
+    payload = doctor(deep=deep)
     Path(path).write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     return payload
 
@@ -213,6 +247,11 @@ def doctor_text(payload: dict[str, Any]) -> str:
             lines.append(f"{item['name']:<14}{item['status']:<17}{item.get('version') or ''}")
             if item.get("diagnostic"):
                 lines.append(f"  Error: {item['diagnostic']}")
+    if payload.get("deep_checks"):
+        lines += ["", "Deep database checks"]
+        for item in payload["deep_checks"]:
+            detail = item.get("first_profile") or item.get("diagnostic") or ""
+            lines.append(f"{item['name']:<30}{item['status']:<12}{detail}")
     lines += ["", "Evidence Resources"]
     labels = {"PFAM": "Pfam", "VOGDB": "VOGDB", "SWISSPROT": "Swiss-Prot", "PHROGS": "PHROGs", "PMFDB": "PMFDB", "INPHARED_GENOMES": "INPHARED genomes"}
     for kind, label in labels.items():

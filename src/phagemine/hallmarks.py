@@ -1,8 +1,9 @@
-"""Conservative bacteriophage hallmark-system checks.
+"""Conservative annotation-text screening for bacteriophage hallmarks.
 
 Failure to detect a hallmark is reported as ``NOT_ESTABLISHED`` rather than
-biological absence.  Phage architectures differ and database searches can miss
-divergent proteins.
+biological absence. This is not an independent profile-HMM search or a genome-
+completeness estimate. Phage architectures differ and database searches can
+miss divergent proteins.
 """
 from __future__ import annotations
 
@@ -11,7 +12,7 @@ import json
 from pathlib import Path
 
 
-HALLMARK_RULES_VERSION = "1.0"
+HALLMARK_RULES_VERSION = "1.1"
 HALLMARKS = {
     "major_capsid": ("major capsid", "major head protein"),
     "portal": ("portal protein", "portal vertex"),
@@ -41,6 +42,9 @@ def assess_hallmarks(classifications: list[dict]) -> list[dict]:
             "proposed_functions": "; ".join(str(item.get("display_product") or item.get("proposed_function") or "") for item in selected),
             "highest_confidence": next((level for level in ("HIGH","MODERATE","LOW") if any(item.get("confidence")==level for item in selected)), "NONE"),
             "interpretation": "Computational evidence supports this component." if status=="DETECTED" else ("Broad evidence is present but does not establish a specific product." if matches else "Not established by the current annotation; this is not evidence of biological absence."),
+            "detection_method": "ANNOTATION_TEXT_SCREEN",
+            "profile_validated": False,
+            "method_limitation": "Keyword screening of evidence-fused annotations; not an independent hallmark HMM search or genome-completeness estimate.",
             "rules_version": HALLMARK_RULES_VERSION,
         })
     return rows
@@ -49,6 +53,6 @@ def assess_hallmarks(classifications: list[dict]) -> list[dict]:
 def write_hallmarks(root: str|Path, rows: list[dict]) -> None:
     root=Path(root)
     (root/"hallmark_completeness.json").write_text(json.dumps(rows,indent=2,sort_keys=True)+"\n")
-    columns=["hallmark","status","protein_ids","proposed_functions","highest_confidence","interpretation","rules_version"]
+    columns=["hallmark","status","protein_ids","proposed_functions","highest_confidence","interpretation","detection_method","profile_validated","method_limitation","rules_version"]
     with (root/"hallmark_completeness.tsv").open("w",newline="") as handle:
         writer=csv.DictWriter(handle,fieldnames=columns,delimiter="\t"); writer.writeheader(); writer.writerows(rows)

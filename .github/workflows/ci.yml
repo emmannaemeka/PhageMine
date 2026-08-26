@@ -1,0 +1,35 @@
+name: PhageMine CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-13, macos-14]
+        python: ["3.10", "3.12", "3.13"]
+        exclude:
+          - os: macos-13
+            python: "3.10"
+          - os: macos-14
+            python: "3.10"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[test]"
+      - run: python -m pytest -q
+        env:
+          PHAGEMINE_REGISTRY_PATH: ${{ runner.temp }}/phagemine-test-registry.json
+      - run: python -m compileall -q src
+      - run: python -m build
+      - run: python -m pip install dist/*.whl --force-reinstall
+      - run: phagemine --version

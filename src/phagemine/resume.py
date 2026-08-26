@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import csv
 import json
 import os
 import shutil
@@ -22,12 +23,33 @@ from .quality import assess
 from .reporting import update_comparative_report, write_outputs
 from .resources import EvidenceResourceManager, ResourceType
 from .sequencing_provenance import SequencingProvenance
-from .fusion import classify_proteins
+from .fusion import attach_gene_call_assessments, classify_proteins
 from .context import build_context
 
 
 REUSED = ("input/genome validation", "genome representation", "gene prediction", "Pfam", "VOGDB", "Swiss-Prot")
 RESUME_STAGES = REUSED + ("PHROGs", "evidence integration", "candidate ranking/mining", "QC/report generation", "GenBank package")
+
+
+def _load_gene_call_assessments(root: Path) -> list[dict[str, Any]]:
+    path = root / "gene_call_confidence.tsv"
+    if not path.is_file():
+        return []
+    with path.open(newline="") as handle:
+        return list(csv.DictReader(handle, delimiter="\t"))
+
+
+def _copy_gene_call_artifacts(source: Path, destination: Path) -> None:
+    """Preserve caller-review evidence in regenerated result directories."""
+    for name in (
+        "orf_reconciliation.tsv", "orf_reconciliation.json",
+        "alternative_orf_evidence.tsv", "alternative_orf_evidence.json",
+        "orf_adjudication.tsv", "orf_adjudication.json",
+        "gene_call_confidence.tsv", "gene_calls_for_review.tsv",
+    ):
+        source_path = source / name
+        if source_path.is_file():
+            shutil.copy2(source_path, destination / name)
 
 
 def reclassify(source: str | Path, output: str | Path,
@@ -48,7 +70,8 @@ def reclassify(source: str | Path, output: str | Path,
                        "GenBank package")
     progress.start("persisted evidence validation"); progress.finish(f"{len(proteins)} proteins validated")
     progress.start("functional classification")
-    classifications = classify_proteins(proteins)
+    classifications = attach_gene_call_assessments(
+        classify_proteins(proteins), _load_gene_call_assessments(source))
     progress.finish("regenerated without database searches")
     progress.start("genomic context")
     context_records, modules = build_context(proteins, classifications)
@@ -88,6 +111,7 @@ def reclassify(source: str | Path, output: str | Path,
         write_outputs(temp, representation, sequencing, proteins, candidates,
                       new_manifest, quality, source / "original_input.fasta",
                       classifications, context_records, modules)
+        _copy_gene_call_artifacts(source, temp)
         comparative_source = source / "comparative"
         if comparative_source.is_dir():
             shutil.copytree(comparative_source, temp / "comparative")
@@ -218,7 +242,8 @@ def recover_evidence_complete(source: str | Path, progress: ProgressReporter | N
     for stage in ("PHROGs", "evidence integration"):
         progress.start(f"REUSED: {stage}"); progress.finish("validated")
     progress.start("functional classification")
-    classifications = classify_proteins(proteins)
+    classifications = attach_gene_call_assessments(
+        classify_proteins(proteins), _load_gene_call_assessments(source))
     context_records, modules = build_context(proteins, classifications)
     progress.finish("regenerated")
     progress.start("candidate ranking/mining")
@@ -305,7 +330,8 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
     stages = ["evidence integration", "candidate ranking/mining", "QC/report generation", "GenBank package"]
     progress.start("evidence integration")
     progress.finish("integrated")
-    classifications = classify_proteins(proteins)
+    classifications = attach_gene_call_assessments(
+        classify_proteins(proteins), _load_gene_call_assessments(source))
     context_records, modules = build_context(proteins, classifications)
     progress.start("candidate ranking/mining")
     mine(proteins)
@@ -325,6 +351,7 @@ def resume(source: str | Path, output: str | Path, run_missing_evidence: bool = 
     temp = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(output.parent)))
     try:
         write_outputs(temp, representation, sequencing, proteins, candidates, new_manifest, quality, source / "original_input.fasta", classifications, context_records, modules)
+        _copy_gene_call_artifacts(source, temp)
         progress.start("GenBank package")
         write_package(temp, representation.analysis_sequence_id, representation.analysis_sequence, proteins, new_manifest, sequencing_provenance=sequencing)
         progress.finish("regenerated")

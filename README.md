@@ -18,7 +18,7 @@ GUI documentation assets, including a future real screenshot, belong in
 `docs/images/phagemine-gui/`. No screenshot is included until one has been
 captured from a validated release build.
 
-PhageMine is an evidence-based bacteriophage genome annotation and discovery-mining platform. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel.
+PhageMine is beta research software for evidence-based bacteriophage genome annotation and discovery mining. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel, and its rule-based evidence-strength labels are not calibrated probabilities.
 
 ## Why PhageMine?
 
@@ -80,8 +80,9 @@ python -m pip install -e .
 Production runs require these executables on `PATH`: PHANOTATE, HMMER
 (`hmmscan`), MMseqs2 (`mmseqs`), PyHMMER, DIAMOND (`diamond`), Mash (`mash`) and BLASTN
 (`blastn`) when whole-genome INPHARED comparison is installed. Mash selects
-candidate references; BLASTN supplies VIRIDIC-compatible intergenomic
-similarity. `table2asn` is optional and
+candidate references; BLASTN supplies PhageMine's own bidirectional,
+length-normalized nucleotide comparison. It is not presented as VIRIDIC output
+and does not assign taxonomy. `table2asn` is optional and
 never blocks the normal GenBank pre-submission package.
 
 After installation, PhageMine displays the database setup commands in its
@@ -91,6 +92,15 @@ top-level help. Install all evidence databases and validate the environment:
 phagemine databases install --all
 phagemine doctor
 ```
+
+For an operational database-format check before a long run, use:
+
+```bash
+phagemine doctor --deep
+```
+
+This opens the registered PHROGs MMseqs2 and PyHMMER databases and fails if a
+database is only superficially present but cannot actually be read.
 
 Do not proceed from executable presence alone. Doctor requires each executable
 probe to exit successfully and reports runtime/linker failures as `BROKEN`.
@@ -172,7 +182,7 @@ phagemine batch genomes/ --output results/both --mode both \
 
 ## Interpreting annotation
 
-The main table uses plain-language classifications such as “Specific function strongly supported”, “Likely function supported by evidence”, “Protein domain detected; full function unknown”, “Conserved in phages; function unknown”, and “No reliable function identified”. Proposed function answers “what does PhageMine think it does?”, while confidence and best evidence explain how strongly and why. Machine-readable states remain in `functional_classification.tsv`. A prediction is not experimental confirmation. PhageMine does not infer lifestyle.
+The main table uses plain-language classifications such as “Specific function strongly supported”, “Likely function supported by evidence”, “Protein domain detected; full function unknown”, “Conserved in phages; function unknown”, and “No reliable function identified”. Proposed function answers “what does PhageMine think it does?”, while rule-based evidence strength and best evidence explain why. These strength categories are explicitly uncalibrated, and domain notes are separated from product names. Machine-readable states remain in `functional_classification.tsv`. A prediction is not experimental confirmation. PhageMine does not infer lifestyle.
 
 Batch tables include protein ID, coordinates, strand, classification, proposed function, confidence, evidence summaries, and PMF where available. Protein IDs link to detailed records rather than reducing a row to a state label alone.
 
@@ -188,11 +198,12 @@ Each record also links genomic context and, in discovery results, PMF membership
 
 ## Important outputs
 
-Annotation outputs include the concise `annotation.tsv`, detailed `functional_classification.tsv/json`, `evidence.json`, `candidate_ranking.tsv`, ID-only `proteins.faa`, product-labelled `annotated_proteins.faa`, `cds.fna`, `genes.gff3`, `gene_call_confidence.tsv`, `gene_calls_for_review.tsv`, `genomic_context.tsv/json`, `modules.tsv/json`, `quality_control.json`, `report.html`, `report.md`, `protein_details/`, `figures/`, `figure_data/`, and `genbank_submission/`.
+Annotation outputs include the concise `annotation.tsv`, detailed `functional_classification.tsv/json`, `scientific_validation_status.json`, `evidence.json`, `candidate_ranking.tsv`, ID-only `proteins.faa`, product-labelled `annotated_proteins.faa`, `cds.fna`, `genes.gff3`, `gene_call_confidence.tsv`, `gene_calls_for_review.tsv`, `genomic_context.tsv/json`, `modules.tsv/json`, `quality_control.json`, `report.html`, `report.md`, `protein_details/`, `figures/`, `figure_data/`, and `genbank_submission/`.
 
-`hallmark_completeness.tsv` checks whether the current evidence establishes
+`hallmark_completeness.tsv` is a backward-compatible annotation-text screen for
 major capsid, portal, terminase, tail, tape-measure, replication and lysis
-components. `NOT_ESTABLISHED` never means biological absence.
+components. It is not an independent HMM search or genome-completeness
+estimate. `NOT_ESTABLISHED` never means biological absence.
 `annotation_review.tsv` is the short manual-curation queue combining uncertain
 functions, disputed gene models and unresolved hallmark components. Detailed
 classification records also state the evidence tier used for each conclusion.
@@ -204,8 +215,10 @@ When the INPHARED genome resource is READY, discovery also writes
 `inphared_summary.tsv` as the duplicate-collapsed researcher summary.
 For zero-distance Mash hits, PhageMine directly compares the query and
 reference nucleotide sequences, including reverse-complement and
-rotation-equivalent representations. Near-reference Mash hits still require a
-formal alignment or ANI workflow; taxonomy is not inferred.
+rotation-equivalent representations. Numerical-boundary interpretation is
+withheld for partial or poorly aligned queries. Formal VIRIDIC/phylogenetic
+analysis and current family-specific ICTV criteria remain necessary; taxonomy
+is not inferred.
 
 ## Independent annotation comparison
 
@@ -219,11 +232,17 @@ phagemine benchmark --output comparison \
   --phold-genbank /path/to/phold.gbk \
   --multiphate-gff /path/to/multiPhATE2.gff \
   --prokka-gff /path/to/prokka.gff
+
+# Accuracy metrics require an expert-reviewed truth set:
+phagemine benchmark --output validated-comparison \
+  --phagemine-results ./genome_phagemine_results \
+  --truth-genbank /path/to/expert_reviewed_truth.gbk
 ```
 
 The comparison reports coordinate agreement separately from product-name
-agreement. Agreement between tools is supporting computational evidence, not
-experimental validation.
+agreement. Without `--truth-gff` or `--truth-genbank`, the manifest is labelled
+`TOOL_AGREEMENT_ONLY` and cannot support accuracy or superiority claims. See
+`docs/validation-protocol.md`.
 It also writes `hallmark_comparison.tsv` and a checksummed
 `benchmark_manifest.json`. No structural-search software is required.
 

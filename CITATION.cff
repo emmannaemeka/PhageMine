@@ -1,7 +1,16 @@
 cff-version: 1.2.0
 title: PhageMine
-version: 1.0.4
+version: 1.0.6
 type: software
 message: "If you use PhageMine, please cite this release."
 authors:
-  - name: Nnaemeka Emmanuel Nnadi
+  - family-names: Nnadi
+    given-names: Nnaemeka Emmanuel
+    affiliation: Centre for Phage Biology and Therapeutics LTD/GTE, Jos, Plateau State, Nigeria
+license: MIT
+repository-code: "https://github.com/emmannaemeka/PhageMine"
+url: "https://github.com/emmannaemeka/PhageMine"
+keywords:
+  - bacteriophage
+  - genome annotation
+  - bioinformatics

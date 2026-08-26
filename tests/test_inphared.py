@@ -59,10 +59,11 @@ def test_compare_genomes_groups_duplicate_accessions_and_labels_exact_sketch_mat
     assert summary["reference_accessions"] == "GB1;RS1"
 
 
-def test_ictv_interpretation_uses_species_and_family_specific_genus_thresholds():
-    assert _ictv_interpretation(96.0, "Sarkviridae")[3] == "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD"
-    assert _ictv_interpretation(65.0, "Herelleviridae")[3] == "CONSISTENT_WITH_SAME_GENUS_DIFFERENT_SPECIES"
-    assert _ictv_interpretation(65.0, "Sarkviridae")[3] == "SAME_GENUS_NOT_SUPPORTED_BY_NUCLEOTIDE_THRESHOLD"
+def test_ictv_interpretation_uses_species_boundary_and_abstains_on_genus():
+    assert _ictv_interpretation(96.0, "Sarkviridae")[3] == "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW"
+    assert _ictv_interpretation(65.0, "Herelleviridae")[3] == "NO_FAMILY_SPECIFIC_GENUS_BOUNDARY_CONFIGURED"
+    assert _ictv_interpretation(65.0, "Sarkviridae")[3] == "NO_FAMILY_SPECIFIC_GENUS_BOUNDARY_CONFIGURED"
+    assert _ictv_interpretation(99.0, "Sarkviridae", taxonomy_eligible=False)[3] == "NUMERICAL_TAXONOMY_NOT_APPLICABLE_TO_PARTIAL_OR_POORLY_ALIGNED_QUERY"
 
 
 def test_bidirectional_similarity_is_normalized_to_both_complete_genomes(tmp_path, monkeypatch):

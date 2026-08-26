@@ -21,7 +21,7 @@ from .swissprot import SwissProtEvidenceAdapter
 from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
 from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
-from .fusion import classify_proteins
+from .fusion import attach_gene_call_assessments, classify_proteins
 from .context import build_context
 from .reconciliation import GeneModel, ProdigalPredictor, gene_call_review, reconcile_models, write_gene_call_review, write_reconciliation
 from .adjudication import adjudicate, write_adjudication
@@ -76,6 +76,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     reconciliation_rows = None
     prodigal_models = None
     gene_review_records = []
+    progress.finish(f"{len(proteins)} proteins")
     if reconcile_orfs:
         progress.start("Prodigal secondary gene prediction")
         prodigal_models = ProdigalPredictor(prodigal).predict(fasta, representation.analysis_sequence)
@@ -87,7 +88,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
-    progress.finish(f"{len(proteins)} proteins")
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = MockEvidenceBackend().analyze(proteins)
@@ -198,6 +198,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         Path(output) / "checkpoints", "phrogs", [asdict(e) for e in merged_phrogs],
         {"backends": [phrogs_result.provenance, phrogs_hmm_result.provenance],
          "deduplicated_evidence_count": len(merged_phrogs)})
+    accepted = sum(e.supports for e in merged_phrogs)
+    backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
+    progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
+    timed_end("phrogs")
     if reconcile_orfs:
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
@@ -215,10 +219,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         gene_review_records = gene_call_review(reconciliation_rows, evidence_map, lengths)
         write_gene_call_review(output, gene_review_records)
         progress.finish("adjudication persisted")
-    accepted = sum(e.supports for e in merged_phrogs)
-    backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
-    progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
-    timed_end("phrogs")
     progress.start("evidence integration")
     timed_start("evidence_fusion")
     checkpoint_manifest = {"pipeline": "PhageMine", "pipeline_version": __version__, "command": command,
@@ -229,7 +229,8 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                               representation, sequencing_provenance, proteins, checkpoint_manifest, fasta)
     progress.finish(f"{sum(len(p.evidence) for p in proteins)} evidence records")
     timed_end("evidence_fusion")
-    classifications = classify_proteins(proteins)
+    classifications = attach_gene_call_assessments(
+        classify_proteins(proteins), gene_review_records)
     classification_by_id = {item["protein_id"]: item for item in classifications}
     # Keep every public output on the same final product vocabulary.  The
     # previous pipeline left Protein.annotation at its constructor default,

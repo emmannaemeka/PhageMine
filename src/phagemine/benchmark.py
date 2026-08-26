@@ -105,6 +105,41 @@ def metrics(predicted, reference):
     exact=sum(r['relationship']=='EXACT_MATCH' for r in compare_models(predicted,reference)); p=len(predicted); r=len(reference); precision=exact/p if p else 0; recall=exact/r if r else 0
     return {'predicted':p,'reference':r,'exact_matches':exact,'exact_precision':precision,'exact_recall':recall,'exact_f1':2*precision*recall/(precision+recall) if precision+recall else 0}
 
+def truth_metrics(predicted, truth):
+    """Evaluate products only at exact CDS matches against reviewed truth.
+
+    Abstention is separated from error so a conservative annotator is not
+    rewarded for verbosity or punished as though "hypothetical" were a wrong
+    biochemical assertion.
+    """
+    model = metrics(predicted, truth)
+    evaluated = correct = incorrect = abstained = 0
+    for relation in compare_models(predicted, truth):
+        if relation['relationship'] != 'EXACT_MATCH':
+            continue
+        observed = relation['method_a'].get('product')
+        expected = relation['method_b'].get('product')
+        expected_text = re.sub(r'[^a-z0-9]+', ' ', str(expected or '').lower()).strip()
+        if not expected_text or expected_text in {
+            'hypothetical protein', 'unknown function', 'uncharacterized protein',
+            'uncharacterised protein', 'conserved phage protein of unknown function'}:
+            continue
+        evaluated += 1
+        status = classify_product_relation(observed, expected)
+        if status in {'EXACT_PRODUCT_AGREEMENT', 'EQUIVALENT_FUNCTION'}:
+            correct += 1
+        elif status == 'OTHER_METHOD_FUNCTIONALLY_MORE_INFORMATIVE':
+            abstained += 1
+        else:
+            incorrect += 1
+    asserted = correct + incorrect
+    return {**model, 'truth_products_evaluated': evaluated,
+            'correct_product_assertions': correct, 'incorrect_product_assertions': incorrect,
+            'product_abstentions': abstained,
+            'asserted_product_precision': correct / asserted if asserted else None,
+            'functional_coverage': asserted / evaluated if evaluated else None,
+            'overall_product_accuracy': correct / evaluated if evaluated else None}
+
 def classify_product_relation(left, right, left_state=None, right_state=None):
     """Classify biological product relationships without rewarding verbosity."""
     def clean(value):
@@ -139,7 +174,7 @@ def benchmark(methods, output, references=None):
     for i,a in enumerate(names):
         hypothetical=sum(not x.get('product') or any(term in x.get('product','').lower() for term in ('hypothetical','unknown function','uncharacterized','uncharacterised')) for x in methods[a])
         summary.append({'method':a,'cds_count':len(methods[a]),'specific_annotations':len(methods[a])-hypothetical,'hypothetical':hypothetical})
-        if a in references: metric_rows.append({'method':a,**metrics(methods[a],references[a])})
+        if a in references: metric_rows.append({'method':a,**truth_metrics(methods[a],references[a])})
         for b in names[i+1:]: comparisons.extend([{**r,'method_a_name':a,'method_b_name':b} for r in compare_models(methods[a],methods[b])])
     for name,data in [('benchmark_summary',summary),('gene_model_comparison',comparisons),('benchmark_metrics',metric_rows)]:
         (output/(name+'.json')).write_text(json.dumps(data,indent=2,sort_keys=True,default=str))
@@ -172,8 +207,9 @@ def benchmark(methods, output, references=None):
     with (output/'functional_comparison.tsv').open('w',newline='') as handle:
         writer=csv.DictWriter(handle,fieldnames=functional_columns,delimiter='\t'); writer.writeheader(); writer.writerows(functional)
     legacy=[name for name,data in methods.items() if name == 'PHAGEMINE' and any(x.get('functional_classification_status') == 'LEGACY_OUTPUT_NOT_AVAILABLE' for x in data)]
-    manifest={'methods':{name:{'record_count':len(records),'source_files':sorted({record.get('source_path') for record in records if record.get('source_path')}),'source_sha256':sorted({record.get('source_sha256') for record in records if record.get('source_sha256')})} for name,records in methods.items()},'interpretation':'Independent software agreement is supporting computational evidence, not experimental truth.'}
+    manifest={'methods':{name:{'record_count':len(records),'source_files':sorted({record.get('source_path') for record in records if record.get('source_path')}),'source_sha256':sorted({record.get('source_sha256') for record in records if record.get('source_sha256')})} for name,records in methods.items()},'validation_mode':'REVIEWED_TRUTH_SET' if references else 'TOOL_AGREEMENT_ONLY','accuracy_claim_permitted':bool(references),'interpretation':'Accuracy metrics require an expert-reviewed truth set. Independent software agreement alone is supporting computational evidence, not experimental truth.'}
     (output/'benchmark_manifest.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
     note='\n\nLegacy PhageMine output detected: gene-model comparison is supported, but modern functional-classification metrics are NOT_EVALUABLE.\n' if legacy else ''
-    (output/'benchmark_report.md').write_text('# PhageMine annotation comparison\n\nThis report compares independent annotation outputs. Agreement is supporting computational evidence, not experimental validation. Gene-model differences and product-name differences are reported separately; no consensus call is silently substituted.'+note+'\n')
+    mode = ('Expert-reviewed truth-set metrics were calculated.' if references else 'No reviewed truth set was supplied; this run measures agreement only and cannot support accuracy or superiority claims.')
+    (output/'benchmark_report.md').write_text('# PhageMine annotation comparison\n\n'+mode+' Agreement is supporting computational evidence, not experimental validation. Gene-model differences and product-name differences are reported separately; no consensus call is silently substituted.'+note+'\n')
     return summary

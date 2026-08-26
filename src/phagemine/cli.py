@@ -37,6 +37,7 @@ Individual installers are also available:
     doctor_command = subcommands.add_parser("doctor", help="Validate executables and registered evidence resources")
     doctor_command.add_argument("--output", help="Optional JSON report path")
     doctor_command.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
+    doctor_command.add_argument("--deep", action="store_true", help="Open PHROGs databases and verify their operational formats")
     databases = subcommands.add_parser("databases", help="Manage registered local evidence resources")
     database_commands = databases.add_subparsers(dest="database_command", required=True)
     register = database_commands.add_parser("register", help="Register a local evidence resource")
@@ -105,6 +106,9 @@ Individual installers are also available:
     benchmark_command.add_argument("--multiphate-gff", help="multiPhATE2 GFF output")
     benchmark_command.add_argument("--phold-genbank", help="Phold GenBank output")
     benchmark_command.add_argument("--phagemine-results", help="Completed PhageMine result directory")
+    truth = benchmark_command.add_mutually_exclusive_group()
+    truth.add_argument("--truth-gff", help="Expert-reviewed truth-set GFF3; required for accuracy claims")
+    truth.add_argument("--truth-genbank", help="Expert-reviewed truth-set GenBank file; required for accuracy claims")
     batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files")
     batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--mode", choices=("annotate", "discover", "both"), default="annotate"); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal"); batch_command.add_argument("--threads", type=int, default=1); batch_command.add_argument("--evidence", dest="evidence_profile", choices=("core", "standard", "full"), default="core")
     extract_command = subcommands.add_parser("extract", help="Retrieve stable protein records and FASTA from a completed run")
@@ -167,11 +171,13 @@ Individual installers are also available:
         return gui_main([])
     if args.command == "doctor":
         from .preflight import doctor, doctor_text, write_doctor_report
-        payload = write_doctor_report(args.output) if args.output else doctor()
+        payload = write_doctor_report(args.output, deep=args.deep) if args.output else doctor(deep=args.deep)
         print(json.dumps(payload, indent=2, sort_keys=True) if args.json or args.output else doctor_text(payload))
         required = {"phanotate.py", "hmmscan", "mmseqs", "diamond", "mash"}
-        return 0 if all(x.get("status") == "READY" for x in payload["executables"]
-                        if x.get("name") in required) else 1
+        executables_ready = all(x.get("status") == "READY" for x in payload["executables"]
+                                if x.get("name") in required)
+        deep_ready = all(item.get("status") == "READY" for item in payload.get("deep_checks", []))
+        return 0 if executables_ready and deep_ready else 1
     if args.command == "families":
         from .family import build_database, assign_protein_family, write_assignments, _fasta
         if args.families_command == 'build':
@@ -221,7 +227,11 @@ Individual installers are also available:
         if args.pharokka_gff: methods["Pharokka"]=import_pharokka(args.pharokka_gff)
         if args.multiphate_gff: methods["multiPhATE2"]=import_multiphate(args.multiphate_gff)
         if args.phold_genbank: methods["Phold"]=import_phold(args.phold_genbank)
-        benchmark(methods,args.output)
+        truth_records = None
+        if args.truth_gff: truth_records = import_pharokka(args.truth_gff, genome_id="reviewed_truth")
+        if args.truth_genbank: truth_records = import_phold(args.truth_genbank, genome_id="reviewed_truth")
+        references = {name: truth_records for name in methods} if truth_records else None
+        benchmark(methods,args.output,references=references)
         print(f"PhageMine benchmark complete. Outputs: {args.output}"); return 0
     if args.command == "revise":
         from .submission_revision import revise as revise_submission

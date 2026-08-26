@@ -5,11 +5,37 @@ from unittest.mock import patch
 from pathlib import Path
 
 from phagemine.evidence import EvidenceAdapterResult, EvidenceState
-from phagemine.preflight import doctor, doctor_text, executable_status, preflight_resources
+from phagemine.preflight import _deep_phrogs_checks, doctor, doctor_text, executable_status, preflight_resources
 from phagemine.resources import EvidenceResourceManager, ResourceType
 
 
 class PreflightTests(unittest.TestCase):
+    @patch("phagemine.preflight.subprocess.run")
+    def test_deep_check_validates_mmseqs_database_format(self, run):
+        run.return_value.returncode = 1
+        run.return_value.stdout = ""
+        run.return_value.stderr = "wrong database type"
+        checks = _deep_phrogs_checks([{
+            "resource_type": "PHROGS", "status": "READY",
+            "path": "/database/phrogs_profile_db", "provenance": {},
+        }], "/usr/bin/mmseqs", False)
+        self.assertEqual(checks[0]["status"], "BROKEN")
+        self.assertIn("wrong database type", checks[0]["diagnostic"])
+        run.assert_called_once_with(
+            ["/usr/bin/mmseqs", "dbtype", "/database/phrogs_profile_db"],
+            capture_output=True, text=True, timeout=30, check=False)
+
+    def test_doctor_text_displays_deep_database_failures(self):
+        payload = {
+            "phagemine_version": "1.0.5", "executables": [], "python_modules": [],
+            "deep_checks": [{"name": "PHROGs PyHMMER database", "status": "BROKEN",
+                             "diagnostic": "format not recognized"}],
+            "resources": [], "capabilities": {}, "recommendations": [],
+        }
+        output = doctor_text(payload)
+        self.assertIn("Deep database checks", output)
+        self.assertIn("format not recognized", output)
+
     def test_evidence_state_normalizes_legacy_real_results(self):
         self.assertEqual(EvidenceAdapterResult("x", "REAL").state, EvidenceState.SUCCESS_NO_HIT)
 

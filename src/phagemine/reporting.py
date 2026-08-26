@@ -47,9 +47,9 @@ def update_comparative_report(output: str | Path, comparative: dict) -> None:
         table = "<table><thead><tr><th>Rank</th><th>Reference phage</th><th>Accession</th><th>Host</th><th>ICTV family</th><th>ICTV genus</th><th>Intergenomic similarity</th><th>Query aligned</th><th>Reference aligned</th><th>Interpretation</th></tr></thead><tbody>" + "".join(table_rows) + "</tbody></table>"
     else:
         table = "<p>No INPHARED reference comparison was available.</p>"
-    section = ("<section id='inphared-numerical-taxonomy'><h2>Whole-genome numerical taxonomy: INPHARED and ICTV comparison</h2>"
-        "<p><b>Method:</b> Mash is used only to select candidate references. Reported similarity is calculated by a VIRIDIC-compatible bidirectional BLASTN method and normalized across both complete genome lengths. Mash distance is not converted to similarity.</p>"
-        "<p><b>Taxonomic caution:</b> Threshold agreement is computational support, not a formal ICTV assignment. Taxon-specific ICTV demarcation criteria take precedence.</p>"
+    section = ("<section id='inphared-numerical-taxonomy'><h2>INPHARED nearest-reference nucleotide comparison</h2>"
+        "<p><b>Method:</b> Mash is used only to select candidate references. Reported similarity is PhageMine's bidirectional BLASTN length-normalized calculation; it is not presented as VIRIDIC output. Mash distance is not converted to similarity.</p>"
+        "<p><b>Taxonomic caution:</b> PhageMine does not assign taxa. Boundary interpretation is withheld for partial or poorly aligned queries; current family-specific ICTV criteria and formal phylogenetic analysis take precedence.</p>"
         + table + "<p><a href='comparative/inphared_nearest_phages.tsv'>Download accession-level results</a> · <a href='comparative/inphared_summary.tsv'>Download numerical-taxonomy summary</a> · <a href='comparative/discovery_report.html'>Open comparative report</a></p></section>")
     content = report.read_text()
     content = content.replace("</body>", section + "</body>")
@@ -84,7 +84,8 @@ def _write_protein_details(root: Path, proteins: list[Protein], classifications:
         reason = record.get("reasoning_summary") or "No deterministic evidence-based explanation was generated."
         evidence_html = "".join(f"<li>{html.escape(line)}</li>" for line in _evidence_lines(protein))
         context_text = json.dumps(ctx.get(protein.protein_id), sort_keys=True) if ctx.get(protein.protein_id) else "No genomic-context record available."
-        page = f"<!doctype html><html><head><meta charset='utf-8'><title>{html.escape(protein.protein_id)}</title></head><body><h1>{html.escape(protein.protein_id)}</h1><p><b>Coordinates:</b> {protein.start}-{protein.end} &nbsp; <b>Strand:</b> {html.escape(protein.strand)} &nbsp; <b>Length:</b> {protein.length} aa</p><h2>Classification</h2><p>{html.escape(str(record.get('functional_state') or 'UNRESOLVED'))}</p><p><b>Proposed product:</b> {html.escape(record.get('display_product') or record.get('proposed_function') or 'hypothetical protein')}</p><p><b>Confidence:</b> {html.escape(str(record.get('confidence') or 'NONE'))}</p><p><b>Reason for annotation:</b> {html.escape(reason)}</p><h2>Evidence</h2><ul>{evidence_html}</ul><h2>Genomic context</h2><pre>{html.escape(context_text)}</pre><p><a download href='fasta/{html.escape(protein.protein_id)}.faa'>Protein FASTA</a> | <a download href='fasta/{html.escape(protein.protein_id)}.fna'>CDS FASTA</a> | <a href='{html.escape(protein.protein_id)}.json'>Evidence JSON</a></p></body></html>"
+        domain_note = html.escape(str(record.get("domain_summary") or "No accepted domain evidence"))
+        page = f"<!doctype html><html><head><meta charset='utf-8'><title>{html.escape(protein.protein_id)}</title></head><body><h1>{html.escape(protein.protein_id)}</h1><p><b>Coordinates:</b> {protein.start}-{protein.end} &nbsp; <b>Strand:</b> {html.escape(protein.strand)} &nbsp; <b>Length:</b> {protein.length} aa</p><h2>Classification</h2><p>{html.escape(str(record.get('functional_state') or 'UNRESOLVED'))}</p><p><b>Proposed product:</b> {html.escape(record.get('display_product') or record.get('proposed_function') or 'hypothetical protein')}</p><p><b>Rule-based evidence strength:</b> {html.escape(str(record.get('confidence') or 'NONE'))} (not empirically calibrated)</p><p><b>Domain note:</b> {domain_note}</p><p><b>Reason for annotation:</b> {html.escape(reason)}</p><h2>Evidence</h2><ul>{evidence_html}</ul><h2>Genomic context</h2><pre>{html.escape(context_text)}</pre><p><a download href='fasta/{html.escape(protein.protein_id)}.faa'>Protein FASTA</a> | <a download href='fasta/{html.escape(protein.protein_id)}.fna'>CDS FASTA</a> | <a href='{html.escape(protein.protein_id)}.json'>Evidence JSON</a></p></body></html>"
         (detail_dir / f"{protein.protein_id}.html").write_text(page)
         links.append(str(detail_dir / f"{protein.protein_id}.html"))
     return links
@@ -181,6 +182,26 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     (root / "analysis_genome.fasta").write_text(f">{representation.analysis_sequence_id}\n{representation.analysis_sequence}\n")
     (root / "genome_representation.json").write_text(json.dumps(representation.manifest(), indent=2, sort_keys=True))
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
+    scientific_status = {
+        "software_maturity": "BETA_RESEARCH_SOFTWARE",
+        "functional_strength_empirically_calibrated": False,
+        "accuracy_claim_permitted_from_this_run": False,
+        "taxonomy_assignment_performed": False,
+        "hallmark_method": "ANNOTATION_TEXT_SCREEN",
+        "hallmark_profile_validated": False,
+        "feature_scope": {
+            "CDS": "PREDICTED",
+            "tRNA": "NOT_CALLED",
+            "tmRNA": "NOT_CALLED",
+            "other_structured_RNA": "NOT_CALLED",
+            "programmed_frameshift": "NOT_CALLED",
+            "translational_bypass": "NOT_CALLED",
+            "intron": "NOT_CALLED",
+        },
+        "interpretation": "This run produces computational hypotheses. Accuracy requires a separate expert-reviewed truth-set benchmark.",
+    }
+    (root / "scientific_validation_status.json").write_text(
+        json.dumps(scientific_status, indent=2, sort_keys=True) + "\n")
     (root / "proteins.faa").write_text("".join(f">{p.protein_id} genome={p.genome_id} start={p.start} end={p.end}\n{p.sequence}\n" for p in proteins))
     (root / "cds.fna").write_text("".join(f">{p.protein_id}\n{p.cds}\n" for p in proteins))
     gff_records = []
@@ -199,7 +220,7 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
         f'>{p.protein_id} product="{(cls_by_id.get(p.protein_id, {}).get("display_product") or "hypothetical protein").replace(chr(34), "")}" coordinates={p.start}..{p.end} strand={p.strand} confidence={cls_by_id.get(p.protein_id, {}).get("confidence") or "NONE"}\n{p.sequence}\n'
         for p in proteins
     ))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function", "EC_number", "classification", "confidence", "evidence_sources", "best_evidence", "biotechnology_relevance", "review_flag"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function", "domain_note", "EC_number", "classification", "confidence", "confidence_calibrated", "evidence_sources", "best_evidence", "gene_call_confidence", "gene_call_review_flag", "functional_review_flag", "biotechnology_relevance", "review_flag"]
     with (root / "annotation.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()
@@ -209,11 +230,16 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
                 "strand": p.strand, "length_aa": p.length,
                 "gene": c.get("gene") or "", "product": c.get("display_product") or "hypothetical protein",
                 "proposed_function": c.get("display_product") or p.annotation,
+                "domain_note": c.get("domain_summary") or "",
                 "EC_number": c.get("ec_number") or "",
                 "classification": c.get("display_classification") or "No reliable function identified",
                 "confidence": c.get("confidence") or "NONE",
+                "confidence_calibrated": "false",
                 "evidence_sources": ";".join(c.get("supporting_sources") or []),
                 "best_evidence": c.get("best_evidence") or "No accepted evidence",
+                "gene_call_confidence": c.get("gene_call_confidence") or "NOT_ASSESSED",
+                "gene_call_review_flag": c.get("gene_call_review_flag") or "NOT_ASSESSED",
+                "functional_review_flag": c.get("functional_review_flag") or c.get("review_flag") or "NONE",
                 "biotechnology_relevance": c.get("biotechnology_relevance") or "",
                 "review_flag": c.get("review_flag") or "NONE"})
     with (root / "candidate_ranking.tsv").open("w", newline="") as handle:
@@ -231,6 +257,7 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     manifest["figures"] = generate_annotation_figures(root, proteins, classifications or [], context_records, modules)
     detail_links = _write_protein_details(root, proteins, classifications or [], context_records)
     manifest["protein_detail_records"] = detail_links
+    manifest["scientific_validation"] = scientific_status
     manifest["created_at"] = datetime.now(timezone.utc).isoformat()
     (root / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     markdown = _markdown(representation, sequencing_provenance, proteins, candidates, manifest)
@@ -238,8 +265,8 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     rows = []
     for protein in proteins:
         c = cls_by_id.get(protein.protein_id, {})
-        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}..{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{protein.length}</td><td>{html.escape(str(c.get('display_classification') or 'No reliable function identified'))}</td><td>{html.escape(str(c.get('display_product') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td></tr>")
-    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1500px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}td,th{{border:1px solid #bbb;padding:.4em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Select a protein identifier to inspect its domains, orthologs, alignments, and reasoning.</p><p><a href='hallmark_completeness.tsv'>Hallmark-system check</a> · <a href='annotation_review.tsv'>Manual-review queue</a> · <a href='annotated_proteins.faa'>Product-labelled protein FASTA</a></p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Length (aa)</th><th>Classification</th><th>Proposed function</th><th>Confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
+        rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}..{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{protein.length}</td><td>{html.escape(str(c.get('display_classification') or 'No reliable function identified'))}</td><td>{html.escape(str(c.get('display_product') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td><td>{html.escape(str(c.get('gene_call_confidence') or 'NOT_ASSESSED'))}</td></tr>")
+    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1500px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}td,th{{border:1px solid #bbb;padding:.4em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Functional evidence strength is a deterministic rule category, not a measured probability. Gene-call confidence independently describes caller agreement/support. Select a protein identifier to inspect its domains, orthologs, alignments, and reasoning.</p><p><a href='hallmark_completeness.tsv'>Annotation-derived hallmark screen</a> · <a href='annotation_review.tsv'>Manual-review queue</a> · <a href='annotated_proteins.faa'>Product-labelled protein FASTA</a></p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Length (aa)</th><th>Classification</th><th>Proposed function</th><th>Rule-based evidence strength</th><th>Gene-call confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
     (root / "report.html").write_text(report_html)
 
 

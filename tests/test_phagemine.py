@@ -28,7 +28,7 @@ from phagemine.phrogs import MMSEQS_FORMAT, PHROGSMMseqsAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.progress import ProgressReporter
 from phagemine.resume import _load_source, RESUME_STAGES, checkpoint_reusable, reclassify
-from phagemine.fusion import classify_protein, classify_proteins, normalize_function, write_classification
+from phagemine.fusion import attach_gene_call_assessments, classify_protein, classify_proteins, normalize_function, write_classification
 from phagemine.context import build_context, write_context
 from phagemine.compare import compare
 from phagemine.batch import discover_inputs, batch
@@ -39,7 +39,7 @@ from phagemine.pfam import PfamHMMAdapter
 from phagemine.vog import VOGHMMAdapter
 from phagemine.swissprot import SwissProtEvidenceAdapter
 from phagemine.phrogs import PHROGSMMseqsAdapter
-from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics, classify_product_relation
+from phagemine.benchmark import benchmark, import_phold, import_prokka, import_pharokka, import_phagemine, compare_models, metrics, truth_metrics, classify_product_relation
 from phagemine.reporting import write_checkpoint_snapshot, write_stage_checkpoint, prefix_checkpoint_artifacts, update_comparative_report
 from phagemine.evidence import EvidenceAdapterResult
 from phagemine.mining import mine
@@ -76,7 +76,7 @@ class PhageMineTests(unittest.TestCase):
                 "reference_aligned_percent": 98.0, "taxonomic_interpretation": "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD",
             }]}})
             report = (root / "report.html").read_text()
-            self.assertIn("Whole-genome numerical taxonomy", report)
+            self.assertIn("INPHARED nearest-reference nucleotide comparison", report)
             self.assertIn("96.20%", report)
             self.assertIn("Mash distance is not converted to similarity", report)
 
@@ -111,6 +111,30 @@ class PhageMineTests(unittest.TestCase):
         review=gene_call_review(rows, {}, {"P1": 100})[0]
         self.assertEqual(review["gene_call_confidence"], "HIGH")
         self.assertEqual(review["review_flag"], "NONE")
+
+    def test_gene_call_fields_remain_separate_from_functional_review(self):
+        classification = classify_protein(self._fusion_protein())
+        attached = attach_gene_call_assessments([classification], [{
+            "protein_id": "P", "gene_call_confidence": "HIGH", "review_flag": "NONE",
+        }])[0]
+        self.assertEqual(attached["gene_call_confidence"], "HIGH")
+        self.assertEqual(attached["gene_call_review_flag"], "NONE")
+        self.assertEqual(attached["functional_review_flag"], "REVIEW_REQUIRED")
+
+    def test_exact_concordance_adjudication_confirms_both_boundaries_and_strand(self):
+        row = reconcile_models(
+            [GeneModel("PHANOTATE", "P1", 100, 400, "+")],
+            [GeneModel("Prodigal", "D1", 100, 400, "+")],
+        )[0]
+        result = adjudicate([row], {
+            "P1": [{"supports": True, "evidence_strength": "STRONG"}],
+            "D1": [],
+        })[0]
+        self.assertEqual(result["start_decision"], "START_CONFIRMED")
+        self.assertEqual(result["stop_decision"], "STOP_CONFIRMED")
+        self.assertEqual(result["strand_decision"], "STRAND_CONFIRMED")
+        self.assertEqual(result["evidence_agreement"], "COORDINATE_CONCORDANCE")
+        self.assertFalse(result["manual_review"])
 
     def test_hallmark_check_never_converts_non_detection_to_absence(self):
         rows=assess_hallmarks([{"protein_id":"P1","functional_state":"PROBABLE_FUNCTION","display_product":"major capsid protein","confidence":"MODERATE"}])
@@ -335,6 +359,28 @@ class PhageMineTests(unittest.TestCase):
             sample=out/"a"
             self.assertTrue((sample/"annotation.tsv").is_file())
             self.assertFalse((sample/"a_proteins.faa").exists())
+
+    def test_batch_propagates_threads_to_each_single_genome_run(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inp, out = Path(temp) / "in", Path(temp) / "out"
+            inp.mkdir()
+            genome = (ROOT / "examples/demo_phage.fasta").read_text()
+            (inp / "a.fasta").write_text(genome)
+            observed = []
+
+            def fake_run(path, destination, progress=None, **kwargs):
+                observed.append(kwargs.get("threads"))
+                destination = Path(destination)
+                (destination / "analysis_genome.fasta").write_text(genome)
+                for name, value in (
+                    ("functional_classification.json", []), ("genomic_context.json", []),
+                    ("modules.json", []), ("evidence.json", []), ("run_manifest.json", {}),
+                ):
+                    (destination / name).write_text(json.dumps(value))
+
+            with patch("phagemine.batch.run", fake_run):
+                batch(inp, out, gene_predictor="demo", threads=4)
+            self.assertEqual(observed, [4])
 
     def test_batch_continues_after_failed_sample(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -600,7 +646,7 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(result["functional_state"], "FUNCTIONAL_CLASS_ONLY")
         self.assertIsNone(result["proposed_function"])
         self.assertEqual(result["display_product"], "hypothetical protein")
-        self.assertIsNone(result["domain_summary"])
+        self.assertEqual(result["domain_summary"], "Detected domain evidence: domain x")
 
     def test_fusion_suppresses_taxon_specific_products_but_preserves_raw_evidence(self):
         for unsafe in ("Interferon gamma", "Apolipoprotein CIII", "Centromere kinetochore component CENP-T", "Male sterility protein"):
@@ -694,6 +740,33 @@ class PhageMineTests(unittest.TestCase):
             result = classify_protein(self._fusion_protein([self._fusion_e("Pfam", description)]))
             self.assertNotIn(description.lower(), result["display_product"])
 
+    def test_organism_specific_domain_text_is_note_only_and_neutralized(self):
+        for description in (
+            "coronavirus replicase NSP2, C-terminal",
+            "influenza C hemagglutinin stalk",
+            "Salmonella virulence plasmid 28.1 kDa A protein",
+            "spirochaete C-terminal Tudor-like domain",
+        ):
+            result = classify_protein(self._fusion_protein([self._fusion_e("Pfam", description)]))
+            self.assertEqual(result["display_product"], "hypothetical protein")
+            self.assertNotIn(description.lower(), result["domain_summary"].lower())
+            self.assertFalse(result["confidence_calibrated"])
+
+    def test_truth_metrics_separate_precision_coverage_and_abstention(self):
+        truth = [
+            {"start": 1, "end": 90, "strand": "+", "product": "major capsid protein"},
+            {"start": 100, "end": 180, "strand": "+", "product": "endolysin"},
+        ]
+        predicted = [
+            {"start": 1, "end": 90, "strand": "+", "product": "major head protein"},
+            {"start": 100, "end": 180, "strand": "+", "product": "hypothetical protein"},
+        ]
+        result = truth_metrics(predicted, truth)
+        self.assertEqual(result["correct_product_assertions"], 1)
+        self.assertEqual(result["product_abstentions"], 1)
+        self.assertEqual(result["asserted_product_precision"], 1.0)
+        self.assertEqual(result["functional_coverage"], 0.5)
+
     def test_ijeoma_diagnostic_domain_and_compatible_function_rules(self):
         polymerase = classify_protein(self._fusion_protein([
             self._fusion_e("Pfam", "DNA polymerase family A")
@@ -725,17 +798,48 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(ssdna["proposed_function"], "single-stranded dna-binding protein")
         self.assertEqual(ssdna["confidence"], "LOW")
 
-    def test_ijeoma_unsafe_mixed_domains_are_rewritten_and_short_enzyme_orf_flagged(self):
+    def test_ijeoma_unsafe_mixed_domains_are_rewritten_without_inferring_false_orf(self):
         ninh = classify_protein(self._fusion_protein([
             self._fusion_e("Pfam", "phage NinH protein"),
             self._fusion_e("Pfam", "transposase"),
         ]))
-        self.assertEqual(ninh["display_product"], "hypothetical protein containing ninh-like domain")
+        self.assertEqual(ninh["display_product"], "hypothetical protein")
+        self.assertIn("ninh-like domain", ninh["domain_summary"])
         short = self._fusion_protein([self._fusion_e("Pfam", "P-type ATPase actuator domain and DISARM protein DrmE, C-terminal domain")])
         short.sequence = "M" * 63
         result = classify_protein(short)
-        self.assertEqual(result["display_product"], "hypothetical protein containing atpase-related domain")
-        self.assertEqual(result["review_flag"], "POSSIBLE_PARTIAL_OR_FALSE_ORF")
+        self.assertEqual(result["display_product"], "hypothetical protein")
+        self.assertIn("atpase-related domain", result["domain_summary"])
+        self.assertEqual(result["review_flag"], "NONE")
+
+    def test_repeated_phrogs_hnh_profiles_support_hnh_endonuclease(self):
+        evidence = []
+        for identifier, evalue, coverage, score in (
+            ("phrog_99", 6.935e-20, 0.946, 86.0),
+            ("phrog_4578", 3.7e-23, 0.518, 82.8),
+            ("phrog_3593", 5.6e-12, 0.633, 46.8),
+        ):
+            hit = self._fusion_e("PHROGs", "HNH endonuclease", identifier=identifier)
+            hit.metrics.update({"evalue": evalue, "query_coverage": coverage, "bit_score": score})
+            evidence.append(hit)
+        evidence.append(self._fusion_e("Pfam", "HNH endonuclease domain"))
+        result = classify_protein(self._fusion_protein(evidence))
+        self.assertEqual(result["proposed_function"], "hnh endonuclease")
+        self.assertEqual(result["confidence"], "MODERATE")
+
+    def test_annotated_phrogs_consensus_outranks_unannotated_profile(self):
+        unknown = self._fusion_e("PHROGs", None, identifier="phrog_38319")
+        unknown.metrics.update({"evalue": 1.6e-42, "query_coverage": 0.549, "bit_score": 161})
+        first = self._fusion_e("PHROGs", "terminase large subunit", identifier="phrog_10250")
+        first.metrics.update({"evalue": 1.7e-37, "query_coverage": 0.637, "bit_score": 146})
+        second = self._fusion_e("PHROGs", "terminase large subunit", identifier="phrog_2")
+        second.metrics.update({"evalue": 6.3e-36, "query_coverage": 0.912, "bit_score": 125})
+        result = classify_protein(self._fusion_protein([
+            unknown, first, second,
+            self._fusion_e("Pfam", "terminase RNaseH-like domain"),
+        ]))
+        self.assertEqual(result["proposed_function"], "terminase large subunit")
+        self.assertEqual(result["confidence"], "MODERATE")
 
     def test_context_refinement_never_invents_minor_tail_without_candidate(self):
         proteins=[]
@@ -940,10 +1044,17 @@ class PhageMineTests(unittest.TestCase):
             output = Path(temp) / "run"
             count = run(ROOT / "examples/demo_phage.fasta", output, predictor=DemoORFPredictor())
             self.assertEqual(count, 5)
-            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "genes.gff3", "proteins.faa", "annotated_proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "hallmark_completeness.tsv", "annotation_review.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
+            for filename in ("original_input.fasta", "analysis_genome.fasta", "genome_representation.json", "sequencing_provenance.json", "scientific_validation_status.json", "genes.gff3", "proteins.faa", "annotated_proteins.faa", "cds.fna", "annotation.tsv", "evidence.json", "candidate_ranking.tsv", "hallmark_completeness.tsv", "annotation_review.tsv", "report.md", "report.html", "run_manifest.json", "quality_control.json"):
                 self.assertTrue((output / filename).exists(), filename)
+            scientific_status = json.loads((output / "scientific_validation_status.json").read_text())
+            self.assertFalse(scientific_status["functional_strength_empirically_calibrated"])
+            self.assertEqual(scientific_status["feature_scope"]["tRNA"], "NOT_CALLED")
             with (output / "annotation.tsv").open() as handle:
-                self.assertEqual(next(csv.reader(handle, delimiter="\t")), ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function", "EC_number", "classification", "confidence", "evidence_sources", "best_evidence", "biotechnology_relevance", "review_flag"])
+                header = next(csv.reader(handle, delimiter="\t"))
+                self.assertEqual(header[:8], ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function"])
+                self.assertIn("domain_note", header)
+                self.assertIn("confidence", header)
+                self.assertIn("confidence_calibrated", header)
             named_headers=[line for line in (output / "annotated_proteins.faa").read_text().splitlines() if line.startswith(">")]
             self.assertEqual(len(named_headers), count)
             self.assertTrue(all(" product=\"" in line and " coordinates=" in line and " strand=" in line for line in named_headers))
@@ -1432,6 +1543,19 @@ class PhageMineTests(unittest.TestCase):
     def test_default_registry_is_user_level_not_repository(self):
         registry = default_registry_path()
         self.assertNotIn(str(ROOT), str(registry))
+
+    def test_registry_environment_override_is_atomic_and_keeps_backup(self):
+        with tempfile.TemporaryDirectory() as temp:
+            registry = Path(temp) / "isolated" / "resources.json"
+            with patch.dict(os.environ, {"PHAGEMINE_REGISTRY_PATH": str(registry)}):
+                self.assertEqual(default_registry_path(), registry)
+                resource = Path(temp) / "resource.hmm"
+                resource.write_text("data")
+                manager = EvidenceResourceManager()
+                manager.register("first", "PFAM", resource)
+                manager.register("second", "VOGDB", resource)
+            self.assertTrue(registry.is_file())
+            self.assertTrue(registry.with_suffix(".json.bak").is_file())
 
     @pytest.mark.integration
     def test_fasta_analysis_without_sequencing_metadata_uses_unknown(self):
