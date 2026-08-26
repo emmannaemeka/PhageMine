@@ -841,6 +841,83 @@ class PhageMineTests(unittest.TestCase):
         self.assertEqual(result["proposed_function"], "terminase large subunit")
         self.assertEqual(result["confidence"], "MODERATE")
 
+    def test_danladi_chimallin_nuclear_shell_synonyms_converge(self):
+        phrog = self._fusion_e("PHROGs", "nuclear shell protein", identifier="phrog_4795")
+        phrog.metrics.update({"query_coverage": 0.981, "sequence_identity": 0.398,
+                              "bit_score": 461, "evalue": 1.526e-141})
+        vog = self._fusion_e("VOGDB", "sp|F8SJT5|CHMA_BPPA3 Chimallin", identifier="VOG27585")
+        vog.metrics.update({"query_coverage": 0.997, "bit_score": 796.8, "evalue": 4.3e-239})
+        swiss = self._fusion_e("Swiss-Prot", "sp|F8SJT5|CHMA_BPPA3 Chimallin",
+                               strength="MODERATE", identifier="F8SJT5")
+        swiss.metrics.update({
+            "reviewed": True, "organism": "Pseudomonas phage PA3.",
+            "percent_identity": 65.9, "query_coverage": 575 / 621,
+            "subject_coverage": 575 / 602, "evalue": 3.92e-274,
+            "bit_score": 765,
+        })
+        result = classify_protein(self._fusion_protein([phrog, vog, swiss]))
+        self.assertEqual(result["proposed_function"], "chimallin")
+        self.assertEqual(result["product_supporting_source_count"], 3)
+        self.assertTrue(result["selected_by_curated_phage_anchor"])
+        self.assertEqual(result["review_flag"], "NONE")
+
+    def test_danladi_gp144_curated_phage_anchor_beats_partial_tail_label_but_keeps_review(self):
+        tail = self._fusion_e("PHROGs", "tail fiber protein", identifier="phrog_3201")
+        tail.metrics.update({"sequence_identity": 0.494, "query_coverage": 0.718,
+                             "bit_score": 179, "evalue": 1.961e-50})
+        vog = self._fusion_e("VOGDB", "sp|Q8SD18|ENLYS_BPDPK Endolysin gp144",
+                             identifier="VOG15058")
+        vog.metrics.update({"query_coverage": 200 / 259, "bit_score": 228.1,
+                            "evalue": 2.6e-67})
+        swiss = self._fusion_e("Swiss-Prot",
+                               "Endolysin gp144 {ECO:0000303|PubMed:28461978}",
+                               strength="MODERATE", identifier="Q8SD18")
+        swiss.metrics.update({
+            "reviewed": True, "organism": "Pseudomonas phage phiKZ.",
+            "percent_identity": 56.8, "query_coverage": 257 / 259,
+            "subject_coverage": 257 / 260, "evalue": 2.54e-88,
+            "bit_score": 265,
+        })
+        result = classify_protein(self._fusion_protein([tail, vog, swiss]))
+        self.assertEqual(result["proposed_function"], "endolysin")
+        self.assertTrue(result["selected_by_curated_phage_anchor"])
+        self.assertIn("Swiss-Prot:Q8SD18", result["best_evidence"])
+        self.assertEqual(result["product_supporting_source_count"], 2)
+        self.assertEqual(result["review_flag"], "REVIEW_REQUIRED")
+
+    def test_danladi_gp181_curated_structural_hydrolase_not_silently_overruled_by_tail_fiber(self):
+        tail = self._fusion_e("PHROGs", "tail fiber protein", identifier="phrog_3201")
+        tail.metrics.update({"sequence_identity": 0.60, "query_coverage": 0.95,
+                             "bit_score": 600, "evalue": 1e-150})
+        vog = self._fusion_e("VOGDB",
+                             "sp|Q8SCY1|EXLYS_BPDPK Peptidoglycan hydrolase gp181",
+                             identifier="VOG42004")
+        vog.metrics.update({"query_coverage": 1.0, "bit_score": 2827.4, "evalue": 0.0})
+        swiss = self._fusion_e("Swiss-Prot",
+                               "Peptidoglycan hydrolase gp181 {ECO:0000305}",
+                               strength="MODERATE", identifier="Q8SCY1")
+        swiss.metrics.update({
+            "reviewed": True, "organism": "Pseudomonas phage phiKZ.",
+            "percent_identity": 55.0, "query_coverage": 0.95,
+            "subject_coverage": 0.95, "evalue": 1e-200,
+            "bit_score": 1500,
+        })
+        result = classify_protein(self._fusion_protein([tail, vog, swiss]))
+        self.assertEqual(result["proposed_function"], "peptidoglycan hydrolase gp181")
+        self.assertTrue(result["selected_by_curated_phage_anchor"])
+        self.assertIn("Swiss-Prot:Q8SCY1", result["best_evidence"])
+        self.assertEqual(result["product_supporting_source_count"], 2)
+        self.assertEqual(result["review_flag"], "REVIEW_REQUIRED")
+
+    def test_product_evidence_tier_counts_only_sources_supporting_selected_product(self):
+        phrog = self._fusion_e("PHROGs", "RNA polymerase", identifier="p")
+        pfam = self._fusion_e("Pfam", "RNA polymerase beta subunit domain", identifier="PFTEST")
+        result = classify_protein(self._fusion_protein([phrog, pfam]))
+        self.assertEqual(result["proposed_function"], "rna polymerase")
+        self.assertEqual(result["supporting_source_count"], 2)
+        self.assertEqual(result["product_supporting_source_count"], 1)
+        self.assertEqual(result["evidence_tier"], 4)
+
     def test_context_refinement_never_invents_minor_tail_without_candidate(self):
         proteins=[]
         for index,(description,start) in enumerate((("tail protein",1),("unknown function",301),("minor tail protein",601)),1):
