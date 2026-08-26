@@ -898,16 +898,59 @@ class PhageMineTests(unittest.TestCase):
                                strength="MODERATE", identifier="Q8SCY1")
         swiss.metrics.update({
             "reviewed": True, "organism": "Pseudomonas phage phiKZ.",
-            "percent_identity": 55.0, "query_coverage": 0.95,
-            "subject_coverage": 0.95, "evalue": 1e-200,
-            "bit_score": 1500,
+            "percent_identity": 38.5,
+            "alignment_length": 2171,
+            "query_length": 2256,
+            "subject_length": 2237,
+            "query_coverage": 0.9321808510638298,
+            "subject_coverage": 0.9400983459991059,
+            "evalue": 0.0,
+            "bit_score": 1316.0,
         })
         result = classify_protein(self._fusion_protein([tail, vog, swiss]))
-        self.assertEqual(result["proposed_function"], "peptidoglycan hydrolase gp181")
+        self.assertEqual(result["proposed_function"], "structural peptidoglycan hydrolase")
         self.assertTrue(result["selected_by_curated_phage_anchor"])
         self.assertIn("Swiss-Prot:Q8SCY1", result["best_evidence"])
         self.assertEqual(result["product_supporting_source_count"], 2)
         self.assertEqual(result["review_flag"], "REVIEW_REQUIRED")
+
+    def test_head_and_capsid_maturation_protease_are_semantic_synonyms(self):
+        phrog = self._fusion_e("PHROGs", "head maturation protease", identifier="phrog_3014")
+        swiss = self._fusion_e("Swiss-Prot", "Capsid maturation protease {ECO:0000305}",
+                               strength="MODERATE", identifier="Q8SCY7")
+        swiss.metrics.update({
+            "reviewed": True, "organism": "Pseudomonas phage phiKZ.",
+            "percent_identity": 60.0, "query_coverage": 0.95,
+            "subject_coverage": 0.95, "evalue": 1e-100,
+        })
+        result = classify_protein(self._fusion_protein([phrog, swiss]))
+        self.assertEqual(result["proposed_function"], "capsid maturation protease")
+        self.assertNotIn(
+            "distinct strong labels could not be confidently established as biologically incompatible",
+            result["ambiguity_flags"],
+        )
+        self.assertEqual(result["review_flag"], "NONE")
+
+    def test_lower_identity_curated_phage_anchor_requires_near_full_length_coverage(self):
+        swiss = self._fusion_e("Swiss-Prot", "Peptidoglycan hydrolase gp181",
+                               strength="MODERATE", identifier="Q8SCY1")
+        swiss.metrics.update({
+            "reviewed": True, "organism": "Pseudomonas phage phiKZ.",
+            "percent_identity": 38.5,
+            "query_coverage": 0.70,
+            "subject_coverage": 0.70,
+            "evalue": 0.0,
+            "bit_score": 600,
+        })
+        tail = self._fusion_e("PHROGs", "tail fiber protein", identifier="phrog_3201")
+        tail.metrics.update({
+            "percent_identity": 0.60, "query_coverage": 0.95,
+            "bit_score": 700, "evalue": 1e-180,
+        })
+        result = classify_protein(self._fusion_protein([tail, swiss]))
+        self.assertFalse(result["selected_by_curated_phage_anchor"])
+        self.assertEqual(result["proposed_function"], "tail fiber protein")
+        self.assertEqual(result["review_flag"], "NONE")
 
     def test_product_evidence_tier_counts_only_sources_supporting_selected_product(self):
         phrog = self._fusion_e("PHROGs", "RNA polymerase", identifier="p")

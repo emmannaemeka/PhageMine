@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.7"
+FUSION_RULES_VERSION = "1.8"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -172,6 +172,12 @@ def normalize_function(description: str | None) -> str | None:
         # endolysin/lytic transglycosylase. Keep the transferable product
         # conservative rather than propagating the source-phage locus number.
         "endolysin gp144": "endolysin",
+        # Equivalent maturation-protease nomenclature used across phage DBs.
+        "head maturation protease": "capsid maturation protease",
+        # phiKZ gp181 is experimentally established as a structural virion
+        # peptidoglycan hydrolase. Remove the source-phage locus number while
+        # preserving the experimentally supported structural biochemical role.
+        "peptidoglycan hydrolase gp181": "structural peptidoglycan hydrolase",
     }
     value = canonical.get(value, value)
     return None if value in UNKNOWN_LABELS else value
@@ -214,12 +220,23 @@ def _curated_phage_anchor(evidence: Evidence) -> bool:
     if scov is not None and scov > 1:
         scov /= 100.0
 
-    return bool(
-        identity is not None and identity >= 0.40
-        and qcov is not None and qcov >= 0.80
-        and scov is not None and scov >= 0.80
-        and evalue is not None and evalue <= 1e-20
+    if identity is None or qcov is None or scov is None or evalue is None:
+        return False
+    if evalue > 1e-20:
+        return False
+
+    # Standard curated anchor: substantial identity and substantial coverage.
+    standard_anchor = identity >= 0.40 and qcov >= 0.80 and scov >= 0.80
+
+    # Lower-identity rescue is allowed only for essentially whole-protein
+    # homology. This captures divergent jumbo-phage structural proteins such
+    # as Danladi PM_000202 versus phiKZ gp181 (38.5% identity, ~93/94%
+    # query/subject coverage, E=0) without promoting partial 35-40% matches.
+    near_full_length_anchor = (
+        identity >= 0.35 and qcov >= 0.90 and scov >= 0.90
     )
+
+    return standard_anchor or near_full_length_anchor
 
 def _candidate_score(evidence: Evidence, label: str) -> float:
     """Rank product hypotheses using provenance and alignment support."""
