@@ -24,9 +24,10 @@ UNKNOWN_ANNOTATION = re.compile(
 )
 VALID_AA = set("ABCDEFGHIKLMNPQRSTVWXYZJUO*")
 ICTV_SPECIES_THRESHOLD = 95.0
-ICTV_DEFAULT_GENUS_THRESHOLD = 70.0
-ICTV_FAMILY_GENUS_THRESHOLDS = {"Herelleviridae": 60.0}
-ICTV_METHOD = "VIRIDIC-compatible bidirectional BLASTN whole-genome similarity"
+# Genus demarcation is family/proposal-specific and changes over time.  No
+# boundary is embedded until a versioned, cited policy file is supplied.
+ICTV_FAMILY_GENUS_THRESHOLDS: dict[str, float] = {}
+ICTV_METHOD = "PhageMine bidirectional BLASTN length-normalized similarity"
 
 
 def _covered_length(intervals: list[tuple[int, int]]) -> int:
@@ -68,17 +69,28 @@ def _directional_blast_identity(blastn: str, query: Path, subject: Path) -> tupl
     return identical, _covered_length(intervals), command
 
 
-def _ictv_interpretation(similarity: float | None, family: str | None) -> tuple[float, float, str, str]:
-    genus = ICTV_FAMILY_GENUS_THRESHOLDS.get(family or "", ICTV_DEFAULT_GENUS_THRESHOLD)
-    source = "ICTV family-specific genus threshold" if family in ICTV_FAMILY_GENUS_THRESHOLDS else "general ICTV Bacterial Viruses Subcommittee working threshold"
+def _ictv_interpretation(similarity: float | None, family: str | None,
+                         taxonomy_eligible: bool = True) -> tuple[float, float | None, str, str]:
+    """Describe numerical boundaries without making a taxonomic assignment.
+
+    Genus criteria are not universal across bacteriophages.  PhageMine applies
+    no generic 70% genus rule and abstains for partial/poorly aligned queries.
+    """
+    genus = ICTV_FAMILY_GENUS_THRESHOLDS.get(family or "")
+    source = ("configured family-specific working boundary; verify against the current ICTV proposal"
+              if genus is not None else "no family-specific genus boundary configured")
     if similarity is None:
         label = "NOT_CALCULATED"
+    elif not taxonomy_eligible:
+        label = "NUMERICAL_TAXONOMY_NOT_APPLICABLE_TO_PARTIAL_OR_POORLY_ALIGNED_QUERY"
     elif similarity >= ICTV_SPECIES_THRESHOLD:
-        label = "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD"
+        label = "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW"
+    elif genus is None:
+        label = "NO_FAMILY_SPECIFIC_GENUS_BOUNDARY_CONFIGURED"
     elif similarity >= genus:
-        label = "CONSISTENT_WITH_SAME_GENUS_DIFFERENT_SPECIES"
+        label = "ABOVE_CONFIGURED_FAMILY_GENUS_BOUNDARY_REQUIRES_ICTV_REVIEW"
     else:
-        label = "SAME_GENUS_NOT_SUPPORTED_BY_NUCLEOTIDE_THRESHOLD"
+        label = "BELOW_CONFIGURED_FAMILY_GENUS_BOUNDARY"
     return ICTV_SPECIES_THRESHOLD, genus, source, label
 
 
@@ -593,9 +605,21 @@ def compare_genomes(
         row.update(comparison or {"intergenomic_similarity_percent": None, "query_aligned_percent": None,
             "reference_aligned_percent": None, "genome_length_ratio": None,
             "similarity_method": "NOT_CALCULATED_BLASTN_OR_REFERENCE_UNAVAILABLE", "similarity_commands": []})
-        species_cutoff, genus_cutoff, threshold_source, taxonomic_interpretation = _ictv_interpretation(row["intergenomic_similarity_percent"], row.get("phage_family"))
+        length_ratio = row.get("genome_length_ratio")
+        query_aligned = row.get("query_aligned_percent")
+        reference_aligned = row.get("reference_aligned_percent")
+        taxonomy_eligible = bool(
+            comparison and length_ratio is not None and length_ratio >= 0.90
+            and query_aligned is not None and query_aligned >= 70.0
+            and reference_aligned is not None and reference_aligned >= 70.0
+        )
+        comparison_scope = ("APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON"
+                            if taxonomy_eligible else "PARTIAL_OR_POORLY_ALIGNED_QUERY")
+        species_cutoff, genus_cutoff, threshold_source, taxonomic_interpretation = _ictv_interpretation(
+            row["intergenomic_similarity_percent"], row.get("phage_family"), taxonomy_eligible)
         row.update({"species_threshold_percent": species_cutoff, "genus_threshold_percent": genus_cutoff,
-                    "threshold_source": threshold_source, "taxonomic_interpretation": taxonomic_interpretation})
+                    "threshold_source": threshold_source, "taxonomic_interpretation": taxonomic_interpretation,
+                    "taxonomy_eligible": taxonomy_eligible, "comparison_scope": comparison_scope})
         row["interpretation"] = taxonomic_interpretation if comparison else "MASH_SCREENING_ONLY; ICTV_SIMILARITY_NOT_CALCULATED"
     destination = Path(output)
     destination.mkdir(parents=True, exist_ok=True)
@@ -604,7 +628,7 @@ def compare_genomes(
         "p_value", "matching_hashes", "reference_description", "host_genus", "phage_genus",
         "phage_subfamily", "phage_family", "intergenomic_similarity_percent", "query_aligned_percent",
         "reference_aligned_percent", "genome_length_ratio", "similarity_method", "species_threshold_percent",
-        "genus_threshold_percent", "threshold_source", "taxonomic_interpretation", "sequence_confirmation",
+        "genus_threshold_percent", "threshold_source", "taxonomy_eligible", "comparison_scope", "taxonomic_interpretation", "sequence_confirmation",
         "confirmed_identity", "confirmation_method", "interpretation", "similarity_commands",
     ]
     with (destination / "inphared_nearest_phages.tsv").open("w", newline="") as handle:
@@ -645,6 +669,8 @@ def compare_genomes(
             "species_threshold_percent": best.get("species_threshold_percent"),
             "genus_threshold_percent": best.get("genus_threshold_percent"),
             "threshold_source": best.get("threshold_source"),
+            "taxonomy_eligible": best.get("taxonomy_eligible"),
+            "comparison_scope": best.get("comparison_scope"),
             "taxonomic_interpretation": best.get("taxonomic_interpretation"),
             "sequence_confirmation": best.get("sequence_confirmation"),
             "confirmed_identity": best.get("confirmed_identity"),
@@ -653,7 +679,7 @@ def compare_genomes(
             "interpretation": best.get("interpretation"),
         })
     unique.sort(key=lambda item: (item["sample_id"], item["best_mash_distance"], item["reference_description"] or ""))
-    summary_columns = ["sample_id", "relationship", "reference_description", "reference_accessions", "best_mash_distance", "matching_hashes", "intergenomic_similarity_percent", "query_aligned_percent", "reference_aligned_percent", "genome_length_ratio", "similarity_method", "species_threshold_percent", "genus_threshold_percent", "threshold_source", "taxonomic_interpretation", "sequence_confirmation", "confirmed_identity", "host_genus", "phage_genus", "phage_subfamily", "phage_family", "interpretation"]
+    summary_columns = ["sample_id", "relationship", "reference_description", "reference_accessions", "best_mash_distance", "matching_hashes", "intergenomic_similarity_percent", "query_aligned_percent", "reference_aligned_percent", "genome_length_ratio", "similarity_method", "species_threshold_percent", "genus_threshold_percent", "threshold_source", "taxonomy_eligible", "comparison_scope", "taxonomic_interpretation", "sequence_confirmation", "confirmed_identity", "host_genus", "phage_genus", "phage_subfamily", "phage_family", "interpretation"]
     with (destination / "inphared_summary.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=summary_columns, delimiter="\t")
         writer.writeheader(); writer.writerows(unique)
@@ -661,7 +687,7 @@ def compare_genomes(
         "status": "COMPLETE",
         "database": "INPHARED",
         "commands": commands,
-        "scientific_interpretation": "Mash selects candidate references only. Taxonomic interpretation uses VIRIDIC-compatible bidirectional BLASTN similarity normalized to both complete genome lengths; it remains computational evidence, not an ICTV assignment.",
+        "scientific_interpretation": "Mash selects candidate references only. PhageMine reports its own bidirectional BLASTN length-normalized similarity and does not claim VIRIDIC equivalence or make an ICTV assignment. Taxonomic boundary interpretation is withheld for partial or poorly aligned queries.",
         "matches": rows,
         "unique_reference_summaries": unique,
     }

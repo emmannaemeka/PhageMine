@@ -38,6 +38,32 @@ class ProgressReporter:
         if self.callback: self.callback("COMPLETE", stage, {"elapsed_seconds": elapsed, "summary": summary})
         self._started = None
 
+    def skip(self, summary: str | None = None) -> None:
+        """Complete the current stage explicitly as unavailable/not configured."""
+        if self._started is None:
+            return
+
+        stage, started = self._started
+        elapsed = time.monotonic() - started
+        suffix = f"; {summary}" if summary else ""
+
+        self.completed += 1
+
+        if not self.quiet:
+            self._write(
+                f"[PhageMine {self.completed}/{len(self.STAGES)}] "
+                f"SKIPPED: {stage} ({elapsed:.1f}s){suffix}"
+            )
+
+        if self.callback:
+            self.callback(
+                "SKIPPED",
+                stage,
+                {"elapsed_seconds": elapsed, "summary": summary},
+            )
+
+        self._started = None
+
     def _write(self, message: str) -> None:
         self.stream.write(message + "\n")
         self.stream.flush()

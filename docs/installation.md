@@ -35,6 +35,10 @@ phagemine databases install --all
 phagemine doctor
 ```
 
+For release validation or diagnosis of a database that appears ready but fails
+at runtime, use `phagemine doctor --deep`. It opens the registered PHROGs
+MMseqs2 and PyHMMER databases and reports format errors before an analysis run.
+
 All required executables and requested capabilities must report `READY` before
 a production full-evidence run. `BLOCKED/INVALID` means that a database is
 registered but cannot currently operate, commonly because a required
@@ -80,7 +84,8 @@ as unavailable and the Core workflow remains usable, but full evidence mode
 requires the four annotation resources to be `READY` in `phagemine doctor`.
 PMFDB and INPHARED enable the two comparative discovery capabilities. The
 INPHARED workflow uses Mash only to shortlist references and BLASTN to compute
-VIRIDIC-compatible whole-genome intergenomic similarity; Mash distance is
+PhageMine's bidirectional length-normalized nucleotide similarity; this is not
+presented as VIRIDIC output. Mash distance is
 never converted into percentage similarity. The
 complete six-resource download is approximately 3.4 GiB; keep at least
 15–20 GiB free during preparation.

@@ -1,0 +1,21 @@
+name: phagemine
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - phanotate=1.6.7
+  - prodigal=2.6.3
+  - hmmer=3.4
+  - mmseqs2
+  - diamond
+  - mash=2.3
+  - blast
+  - matplotlib
+  - pyhmmer>=0.10,<0.13
+  - pytest
+  - python-build
+  - pip:
+      - -e .

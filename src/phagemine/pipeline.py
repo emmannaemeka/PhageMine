@@ -21,7 +21,7 @@ from .swissprot import SwissProtEvidenceAdapter
 from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
 from .resources import EvidenceResourceManager, ResourceType
 from .progress import ProgressReporter
-from .fusion import classify_proteins
+from .fusion import attach_gene_call_assessments, classify_proteins
 from .context import build_context
 from .reconciliation import GeneModel, ProdigalPredictor, gene_call_review, reconcile_models, write_gene_call_review, write_reconciliation
 from .adjudication import adjudicate, write_adjudication
@@ -43,10 +43,20 @@ def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
 def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
     progress = progress or ProgressReporter(quiet=True)
     if reconcile_orfs:
-        progress.STAGES = ("input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
+        stages = [
+            "input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
             "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
             "ORF adjudication", "evidence integration", "candidate ranking/mining", "QC/report generation",
-            "GenBank pre-submission package")
+        ]
+        if command == "annotate":
+            stages.append("INPHARED genome comparison")
+        stages.append("GenBank pre-submission package")
+        progress.STAGES = tuple(stages)
+    elif command == "annotate":
+        stages = list(progress.STAGES)
+        if "INPHARED genome comparison" not in stages:
+            stages.insert(-1, "INPHARED genome comparison")
+        progress.STAGES = tuple(stages)
     timings = {}
     def timed_start(name): timings[name] = {"start": time.time()}
     def timed_end(name): timings[name]["end"] = time.time(); timings[name]["seconds"] = timings[name]["end"] - timings[name]["start"]
@@ -76,6 +86,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     reconciliation_rows = None
     prodigal_models = None
     gene_review_records = []
+    progress.finish(f"{len(proteins)} proteins")
     if reconcile_orfs:
         progress.start("Prodigal secondary gene prediction")
         prodigal_models = ProdigalPredictor(prodigal).predict(fasta, representation.analysis_sequence)
@@ -87,7 +98,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
-    progress.finish(f"{len(proteins)} proteins")
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = MockEvidenceBackend().analyze(proteins)
@@ -198,6 +208,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         Path(output) / "checkpoints", "phrogs", [asdict(e) for e in merged_phrogs],
         {"backends": [phrogs_result.provenance, phrogs_hmm_result.provenance],
          "deduplicated_evidence_count": len(merged_phrogs)})
+    accepted = sum(e.supports for e in merged_phrogs)
+    backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
+    progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
+    timed_end("phrogs")
     if reconcile_orfs:
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
@@ -215,10 +229,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         gene_review_records = gene_call_review(reconciliation_rows, evidence_map, lengths)
         write_gene_call_review(output, gene_review_records)
         progress.finish("adjudication persisted")
-    accepted = sum(e.supports for e in merged_phrogs)
-    backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
-    progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
-    timed_end("phrogs")
     progress.start("evidence integration")
     timed_start("evidence_fusion")
     checkpoint_manifest = {"pipeline": "PhageMine", "pipeline_version": __version__, "command": command,
@@ -227,9 +237,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                            "evidence_adapters": evidence_adapters}
     write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "evidence_complete",
                               representation, sequencing_provenance, proteins, checkpoint_manifest, fasta)
-    progress.finish(f"{sum(len(p.evidence) for p in proteins)} evidence records")
+    progress.finish(f"{sum(len(p.evidence) for p in proteins)} annotation evidence records integrated")
     timed_end("evidence_fusion")
-    classifications = classify_proteins(proteins)
+    classifications = attach_gene_call_assessments(
+        classify_proteins(proteins), gene_review_records)
     classification_by_id = {item["protein_id"]: item for item in classifications}
     # Keep every public output on the same final product vocabulary.  The
     # previous pipeline left Protein.annotation at its constructor default,
@@ -267,6 +278,59 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta, classifications, context_records, modules)
     progress.finish(f"outputs written to {output}")
     timed_end("reporting")
+    # ``annotate`` performs the genome-level INPHARED nearest-reference
+    # comparison when the validated resource is available.  It deliberately
+    # does not invoke PMFDB family mining or the broader discovery workflow.
+    # ``run`` continues to consume INPHARED through build_discovery_outputs(),
+    # so the whole-genome comparison is executed exactly once per workflow.
+    if command == "annotate":
+        from .inphared import compare_genomes
+
+        progress.start("INPHARED genome comparison")
+        timed_start("inphared")
+
+        manager = EvidenceResourceManager()
+        inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
+
+        comparative_directory = Path(output) / "comparative"
+        unavailable = {"status": "INPHARED_UNAVAILABLE", "matches": []}
+
+        manifest["comparative_analysis"] = {
+            "output_directory": str(comparative_directory),
+            "inphared": unavailable,
+        }
+
+        if inphared_resource:
+            provenance = inphared_resource.get("provenance") or {}
+            analysis_fasta = Path(output) / "analysis_genome.fasta"
+
+            inphared_comparison = compare_genomes(
+                {Path(output).name: analysis_fasta},
+                mash_index=provenance.get("mash_index_path"),
+                metadata=provenance.get("metadata_path"),
+                output=comparative_directory,
+                reference_fasta=inphared_resource.get("path"),
+            )
+
+            inphared_comparison["resource_version"] = inphared_resource.get("version")
+            inphared_comparison["resource_manifest"] = provenance.get("reference_manifest_path")
+
+            comparative_directory.mkdir(parents=True, exist_ok=True)
+            (comparative_directory / "inphared_nearest_phages.json").write_text(
+                json.dumps(inphared_comparison, indent=2, sort_keys=True) + "\n"
+            )
+
+            manifest["comparative_analysis"]["inphared"] = inphared_comparison
+            update_comparative_report(output, {"inphared": inphared_comparison})
+
+            progress.finish(
+                f"{len(inphared_comparison.get('matches') or [])} nearest-reference rows"
+            )
+        else:
+            progress.skip("INPHARED genomes not configured")
+
+        timed_end("inphared")
+
     # ``run`` is the complete single-genome workflow.  Installed comparative
     # resources must be consumed, not merely reported as READY by ``doctor``.
     if command == "run":

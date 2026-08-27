@@ -44,7 +44,7 @@ def reconcile_models(phanotate: list[GeneModel], prodigal: list[GeneModel], geno
 
 def _row(locus,p,d,o,conflict,sha):
     start_agreement=bool(p and d and p.start==d.start); stop_agreement=bool(p and d and p.end==d.end)
-    return {"locus_id":f"LOCUS_{locus:06d}","conflict_type":conflict,"phanotate_id":p.identifier if p else None,"phanotate_start":p.start if p else None,"phanotate_end":p.end if p else None,"phanotate_strand":p.strand if p else None,"prodigal_id":d.identifier if d else None,"prodigal_start":d.start if d else None,"prodigal_end":d.end if d else None,"prodigal_strand":d.strand if d else None,"overlap_bp":o,"phanotate_overlap_fraction":o/(p.end-p.start+1) if p and o else 0.0,"prodigal_overlap_fraction":o/(d.end-d.start+1) if d and o else 0.0,"start_agreement":start_agreement,"stop_agreement":stop_agreement,"orf_existence_status":"CONCORDANT" if p and d else "CALLER_SPECIFIC","start_status":"START_CONFIRMED" if start_agreement else ("START_DISCORDANT" if p and d else "START_NOT_COMPARABLE"),"stop_status":"STOP_CONFIRMED" if stop_agreement else ("STOP_DISCORDANT" if p and d else "STOP_NOT_COMPARABLE"),"selected_model":"PHANOTATE","decision_status":"OBSERVATIONAL_NOT_ADJUDICATED" if conflict not in {"EXACT_CONCORDANCE"} else "OBSERVATIONAL_CONCORDANT","manual_review":conflict not in {"EXACT_CONCORDANCE"},"input_genome_sha256":sha}
+    return {"locus_id":f"LOCUS_{locus:06d}","conflict_type":conflict,"phanotate_id":p.identifier if p else None,"phanotate_start":p.start if p else None,"phanotate_end":p.end if p else None,"phanotate_strand":p.strand if p else None,"prodigal_id":d.identifier if d else None,"prodigal_start":d.start if d else None,"prodigal_end":d.end if d else None,"prodigal_strand":d.strand if d else None,"overlap_bp":o,"phanotate_overlap_fraction":o/(p.end-p.start+1) if p and o else 0.0,"prodigal_overlap_fraction":o/(d.end-d.start+1) if d and o else 0.0,"start_agreement":start_agreement,"stop_agreement":stop_agreement,"orf_existence_status":"CONCORDANT" if p and d else "CALLER_SPECIFIC","start_status":"START_CONFIRMED" if start_agreement else ("START_DISCORDANT" if p and d else "START_NOT_COMPARABLE"),"stop_status":"STOP_CONFIRMED" if stop_agreement else ("STOP_DISCORDANT" if p and d else "STOP_NOT_COMPARABLE"),"selected_model":"PHANOTATE","primary_model_policy":"PHANOTATE_RETAINED_WITHOUT_TRUTH_ADJUDICATION","model_resolution":"CALLERS_AGREE" if conflict == "EXACT_CONCORDANCE" else "NOT_RESOLVED","decision_status":"OBSERVATIONAL_NOT_ADJUDICATED" if conflict not in {"EXACT_CONCORDANCE"} else "OBSERVATIONAL_CONCORDANT","manual_review":conflict not in {"EXACT_CONCORDANCE"},"input_genome_sha256":sha}
 
 def write_reconciliation(root: str|Path, rows: list[dict], provenance: dict) -> None:
     root=Path(root); (root/"orf_reconciliation.json").write_text(json.dumps({"provenance":provenance,"records":rows},indent=2,sort_keys=True))
@@ -88,13 +88,15 @@ def gene_call_review(rows: list[dict], evidence_by_candidate: dict[str, list[dic
             "strong_evidence_count": len(strong),
             "best_evidence": (f"{best.get('source')}:{best.get('identifier') or best.get('family_name') or 'match'}" if best else "No accepted evidence"),
             "gene_call_confidence": confidence, "review_flag": flag,
+            "confidence_calibrated": False,
+            "confidence_interpretation": "Rule-based caller agreement category; not an empirical probability that the ORF is real.",
             "rationale": rationale,
         })
     return reviewed
 
 def write_gene_call_review(root: str|Path, records: list[dict]) -> None:
     root=Path(root)
-    columns=["locus_id","protein_id","phanotate_id","prodigal_id","conflict_type","length_aa","accepted_evidence_count","strong_evidence_count","best_evidence","gene_call_confidence","review_flag","rationale"]
+    columns=["locus_id","protein_id","phanotate_id","prodigal_id","conflict_type","length_aa","accepted_evidence_count","strong_evidence_count","best_evidence","gene_call_confidence","confidence_calibrated","confidence_interpretation","review_flag","rationale"]
     with (root/"gene_call_confidence.tsv").open("w", newline="") as handle:
         writer=csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader(); writer.writerows(records)
     flagged=[record for record in records if record["review_flag"] != "NONE"]

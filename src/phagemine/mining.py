@@ -40,7 +40,23 @@ def mine(proteins: list[Protein], mock: bool = False) -> None:
             protein.missing_evidence = ["External similarity and profile searches against versioned databases.", "Comparative genomic context across related phages.", "Experimental phenotype or biochemical assay."]
         if protein.length < 40:
             components["quality_penalty"] = 15
-            protein.evidence.append(Evidence("quality", "Short predicted ORF increases risk of a spurious gene call.", EvidenceLevel.WEAK, "phagemine-qc", "0.1.0", status="real", supports=False, metrics={"protein_length": protein.length}))
+            has_short_orf_qc = any(
+                evidence.modality == "quality"
+                and evidence.source == "phagemine-qc"
+                and evidence.metrics.get("protein_length") == protein.length
+                for evidence in protein.evidence
+            )
+            if not has_short_orf_qc:
+                protein.evidence.append(Evidence(
+                    "quality",
+                    "Short predicted ORF increases risk of a spurious gene call.",
+                    EvidenceLevel.WEAK,
+                    "phagemine-qc",
+                    "0.1.0",
+                    status="real",
+                    supports=False,
+                    metrics={"protein_length": protein.length},
+                ))
         support_modalities = {e.modality for e in protein.evidence if e.supports}
         if unknown:
             components["convergence"] = min(16, max(0, len(support_modalities) - 1) * 4)

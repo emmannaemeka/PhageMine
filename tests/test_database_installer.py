@@ -141,7 +141,7 @@ def test_cli_requires_resource_or_all():
 
 
 def test_cli_attaches_existing_phrogs_hmm_without_download(tmp_path, monkeypatch):
-    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    monkeypatch.setenv("PHAGEMINE_REGISTRY_PATH", str(tmp_path / "config" / "resources.json"))
     database = tmp_path / "phrogs_profile_db"
     database.write_bytes(b"db")
     Path(str(database) + ".dbtype").write_bytes(b"type")

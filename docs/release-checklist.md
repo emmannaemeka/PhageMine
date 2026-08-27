@@ -14,8 +14,9 @@ the source checkout, passes these checks.
    the Bioconda artifact using the documented command.
 6. Run each binary directly and require a zero exit status: PHANOTATE, HMMER,
    MMseqs2, DIAMOND, and Mash.
-7. Run `phagemine doctor`; all production executables and intended capabilities
-   must be `READY`, and the command must exit zero.
+7. Run `phagemine doctor --deep`; all production executables, operational
+   database format checks, and intended capabilities must be `READY`, and the
+   command must exit zero.
 8. Install all six databases in a clean user-data directory and run Doctor
    again. Repeat with a registry retained from the immediately previous
    PhageMine version.
@@ -30,3 +31,5 @@ the source checkout, passes these checks.
     experimental validation or infer phage lifestyle.
 11. Publish the release only after the clean-install evidence and exact package
     versions are recorded in the release notes.
+12. Run the tests with `PHAGEMINE_REGISTRY_PATH` set to a disposable path and
+    verify the real user registry is byte-for-byte unchanged afterward.

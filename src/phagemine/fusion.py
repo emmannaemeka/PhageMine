@@ -9,9 +9,10 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.4"
+FUSION_RULES_VERSION = "1.8"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
+CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
 DISPLAY_STATES = {
     "KNOWN_FUNCTION": "Specific function strongly supported",
     "PROBABLE_FUNCTION": "Likely function supported by evidence",
@@ -48,7 +49,9 @@ TAXON_SPECIFIC_TERMS = (
     "anthrax toxin", "lethal factor", "ino80", "balf1", "arabinogalactan",
     "fungal", "apoptosis", "outer membrane lipoprotein",
     "spore coat", "starch initiation", "znf598", "plant ", "animal ",
-    "queuosine salvage protein",
+    "queuosine salvage protein", "coronavirus", "influenza", "virulence plasmid",
+    "salmonella virulence", "spirochaete", "actinomycete", "archaea",
+    "competence regulator", "plasmid transfer protein",
 )
 PHAGE_SAFE_FUNCTION_TERMS = (
     "phage", "virion", "capsid", "portal", "terminase", "tail", "baseplate",
@@ -102,6 +105,12 @@ def _product_candidate(evidence: Evidence, label: str | None, accepted: list[Evi
 
 
 def _domain_summary(accepted: list[Evidence]) -> str | None:
+    """Return a neutral evidence note, never a final protein product.
+
+    Pfam descriptions are often named after the organism or protein in which a
+    domain was first described. The raw description remains in evidence.json;
+    organism-specific free text is not copied into a phage product field.
+    """
     labels = []
     for evidence in accepted:
         if evidence.source != "Pfam" and evidence.modality != "domain":
@@ -113,7 +122,10 @@ def _domain_summary(accepted: list[Evidence]) -> str | None:
             label = "single-stranded dna-binding domain"
         elif label and "disarm protein drme" in label:
             label = "atpase-related domain"
-        if label and not any(term in label for term in TAXON_SPECIFIC_TERMS) and label not in labels:
+        if label and any(term in label for term in TAXON_SPECIFIC_TERMS):
+            identifier = str(evidence.identifier or evidence.family_name or "protein domain")
+            label = f"domain {identifier}"
+        if label and label not in labels:
             labels.append(label)
     if any("ninh" in label for label in labels):
         labels = [label for label in labels if "transposase" not in label and "ninh" not in label]
@@ -125,7 +137,7 @@ def _domain_summary(accepted: list[Evidence]) -> str | None:
         return None
     shown = labels[:2]
     suffix = " and ".join(shown)
-    return f"hypothetical protein containing {suffix}"
+    return f"Detected domain evidence: {suffix}"
 
 
 def normalize_function(description: str | None) -> str | None:
@@ -150,6 +162,22 @@ def normalize_function(description: str | None) -> str | None:
         "tail spike": "tail spike protein",
         "head morphogenesis": "head morphogenesis protein",
         "terminase": "terminase protein",
+        # Chimalliviridae nucleus-shell terminology: PHROGs commonly uses
+        # "nuclear shell protein" while Swiss-Prot/VOGDB use "chimallin".
+        # These are treated as nomenclature variants of the same product.
+        "nuclear shell protein": "chimallin",
+        "phage nuclear shell protein": "chimallin",
+        "phage nucleus shell protein": "chimallin",
+        # gp144 is a locus-specific name for a biochemically established
+        # endolysin/lytic transglycosylase. Keep the transferable product
+        # conservative rather than propagating the source-phage locus number.
+        "endolysin gp144": "endolysin",
+        # Equivalent maturation-protease nomenclature used across phage DBs.
+        "head maturation protease": "capsid maturation protease",
+        # phiKZ gp181 is experimentally established as a structural virion
+        # peptidoglycan hydrolase. Remove the source-phage locus number while
+        # preserving the experimentally supported structural biochemical role.
+        "peptidoglycan hydrolase gp181": "structural peptidoglycan hydrolase",
     }
     value = canonical.get(value, value)
     return None if value in UNKNOWN_LABELS else value
@@ -165,6 +193,50 @@ def _numeric_metric(evidence: Evidence, *names: str) -> float | None:
             pass
     return None
 
+
+
+def _curated_phage_anchor(evidence: Evidence) -> bool:
+    # High-authority, near-full-length bacteriophage Swiss-Prot match.
+    # This does not make Swiss-Prot globally authoritative and it does not
+    # bypass product-safety checks performed by _product_candidate.
+    if evidence.source != "Swiss-Prot":
+        return False
+    reviewed = evidence.metrics.get("reviewed")
+    if reviewed not in {True, 1, "true", "True", "reviewed", "Reviewed"}:
+        return False
+    organism = str(evidence.metrics.get("organism") or "").lower()
+    if "phage" not in organism and "bacteriophage" not in organism:
+        return False
+
+    identity = _numeric_metric(evidence, "percent_identity", "sequence_identity", "identity")
+    qcov = _numeric_metric(evidence, "query_coverage", "qcov")
+    scov = _numeric_metric(evidence, "subject_coverage", "scov")
+    evalue = _numeric_metric(evidence, "evalue", "e_value")
+
+    if identity is not None and identity > 1:
+        identity /= 100.0
+    if qcov is not None and qcov > 1:
+        qcov /= 100.0
+    if scov is not None and scov > 1:
+        scov /= 100.0
+
+    if identity is None or qcov is None or scov is None or evalue is None:
+        return False
+    if evalue > 1e-20:
+        return False
+
+    # Standard curated anchor: substantial identity and substantial coverage.
+    standard_anchor = identity >= 0.40 and qcov >= 0.80 and scov >= 0.80
+
+    # Lower-identity rescue is allowed only for essentially whole-protein
+    # homology. This captures divergent jumbo-phage structural proteins such
+    # as Danladi PM_000202 versus phiKZ gp181 (38.5% identity, ~93/94%
+    # query/subject coverage, E=0) without promoting partial 35-40% matches.
+    near_full_length_anchor = (
+        identity >= 0.35 and qcov >= 0.90 and scov >= 0.90
+    )
+
+    return standard_anchor or near_full_length_anchor
 
 def _candidate_score(evidence: Evidence, label: str) -> float:
     """Rank product hypotheses using provenance and alignment support."""
@@ -198,11 +270,49 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
     alternatives = [
         {"label": label, "source": evidence.source,
          "identifier": evidence.identifier or evidence.family_name,
-         "adjudication_score": round(score, 3)}
+         "adjudication_score": round(score, 3),
+         "curated_phage_anchor": _curated_phage_anchor(evidence)}
         for _, evidence, label, score in ranked
     ]
     if not ranked:
         return None, None, alternatives
+
+    # A reviewed, near-full-length bacteriophage Swiss-Prot homologue is a
+    # high-authority product anchor. It is evaluated before the generic
+    # score-gap rule so a partial computational profile cannot silently
+    # overrule substantially full-length curated phage homology.
+    # Multiple disagreeing curated anchors do not force a winner here.
+    curated = [item for item in ranked if _curated_phage_anchor(item[1])]
+    curated_labels = {item[2] for item in curated}
+    if len(curated_labels) == 1:
+        chosen = max(curated, key=lambda item: item[3])
+        _, winner, label, _ = chosen
+        return label, winner, alternatives
+
+    # Profile libraries often contain several related PHROG models carrying
+    # the same curated product.  Score that agreement as a consensus before
+    # allowing a single ancillary label to force abstention.  Unannotated
+    # profiles never enter ``informative`` and therefore cannot veto a named
+    # product.  Requiring two strong profiles and at least one near-complete
+    # query match keeps this promotion deliberately conservative.
+    consensus: dict[str, list[tuple[int, Evidence, str, float]]] = {}
+    for item in ranked:
+        if item[1].evidence_strength == "STRONG":
+            consensus.setdefault(item[2], []).append(item)
+    eligible = []
+    for consensus_label, items in consensus.items():
+        coverages = [_numeric_metric(item[1], "query_coverage", "qcov") for item in items]
+        coverages = [value / 100.0 if value is not None and value > 1 else value
+                     for value in coverages if value is not None]
+        if len(items) >= 2 and coverages and max(coverages) >= 0.8:
+            aggregate = max(item[3] for item in items) + 4.0 * (len(items) - 1)
+            eligible.append((len(items), aggregate, consensus_label, items[0][1]))
+    if eligible:
+        eligible.sort(key=lambda item: (-item[0], -item[1], item[2]))
+        best_count, best_score, consensus_label, consensus_evidence = eligible[0]
+        runner = eligible[1] if len(eligible) > 1 else None
+        if runner is None or best_count > runner[0] or best_score - runner[1] >= 8.0:
+            return consensus_label, consensus_evidence, alternatives
     _, winner, label, winner_score = ranked[0]
     # Prefer a supported specific phage role over its own broad parent term.
     # This is a terminology hierarchy, not a score override between unrelated
@@ -385,12 +495,25 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         selected_evidence = next((e for _, e, label in informative if label == selected_product), selected_evidence)
     domain_summary = _domain_summary(accepted)
     conservation = _conservation(protein.evidence)
-    display_product = selected_product or domain_summary or ("conserved phage protein of unknown function" if conservation in {"STRONGLY_CONSERVED", "CONSERVED"} else "hypothetical protein")
+    # A detected domain is reported separately and never becomes a product
+    # name without whole-protein evidence.
+    display_product = selected_product or ("conserved phage protein of unknown function" if conservation in {"STRONGLY_CONSERVED", "CONSERVED"} else "hypothetical protein")
     independent_strong = len({e.source for _, e, _ in strong_info}) >= 2
     swiss_strong = any(e.source == "Swiss-Prot" for _, e, _ in strong_info)
     strong_families = {MODALITY_FAMILIES.get(e.source, MODALITY_FAMILIES.get(e.modality, e.modality)) for _, e, _ in strong_info}
     orthology_only = strong_families and strong_families <= {"PHAGE_ORTHOLOGY", "VIRAL_ORTHOLOGY"}
-    agreeing_sources = len({e.source for _, e, label in informative if selected_product and label == selected_product})
+    product_supporting_sources = sorted({
+        e.source for _, e, label in informative
+        if selected_product and label == selected_product
+    })
+    product_supporting_records = [
+        (i, e, label) for i, e, label in informative
+        if selected_product and label == selected_product
+    ]
+    agreeing_sources = len(product_supporting_sources)
+    selected_by_curated_anchor = bool(
+        selected_evidence is not None and _curated_phage_anchor(selected_evidence)
+    )
     if conflicting and not conflict_resolved:
         state, confidence, reasons = "CONFLICTING_EVIDENCE", "LOW", ["accepted STRONG informative evidence supports incompatible normalized functions"]
     elif strong_info and (independent_strong or (swiss_strong and agreeing_sources >= 2)) and len(strong_families) >= 2 and not orthology_only and not ambiguity:
@@ -410,6 +533,10 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
             f"accepted {e.evidence_strength or 'informative'} {e.source} evidence supports a functional interpretation"
             for _, e, _ in informative
         ]
+        if selected_by_curated_anchor:
+            reasons.append(
+                "reviewed near-full-length phage Swiss-Prot homology anchors product selection"
+            )
         if diagnostic_reason:
             reasons.append(diagnostic_reason)
     elif categories or domain_summary or any(e.source == "Pfam" or e.modality == "domain" for e in accepted):
@@ -438,25 +565,34 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         (e for _, e, label in informative if selected_product and label == selected_product and e.source == "PHROGs"),
         None,
     )
-    best = matching_phrogs or selected_evidence or (ranked_evidence[0] if ranked_evidence else None)
+    best = (
+        selected_evidence if selected_by_curated_anchor
+        else matching_phrogs or selected_evidence or (ranked_evidence[0] if ranked_evidence else None)
+    )
     best_evidence = (
         f"{best.source}:{best.identifier or best.family_name or 'match'}"
         + (f" — {best.description}" if best.description else "")
         if best else "No accepted evidence"
     )
-    enzyme_domain = any(term in " ".join(filter(None, (normalize_function(e.description) for e in accepted if e.source == "Pfam" or e.modality == "domain")))
-                        for term in ("atpase", "polymerase", "helicase", "nuclease", "transposase"))
-    if protein.length < 80 and enzyme_domain:
-        review_flag = "POSSIBLE_PARTIAL_OR_FALSE_ORF"
-    else:
-        review_flag = "REVIEW_REQUIRED" if state in {"CONFLICTING_EVIDENCE", "UNRESOLVED"} else "NONE"
+    # Functional classification cannot determine whether an ORF is false.
+    # Gene-existence review is produced separately from caller reconciliation;
+    # short, real phage proteins must not be penalized for uncertain function.
+    unresolved_strong_label_ambiguity = (
+        "distinct strong labels could not be confidently established as biologically incompatible"
+        in ambiguity
+    )
+    review_flag = (
+        "REVIEW_REQUIRED"
+        if state in {"CONFLICTING_EVIDENCE", "UNRESOLVED"} or unresolved_strong_label_ambiguity
+        else "NONE"
+    )
     experimental = any(e.evidence_strength == "EXPERIMENTAL" or e.level.value == "experimentally established" for e in accepted)
     if experimental and selected_product:
         evidence_tier, evidence_tier_label = 1, "Experimentally supported database evidence"
     elif state == "KNOWN_FUNCTION":
         evidence_tier, evidence_tier_label = 2, "Curated and independently corroborated function"
-    elif state == "PROBABLE_FUNCTION" and len(supporting_sources) >= 2:
-        evidence_tier, evidence_tier_label = 3, "Independent computational sources support the same function"
+    elif state == "PROBABLE_FUNCTION" and len(product_supporting_sources) >= 2:
+        evidence_tier, evidence_tier_label = 3, "Multiple independent sources support the same function"
     elif state in {"PROBABLE_FUNCTION", "FUNCTIONAL_CLASS_ONLY"}:
         evidence_tier, evidence_tier_label = 4, "Single-source function or protein-domain support"
     elif state == "CONSERVED_UNKNOWN":
@@ -480,9 +616,15 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         "evidence_hierarchy_version": EVIDENCE_HIERARCHY_VERSION,
         "functional_category": categories[0] if len(categories) == 1 else ("; ".join(categories) if categories else None),
         "confidence": confidence, "confidence_reasons": reasons,
+        "confidence_calibrated": False,
+        "confidence_calibration_status": CONFIDENCE_CALIBRATION_STATUS,
         "conservation_status": conservation,
         "supporting_sources": supporting_sources, "supporting_modalities": supporting_modalities,
         "supporting_source_count": len(supporting_sources), "supporting_modality_count": len(supporting_modalities), "supporting_record_count": len(informative),
+        "product_supporting_sources": product_supporting_sources,
+        "product_supporting_source_count": len(product_supporting_sources),
+        "product_supporting_record_count": len(product_supporting_records),
+        "selected_by_curated_phage_anchor": selected_by_curated_anchor,
         "supporting_evidence_ids": support_ids,
         "ortholog_groups": ortholog_groups,
         "conflicting_sources": conflict_sources, "conflicting_evidence_ids": conflict_ids,
@@ -538,12 +680,33 @@ def classify_proteins(proteins: list[Protein]) -> list[dict[str, Any]]:
     return results
 
 
+def attach_gene_call_assessments(results: list[dict[str, Any]],
+                                 assessments: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
+    """Attach caller-confidence fields without conflating them with function.
+
+    Functional evidence answers what a protein may do.  Caller reconciliation
+    answers whether the CDS boundaries/existence are credible.  Keeping the two
+    review signals separate prevents a short but caller-concordant CDS from
+    being labelled a possible false ORF merely because its function is vague.
+    """
+    by_id = {str(row.get("protein_id") or row.get("phanotate_id")): row
+             for row in (assessments or [])}
+    for result in results:
+        assessment = by_id.get(str(result["protein_id"]))
+        result["functional_review_flag"] = result.get("review_flag") or "NONE"
+        result["gene_call_confidence"] = (
+            assessment.get("gene_call_confidence") if assessment else "NOT_ASSESSED")
+        result["gene_call_review_flag"] = (
+            assessment.get("review_flag") if assessment else "NOT_ASSESSED")
+    return results
+
+
 def write_classification(root: str | Path, proteins: list[Protein], results: list[dict[str, Any]] | None = None) -> None:
     results = results if results is not None else classify_proteins(proteins)
     by_id = {p.protein_id: p for p in proteins}
     path = Path(root)
     (path / "functional_classification.json").write_text(json.dumps(results, indent=2, sort_keys=True))
-    columns = ["protein_id", "start", "end", "strand", "length_aa", "gene", "ec_number", "functional_state", "display_classification", "proposed_function", "display_product", "confidence", "evidence_tier", "evidence_tier_label", "best_evidence", "review_flag", "domain_summary", "functional_category", "biotechnology_relevance", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
+    columns = ["protein_id", "start", "end", "strand", "length_aa", "gene", "ec_number", "functional_state", "display_classification", "proposed_function", "display_product", "confidence", "confidence_calibrated", "confidence_calibration_status", "evidence_tier", "evidence_tier_label", "best_evidence", "functional_review_flag", "gene_call_confidence", "gene_call_review_flag", "review_flag", "domain_summary", "functional_category", "biotechnology_relevance", "conservation_status", "ortholog_groups", "supporting_sources", "supporting_source_count", "supporting_record_count", "conflict", "scientific_interpretation", "reasoning_summary"]
     with (path / "functional_classification.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
         writer.writeheader()

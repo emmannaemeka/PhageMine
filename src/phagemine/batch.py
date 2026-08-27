@@ -270,13 +270,13 @@ def _write_batch_presentation(project: Path, rows: list[dict]) -> None:
     for s, value in totals.items(): lines.append(f"<tr><td>{s}</td><td>{value}</td><td>{value/total:.1%}</td></tr>" if total else f"<tr><td>{s}</td><td>0</td><td>0%</td></tr>")
     lines.append("</table><h2>Per-genome annotations</h2>")
     for r in completed:
-        sample = Path(r["output_directory"]); lines.append(f"<h3>{html.escape(r['sample_id'])}</h3><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Classification</th><th>Proposed function</th><th>Confidence</th></tr>")
+        sample = Path(r["output_directory"]); lines.append(f"<h3>{html.escape(r['sample_id'])}</h3><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Classification</th><th>Proposed function</th><th>Functional confidence</th><th>Gene-call confidence</th></tr>")
         try: records=json.loads((sample/'functional_classification.json').read_text())
         except Exception: records=[]
         for c in records:
             pid=c.get('protein_id')
             if not pid: continue
-            lines.append(f"<tr><td><a href='{html.escape(str(sample.relative_to(project) / 'protein_details' / (pid+'.html')))}'>{html.escape(pid)}</a></td><td>{c.get('start')}-{c.get('end')}</td><td>{html.escape(str(c.get('strand') or ''))}</td><td>{html.escape(str(c.get('functional_state') or 'UNRESOLVED'))}</td><td>{html.escape(str(c.get('proposed_function') or 'Function unresolved'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td></tr>")
+            lines.append(f"<tr><td><a href='{html.escape(str(sample.relative_to(project) / 'protein_details' / (pid+'.html')))}'>{html.escape(pid)}</a></td><td>{c.get('start')}-{c.get('end')}</td><td>{html.escape(str(c.get('strand') or ''))}</td><td>{html.escape(str(c.get('functional_state') or 'UNRESOLVED'))}</td><td>{html.escape(str(c.get('proposed_function') or 'Function unresolved'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td><td>{html.escape(str(c.get('gene_call_confidence') or 'NOT_ASSESSED'))}</td></tr>")
         lines.append("</table>")
     lines.append("<h2>Downloads</h2><p><a href='batch_summary.tsv'>Batch summary TSV</a> · <a href='figure_data/genome_functional_states.tsv'>Figure source data</a></p></body></html>")
     (project / "batch_annotation_report.html").write_text("".join(lines))
@@ -422,9 +422,9 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
             elif preexisting and any(destination.iterdir()):
                 raise ValueError(f"output directory exists but is not a valid completed run: {destination}")
             else:
-                run(path, destination, command="run", predictor=create_predictor(gene_predictor, phanotate),
+                run(path, destination, command="annotate", predictor=create_predictor(gene_predictor, phanotate),
                     reconcile_orfs=reconcile_orfs, prodigal=prodigal,
-                    progress=sample_progress)
+                    progress=sample_progress, threads=threads)
                 row["status"] = "SUCCESS"
                 status["status"] = "SUCCESS"
                 _atomic_json(status_path, status)

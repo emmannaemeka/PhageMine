@@ -39,6 +39,9 @@ REQUIRED_TOOLS = {
 
 
 def default_registry_path() -> Path:
+    override = os.environ.get("PHAGEMINE_REGISTRY_PATH")
+    if override:
+        return Path(override).expanduser()
     system = platform.system()
     if system == "Darwin":
         return Path.home() / "Library" / "Application Support" / "PhageMine" / "resources.json"
@@ -219,7 +222,13 @@ class EvidenceResourceManager:
     def _save(self, resources: dict[str, EvidenceResource]) -> None:
         self.registry_path.parent.mkdir(parents=True, exist_ok=True)
         payload = {"format_version": "1", "resources": {name: resource.metadata() for name, resource in resources.items()}}
-        self.registry_path.write_text(json.dumps(payload, indent=2, sort_keys=True))
+        encoded = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+        temporary = self.registry_path.with_name(self.registry_path.name + ".tmp")
+        backup = self.registry_path.with_name(self.registry_path.name + ".bak")
+        temporary.write_text(encoded)
+        if self.registry_path.exists():
+            shutil.copy2(self.registry_path, backup)
+        os.replace(temporary, self.registry_path)
 
     def register(self, name: str, resource_type: ResourceType | str, path: str | Path, version: str | None = None, checksum: str | None = None, required_tools: list[str] | None = None, preparation_status: str = "not_checked", notes: str | None = None, provenance: dict[str, Any] | None = None) -> EvidenceResource:
         resource_type = resource_type if isinstance(resource_type, ResourceType) else ResourceType(str(resource_type).upper())
