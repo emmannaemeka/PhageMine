@@ -1118,16 +1118,24 @@ class PhageMineTests(unittest.TestCase):
             if kind == ResourceType.INPHARED_GENOMES:
                 return {"path": "/db/inphared", "resource_type": "INPHARED_GENOMES", "provenance": {}}
             return None
-        comparative = {"pmfdb": {"status": "COMPLETE"}, "inphared": {"status": "COMPLETE", "matches": []}}
+        comparative = {"pmfdb": {"status": "COMPLETE"}, "inphared": {"status": "SKIPPED", "matches": []}}
+        resolved = {"path": "/db/reference_phage_genomes.fna", "version": "2026-04-07",
+                    "runtime_paths": {"reference_fasta": "/db/reference_phage_genomes.fna",
+                                      "mash_index": "/db/inphared.msh", "metadata": "/db/genome_metadata.tsv",
+                                      "manifest": "/db/genome_manifest.json"}}
+        comparison = {"status": "COMPLETE", "matches": [], "unique_reference_summaries": []}
         with tempfile.TemporaryDirectory() as temp, \
              patch("phagemine.resources.EvidenceResourceManager.find", new=registered), \
+             patch("phagemine.pipeline.resolve_validated_inphared", return_value=(resolved, "ready")), \
+             patch("phagemine.inphared.compare_genomes", return_value=comparison) as compare, \
              patch("phagemine.discovery.build_discovery_outputs", return_value=comparative) as build:
             output = Path(temp) / "run"
             run(ROOT / "examples/demo_phage.fasta", output, command="run", predictor=DemoORFPredictor())
             self.assertTrue(build.called)
             kwargs = build.call_args.kwargs
             self.assertEqual(kwargs["pmfdb"], "/db/pmfdb")
-            self.assertEqual(kwargs["inphared"]["resource_type"], "INPHARED_GENOMES")
+            self.assertIsNone(kwargs["inphared"])
+            self.assertEqual(compare.call_count, 1)
             manifest = json.loads((output / "run_manifest.json").read_text())
             self.assertEqual(manifest["comparative_analysis"]["pmfdb"]["status"], "COMPLETE")
             self.assertEqual(manifest["comparative_analysis"]["inphared"]["status"], "COMPLETE")
@@ -1155,8 +1163,12 @@ class PhageMineTests(unittest.TestCase):
             "unique_reference_summaries": [],
         }
 
+        resolved = {"path": "/db/reference_phage_genomes.fna", "version": "2026-04-07",
+                    "runtime_paths": {"reference_fasta": "/db/reference_phage_genomes.fna",
+                                      "mash_index": "/db/inphared.msh", "metadata": "/db/genome_metadata.tsv",
+                                      "manifest": "/db/genome_manifest.json"}}
         with tempfile.TemporaryDirectory() as temp, \
-             patch("phagemine.resources.EvidenceResourceManager.find", new=registered), \
+             patch("phagemine.pipeline.resolve_validated_inphared", return_value=(resolved, "ready")), \
              patch("phagemine.inphared.compare_genomes", return_value=comparison) as compare, \
              patch("phagemine.discovery.build_discovery_outputs") as discovery:
             output = Path(temp) / "annotate"
@@ -1188,6 +1200,73 @@ class PhageMineTests(unittest.TestCase):
                 manifest["comparative_analysis"]["inphared"]["status"],
                 "COMPLETE",
             )
+
+    def test_annotate_skips_incomplete_registered_inphared_without_crashing(self):
+        from phagemine.resources import EvidenceResourceManager, ResourceType
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            reference = root / "reference_phage_genomes.fna"
+            reference.write_text(">REF1\nACGT\n")
+            registry = root / "resources.json"
+            manager = EvidenceResourceManager(registry)
+            manager.register("incomplete", ResourceType.INPHARED_GENOMES, reference)
+            output = root / "annotate"
+            progress_stream = StringIO()
+            with patch.dict(os.environ, {"PHAGEMINE_REGISTRY_PATH": str(registry)}), \
+                 patch("phagemine.resources._tool_available", return_value=True):
+                run(ROOT / "examples/demo_phage.fasta", output, command="annotate",
+                    predictor=DemoORFPredictor(), progress=ProgressReporter(stream=progress_stream))
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["comparative_analysis"]["inphared"]["status"], "SKIPPED")
+            self.assertIn("inphared.msh", manifest["comparative_analysis"]["inphared"]["reason"])
+            self.assertIn("SKIPPED: INPHARED genome comparison", progress_stream.getvalue())
+
+    def test_annotate_skips_inphared_when_mash_is_missing(self):
+        reason = "INPHARED resource is not operationally READY: required executable unavailable: mash"
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.pipeline.resolve_validated_inphared", return_value=(None, reason)), \
+             patch("phagemine.inphared.compare_genomes") as compare:
+            output = Path(temp) / "annotate"
+            run(ROOT / "examples/demo_phage.fasta", output, command="annotate", predictor=DemoORFPredictor())
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(manifest["comparative_analysis"]["inphared"]["status"], "SKIPPED")
+            self.assertIn("required executable unavailable: mash",
+                          manifest["comparative_analysis"]["inphared"]["reason"])
+            self.assertFalse(compare.called)
+
+    def test_run_with_only_inphared_does_not_invoke_pmf_discovery(self):
+        resolved = {"path": "/db/reference_phage_genomes.fna", "version": "2026-04-07",
+                    "runtime_paths": {"reference_fasta": "/db/reference_phage_genomes.fna",
+                                      "mash_index": "/db/inphared.msh", "metadata": "/db/genome_metadata.tsv",
+                                      "manifest": "/db/genome_manifest.json"}}
+        comparison = {"status": "COMPLETE", "matches": [], "unique_reference_summaries": []}
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.pipeline.resolve_validated_inphared", return_value=(resolved, "ready")), \
+             patch("phagemine.inphared.compare_genomes", return_value=comparison) as compare, \
+             patch("phagemine.discovery.build_discovery_outputs") as discovery:
+            output = Path(temp) / "run"
+            run(ROOT / "examples/demo_phage.fasta", output, command="run", predictor=DemoORFPredictor())
+            self.assertEqual(compare.call_count, 1)
+            self.assertFalse(discovery.called)
+
+    def test_batch_validates_inphared_once_and_compares_each_genome_once(self):
+        resolved = {"path": "/db/reference_phage_genomes.fna", "version": "2026-04-07",
+                    "runtime_paths": {"reference_fasta": "/db/reference_phage_genomes.fna",
+                                      "mash_index": "/db/inphared.msh", "metadata": "/db/genome_metadata.tsv",
+                                      "manifest": "/db/genome_manifest.json"}}
+        comparison = {"status": "COMPLETE", "matches": [], "unique_reference_summaries": []}
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.batch.resolve_validated_inphared", return_value=(resolved, "ready")) as resolve, \
+             patch("phagemine.pipeline.resolve_validated_inphared") as pipeline_resolve, \
+             patch("phagemine.inphared.compare_genomes", return_value=comparison) as compare:
+            input_dir = Path(temp) / "inputs"; input_dir.mkdir()
+            for index in range(3):
+                shutil.copy2(ROOT / "examples/demo_phage.fasta", input_dir / f"sample-{index}.fasta")
+            rows = batch(input_dir, Path(temp) / "batch", gene_predictor="demo")
+            self.assertEqual([row["status"] for row in rows], ["SUCCESS"] * 3)
+            self.assertEqual(resolve.call_count, 1)
+            self.assertFalse(pipeline_resolve.called)
+            self.assertEqual(compare.call_count, 3)
 
     def test_progress_skip_is_explicit(self):
         stream = StringIO()

@@ -70,7 +70,7 @@ def _directional_blast_identity(blastn: str, query: Path, subject: Path) -> tupl
 
 
 def _ictv_interpretation(similarity: float | None, family: str | None,
-                         taxonomy_eligible: bool = True) -> tuple[float, float | None, str, str]:
+                         taxonomy_eligible: bool = True) -> tuple[float | None, float | None, str, str]:
     """Describe numerical boundaries without making a taxonomic assignment.
 
     Genus criteria are not universal across bacteriophages.  PhageMine applies
@@ -80,8 +80,8 @@ def _ictv_interpretation(similarity: float | None, family: str | None,
     source = ("configured family-specific working boundary; verify against the current ICTV proposal"
               if genus is not None else "no family-specific genus boundary configured")
     if similarity is None:
-        label = "NOT_CALCULATED"
-    elif not taxonomy_eligible:
+        return None, None, "not applicable; intergenomic similarity was not calculated", "NOT_CALCULATED"
+    if not taxonomy_eligible:
         label = "NUMERICAL_TAXONOMY_NOT_APPLICABLE_TO_PARTIAL_OR_POORLY_ALIGNED_QUERY"
     elif similarity >= ICTV_SPECIES_THRESHOLD:
         label = "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW"
@@ -534,7 +534,7 @@ def compare_genomes(
     reference_fasta: str | Path | None = None,
     blastn: str = "blastn",
 ) -> dict:
-    """Screen INPHARED with Mash, then calculate ICTV-compatible similarity."""
+    """Screen INPHARED with Mash, then optionally calculate BLASTN similarity."""
     executable = str(Path(mash)) if Path(mash).is_file() else shutil.which(mash)
     if not executable:
         raise RuntimeError("Mash unavailable; install mash or provide its executable path")

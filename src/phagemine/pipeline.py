@@ -19,7 +19,7 @@ from .pfam import PfamHMMAdapter
 from .vog import VOGHMMAdapter
 from .swissprot import SwissProtEvidenceAdapter
 from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
-from .resources import EvidenceResourceManager, ResourceType
+from .resources import EvidenceResourceManager, ResourceType, resolve_validated_inphared
 from .progress import ProgressReporter
 from .fusion import attach_gene_call_assessments, classify_proteins
 from .context import build_context
@@ -40,7 +40,42 @@ def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
     return f"{len(accepted)} accepted hits / {len(proteins)} proteins"
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
+def _run_validated_inphared(
+    output: str | Path,
+    manifest: dict,
+    progress: ProgressReporter,
+    validated_resolution: tuple[dict | None, str] | None = None,
+) -> dict:
+    """Run the automatic genome comparison, or record an explicit safe skip."""
+    from .inphared import compare_genomes
+
+    progress.start("INPHARED genome comparison")
+    resource, reason = validated_resolution or resolve_validated_inphared()
+    comparative_directory = Path(output) / "comparative"
+    if resource is None:
+        result = {"status": "SKIPPED", "reason": reason, "matches": []}
+        progress.skip(reason)
+    else:
+        paths = resource["runtime_paths"]
+        analysis_fasta = Path(output) / "analysis_genome.fasta"
+        result = compare_genomes(
+            {Path(output).name: analysis_fasta},
+            mash_index=paths["mash_index"],
+            metadata=paths["metadata"],
+            output=comparative_directory,
+            reference_fasta=paths["reference_fasta"],
+        )
+        result["resource_version"] = resource.get("version")
+        result["resource_manifest"] = paths["manifest"]
+        progress.finish(f"{len(result.get('matches') or [])} nearest-reference rows")
+
+    manifest.setdefault("comparative_analysis", {})["inphared"] = result
+    manifest["comparative_analysis"]["output_directory"] = str(comparative_directory)
+    update_comparative_report(output, {"inphared": result})
+    return result
+
+
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None) -> int:
     progress = progress or ProgressReporter(quiet=True)
     if reconcile_orfs:
         stages = [
@@ -48,11 +83,11 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
             "ORF adjudication", "evidence integration", "candidate ranking/mining", "QC/report generation",
         ]
-        if command == "annotate":
+        if command in {"annotate", "run"}:
             stages.append("INPHARED genome comparison")
         stages.append("GenBank pre-submission package")
         progress.STAGES = tuple(stages)
-    elif command == "annotate":
+    elif command in {"annotate", "run"}:
         stages = list(progress.STAGES)
         if "INPHARED genome comparison" not in stages:
             stages.insert(-1, "INPHARED genome comparison")
@@ -278,57 +313,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta, classifications, context_records, modules)
     progress.finish(f"outputs written to {output}")
     timed_end("reporting")
-    # ``annotate`` performs the genome-level INPHARED nearest-reference
-    # comparison when the validated resource is available.  It deliberately
-    # does not invoke PMFDB family mining or the broader discovery workflow.
-    # ``run`` continues to consume INPHARED through build_discovery_outputs(),
-    # so the whole-genome comparison is executed exactly once per workflow.
     if command == "annotate":
-        from .inphared import compare_genomes
-
-        progress.start("INPHARED genome comparison")
         timed_start("inphared")
-
-        manager = EvidenceResourceManager()
-        inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
-
-        comparative_directory = Path(output) / "comparative"
-        unavailable = {"status": "INPHARED_UNAVAILABLE", "matches": []}
-
-        manifest["comparative_analysis"] = {
-            "output_directory": str(comparative_directory),
-            "inphared": unavailable,
-        }
-
-        if inphared_resource:
-            provenance = inphared_resource.get("provenance") or {}
-            analysis_fasta = Path(output) / "analysis_genome.fasta"
-
-            inphared_comparison = compare_genomes(
-                {Path(output).name: analysis_fasta},
-                mash_index=provenance.get("mash_index_path"),
-                metadata=provenance.get("metadata_path"),
-                output=comparative_directory,
-                reference_fasta=inphared_resource.get("path"),
-            )
-
-            inphared_comparison["resource_version"] = inphared_resource.get("version")
-            inphared_comparison["resource_manifest"] = provenance.get("reference_manifest_path")
-
-            comparative_directory.mkdir(parents=True, exist_ok=True)
-            (comparative_directory / "inphared_nearest_phages.json").write_text(
-                json.dumps(inphared_comparison, indent=2, sort_keys=True) + "\n"
-            )
-
-            manifest["comparative_analysis"]["inphared"] = inphared_comparison
-            update_comparative_report(output, {"inphared": inphared_comparison})
-
-            progress.finish(
-                f"{len(inphared_comparison.get('matches') or [])} nearest-reference rows"
-            )
-        else:
-            progress.skip("INPHARED genomes not configured")
-
+        _run_validated_inphared(output, manifest, progress, inphared_resolution)
         timed_end("inphared")
 
     # ``run`` is the complete single-genome workflow.  Installed comparative
@@ -337,15 +324,14 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         from .discovery import build_discovery_outputs
         manager = EvidenceResourceManager()
         pmfdb_resource = manager.find(ResourceType.PMFDB)
-        inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
         comparative = {"pmfdb": {"status": "PMFDB_UNAVAILABLE"},
-                       "inphared": {"status": "INPHARED_UNAVAILABLE", "matches": []}}
-        if pmfdb_resource or inphared_resource:
+                       "inphared": {"status": "SKIPPED", "matches": []}}
+        if pmfdb_resource:
             comparative = build_discovery_outputs(
                 [Path(output)], Path(output) / "comparative",
                 mmseqs=mmseqs or "mmseqs",
                 pmfdb=pmfdb_resource.get("path") if pmfdb_resource else None,
-                inphared=inphared_resource,
+                inphared=None,
                 progress=progress,
                 source_mode="single-run",
             )
@@ -354,6 +340,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             "pmfdb": comparative.get("pmfdb"),
             "inphared": comparative.get("inphared"),
         }
+        timed_start("inphared")
+        inphared_result = _run_validated_inphared(output, manifest, progress, inphared_resolution)
+        timed_end("inphared")
+        comparative["inphared"] = inphared_result
         update_comparative_report(output, comparative)
     # Local package generation follows annotation, mining, ranking, and QC evidence collection.
     progress.start("GenBank pre-submission package")

@@ -1,12 +1,35 @@
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
 from phagemine.batch import _comparative_resources
 from phagemine.family_external import validate_external
 from phagemine.inphared import compare_genomes, _calculate_intergenomic_similarity, _ictv_interpretation
+from phagemine.reporting import update_comparative_report
+from phagemine.resources import EvidenceResourceManager, ResourceType, resolve_validated_inphared
+
+
+def _registered_inphared(tmp_path, *, complete=True, checksum=None, provenance=None):
+    root = tmp_path / "inphared"
+    root.mkdir()
+    reference = root / "reference_phage_genomes.fna"
+    reference.write_text(">REF1\nACGTACGT\n")
+    if complete:
+        (root / "genome_metadata.tsv").write_text(
+            "accession\tdescription\tphage_genus\tphage_subfamily\tphage_family\thost_genus\n"
+            "REF1\tReference\tTestvirus\t\t\tHost\n"
+        )
+        (root / "genome_qc.tsv").write_text("accession\tstatus\nREF1\tPASS\n")
+        (root / "inphared.msh").write_bytes(b"mash index")
+        (root / "genome_manifest.json").write_text(json.dumps({"schema_version": "1.0", "checksums": {}}))
+    registry = tmp_path / "resources.json"
+    manager = EvidenceResourceManager(registry)
+    manager.register("INPHARED", ResourceType.INPHARED_GENOMES, reference,
+                     checksum=checksum, provenance=provenance or {})
+    return manager, root
 
 
 def test_compare_genomes_writes_ranked_conservative_results(tmp_path, monkeypatch):
@@ -95,10 +118,109 @@ def test_batch_resolves_only_validated_comparative_resources(monkeypatch):
         {"resource_type": "INPHARED_GENOMES", "status": "READY", "path": "/db/inphared", "provenance": {}},
         {"resource_type": "PMFDB", "status": "INVALID", "path": "/db/broken"},
     ]
-    monkeypatch.setattr("phagemine.batch.EvidenceResourceManager.validate_all", lambda self, check_checksum=True: resources)
-    pmfdb, inphared = _comparative_resources()
+    monkeypatch.setattr(
+        "phagemine.batch.EvidenceResourceManager.validate_type",
+        lambda self, resource_type, check_checksum=True: [
+            item for item in resources if item["resource_type"] == resource_type.value
+        ],
+    )
+    monkeypatch.setattr(
+        "phagemine.batch.EvidenceResourceManager.validate_all",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("full registry validation is forbidden")),
+    )
+    pmfdb, inphared, reason = _comparative_resources()
     assert pmfdb == "/db/pmfdb"
-    assert inphared["path"] == "/db/inphared"
+    assert inphared["path"] == "/db/inphared/reference_phage_genomes.fna"
+    assert reason == "INPHARED resource is operationally READY"
+
+
+def test_incomplete_inphared_sidecars_are_skipped(tmp_path, monkeypatch):
+    manager, _root = _registered_inphared(tmp_path, complete=False)
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+    resource, reason = resolve_validated_inphared(manager)
+    assert resource is None
+    assert "inphared.msh" in reason
+    assert "genome_metadata.tsv" in reason
+
+
+def test_inphared_missing_mash_is_skipped(tmp_path, monkeypatch):
+    manager, _root = _registered_inphared(tmp_path)
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: False)
+    resource, reason = resolve_validated_inphared(manager)
+    assert resource is None
+    assert "required executable unavailable: mash" in reason
+
+
+def test_inphared_checksum_failure_is_skipped(tmp_path, monkeypatch):
+    manager, _root = _registered_inphared(tmp_path, checksum="0" * 64)
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+    resource, reason = resolve_validated_inphared(manager)
+    assert resource is None
+    assert "checksum mismatch" in reason
+
+
+def test_inphared_uses_canonical_paths_instead_of_stale_provenance(tmp_path, monkeypatch):
+    manager, root = _registered_inphared(
+        tmp_path,
+        provenance={"mash_index_path": "/stale/index", "metadata_path": "/stale/metadata"},
+    )
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+    resource, reason = resolve_validated_inphared(manager)
+    assert reason == "INPHARED resource is operationally READY"
+    assert resource["runtime_paths"]["mash_index"] == str(root / "inphared.msh")
+    assert resource["runtime_paths"]["metadata"] == str(root / "genome_metadata.tsv")
+
+
+def test_inphared_resolution_does_not_checksum_unrelated_resources(tmp_path, monkeypatch):
+    manager, _root = _registered_inphared(tmp_path)
+    unrelated = tmp_path / "large-unrelated-database"
+    unrelated.write_bytes(b"unrelated")
+    manager.register("Swiss-Prot", ResourceType.SWISSPROT, unrelated, checksum="0" * 64)
+    checksum_calls = []
+
+    def tracked_checksum(path):
+        checksum_calls.append(Path(path))
+        return "0" * 64
+
+    monkeypatch.setattr("phagemine.resources._tool_available", lambda _tool: True)
+    monkeypatch.setattr("phagemine.resources._sha256", tracked_checksum)
+    resource, _reason = resolve_validated_inphared(manager)
+    assert resource is not None
+    assert unrelated not in checksum_calls
+
+
+def test_blastn_unavailable_keeps_successful_mash_screening(tmp_path, monkeypatch):
+    mash = tmp_path / "mash"; mash.write_text("fixture")
+    index = tmp_path / "inphared.msh"; index.write_bytes(b"index")
+    metadata = tmp_path / "metadata.tsv"
+    metadata.write_text("accession\tdescription\nREF1\tReference\n")
+    query = tmp_path / "query.fna"; query.write_text(">query\nACGT\n")
+    monkeypatch.setattr(
+        "phagemine.inphared.subprocess.run",
+        lambda *_a, **_k: SimpleNamespace(returncode=0, stdout="REF1\tq\t0.1\t1e-10\t10/100\n", stderr=""),
+    )
+    monkeypatch.setattr("phagemine.inphared.shutil.which", lambda _name: None)
+    payload = compare_genomes(
+        {"sample": query}, mash_index=index, metadata=metadata,
+        output=tmp_path / "output", mash=str(mash), blastn="missing-blastn",
+    )
+    row = payload["matches"][0]
+    assert payload["status"] == "COMPLETE"
+    assert row["intergenomic_similarity_percent"] is None
+    assert row["taxonomy_eligible"] is False
+    assert row["species_threshold_percent"] is None
+    assert row["genus_threshold_percent"] is None
+    assert row["taxonomic_interpretation"] == "NOT_CALCULATED"
+    assert row["interpretation"] == "MASH_SCREENING_ONLY; ICTV_SIMILARITY_NOT_CALCULATED"
+
+
+def test_annotation_report_has_no_missing_discovery_report_link(tmp_path):
+    (tmp_path / "report.html").write_text("<html><body></body></html>")
+    update_comparative_report(tmp_path, {"inphared": {"status": "COMPLETE", "matches": []}})
+    report = (tmp_path / "report.html").read_text()
+    assert "comparative/discovery_report.html" not in report
+    update_comparative_report(tmp_path, {"inphared": {"status": "COMPLETE", "matches": []}})
+    assert (tmp_path / "report.html").read_text().count("inphared-numerical-taxonomy") == 1
 
 
 def test_inphared_product_label_remains_predicted_evidence(tmp_path, monkeypatch):
