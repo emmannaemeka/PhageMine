@@ -227,7 +227,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                            "evidence_adapters": evidence_adapters}
     write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "evidence_complete",
                               representation, sequencing_provenance, proteins, checkpoint_manifest, fasta)
-    progress.finish(f"{sum(len(p.evidence) for p in proteins)} evidence records")
+    progress.finish(f"{sum(len(p.evidence) for p in proteins)} annotation evidence records integrated")
     timed_end("evidence_fusion")
     classifications = attach_gene_call_assessments(
         classify_proteins(proteins), gene_review_records)

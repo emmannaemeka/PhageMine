@@ -1382,6 +1382,28 @@ class PhageMineTests(unittest.TestCase):
         mine(proteins)
         self.assertGreater(proteins[0].biological_interest, 0)
 
+    def test_short_orf_qc_evidence_is_idempotent(self):
+        protein = Protein(
+            "demo", "PM_SHORT", 1, 90, "+",
+            "ATG" + ("AAA" * 28) + "TAA",
+            "M" * 29,
+            "PHANOTATE",
+        )
+
+        mine([protein])
+        mine([protein])
+
+        qc = [
+            evidence for evidence in protein.evidence
+            if evidence.modality == "quality"
+            and evidence.source == "phagemine-qc"
+        ]
+
+        self.assertEqual(len(qc), 1)
+        self.assertFalse(qc[0].supports)
+        self.assertEqual(qc[0].metrics["protein_length"], 29)
+        self.assertEqual(protein.score_components["quality_penalty"], 15)
+
     def test_weak_only_pfam_does_not_enable_ranking(self):
         _, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
         proteins = predict_orfs("demo", genome)
