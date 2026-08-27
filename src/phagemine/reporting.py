@@ -52,6 +52,18 @@ def update_comparative_report(output: str | Path, comparative: dict) -> None:
         "<p><b>Taxonomic caution:</b> PhageMine does not assign taxa. Boundary interpretation is withheld for partial or poorly aligned queries; current family-specific ICTV criteria and formal phylogenetic analysis take precedence.</p>"
         + table + "<p><a href='comparative/inphared_nearest_phages.tsv'>Download accession-level results</a> · <a href='comparative/inphared_summary.tsv'>Download numerical-taxonomy summary</a> · <a href='comparative/discovery_report.html'>Open comparative report</a></p></section>")
     content = report.read_text()
+
+    # Report updates can occur during resume/recovery.  Remove any previously
+    # generated INPHARED section before inserting the current result so that
+    # repeated updates remain deterministic and do not duplicate taxonomy rows.
+    marker = "<section id='inphared-numerical-taxonomy'>"
+    while marker in content:
+        prefix, remainder = content.split(marker, 1)
+        if "</section>" not in remainder:
+            break
+        _, suffix = remainder.split("</section>", 1)
+        content = prefix + suffix
+
     content = content.replace("</body>", section + "</body>")
     report.write_text(content)
 

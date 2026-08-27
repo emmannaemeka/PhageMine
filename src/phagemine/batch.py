@@ -422,7 +422,7 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
             elif preexisting and any(destination.iterdir()):
                 raise ValueError(f"output directory exists but is not a valid completed run: {destination}")
             else:
-                run(path, destination, command="run", predictor=create_predictor(gene_predictor, phanotate),
+                run(path, destination, command="annotate", predictor=create_predictor(gene_predictor, phanotate),
                     reconcile_orfs=reconcile_orfs, prodigal=prodigal,
                     progress=sample_progress, threads=threads)
                 row["status"] = "SUCCESS"

@@ -80,6 +80,21 @@ class PhageMineTests(unittest.TestCase):
             self.assertIn("96.20%", report)
             self.assertIn("Mash distance is not converted to similarity", report)
 
+            # Re-applying the same comparative result must replace rather than
+            # duplicate the INPHARED section.
+            update_comparative_report(root, {"inphared": {"unique_reference_summaries": [{
+                "reference_description": "Reference phage", "reference_accessions": "AB123",
+                "host_genus": "Salmonella", "phage_family": "Sarkviridae", "phage_genus": "Jerseyvirus",
+                "intergenomic_similarity_percent": 96.2, "query_aligned_percent": 99.0,
+                "reference_aligned_percent": 98.0,
+                "taxonomic_interpretation": "CONSISTENT_WITH_SAME_SPECIES_THRESHOLD",
+            }]}})
+            report = (root / "report.html").read_text()
+            self.assertEqual(
+                report.count("id='inphared-numerical-taxonomy'"),
+                1,
+            )
+
     def test_orf_reconciliation_boundary_and_strand_categories(self):
         p=GeneModel("PHANOTATE","P1",100,400,"+")
         self.assertEqual(reconcile_models([p],[GeneModel("Prodigal","D1",100,400,"+")])[0]["conflict_type"],"EXACT_CONCORDANCE")
@@ -349,7 +364,9 @@ class PhageMineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             inp, out = Path(temp)/"in", Path(temp)/"out"; inp.mkdir()
             genome=(ROOT/"examples/demo_phage.fasta").read_text(); (inp/"a.fasta").write_text(genome)
+            observed_commands = []
             def fake_run(path, destination, progress=None, **kwargs):
+                observed_commands.append(kwargs.get("command"))
                 d=Path(destination); (d/"analysis_genome.fasta").write_text(genome)
                 (d/"functional_classification.json").write_text("[]"); (d/"genomic_context.json").write_text("[]"); (d/"modules.json").write_text("[]")
                 for name in ("run_manifest.json","evidence.json","proteins.faa","genes.gff3","cds.fna","annotation.tsv","functional_classification.tsv"):
@@ -357,6 +374,7 @@ class PhageMineTests(unittest.TestCase):
             with patch("phagemine.batch.run", fake_run):
                 batch(inp, out, gene_predictor="demo")
             sample=out/"a"
+            self.assertEqual(observed_commands, ["annotate"])
             self.assertTrue((sample/"annotation.tsv").is_file())
             self.assertFalse((sample/"a_proteins.faa").exists())
 
@@ -1113,6 +1131,74 @@ class PhageMineTests(unittest.TestCase):
             manifest = json.loads((output / "run_manifest.json").read_text())
             self.assertEqual(manifest["comparative_analysis"]["pmfdb"]["status"], "COMPLETE")
             self.assertEqual(manifest["comparative_analysis"]["inphared"]["status"], "COMPLETE")
+
+    def test_annotate_consumes_registered_inphared_without_discovery_workflow(self):
+        from phagemine.resources import ResourceType
+
+        def registered(_manager, kind):
+            if kind == ResourceType.INPHARED_GENOMES:
+                return {
+                    "path": "/db/reference_phage_genomes.fna",
+                    "version": "2026-04-07",
+                    "resource_type": "INPHARED_GENOMES",
+                    "provenance": {
+                        "mash_index_path": "/db/inphared.msh",
+                        "metadata_path": "/db/genome_metadata.tsv",
+                        "reference_manifest_path": "/db/genome_manifest.json",
+                    },
+                }
+            return None
+
+        comparison = {
+            "status": "COMPLETE",
+            "matches": [],
+            "unique_reference_summaries": [],
+        }
+
+        with tempfile.TemporaryDirectory() as temp, \
+             patch("phagemine.resources.EvidenceResourceManager.find", new=registered), \
+             patch("phagemine.inphared.compare_genomes", return_value=comparison) as compare, \
+             patch("phagemine.discovery.build_discovery_outputs") as discovery:
+            output = Path(temp) / "annotate"
+
+            run(
+                ROOT / "examples/demo_phage.fasta",
+                output,
+                command="annotate",
+                predictor=DemoORFPredictor(),
+            )
+
+            self.assertTrue(compare.called)
+            self.assertFalse(discovery.called)
+
+            kwargs = compare.call_args.kwargs
+            self.assertEqual(kwargs["mash_index"], "/db/inphared.msh")
+            self.assertEqual(kwargs["metadata"], "/db/genome_metadata.tsv")
+            self.assertEqual(
+                kwargs["reference_fasta"],
+                "/db/reference_phage_genomes.fna",
+            )
+            self.assertEqual(
+                kwargs["output"],
+                output / "comparative",
+            )
+
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            self.assertEqual(
+                manifest["comparative_analysis"]["inphared"]["status"],
+                "COMPLETE",
+            )
+
+    def test_progress_skip_is_explicit(self):
+        stream = StringIO()
+        progress = ProgressReporter(stream=stream)
+        progress.start("INPHARED genome comparison")
+        progress.skip("INPHARED genomes not configured")
+
+        output = stream.getvalue()
+        self.assertIn("SKIPPED: INPHARED genome comparison", output)
+        self.assertIn("INPHARED genomes not configured", output)
+        self.assertEqual(progress.completed, 1)
 
     def test_progress_quiet_mode(self):
         stream = StringIO()
