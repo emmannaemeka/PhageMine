@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.1.0
+
+- Promote the scientifically hardened development line to the PhageMine 1.1.0
+  package release while retaining functional-fusion rules version 1.8 as an
+  independent annotation-rule version.
+
+- Refine conservative phage functional evidence fusion, including stronger
+  source agreement requirements, safer product normalization, curated phage
+  anchors, conflict handling, and explicit review states.
+
+- Prevent organism-specific or source-phage locus labels from being
+  transferred unsafely into final product names while preserving supporting
+  homolog and family evidence.
+
+- Harden mining and quality-control evidence accounting so short-ORF QC
+  records are idempotent and annotation-evidence totals remain reproducible
+  and auditable.
+
+- Run validated INPHARED nearest-reference whole-genome comparison
+  automatically in `annotate`, `run`, and batch annotation workflows when the
+  INPHARED resource is READY.
+
+- Preserve the existing cohort-level INPHARED comparison in batch discovery
+  workflows while keeping PMFDB/discovery analysis separate from ordinary
+  `annotate`.
+
+- Add an explicit INPHARED pipeline stage and report unavailable resources as
+  SKIPPED rather than silently omitting the comparison.
+
+- Make INPHARED comparative-report insertion idempotent so resumed or repeated
+  report updates do not duplicate the nearest-reference section.
+
+- Correct ordinary batch annotation to invoke the annotation workflow rather
+  than the broader single-genome `run` workflow.
+
+- Extend regression coverage for INPHARED workflow consumption, batch command
+  semantics, comparative-report idempotency, and progress reporting.
+
 ## 1.0.6
 
 - Separate domain evidence notes from final product names; organism-specific
