@@ -4,7 +4,7 @@ import hashlib
 from pathlib import Path
 
 
-def read_fasta(path: str | Path) -> tuple[str, str]:
+def read_fasta_records(path: str | Path) -> list[tuple[str, str]]:
     records: list[tuple[str, str]] = []
     header: str | None = None
     seq: list[str] = []
@@ -20,14 +20,20 @@ def read_fasta(path: str | Path) -> tuple[str, str]:
             seq.append(line.upper())
     if header is not None:
         records.append((header, "".join(seq)))
+    for _, sequence in records:
+        if not sequence or set(sequence) - set("ACGTRYSWKMBDHVN"):
+            raise ValueError("FASTA sequence must contain standard IUPAC DNA bases")
+    return records
+
+
+def read_fasta(path: str | Path) -> tuple[str, str]:
+    records = read_fasta_records(path)
     if len(records) != 1:
         raise ValueError("MVP accepts exactly one FASTA record per run")
     genome_id, sequence = records[0]
     # Accept standard IUPAC DNA ambiguity codes; preserve the sequence exactly
     # for provenance while allowing annotated public cohorts with ambiguous
     # bases (e.g. Y) to proceed through validation.
-    if not sequence or set(sequence) - set("ACGTRYSWKMBDHVN"):
-        raise ValueError("FASTA sequence must contain standard IUPAC DNA bases")
     return genome_id, sequence
 
 

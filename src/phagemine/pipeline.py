@@ -51,6 +51,40 @@ def _consensus_provider_ids(profile: str = "standard") -> tuple[str, ...]:
     return ("phanotate", "pyrodigal", "prodigal_gv")
 
 
+def _run_rna_gene_models(fasta, output, representation, *, progress):
+    from .gene_callers import PyrodigalRVProvider, ProviderUnavailable
+    provider = PyrodigalRVProvider()
+    if not provider.available():
+        raise ProviderUnavailable("RNA mode requires Pyrodigal-rv; install pyrodigal-rv in the active environment")
+    progress.start("RNA gene caller (Pyrodigal-rv)")
+    result = provider.predict(representation.analysis_sequence_id, representation.analysis_sequence,
+                              fasta, molecule_type="rna", segment_id=representation.analysis_sequence_id)
+    provider.persist_raw_output(result, Path(output) / "gene_calls" / "raw")
+    from .model_adjudication import CandidateModel
+    proteins = []
+    for index, model in enumerate(result.models, 1):
+        proteins.append(_protein_from_gene_model(model, f"PM_{index:06d}", candidate_id=CandidateModel.from_model(f"RNA_{representation.analysis_sequence_id}", model).candidate_id, locus_id=f"RNA_{representation.analysis_sequence_id}"))
+    root = Path(output) / "gene_calls"; root.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(representation.analysis_sequence.encode()).hexdigest()
+    (root / "gene_call_manifest.json").write_text(json.dumps({
+        "schema_version": "1.2-step8", "input_fasta": str(Path(fasta).resolve()),
+        "input_sequence_sha256": digest, "genome_id": representation.analysis_sequence_id,
+        "molecule_type": "rna", "segment_count": 1,
+        "segments": [{"segment_id": representation.analysis_sequence_id, "sha256": digest, "length": len(representation.analysis_sequence)}],
+        "rna_provider": provider.provider_id, "rna_provider_version": provider.version(),
+        "rna_policy": "RNA_PYRODIGAL_RV_PRIMARY_V1", "final_cds_source": "PYRODIGAL_RV",
+        "functional_annotation_status": "PENDING_DOWNSTREAM", "confidence_calibrated": False,
+    }, indent=2, sort_keys=True))
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t"); writer.writerow(["protein_id", "locus_id", "segment_id", "start", "end", "strand", "selected_source", "selection_policy", "input_sha256"])
+        for protein in proteins:
+            writer.writerow([protein.protein_id, f"RNA_{representation.analysis_sequence_id}", representation.analysis_sequence_id, protein.start, protein.end, protein.strand, "pyrodigal_rv", "RNA_PYRODIGAL_RV_PRIMARY_V1", digest])
+    progress.finish(f"{len(proteins)} RNA proteins")
+    if not proteins:
+        raise ValueError("Pyrodigal-rv produced no parseable RNA gene models")
+    return proteins
+
+
 def _run_consensus_gene_models(fasta, output, representation, predictor, *, profile, progress):
     """Run providers, reconciliation, observational adjudication and selection."""
     from .gene_callers import PHANOTATEProvider, PyrodigalProvider, ProdigalGVProvider, ProviderUnavailable
@@ -258,10 +292,15 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard") -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna") -> int:
     progress = progress or ProgressReporter(quiet=True)
+    molecule_type = str(molecule_type).lower()
+    if molecule_type not in {"dna", "rna"}:
+        raise ValueError("molecule_type must be dna or rna")
     consensus_active = gene_model_policy == "consensus"
-    if reconcile_orfs and not consensus_active:
+    if molecule_type == "rna" and consensus_active:
+        raise ValueError("RNA mode uses the explicit Pyrodigal-rv RNA policy; DNA consensus is not applicable")
+    if reconcile_orfs and not consensus_active and molecule_type == "dna":
         stages = [
             "input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
             "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
@@ -295,7 +334,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         predictor_input = Path(output) / "analysis_predictor_input.fasta"
         predictor_input.write_text(f">{representation.analysis_sequence_id}\n{representation.analysis_sequence}\n")
     consensus_context = None
-    if consensus_active:
+    if molecule_type == "rna":
+        proteins = _run_rna_gene_models(fasta, output, representation, progress=progress)
+    elif consensus_active:
         # Generic providers own prediction/provenance in this branch.  Legacy
         # --reconcile-orfs is intentionally not duplicated here.
         proteins, active_providers, consensus_loci, consensus_decisions, consensus_selections = _run_consensus_gene_models(
@@ -314,7 +355,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     prodigal_models = None
     gene_review_records = []
     progress.finish(f"{len(proteins)} proteins")
-    if reconcile_orfs and not consensus_active:
+    if reconcile_orfs and not consensus_active and molecule_type == "dna":
         progress.start("Prodigal secondary gene prediction")
         prodigal_predictor = ProdigalPredictor(prodigal)
         prodigal_models = prodigal_predictor.predict(fasta, representation.analysis_sequence)
@@ -336,7 +377,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
-    if not consensus_active:
+    if not consensus_active and molecule_type == "dna":
         _write_gene_call_provenance(
             output, fasta, representation, predictor, proteins,
             prodigal_predictor=locals().get("prodigal_predictor"),
@@ -466,7 +507,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
     progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
     timed_end("phrogs")
-    if reconcile_orfs and not consensus_active:
+    if reconcile_orfs and not consensus_active and molecule_type == "dna":
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
         # Adapter objects are reused with isolated one-protein inputs; canonical evidence is untouched.

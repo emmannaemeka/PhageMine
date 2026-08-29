@@ -8,6 +8,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any
+import hashlib
 
 
 class Topology(str, Enum):
@@ -26,6 +27,36 @@ class Rotation(str, Enum):
     NONE = "NONE"
     ROTATED = "ROTATED"
     UNRESOLVED = "UNRESOLVED"
+
+
+@dataclass(frozen=True)
+class SegmentRecord:
+    """A segment-local sequence record; segments are never concatenated."""
+    segment_id: str
+    sequence: str
+    source_record: str | None = None
+
+    @property
+    def length(self) -> int:
+        return len(self.sequence)
+
+    @property
+    def sha256(self) -> str:
+        return hashlib.sha256(self.sequence.encode()).hexdigest()
+
+
+@dataclass(frozen=True)
+class GenomeRecord:
+    """Biological genome container preserving independent segment identity."""
+    genome_id: str
+    molecule_type: str
+    segments: tuple[SegmentRecord, ...]
+
+    def __post_init__(self):
+        if self.molecule_type.lower() not in {"dna", "rna"}:
+            raise ValueError("molecule_type must be dna or rna")
+        if not self.segments:
+            raise ValueError("GenomeRecord requires at least one segment")
 
 
 def reverse_complement(sequence: str) -> str:

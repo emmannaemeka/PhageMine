@@ -455,8 +455,64 @@ class ProdigalGVProvider(PyrodigalProvider):
         return renamed
 
 
+class PyrodigalRVProvider(PyrodigalProvider):
+    """RNA-virus provider backed by the Pyrodigal-rv ViralGeneFinder API."""
+
+    provider_id = "pyrodigal_rv"
+    name = "Pyrodigal-rv"
+    method_family = "pyrodigal_rv"
+    method_lineage = "pyrodigal_rv"
+    capabilities = ProviderCapabilities((MoleculeType.RNA.value,), supports_segmented_input=True,
+                                        supports_alternative_genetic_codes=True,
+                                        supports_overlapping_orfs=True, supports_small_orfs=True,
+                                        external_executable_required=False, native_python_provider=True)
+
+    def _module(self):
+        try:
+            import pyrodigal_rv
+            return pyrodigal_rv
+        except ImportError as exc:
+            raise ProviderUnavailable("Pyrodigal-rv is required for RNA gene prediction") from exc
+
+    def _new_finder(self):
+        module = self._module()
+        try:
+            return module.ViralGeneFinder(meta=True, viral_only=False,
+                                          closed=self.closed, mask=self.mask,
+                                          min_gene=self.min_gene, min_edge_gene=self.min_edge_gene,
+                                          max_overlap=self.max_overlap)
+        except (TypeError, ValueError) as exc:
+            raise InvalidCallerOutput(f"Could not configure Pyrodigal-rv: {exc}") from exc
+
+    def parameters(self):
+        values = super().parameters()
+        values.update({"provider": "pyrodigal-rv", "mode": "meta",
+                       "translation_table": "provider-native RNA-virus model",
+                       "alternative_code_inference": "provider-native; review required"})
+        return values
+
+    def predict(self, genome_id, sequence, input_fasta=None, *, molecule_type=MoleculeType.RNA, segment_id=None):
+        if not self.supports_molecule_type(molecule_type):
+            raise UnsupportedMoleculeType(f"{self.provider_id} does not support {molecule_type}")
+        result = super().predict(genome_id, sequence, input_fasta, molecule_type=MoleculeType.RNA, segment_id=segment_id)
+        result.molecule_type = MoleculeType.RNA.value
+        return result
+
+    def persist_raw_output(self, result, output_dir):
+        root = Path(output_dir); root.mkdir(parents=True, exist_ok=True)
+        tsv = root / "pyrodigal_rv.tsv"
+        with tsv.open("w", newline="") as handle:
+            columns = ["raw_identifier", "begin", "end", "strand", "partial_begin", "partial_end", "start_type", "translation_table", "sequence", "protein_sequence"]
+            writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader(); writer.writerows(self._raw_records)
+        native = root / "pyrodigal_rv.json"
+        native.write_text(json.dumps({"provider_id": self.provider_id, "version": self.version(), "parameters": self.parameters(), "records": self._raw_records}, indent=2, sort_keys=True))
+        result.raw_output_paths = [str(tsv), str(native)]
+        return result.raw_output_paths
+
+
 _PROVIDERS = {"phanotate": PHANOTATEProvider, "prodigal": ProdigalProvider,
-              "pyrodigal": PyrodigalProvider, "prodigal_gv": ProdigalGVProvider}
+              "pyrodigal": PyrodigalProvider, "prodigal_gv": ProdigalGVProvider,
+              "pyrodigal_rv": PyrodigalRVProvider}
 
 
 def register_gene_model_provider(provider_id: str, provider_factory) -> None:
