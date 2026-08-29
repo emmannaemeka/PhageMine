@@ -83,6 +83,18 @@ def _write_gene_call_provenance(output, fasta, representation, predictor, protei
         "reconciliation_policy": "observational-only; PHANOTATE remains final",
         "decision_policy": "v1.1 final CDS behavior preserved",
     }
+    manifest["providers"] = [{
+        "provider_id": "phanotate", "name": "PHANOTATE", "version": predictor.version(),
+        "role": "PRIMARY", "status": "SUCCESS", "command": getattr(predictor, "last_command", None),
+        "parameters": predictor.parameters(),
+    }]
+    if reconciliation_enabled and prodigal_predictor is not None:
+        manifest["providers"].append({
+            "provider_id": "prodigal", "name": "Prodigal", "version": prodigal_predictor.version(),
+            "role": "SECONDARY_OBSERVATIONAL", "status": "SUCCESS",
+            "command": getattr(prodigal_predictor, "last_command", None),
+            "parameters": prodigal_predictor.parameters(),
+        })
     (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
         columns = ["protein_id", "locus_id", "start", "end", "strand", "selected_source",
