@@ -156,7 +156,7 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard") -> int:
     progress = progress or ProgressReporter(quiet=True)
     if reconcile_orfs:
         stages = [
@@ -197,7 +197,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     timed_end("phanotate")
     if not proteins:
         raise ValueError("No ORFs met the MVP minimum length; use a genome with coding sequences or lower the configured threshold in a future adapter.")
-    gene_manifest = {"stage": "gene_prediction", "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "input_sha256": checksum(fasta)}
+    gene_manifest = {"stage": "gene_prediction", "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "input_sha256": checksum(fasta), "gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile, "selection_policy_version": "1.0"}
     write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "gene_prediction", representation, sequencing_provenance, proteins, gene_manifest, fasta)
     reconciliation_rows = None
     prodigal_models = None
@@ -231,6 +231,15 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         prodigal_models=prodigal_models,
         reconciliation_enabled=reconcile_orfs,
     )
+    # Selection is an additive policy record at this stage.  The legacy
+    # PHANOTATE final path remains unchanged; consensus selection is exposed
+    # through the dedicated selection layer and is opt-in for future wiring.
+    manifest_path = Path(output) / "gene_calls" / "gene_call_manifest.json"
+    if manifest_path.is_file():
+        manifest = json.loads(manifest_path.read_text())
+        manifest.update({"gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile,
+                         "selection_policy_version": "1.0"})
+        manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = MockEvidenceBackend().analyze(proteins)
