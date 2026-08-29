@@ -6,7 +6,7 @@ final CDS can be traced back to the exact prediction that produced it.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 
@@ -58,3 +58,41 @@ class GeneModel:
         record["length_nt"] = self.length_nt
         record["length_aa"] = self.length_aa
         return record
+
+
+@dataclass
+class ReconciledLocus:
+    """A locus containing all overlapping candidate models, without selection."""
+
+    locus_id: str
+    genome_id: str | None
+    segment_id: str | None
+    start: int
+    end: int
+    strand_status: str
+    candidate_models: list[GeneModel] = field(default_factory=list)
+    supporting_providers: list[str] = field(default_factory=list)
+    provider_count: int = 0
+    candidate_count: int = 0
+    reconciliation_class: str = "CALLER_SPECIFIC"
+    exact_coordinate_groups: list[dict[str, Any]] = field(default_factory=list)
+    start_groups: dict[str, list[str]] = field(default_factory=dict)
+    stop_groups: dict[str, list[str]] = field(default_factory=dict)
+    strand_groups: dict[str, list[str]] = field(default_factory=dict)
+    review_required: bool = False
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "locus_id": self.locus_id, "genome_id": self.genome_id,
+            "segment_id": self.segment_id, "start": self.start, "end": self.end,
+            "strand_status": self.strand_status,
+            "candidate_models": [model.to_dict() for model in self.candidate_models],
+            "supporting_providers": list(self.supporting_providers),
+            "provider_count": self.provider_count, "candidate_count": self.candidate_count,
+            "reconciliation_class": self.reconciliation_class,
+            "exact_coordinate_groups": self.exact_coordinate_groups,
+            "start_groups": self.start_groups, "stop_groups": self.stop_groups,
+            "strand_groups": self.strand_groups, "review_required": self.review_required,
+            "notes": list(self.notes),
+        }
