@@ -120,13 +120,34 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
     manifest = {"schema_version": "1.2-step8b", "genome_id": Path(fasta).stem, "molecule_type": "rna", "segmented": True, "segment_count": len(segment_rows), "segments": segment_rows, "coordinate_scope": "segment-local; segments are never concatenated"}
     (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     (root / "proteins.faa").write_text("".join(aggregate_proteins))
-    # A combined CDS file is safe because headers retain segment keys; no
-    # coordinates are offset and each segment remains an independent record.
+    # Aggregate segment-local files without changing their seqids or offsets.
     cds_lines = []
+    gff_lines = ["##gff-version 3\n"]
+    final_rows = []
+    final_header = None
+    trace_lines = []
+    trace_header = None
     for row in segment_rows:
-        path = root / "gene_calls" / "segments" / row["safe_segment_key"] / "cds.fna"
+        seg_root = root / "gene_calls" / "segments" / row["safe_segment_key"]
+        path = seg_root / "cds.fna"
         if path.exists(): cds_lines.extend(path.read_text().splitlines(True))
+        gff = seg_root / "genes.gff3"
+        if gff.exists():
+            gff_lines.extend(line for line in gff.read_text().splitlines(True) if not line.startswith("##gff-version"))
+        models = seg_root / "gene_calls" / "final_gene_models.tsv"
+        if models.exists():
+            lines = models.read_text().splitlines(True)
+            if lines and final_header is None: final_header = lines[0]
+            final_rows.extend(lines[1:])
+        trace = seg_root / "gene_calls" / "final_gene_model_trace.tsv"
+        if trace.exists():
+            lines = trace.read_text().splitlines(True)
+            if lines and trace_header is None: trace_header = lines[0]
+            trace_lines.extend(lines[1:])
     (root / "cds.fna").write_text("".join(cds_lines))
+    (root / "genes.gff3").write_text("".join(gff_lines))
+    (root / "gene_calls" / "final_gene_models.tsv").write_text((final_header or "") + "".join(final_rows))
+    (root / "gene_calls" / "final_gene_model_trace.tsv").write_text((trace_header or "") + "".join(trace_lines))
     return sum(1 for line in aggregate_proteins if line.startswith(">"))
 
 
