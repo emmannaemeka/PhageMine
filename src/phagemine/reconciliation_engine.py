@@ -41,7 +41,12 @@ def _meaningful_overlap(a: GeneModel, b: GeneModel, *, min_overlap_bp: int, min_
     overlap = _overlap(a, b)
     if overlap <= 0:
         return False
-    return overlap >= min_overlap_bp or min(overlap / a.length_nt, overlap / b.length_nt) >= min_reciprocal
+    reciprocal = min(overlap / a.length_nt, overlap / b.length_nt)
+    # The absolute floor protects short genes, while the small fractional
+    # floor prevents a 30-bp sliver of two long unrelated genes from chaining
+    # them into one locus.  Complete/near-complete overlap remains accepted by
+    # the stronger reciprocal criterion.
+    return (overlap >= min_overlap_bp and reciprocal >= 0.1) or reciprocal >= min_reciprocal
 
 
 def _candidate_key(provider: str, model: GeneModel) -> tuple:

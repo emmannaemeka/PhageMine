@@ -56,3 +56,13 @@ def test_fourth_provider_plugs_in_without_core_changes_and_serializes(tmp_path):
     assert (tmp_path / "candidate_gene_models.tsv").is_file()
     assert (tmp_path / "reconciliation_v2.tsv").is_file()
     assert (tmp_path / "reconciliation_v2.json").is_file()
+
+
+def test_policy_rejects_thin_overlap_of_long_unrelated_models():
+    loci = reconcile_gene_models({"a": [model("a", "a", 1, 1000)], "b": [model("b", "b", 965, 1964)]})
+    assert len(loci) == 2
+
+
+def test_policy_keeps_short_near_complete_overlapping_models_together():
+    loci = reconcile_gene_models({"a": [model("a", "a", 100, 190)], "b": [model("b", "b", 105, 195)]})
+    assert len(loci) == 1
