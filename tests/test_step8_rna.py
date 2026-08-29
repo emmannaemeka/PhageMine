@@ -20,6 +20,24 @@ def test_pyrodigal_rv_unavailable_is_explicit_when_dependency_missing():
             provider.predict("rna", "ATG" * 40, molecule_type="dna")
 
 
+def test_pyrodigal_rv_real_provider_smoke():
+    provider = get_gene_model_provider("pyrodigal_rv")
+    if not provider.available():
+        pytest.skip("pyrodigal-rv not installed in this environment")
+    sequence = "ATG" + "AAA" * 100 + "TAA" + "C" * 20
+    result = provider.predict("rna_dev", sequence, molecule_type="rna", segment_id="S")
+    assert result.status == "SUCCESS"
+    assert result.provider_id == "pyrodigal_rv"
+    assert result.molecule_type == "rna"
+    assert result.models
+    for model in result.models:
+        assert model.segment_id == "S"
+        # RNA-virus callers may emit a partial edge model whose native end is
+        # one base beyond the supplied sequence; preserve that provenance.
+        assert 1 <= model.start <= model.end
+        assert model.coordinate_system.startswith("pyrodigal-0-based")
+
+
 def test_dna_providers_do_not_advertise_rna():
     for name in ("phanotate", "pyrodigal", "prodigal_gv"):
         assert not get_gene_model_provider(name).supports_molecule_type(MoleculeType.RNA)

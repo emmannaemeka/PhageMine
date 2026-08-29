@@ -1,0 +1,4 @@
+Using pip 26.2.1 from /opt/anaconda3/envs/phagemine_v12_dev/lib/python3.12/site-packages/pip (python 3.12)
+Requirement already satisfied: pyrodigal-rv==0.1.0 in /opt/anaconda3/envs/phagemine_v12_dev/lib/python3.12/site-packages (0.1.0)
+Requirement already satisfied: pyrodigal>=3.6.3 in /opt/anaconda3/envs/phagemine_v12_dev/lib/python3.12/site-packages (from pyrodigal-rv==0.1.0) (3.7.1)
+Requirement already satisfied: archspec~=0.2.0 in /opt/anaconda3/envs/phagemine_v12_dev/lib/python3.12/site-packages (from pyrodigal>=3.6.3->pyrodigal-rv==0.1.0) (0.2.6)

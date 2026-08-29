@@ -288,7 +288,8 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
           fail_fast=False, gene_predictor="phanotate", phanotate=None, progress=None,
           reconcile_orfs=False, prodigal=None, threads: int = 1, evidence_profile: str = "core",
           mode: str = "annotate", gene_model_policy: str = "phanotate-only",
-          gene_model_profile: str = "standard", molecule_type: str = "dna") -> list[dict]:
+          gene_model_profile: str = "standard", molecule_type: str = "dna",
+          segmented: bool = False) -> list[dict]:
     root = Path(input_dir).resolve()
     from .preflight import preflight_profile
     profile_resolution = preflight_profile(evidence_profile)
@@ -314,7 +315,8 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
         batch(input_dir, project / "annotation", recursive, resume_existing, fail_fast,
               gene_predictor, phanotate, progress, reconcile_orfs, prodigal, threads,
               evidence_profile, mode="annotate", gene_model_policy=gene_model_policy,
-              gene_model_profile=gene_model_profile, molecule_type=molecule_type)
+              gene_model_profile=gene_model_profile, molecule_type=molecule_type,
+              segmented=segmented)
         samples = discovery_from_annotation(project / "annotation", project / "discovery")
         sample_dirs = [project / "discovery" / _sample_id(path) for path in inputs]
         pmfdb, inphared, inphared_reason = _comparative_resources()
@@ -437,7 +439,7 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
                     inphared_resolution=inphared_resolution,
                     gene_model_policy=gene_model_policy,
                     gene_model_profile=gene_model_profile,
-                    molecule_type=molecule_type)
+                    molecule_type=molecule_type, segmented=segmented)
                 row["status"] = "SUCCESS"
                 status["status"] = "SUCCESS"
                 _atomic_json(status_path, status)

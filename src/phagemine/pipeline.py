@@ -85,6 +85,51 @@ def _run_rna_gene_models(fasta, output, representation, *, progress):
     return proteins
 
 
+def _safe_segment_key(segment_id: str, used: set[str]) -> str:
+    import re
+    base = re.sub(r"[^A-Za-z0-9_.-]+", "_", segment_id).strip("._") or "segment"
+    key = base; index = 2
+    while key in used:
+        key = f"{base}_{index}"; index += 1
+    used.add(key)
+    return key
+
+
+def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
+    """Annotate explicit multi-record RNA FASTA one segment at a time."""
+    from .io import read_fasta_records
+    from .genome_representation import GenomeRecord, SegmentRecord
+    records = read_fasta_records(fasta)
+    if len(records) < 2:
+        raise ValueError("--segmented requires a multi-record FASTA")
+    root = Path(output); root.mkdir(parents=True, exist_ok=True)
+    used: set[str] = set(); segment_rows = []; aggregate_proteins = []
+    for segment_id, sequence in records:
+        safe = _safe_segment_key(segment_id, used)
+        segment_dir = root / "gene_calls" / "segments" / safe
+        segment_dir.mkdir(parents=True, exist_ok=True)
+        segment_fasta = root / "gene_calls" / "segments" / f"{safe}.fasta"
+        segment_fasta.write_text(f">{segment_id}\n{sequence}\n")
+        segment_kwargs = dict(kwargs)
+        segment_kwargs.update({"molecule_type": "rna", "segmented": False})
+        run(segment_fasta, segment_dir, command=command, progress=progress, **segment_kwargs)
+        segment_rows.append({"segment_id": segment_id, "safe_segment_key": safe, "length": len(sequence), "sha256": hashlib.sha256(sequence.encode()).hexdigest()})
+        proteins_path = segment_dir / "proteins.faa"
+        cds_path = segment_dir / "cds.fna"
+        if proteins_path.exists(): aggregate_proteins.extend(proteins_path.read_text().splitlines(True))
+    manifest = {"schema_version": "1.2-step8b", "genome_id": Path(fasta).stem, "molecule_type": "rna", "segmented": True, "segment_count": len(segment_rows), "segments": segment_rows, "coordinate_scope": "segment-local; segments are never concatenated"}
+    (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    (root / "proteins.faa").write_text("".join(aggregate_proteins))
+    # A combined CDS file is safe because headers retain segment keys; no
+    # coordinates are offset and each segment remains an independent record.
+    cds_lines = []
+    for row in segment_rows:
+        path = root / "gene_calls" / "segments" / row["safe_segment_key"] / "cds.fna"
+        if path.exists(): cds_lines.extend(path.read_text().splitlines(True))
+    (root / "cds.fna").write_text("".join(cds_lines))
+    return sum(1 for line in aggregate_proteins if line.startswith(">"))
+
+
 def _run_consensus_gene_models(fasta, output, representation, predictor, *, profile, progress):
     """Run providers, reconciliation, observational adjudication and selection."""
     from .gene_callers import PHANOTATEProvider, PyrodigalProvider, ProdigalGVProvider, ProviderUnavailable
@@ -292,7 +337,7 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna") -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False) -> int:
     progress = progress or ProgressReporter(quiet=True)
     molecule_type = str(molecule_type).lower()
     if molecule_type not in {"dna", "rna"}:
@@ -300,6 +345,27 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     consensus_active = gene_model_policy == "consensus"
     if molecule_type == "rna" and consensus_active:
         raise ValueError("RNA mode uses the explicit Pyrodigal-rv RNA policy; DNA consensus is not applicable")
+    if segmented and molecule_type != "rna":
+        raise ValueError("--segmented is valid only with --molecule-type rna")
+    if segmented:
+        from .io import read_fasta_records
+        if len(read_fasta_records(fasta)) > 1:
+            return _run_segmented_rna(fasta, output, command=command, progress=progress,
+                                      metadata=metadata, table2asn_executable=table2asn_executable,
+                                      predictor=predictor, sequencing_provenance=sequencing_provenance,
+                                      pfam_path=pfam_path, pfam_hmmscan=pfam_hmmscan, pfam_evalue=pfam_evalue,
+                                      pfam_coverage=pfam_coverage, pfam_trusted_cutoff=pfam_trusted_cutoff,
+                                      use_mock_evidence=use_mock_evidence, pfam_threshold_mode=pfam_threshold_mode,
+                                      vog_path=vog_path, vog_annotations=vog_annotations, vog_hmmscan=vog_hmmscan,
+                                      vog_evalue=vog_evalue, vog_coverage=vog_coverage, swissprot_path=swissprot_path,
+                                      swissprot_metadata=swissprot_metadata, diamond=diamond,
+                                      swissprot_evalue=swissprot_evalue, phrogs_path=phrogs_path,
+                                      phrogs_annotations=phrogs_annotations, phrogs_hmm_path=phrogs_hmm_path,
+                                      mmseqs=mmseqs, phrogs_evalue=phrogs_evalue, phrogs_coverage=phrogs_coverage,
+                                      phrogs_score=phrogs_score, phrogs_identity=phrogs_identity,
+                                      phrogs_alignment_length=phrogs_alignment_length, reconcile_orfs=reconcile_orfs,
+                                      prodigal=prodigal, threads=threads, inphared_resolution=inphared_resolution,
+                                      gene_model_policy=gene_model_policy, gene_model_profile=gene_model_profile)
     if reconcile_orfs and not consensus_active and molecule_type == "dna":
         stages = [
             "input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
