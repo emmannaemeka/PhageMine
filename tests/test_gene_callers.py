@@ -58,6 +58,19 @@ def test_registry_resolves_pyrodigal_with_dna_only_native_capabilities():
     assert not provider.capabilities.external_executable_required
 
 
+def test_registry_resolves_prodigal_gv_with_lineage_metadata():
+    provider = get_gene_model_provider("prodigal_gv")
+    assert provider.provider_id == "prodigal_gv"
+    assert provider.name == "Prodigal-gv"
+    assert provider.method_family == "prodigal_gv"
+    assert provider.method_lineage == "prodigal"
+    assert provider.available()
+    assert provider.supports_molecule_type("dna")
+    assert not provider.supports_molecule_type("rna")
+    assert provider.capabilities.native_python_provider
+    assert not provider.capabilities.external_executable_required
+
+
 def test_pyrodigal_returns_normalized_models_and_native_raw_records(tmp_path):
     provider = get_gene_model_provider("pyrodigal")
     sequence = "C" * 1500 + "ATG" + "AAA" * 45 + "TAA" + "C" * 1500
@@ -83,6 +96,18 @@ def test_pyrodigal_rejects_rna_and_invalid_sequence():
         provider.predict("rna", "A" * 120, molecule_type=MoleculeType.RNA)
     with pytest.raises(Exception, match="only A/C/G/T/N"):
         provider.predict("bad", "A" * 100 + "U")
+
+
+def test_prodigal_gv_normalizes_and_preserves_native_raw_provenance(tmp_path):
+    provider = get_gene_model_provider("prodigal_gv")
+    sequence = "C" * 30 + "ATG" + "AAA" * 45 + "TAA" + "C" * 30
+    result = provider.predict("synthetic", sequence, tmp_path / "synthetic.fasta")
+    assert result.models
+    assert all(model.caller == "prodigal_gv" for model in result.models)
+    assert all(model.method_lineage == "prodigal" for model in result.models)
+    paths = provider.persist_raw_output(result, tmp_path / "raw")
+    assert [Path(p).name for p in paths] == ["prodigal_gv.tsv", "prodigal_gv.json"]
+    assert "prodigal_gv" in (tmp_path / "raw" / "prodigal_gv.json").read_text()
 
 
 def test_pairwise_provider_comparison_is_deterministic_and_descriptive():

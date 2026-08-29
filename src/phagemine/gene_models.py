@@ -38,6 +38,8 @@ class GeneModel:
     coordinate_system: str = "1-based-inclusive"
     source_record: str | None = None
     source_file: str | None = None
+    method_family: str | None = None
+    method_lineage: str | None = None
 
     @property
     def raw_identifier(self) -> str:
@@ -73,6 +75,10 @@ class ReconciledLocus:
     candidate_models: list[GeneModel] = field(default_factory=list)
     supporting_providers: list[str] = field(default_factory=list)
     provider_count: int = 0
+    method_family_count: int = 0
+    method_lineage_count: int = 0
+    supporting_method_families: list[str] = field(default_factory=list)
+    supporting_method_lineages: list[str] = field(default_factory=list)
     candidate_count: int = 0
     reconciliation_class: str = "CALLER_SPECIFIC"
     exact_coordinate_groups: list[dict[str, Any]] = field(default_factory=list)
@@ -90,6 +96,9 @@ class ReconciledLocus:
             "candidate_models": [model.to_dict() for model in self.candidate_models],
             "supporting_providers": list(self.supporting_providers),
             "provider_count": self.provider_count, "candidate_count": self.candidate_count,
+            "method_family_count": self.method_family_count, "method_lineage_count": self.method_lineage_count,
+            "supporting_method_families": list(self.supporting_method_families),
+            "supporting_method_lineages": list(self.supporting_method_lineages),
             "reconciliation_class": self.reconciliation_class,
             "exact_coordinate_groups": self.exact_coordinate_groups,
             "start_groups": self.start_groups, "stop_groups": self.stop_groups,

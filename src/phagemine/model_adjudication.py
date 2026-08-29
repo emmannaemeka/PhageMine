@@ -138,8 +138,13 @@ def decide_locus(locus: ReconciledLocus, candidates: list[CandidateModel] | None
     candidates = candidates or candidates_from_locus(locus)
     ids = [candidate.candidate_id for candidate in candidates]
     providers = sorted({candidate.provider_id for candidate in candidates})
+    families = sorted({next((model.method_family for model in locus.candidate_models if model.caller == candidate.provider_id), candidate.provider_id) for candidate in candidates})
+    lineages = sorted({next((model.method_lineage for model in locus.candidate_models if model.caller == candidate.provider_id), candidate.provider_id) for candidate in candidates})
     exact = len({(candidate.start, candidate.end, candidate.strand) for candidate in candidates}) == 1
-    caller_summary = {"providers": providers, "provider_count": len(providers), "candidate_count": len(candidates), "exact_coordinate_agreement": exact, "reconciliation_class": locus.reconciliation_class}
+    caller_summary = {"providers": providers, "provider_count": len(providers), "provider_support_count": len(providers), "provider_support_fraction": len(providers) / len(providers) if providers else 0.0,
+                      "method_families": families, "method_family_count": len(families), "method_family_support_count": len(families),
+                      "method_lineages": lineages, "method_lineage_count": len(lineages), "method_lineage_support_count": len(lineages),
+                      "candidate_count": len(candidates), "exact_coordinate_agreement": exact, "reconciliation_class": locus.reconciliation_class}
     evidence_summary = _evidence_summary(candidates)
     comparable = "COMPARABLE_EVIDENCE_AVAILABLE" if all(candidate.evidence_status in {"SEARCH_EXECUTED", "CACHE_REUSED", "SEARCH_EXECUTED_ZERO_HITS"} for candidate in candidates) and candidates else ("RESOURCE_UNAVAILABLE" if any(candidate.evidence_status == "RESOURCE_UNAVAILABLE" for candidate in candidates) else "PARTIAL_EVIDENCE_AVAILABILITY")
     recommended = None; provider = None; cls = "UNRESOLVED_GENE_MODEL"; status = "OBSERVATIONAL_RECOMMENDATION"; reason = "Evidence did not resolve the competing gene models."; confidence = "LOW"; review = True

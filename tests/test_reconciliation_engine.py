@@ -58,6 +58,19 @@ def test_fourth_provider_plugs_in_without_core_changes_and_serializes(tmp_path):
     assert (tmp_path / "reconciliation_v2.json").is_file()
 
 
+def test_family_and_lineage_counts_distinguish_provider_and_method_support():
+    models = {
+        "phanotate": [GeneModel("phanotate", "p", 100, 400, "+", method_family="phanotate", method_lineage="phanotate")],
+        "pyrodigal": [GeneModel("pyrodigal", "y", 100, 400, "+", method_family="prodigal_standard", method_lineage="prodigal")],
+        "prodigal": [GeneModel("prodigal", "d", 100, 400, "+", method_family="prodigal_standard", method_lineage="prodigal")],
+    }
+    locus = reconcile_gene_models(models)[0]
+    assert locus.provider_count == 3
+    assert locus.method_family_count == 2
+    assert locus.method_lineage_count == 2
+    assert locus.supporting_method_families == ["phanotate", "prodigal_standard"]
+
+
 def test_policy_rejects_thin_overlap_of_long_unrelated_models():
     loci = reconcile_gene_models({"a": [model("a", "a", 1, 1000)], "b": [model("b", "b", 965, 1964)]})
     assert len(loci) == 2

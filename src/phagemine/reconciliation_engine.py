@@ -140,14 +140,28 @@ def reconcile_gene_models(provider_models: dict[str, list[GeneModel]], *,
         for cid, model in zip(candidate_ids, models):
             coordinate_groups.setdefault((model.start, model.end, model.strand), []).append(cid)
             start_groups.setdefault(str(model.start), []).append(cid); stop_groups.setdefault(str(model.end), []).append(cid); strand_groups.setdefault(model.strand, []).append(cid)
-        exact = [{"start": k[0], "end": k[1], "strand": k[2], "candidate_ids": sorted(v), "supporting_providers": sorted({providers[candidate_ids.index(cid)] for cid in v})} for k, v in sorted(coordinate_groups.items())]
+        exact = []
+        for k, values in sorted(coordinate_groups.items()):
+            supporting = sorted({providers[candidate_ids.index(cid)] for cid in values})
+            exact.append({"start": k[0], "end": k[1], "strand": k[2], "candidate_ids": sorted(values),
+                          "supporting_providers": supporting,
+                          "supporting_method_families": sorted({models[candidate_ids.index(cid)].method_family or providers[candidate_ids.index(cid)] for cid in values}),
+                          "supporting_method_lineages": sorted({models[candidate_ids.index(cid)].method_lineage or providers[candidate_ids.index(cid)] for cid in values})})
         cls, review, notes = _classify(models, providers, {})
-        loci.append(ReconciledLocus(locus_id, models[0].genome_id, models[0].segment_id, start, end,
-                                    "CONCORDANT" if len(strand_groups) == 1 else "DISCORDANT",
-                                    models, sorted(set(providers)), len(set(providers)), len(models), cls,
-                                    exact, {k: sorted(v) for k, v in sorted(start_groups.items())},
-                                    {k: sorted(v) for k, v in sorted(stop_groups.items())},
-                                    {k: sorted(v) for k, v in sorted(strand_groups.items())}, review, notes))
+        families = sorted({model.method_family or provider for provider, model in zip(providers, models)})
+        lineages = sorted({model.method_lineage or provider for provider, model in zip(providers, models)})
+        loci.append(ReconciledLocus(
+            locus_id=locus_id, genome_id=models[0].genome_id, segment_id=models[0].segment_id,
+            start=start, end=end, strand_status="CONCORDANT" if len(strand_groups) == 1 else "DISCORDANT",
+            candidate_models=models, supporting_providers=sorted(set(providers)),
+            provider_count=len(set(providers)), method_family_count=len(families),
+            method_lineage_count=len(lineages), supporting_method_families=families,
+            supporting_method_lineages=lineages, candidate_count=len(models),
+            reconciliation_class=cls, exact_coordinate_groups=exact,
+            start_groups={k: sorted(v) for k, v in sorted(start_groups.items())},
+            stop_groups={k: sorted(v) for k, v in sorted(stop_groups.items())},
+            strand_groups={k: sorted(v) for k, v in sorted(strand_groups.items())},
+            review_required=review, notes=notes))
     return sorted(loci, key=lambda locus: (locus.segment_id or "", locus.start, locus.end, locus.locus_id))
 
 

@@ -130,7 +130,7 @@ class GeneModelProvider(ABC):
         return []
 
 
-def _model_from_protein(protein, *, provider_id: str, version: str, command, input_sha: str, source_file):
+def _model_from_protein(protein, *, provider_id: str, version: str, command, input_sha: str, source_file, method_family: str | None = None, method_lineage: str | None = None):
     params = dict(getattr(protein, "gene_call_parameters", {}) or {})
     return GeneModel(
         caller=provider_id, identifier=protein.protein_id, start=protein.start,
@@ -141,12 +141,15 @@ def _model_from_protein(protein, *, provider_id: str, version: str, command, inp
         protein_sequence=protein.sequence, input_sequence_sha256=input_sha,
         raw_start=params.get("raw_start", protein.start), raw_end=params.get("raw_end", protein.end),
         raw_strand=params.get("reported_strand", protein.strand), source_file=str(source_file) if source_file else None,
+        method_family=method_family, method_lineage=method_lineage,
     )
 
 
 class PHANOTATEProvider(GeneModelProvider):
     provider_id = "phanotate"
     name = "PHANOTATE"
+    method_family = "phanotate"
+    method_lineage = "phanotate"
     capabilities = ProviderCapabilities((MoleculeType.DNA.value,), supports_segmented_input=False,
                                         supports_alternative_genetic_codes=False,
                                         supports_overlapping_orfs=True, supports_small_orfs=True,
@@ -176,7 +179,7 @@ class PHANOTATEProvider(GeneModelProvider):
         except RuntimeError as exc:
             raise ProviderExecutionFailure(str(exc)) from exc
         digest = hashlib.sha256(sequence.encode()).hexdigest()
-        models = [_model_from_protein(p, provider_id=self.provider_id, version=self.version(), command=self.predictor.last_command, input_sha=digest, source_file=input_fasta) for p in proteins]
+        models = [_model_from_protein(p, provider_id=self.provider_id, version=self.version(), command=self.predictor.last_command, input_sha=digest, source_file=input_fasta, method_family=self.method_family, method_lineage=self.method_lineage) for p in proteins]
         if not models:
             raise NoParseableCalls("PHANOTATE produced no parseable models")
         return GenePredictionResult(self.provider_id, self.name, self.version(), models,
@@ -202,6 +205,8 @@ class PHANOTATEProvider(GeneModelProvider):
 class ProdigalProvider(GeneModelProvider):
     provider_id = "prodigal"
     name = "Prodigal"
+    method_family = "prodigal_standard"
+    method_lineage = "prodigal"
     capabilities = ProviderCapabilities((MoleculeType.DNA.value,), supports_segmented_input=False,
                                         supports_alternative_genetic_codes=False,
                                         supports_overlapping_orfs=True, supports_small_orfs=False,
@@ -239,6 +244,7 @@ class ProdigalProvider(GeneModelProvider):
                 options=self.parameters(), genome_id=genome_id, segment_id=segment_id,
                 input_sequence_sha256=digest, raw_start=model.start, raw_end=model.end,
                 raw_strand=model.strand, source_file=str(input_fasta),
+                method_family=self.method_family, method_lineage=self.method_lineage,
             ))
         if not normalized:
             raise NoParseableCalls("Prodigal produced no parseable models")
@@ -268,6 +274,8 @@ class PyrodigalProvider(GeneModelProvider):
 
     provider_id = "pyrodigal"
     name = "Pyrodigal"
+    method_family = "prodigal_standard"
+    method_lineage = "prodigal"
     capabilities = ProviderCapabilities((MoleculeType.DNA.value,), supports_segmented_input=True,
                                         supports_alternative_genetic_codes=False,
                                         supports_overlapping_orfs=True, supports_small_orfs=False,
@@ -370,6 +378,7 @@ class PyrodigalProvider(GeneModelProvider):
                 raw_start=raw_start, raw_end=raw_end, raw_strand=str(gene.strand),
                 coordinate_system="pyrodigal-0-based-inclusive->phagemine-1-based-inclusive",
                 source_record=genome_id, source_file=str(input_fasta) if input_fasta else None,
+                method_family=self.method_family, method_lineage=self.method_lineage,
             ))
         if not models:
             raise NoParseableCalls("Pyrodigal produced no gene models")
@@ -396,7 +405,58 @@ class PyrodigalProvider(GeneModelProvider):
         return [str(tsv), str(native)]
 
 
-_PROVIDERS = {"phanotate": PHANOTATEProvider, "prodigal": ProdigalProvider, "pyrodigal": PyrodigalProvider}
+class ProdigalGVProvider(PyrodigalProvider):
+    """Native Prodigal-gv viral model provider, observational in Step 6."""
+
+    provider_id = "prodigal_gv"
+    name = "Prodigal-gv"
+    method_family = "prodigal_gv"
+    method_lineage = "prodigal"
+
+    def __init__(self, *, meta: bool = True, viral_only: bool = False, closed: bool = False,
+                 mask: bool = False, min_gene: int = 90, min_edge_gene: int = 60,
+                 max_overlap: int = 60, translation_table: int = 11):
+        super().__init__(meta=meta, closed=closed, mask=mask, min_gene=min_gene,
+                         min_edge_gene=min_edge_gene, max_overlap=max_overlap,
+                         translation_table=translation_table)
+        self.viral_only = viral_only
+
+    def _module(self):
+        try:
+            import pyrodigal_gv
+            return pyrodigal_gv
+        except ImportError as exc:
+            raise ProviderUnavailable("Prodigal-gv is required for the prodigal_gv provider") from exc
+
+    def _new_finder(self):
+        module = self._module()
+        try:
+            return module.ViralGeneFinder(meta=self.meta, viral_only=self.viral_only,
+                                          closed=self.closed, mask=self.mask,
+                                          min_gene=self.min_gene, min_edge_gene=self.min_edge_gene,
+                                          max_overlap=self.max_overlap)
+        except (TypeError, ValueError) as exc:
+            raise InvalidCallerOutput(f"Could not configure Prodigal-gv: {exc}") from exc
+
+    def parameters(self):
+        values = super().parameters()
+        values["viral_only"] = self.viral_only
+        values["alternative_code_inference"] = "provider-native; not propagated to final annotation"
+        return values
+
+    def persist_raw_output(self, result, output_dir):
+        paths = super().persist_raw_output(result, output_dir)
+        root = Path(output_dir)
+        renamed = []
+        for path in paths:
+            source = Path(path); target = source.with_name(source.name.replace("pyrodigal", "prodigal_gv"))
+            source.replace(target); renamed.append(str(target))
+        result.raw_output_paths = renamed
+        return renamed
+
+
+_PROVIDERS = {"phanotate": PHANOTATEProvider, "prodigal": ProdigalProvider,
+              "pyrodigal": PyrodigalProvider, "prodigal_gv": ProdigalGVProvider}
 
 
 def register_gene_model_provider(provider_id: str, provider_factory) -> None:
