@@ -33,6 +33,108 @@ from .hallmarks import assess_hallmarks, write_hallmarks
 from .review import build_annotation_review, write_annotation_review
 
 
+def _protein_from_gene_model(model, protein_id: str, *, candidate_id: str | None = None, locus_id: str | None = None):
+    """Materialize a normalized GeneModel as the downstream Protein record."""
+    from .models import Protein
+    params = dict(model.options or {})
+    params.update({"candidate_id": candidate_id, "locus_id": locus_id, "selection_reason": "consensus-selected model"})
+    return Protein(model.genome_id or "", protein_id, model.start, model.end, model.strand,
+                   model.cds_sequence or "", model.protein_sequence or model.sequence or "",
+                   model.caller, gene_call_parameters=params,
+                   start_codon=model.start_codon, stop_codon=model.stop_codon)
+
+
+def _consensus_provider_ids(profile: str = "standard") -> tuple[str, ...]:
+    """Return the one shared v1.2 DNA consensus provider profile."""
+    if profile not in {"standard", "extended"}:
+        raise ValueError(f"unknown gene-model profile: {profile}")
+    return ("phanotate", "pyrodigal", "prodigal_gv")
+
+
+def _run_consensus_gene_models(fasta, output, representation, predictor, *, profile, progress):
+    """Run providers, reconciliation, observational adjudication and selection."""
+    from .gene_callers import PHANOTATEProvider, PyrodigalProvider, ProdigalGVProvider, ProviderUnavailable
+    from .reconciliation_engine import run_provider_reconciliation
+    from .model_adjudication import CandidateModel, candidates_from_locus, decide_locus, write_model_adjudication
+    from .gene_model_selection import select_final_gene_models, write_selection_outputs, CONSENSUS
+
+    if profile not in {"standard", "extended"}:
+        raise ValueError(f"unknown gene-model profile: {profile}")
+    # v1.2's single DNA consensus profile intentionally uses all three
+    # caller implementations.  ``profile`` is retained as an explicit
+    # provenance field; both supported profiles currently resolve to this
+    # provider set (extended is reserved for future additions, not a hidden
+    # fourth Prodigal vote).
+    providers = [PHANOTATEProvider(getattr(predictor, "executable", None)), PyrodigalProvider(), ProdigalGVProvider()]
+    unavailable = [provider.provider_id for provider in providers if not provider.available()]
+    if unavailable:
+        raise ProviderUnavailable("Consensus %s profile requires %s; unavailable: %s" % (profile, ", ".join(p.provider_id for p in providers), ", ".join(unavailable)))
+    progress.start("consensus gene callers")
+    _, loci = run_provider_reconciliation(providers, representation.analysis_sequence_id,
+                                           representation.analysis_sequence, fasta,
+                                           Path(output) / "gene_calls", molecule_type="dna")
+    candidates = [candidate for locus in loci for candidate in candidates_from_locus(locus)]
+    decisions = [decide_locus(locus, candidates_from_locus(locus)) for locus in loci]
+    write_model_adjudication(Path(output) / "gene_calls", candidates, decisions)
+    selections = select_final_gene_models(loci, decisions, policy=CONSENSUS, profile=profile)
+    write_selection_outputs(Path(output) / "gene_calls", loci, selections, decisions)
+    by_locus = {locus.locus_id: locus for locus in loci}
+    root = Path(output) / "gene_calls"
+    selection_counts = {
+        "number_loci": len(selections),
+        "number_boundary_changes": sum(item.changed_from_legacy for item in selections),
+        "number_fallback_phanotate": sum(item.fallback_used for item in selections),
+        "number_rescue_candidates": sum(item.selection_rule == "RESCUE_CANDIDATE_NOT_AUTOMATICALLY_SELECTED" for item in selections),
+        "number_review_required": sum(item.review_required for item in selections),
+    }
+    (root / "gene_call_manifest.json").write_text(json.dumps({
+        "schema_version": "1.2-step7b", "input_fasta": str(Path(fasta).resolve()),
+        "input_sequence_sha256": hashlib.sha256(representation.analysis_sequence.encode()).hexdigest(),
+        "genome_id": representation.analysis_sequence_id, "declared_molecule_type": "dna",
+        "gene_model_policy": "consensus", "gene_model_profile": profile,
+        "selection_policy_version": "1.0", "active_providers": [provider.provider_id for provider in providers],
+        "provider_versions": {provider.provider_id: provider.version() for provider in providers},
+        "reconciliation_performed": True, "model_specific_evidence_performed": False,
+        "adjudication_performed": True, "selection_performed": True,
+        "final_cds_source": "CONSENSUS_SELECTED_MODELS", "selection_summary": selection_counts,
+    }, indent=2, sort_keys=True))
+    # Consensus-specific review/rescue ledgers and a complete final trace.
+    with (root / "rescue_candidates.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(["locus_id", "candidate_id", "provider", "start", "end", "evidence_status", "adjudication_status", "reason"])
+        for locus, decision in zip(loci, decisions):
+            cmap = {candidate.candidate_id: candidate for candidate in candidates_from_locus(locus)}
+            for candidate in cmap.values():
+                if candidate.provider_id != "phanotate" and candidate.candidate_id != (next((s.selected_candidate_id for s in selections if s.locus_id == locus.locus_id), None)):
+                    writer.writerow([locus.locus_id, candidate.candidate_id, candidate.provider_id, candidate.start, candidate.end, candidate.evidence_status, decision.decision_status, "Non-PHANOTATE caller-specific model is not automatically rescued."])
+    with (root / "gene_model_review.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(["locus_id", "reconciliation_class", "decision_class", "review_required", "reason"])
+        for locus, decision, selection in zip(loci, decisions, selections):
+            if selection.review_required:
+                writer.writerow([locus.locus_id, locus.reconciliation_class, decision.decision_class, "true", selection.selection_reason])
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        columns = ["protein_id", "locus_id", "candidate_id", "start", "end", "strand", "selected_source", "changed_from_legacy", "selection_policy", "selection_rule", "selection_reason", "adjudication_class", "review_required", "input_sha256"]
+        writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader()
+        for index, selection in enumerate(selections, 1):
+            selected_candidate = next((candidate for candidate in candidates_from_locus(by_locus[selection.locus_id]) if candidate.candidate_id == selection.selected_candidate_id), None) if selection.selected_candidate_id else None
+            writer.writerow({"protein_id": f"PM_{index:06d}", "locus_id": selection.locus_id, "candidate_id": selection.selected_candidate_id or "", "start": selected_candidate.start if selected_candidate else "", "end": selected_candidate.end if selected_candidate else "", "strand": selected_candidate.strand if selected_candidate else "", "selected_source": selected_candidate.provider_id if selected_candidate else "UNRESOLVED", "changed_from_legacy": str(selection.changed_from_legacy).lower(), "selection_policy": selection.selection_policy, "selection_rule": selection.selection_rule, "selection_reason": selection.selection_reason, "adjudication_class": selection.adjudication_decision_class or "", "review_required": str(selection.review_required).lower(), "input_sha256": selected_candidate.input_sequence_sha256 if selected_candidate else ""})
+    selected = []
+    for index, selection in enumerate(selections, 1):
+        locus = by_locus[selection.locus_id]
+        if not selection.selected_candidate_id:
+            continue
+        candidate = next((item for item in candidates_from_locus(locus) if item.candidate_id == selection.selected_candidate_id), None)
+        if candidate is None:
+            raise ValueError(f"Selected candidate {selection.selected_candidate_id} is not present in locus {selection.locus_id}")
+        model = next(model for model in locus.candidate_models if CandidateModel.from_model(locus.locus_id, model).candidate_id == candidate.candidate_id)
+        selected.append(_protein_from_gene_model(model, f"PM_{len(selected)+1:06d}", candidate_id=candidate.candidate_id, locus_id=locus.locus_id))
+    if not selected:
+        raise ValueError("Consensus selection produced no final models")
+    progress.finish(f"{len(selected)} consensus-selected proteins")
+    return selected, providers, loci, decisions, selections
+
+
 def _write_gene_call_provenance(output, fasta, representation, predictor, proteins, *,
                                 prodigal_predictor=None, prodigal_models=None,
                                 reconciliation_enabled=False):
@@ -158,7 +260,8 @@ def _run_validated_inphared(
 
 def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard") -> int:
     progress = progress or ProgressReporter(quiet=True)
-    if reconcile_orfs:
+    consensus_active = gene_model_policy == "consensus"
+    if reconcile_orfs and not consensus_active:
         stages = [
             "input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
             "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
@@ -191,10 +294,18 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         Path(output).mkdir(parents=True, exist_ok=True)
         predictor_input = Path(output) / "analysis_predictor_input.fasta"
         predictor_input.write_text(f">{representation.analysis_sequence_id}\n{representation.analysis_sequence}\n")
-    progress.start("gene prediction")
-    timed_start("phanotate")
-    proteins = predictor.predict(representation.analysis_sequence_id, representation.analysis_sequence, predictor_input)
-    timed_end("phanotate")
+    consensus_context = None
+    if consensus_active:
+        # Generic providers own prediction/provenance in this branch.  Legacy
+        # --reconcile-orfs is intentionally not duplicated here.
+        proteins, active_providers, consensus_loci, consensus_decisions, consensus_selections = _run_consensus_gene_models(
+            fasta, output, representation, predictor, profile=gene_model_profile, progress=progress)
+        consensus_context = (active_providers, consensus_loci, consensus_decisions, consensus_selections)
+    else:
+        progress.start("gene prediction")
+        timed_start("phanotate")
+        proteins = predictor.predict(representation.analysis_sequence_id, representation.analysis_sequence, predictor_input)
+        timed_end("phanotate")
     if not proteins:
         raise ValueError("No ORFs met the MVP minimum length; use a genome with coding sequences or lower the configured threshold in a future adapter.")
     gene_manifest = {"stage": "gene_prediction", "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "input_sha256": checksum(fasta), "gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile, "selection_policy_version": "1.0"}
@@ -203,7 +314,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     prodigal_models = None
     gene_review_records = []
     progress.finish(f"{len(proteins)} proteins")
-    if reconcile_orfs:
+    if reconcile_orfs and not consensus_active:
         progress.start("Prodigal secondary gene prediction")
         prodigal_predictor = ProdigalPredictor(prodigal)
         prodigal_models = prodigal_predictor.predict(fasta, representation.analysis_sequence)
@@ -225,12 +336,13 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
-    _write_gene_call_provenance(
-        output, fasta, representation, predictor, proteins,
-        prodigal_predictor=locals().get("prodigal_predictor"),
-        prodigal_models=prodigal_models,
-        reconciliation_enabled=reconcile_orfs,
-    )
+    if not consensus_active:
+        _write_gene_call_provenance(
+            output, fasta, representation, predictor, proteins,
+            prodigal_predictor=locals().get("prodigal_predictor"),
+            prodigal_models=prodigal_models,
+            reconciliation_enabled=reconcile_orfs,
+        )
     # Selection is an additive policy record at this stage.  The legacy
     # PHANOTATE final path remains unchanged; consensus selection is exposed
     # through the dedicated selection layer and is opt-in for future wiring.
@@ -354,7 +466,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
     progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
     timed_end("phrogs")
-    if reconcile_orfs:
+    if reconcile_orfs and not consensus_active:
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
         # Adapter objects are reused with isolated one-protein inputs; canonical evidence is untouched.

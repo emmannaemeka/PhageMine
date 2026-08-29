@@ -110,7 +110,7 @@ Individual installers are also available:
     truth.add_argument("--truth-gff", help="Expert-reviewed truth-set GFF3; required for accuracy claims")
     truth.add_argument("--truth-genbank", help="Expert-reviewed truth-set GenBank file; required for accuracy claims")
     batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files")
-    batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--mode", choices=("annotate", "discover", "both"), default="annotate"); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal"); batch_command.add_argument("--threads", type=int, default=1); batch_command.add_argument("--evidence", dest="evidence_profile", choices=("core", "standard", "full"), default="core")
+    batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--mode", choices=("annotate", "discover", "both"), default="annotate"); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--gene-model-policy", choices=("phanotate-only", "consensus"), default="phanotate-only"); batch_command.add_argument("--gene-model-profile", choices=("standard", "extended"), default="standard"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal"); batch_command.add_argument("--threads", type=int, default=1); batch_command.add_argument("--evidence", dest="evidence_profile", choices=("core", "standard", "full"), default="core")
     extract_command = subcommands.add_parser("extract", help="Retrieve stable protein records and FASTA from a completed run")
     extract_sub = extract_command.add_subparsers(dest="extract_command", required=True)
     extract_protein = extract_sub.add_parser("protein", help="Extract one protein by stable protein ID")
@@ -255,7 +255,7 @@ Individual installers are also available:
         print(f"PhageMine comparison complete. Outputs: {args.output}")
         return 0
     if args.command == "batch":
-        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode)
+        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode, gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile)
         except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
         print(f"PhageMine batch complete. Outputs: {args.output}"); return 0
     if args.command == "extract":
