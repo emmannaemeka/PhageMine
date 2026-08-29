@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import time
+import csv
+import hashlib
 from pathlib import Path
 from dataclasses import asdict
 
@@ -29,6 +31,73 @@ from .alternative_evidence import alternative_models, acquire_alternative_eviden
 from . import __version__
 from .hallmarks import assess_hallmarks, write_hallmarks
 from .review import build_annotation_review, write_annotation_review
+
+
+def _write_gene_call_provenance(output, fasta, representation, predictor, proteins, *,
+                                prodigal_predictor=None, prodigal_models=None,
+                                reconciliation_enabled=False):
+    """Persist raw caller streams and a machine-readable final-model trace.
+
+    This is intentionally observational in v1.2 Step 1: the existing PHANOTATE
+    proteins remain the final CDS set and no model-selection rule is changed.
+    """
+    root = Path(output) / "gene_calls"
+    raw = root / "raw"
+    raw.mkdir(parents=True, exist_ok=True)
+    phanotate_raw = getattr(predictor, "last_raw_output", "")
+    (raw / "phanotate.raw.txt").write_text(phanotate_raw)
+    with (raw / "phanotate.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(["caller", "raw_identifier", "start", "end", "strand", "length_nt", "length_aa"])
+        for protein in proteins:
+            writer.writerow(["PHANOTATE", protein.protein_id, protein.start, protein.end,
+                             protein.strand, len(protein.cds), len(protein.sequence)])
+
+    if reconciliation_enabled and prodigal_predictor is not None:
+        (raw / "prodigal.gff").write_text(getattr(prodigal_predictor, "last_raw_gff", ""))
+        with (raw / "prodigal.tsv").open("w", newline="") as handle:
+            writer = csv.writer(handle, delimiter="\t")
+            writer.writerow(["caller", "raw_identifier", "start", "end", "strand", "length_nt"])
+            for model in prodigal_models or []:
+                writer.writerow([model.caller, model.raw_identifier, model.start, model.end,
+                                 model.strand, model.length_nt])
+
+    input_sha = checksum(fasta)
+    manifest = {
+        "schema_version": "1.2-step1",
+        "input_fasta": str(Path(fasta).resolve()),
+        "input_sequence_sha256": input_sha,
+        "analysis_sequence_sha256": hashlib.sha256(representation.analysis_sequence.encode()).hexdigest(),
+        "genome_id": representation.analysis_sequence_id,
+        "segment_id": None,
+        "genome_length": len(representation.analysis_sequence),
+        "declared_molecule_type": None,
+        "selected_gene_caller_policy": "phanotate-only-legacy-compatible",
+        "callers_invoked": ["PHANOTATE"] + (["Prodigal"] if reconciliation_enabled else []),
+        "caller_versions": {"PHANOTATE": predictor.version(), **({"Prodigal": prodigal_predictor.version()} if reconciliation_enabled else {})},
+        "exact_commands": {"PHANOTATE": getattr(predictor, "last_command", None), **({"Prodigal": getattr(prodigal_predictor, "last_command", None)} if reconciliation_enabled else {})},
+        "parameters": {"PHANOTATE": predictor.parameters(), **({"Prodigal": prodigal_predictor.parameters()} if reconciliation_enabled else {})},
+        "raw_output_paths": {"PHANOTATE": [str(raw / "phanotate.raw.txt"), str(raw / "phanotate.tsv")], **({"Prodigal": [str(raw / "prodigal.gff"), str(raw / "prodigal.tsv")]} if reconciliation_enabled else {})},
+        "coordinate_conventions": {"PHANOTATE": "1-based-inclusive", "Prodigal": "1-based-inclusive"},
+        "phagemine_version": __version__,
+        "reconciliation_policy": "observational-only; PHANOTATE remains final",
+        "decision_policy": "v1.1 final CDS behavior preserved",
+    }
+    (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        columns = ["protein_id", "locus_id", "start", "end", "strand", "selected_source",
+                   "phanotate_id", "prodigal_id", "caller_agreement", "decision_class",
+                   "decision_reason", "review_required", "input_sha256"]
+        writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
+        writer.writeheader()
+        for index, protein in enumerate(proteins, 1):
+            writer.writerow({"protein_id": protein.protein_id, "locus_id": f"LOCUS_{index:06d}",
+                             "start": protein.start, "end": protein.end, "strand": protein.strand,
+                             "selected_source": "PHANOTATE", "phanotate_id": protein.protein_id,
+                             "prodigal_id": "", "caller_agreement": "PHANOTATE_FINAL",
+                             "decision_class": "LEGACY_PHANOTATE_FINAL",
+                             "decision_reason": "Step 1 preserves v1.1 final CDS selection",
+                             "review_required": "false", "input_sha256": input_sha})
 
 
 def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
@@ -124,15 +193,32 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     progress.finish(f"{len(proteins)} proteins")
     if reconcile_orfs:
         progress.start("Prodigal secondary gene prediction")
-        prodigal_models = ProdigalPredictor(prodigal).predict(fasta, representation.analysis_sequence)
+        prodigal_predictor = ProdigalPredictor(prodigal)
+        prodigal_models = prodigal_predictor.predict(fasta, representation.analysis_sequence)
         progress.finish(f"{len(prodigal_models)} proteins")
         progress.start("ORF reconciliation")
-        phanotate_models = [GeneModel("PHANOTATE", p.protein_id, p.start, p.end, p.strand, p.cds, caller_version=predictor.version(), options=p.gene_call_parameters) for p in proteins]
+        phanotate_models = [GeneModel(
+            caller="PHANOTATE", identifier=p.protein_id, start=p.start, end=p.end,
+            strand=p.strand, sequence=p.sequence, frame=None,
+            caller_version=predictor.version(), command=getattr(predictor, "last_command", None),
+            options=p.gene_call_parameters, genome_id=p.genome_id,
+            start_codon=p.start_codon, stop_codon=p.stop_codon,
+            cds_sequence=p.cds, protein_sequence=p.sequence,
+            input_sequence_sha256=checksum(fasta), raw_start=p.gene_call_parameters.get("raw_start"),
+            raw_end=p.gene_call_parameters.get("raw_end"), raw_strand=p.gene_call_parameters.get("reported_strand"),
+            source_file=str(getattr(predictor, "last_input_fasta", fasta)),
+        ) for p in proteins]
         reconciliation_rows = reconcile_models(phanotate_models, prodigal_models, checksum(fasta))
         write_reconciliation(output, reconciliation_rows, {"input_sha256": checksum(fasta), "phanotate": predictor.parameters(), "prodigal": {"executable": prodigal or "PATH"}})
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
+    _write_gene_call_provenance(
+        output, fasta, representation, predictor, proteins,
+        prodigal_predictor=locals().get("prodigal_predictor"),
+        prodigal_models=prodigal_models,
+        reconciliation_enabled=reconcile_orfs,
+    )
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = MockEvidenceBackend().analyze(proteins)

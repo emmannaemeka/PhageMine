@@ -62,6 +62,11 @@ class PHANOTATEPredictor(GenePredictor):
     def __init__(self, executable: str | None = None, extra_args: list[str] | None = None):
         self.executable = executable or shutil.which("phanotate.py") or shutil.which("phanotate")
         self.extra_args = extra_args or []
+        self.last_command: list[str] | None = None
+        self.last_raw_output = ""
+        self.last_stdout = ""
+        self.last_stderr = ""
+        self.last_input_fasta: str | None = None
 
     def available(self) -> bool:
         return bool(self.executable and Path(self.executable).exists())
@@ -84,10 +89,15 @@ class PHANOTATEPredictor(GenePredictor):
             raise RuntimeError("PHANOTATE is required for production gene prediction but was not found. Install PHANOTATE locally and add phanotate.py (or phanotate) to PATH, or pass --phanotate /path/to/phanotate.py. The demo predictor is test-fixture only.")
         if input_fasta is None:
             raise ValueError("PHANOTATE requires the original FASTA path for reproducible external execution.")
-        completed = subprocess.run([str(self.executable), *self.extra_args, str(input_fasta)], capture_output=True, text=True, check=False)
+        command = [str(self.executable), *self.extra_args, str(input_fasta)]
+        self.last_command = command
+        self.last_input_fasta = str(input_fasta)
+        completed = subprocess.run(command, capture_output=True, text=True, check=False)
+        self.last_stdout, self.last_stderr = completed.stdout or "", completed.stderr or ""
         if completed.returncode:
             raise RuntimeError(f"PHANOTATE failed (exit {completed.returncode}): {(completed.stderr or completed.stdout).strip()}")
-        return self.parse_output(genome_id, sequence, completed.stdout)
+        self.last_raw_output = completed.stdout or ""
+        return self.parse_output(genome_id, sequence, self.last_raw_output)
 
     @staticmethod
     def parse_output(genome_id: str, sequence: str, output: str) -> list[Protein]:

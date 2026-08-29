@@ -1,16 +1,10 @@
 """Observational comparison of PHANOTATE and Prodigal gene models."""
 from __future__ import annotations
 import csv, json, shutil, subprocess, tempfile, os
-from dataclasses import asdict, dataclass
 from pathlib import Path
 from .gene_prediction import reverse_complement
 from .genome import translate
-
-@dataclass(frozen=True)
-class GeneModel:
-    caller: str; identifier: str; start: int; end: int; strand: str
-    sequence: str = ""; frame: int | None = None; caller_version: str | None = None
-    command: list[str] | None = None; options: dict | None = None
+from .gene_models import GeneModel
 
 def _overlap(a: GeneModel, b: GeneModel) -> int:
     return max(0, min(a.end,b.end)-max(a.start,b.start)+1)
@@ -105,16 +99,31 @@ def write_gene_call_review(root: str|Path, records: list[dict]) -> None:
 
 class ProdigalPredictor:
     name="Prodigal"
-    def __init__(self, executable: str|None=None): self.executable=executable or shutil.which("prodigal")
+    def __init__(self, executable: str|None=None):
+        self.executable=executable or shutil.which("prodigal")
+        self.last_command: list[str] | None = None
+        self.last_stdout = ""
+        self.last_stderr = ""
+        self.last_raw_gff = ""
+    def version(self) -> str:
+        if not self.executable:
+            return "unavailable"
+        result = subprocess.run([self.executable, "-v"], capture_output=True, text=True, check=False)
+        return ((result.stdout or result.stderr).strip().splitlines() or ["reported"])[0]
+    def parameters(self) -> dict:
+        return {"executable": self.executable, "format": "gff", "quiet": True}
     def predict(self, fasta: str|Path, sequence: str) -> list[GeneModel]:
         if not self.executable: raise RuntimeError("Prodigal is required for --reconcile-orfs")
         handle=tempfile.NamedTemporaryFile(prefix="phagemine_prodigal_",suffix=".gff",delete=False); gff=Path(handle.name); handle.close(); cmd=[self.executable,"-i",str(fasta),"-o",str(gff),"-f","gff","-q"]
+        self.last_command = cmd
         result=subprocess.run(cmd,capture_output=True,text=True,check=False)
+        self.last_stdout, self.last_stderr = result.stdout or "", result.stderr or ""
         if result.returncode:
             gff.unlink(missing_ok=True)
             raise RuntimeError(f"Prodigal failed (exit {result.returncode}): {(result.stderr or result.stdout).strip()}")
+        self.last_raw_gff = gff.read_text()
         models=[]
-        for line in gff.read_text().splitlines():
+        for line in self.last_raw_gff.splitlines():
             if line.startswith("#"): continue
             f=line.split("\t");
             if len(f)<9 or f[2]!="CDS": continue
