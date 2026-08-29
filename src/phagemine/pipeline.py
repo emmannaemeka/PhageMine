@@ -4,6 +4,7 @@ import json
 import time
 import csv
 import hashlib
+import copy
 from pathlib import Path
 from dataclasses import asdict
 
@@ -31,6 +32,68 @@ from .alternative_evidence import alternative_models, acquire_alternative_eviden
 from . import __version__
 from .hallmarks import assess_hallmarks, write_hallmarks
 from .review import build_annotation_review, write_annotation_review
+
+
+class _SegmentEvidenceCache:
+    """Run-scoped cache for identical protein/database evidence queries.
+
+    The cache is deliberately private to one biological run.  Its fingerprint
+    includes the adapter implementation and provenance (which contains the
+    database/program parameters), so evidence is never shared across
+    incompatible configurations.
+    """
+    def __init__(self):
+        self._entries = {}
+
+    @staticmethod
+    def _adapter_key(adapter):
+        try:
+            provenance = adapter.provenance()
+        except Exception:
+            provenance = getattr(adapter, "__dict__", {})
+        return (adapter.__class__.__module__, adapter.__class__.__qualname__,
+                json.dumps(provenance, sort_keys=True, default=str))
+
+    def analyze(self, adapter, proteins):
+        from .evidence import EvidenceAdapterResult
+        if not proteins:
+            return adapter.analyze(proteins)
+        adapter_key = self._adapter_key(adapter)
+        unique = {}
+        for protein in proteins:
+            digest = hashlib.sha256(protein.sequence.encode()).hexdigest()
+            unique.setdefault(digest, protein)
+        missing = [protein for digest, protein in unique.items() if (adapter_key, digest) not in self._entries]
+        fresh = adapter.analyze(missing) if missing else None
+        if fresh is not None:
+            for protein in missing:
+                digest = hashlib.sha256(protein.sequence.encode()).hexdigest()
+                hits = [copy.deepcopy(e) for e in fresh.evidence
+                        if (e.provenance.get("protein_id") == protein.protein_id or
+                            e.metrics.get("query_protein_id") == protein.protein_id)]
+                for evidence in hits:
+                    evidence.provenance["protein_id"] = protein.protein_id
+                self._entries[(adapter_key, digest)] = (fresh.status, fresh.provenance, fresh.message, hits)
+        template = fresh or next((entry for key, entry in self._entries.items() if key[0] == adapter_key), None)
+        if isinstance(template, tuple):
+            status, provenance, message = template[:3]
+        else:
+            status, provenance, message = template.status, template.provenance, template.message
+        evidence = []
+        for protein in proteins:
+            digest = hashlib.sha256(protein.sequence.encode()).hexdigest()
+            entry = self._entries.get((adapter_key, digest))
+            if entry:
+                for item in entry[3]:
+                    item = copy.deepcopy(item)
+                    item.provenance["protein_id"] = protein.protein_id
+                    evidence.append(item)
+        return EvidenceAdapterResult(adapter=adapter.name, status=status,
+                                     evidence=evidence, provenance=dict(provenance or {}), message=message)
+
+
+def _analyze_evidence(adapter, proteins, cache=None):
+    return cache.analyze(adapter, proteins) if cache is not None else adapter.analyze(proteins)
 
 
 def _protein_from_gene_model(model, protein_id: str, *, candidate_id: str | None = None, locus_id: str | None = None):
@@ -104,6 +167,8 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
         raise ValueError("--segmented requires a multi-record FASTA")
     root = Path(output); root.mkdir(parents=True, exist_ok=True)
     used: set[str] = set(); segment_rows = []; aggregate_proteins = []
+    performance_rows = []
+    shared_evidence_cache = _SegmentEvidenceCache()
     for segment_id, sequence in records:
         safe = _safe_segment_key(segment_id, used)
         segment_dir = root / "gene_calls" / "segments" / safe
@@ -111,8 +176,18 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
         segment_fasta = root / "gene_calls" / "segments" / f"{safe}.fasta"
         segment_fasta.write_text(f">{segment_id}\n{sequence}\n")
         segment_kwargs = dict(kwargs)
-        segment_kwargs.update({"molecule_type": "rna", "segmented": False})
+        segment_kwargs.update({"molecule_type": "rna", "segmented": False,
+                               "shared_evidence_cache": shared_evidence_cache})
         run(segment_fasta, segment_dir, command=command, progress=progress, **segment_kwargs)
+        run_manifest = segment_dir / "run_manifest.json"
+        if run_manifest.exists():
+            try:
+                timings = json.loads(run_manifest.read_text()).get("stage_timings_seconds", {})
+                for stage, seconds in timings.items():
+                    performance_rows.append({"stage": stage, "scope": "SEGMENT", "segment_id": segment_id,
+                                             "item_count": 1, "wall_seconds": seconds, "status": "SUCCESS"})
+            except (OSError, ValueError, TypeError):
+                pass
         segment_rows.append({"segment_id": segment_id, "safe_segment_key": safe, "length": len(sequence), "sha256": hashlib.sha256(sequence.encode()).hexdigest()})
         proteins_path = segment_dir / "proteins.faa"
         cds_path = segment_dir / "cds.fna"
@@ -148,6 +223,13 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
     (root / "genes.gff3").write_text("".join(gff_lines))
     (root / "gene_calls" / "final_gene_models.tsv").write_text((final_header or "") + "".join(final_rows))
     (root / "gene_calls" / "final_gene_model_trace.tsv").write_text((trace_header or "") + "".join(trace_lines))
+    performance_rows.append({"stage": "aggregate_downstream_annotation", "scope": "GENOME",
+                             "segment_id": "", "item_count": len(segment_rows),
+                             "wall_seconds": sum(float(row["wall_seconds"]) for row in performance_rows),
+                             "status": "SUCCESS"})
+    with (root / "performance_profile.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["stage", "scope", "segment_id", "item_count", "wall_seconds", "status"], delimiter="\t")
+        writer.writeheader(); writer.writerows(performance_rows)
     return sum(1 for line in aggregate_proteins if line.startswith(">"))
 
 
@@ -358,8 +440,9 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None) -> int:
     progress = progress or ProgressReporter(quiet=True)
+    shared_evidence_cache = shared_evidence_cache or _SegmentEvidenceCache()
     molecule_type = str(molecule_type).lower()
     if molecule_type not in {"dna", "rna"}:
         raise ValueError("molecule_type must be dna or rna")
@@ -482,7 +565,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
     evidence_adapters = []
     if use_mock_evidence:
-        mock_result = MockEvidenceBackend().analyze(proteins)
+        mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
         evidence_adapters.append({"adapter": mock_result.adapter, "status": mock_result.status, "provenance": mock_result.provenance, "message": mock_result.message})
     pfam_origin = "explicit_cli" if pfam_path else "unavailable"
     if pfam_path is None:
@@ -493,7 +576,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     pfam_adapter = PfamHMMAdapter(pfam_path, pfam_hmmscan, pfam_evalue, pfam_coverage, pfam_trusted_cutoff, threshold_mode=pfam_threshold_mode, threads=threads)
     progress.start("Pfam")
     timed_start("pfam")
-    pfam_result = pfam_adapter.analyze(proteins)
+    pfam_result = _analyze_evidence(pfam_adapter, proteins, shared_evidence_cache)
     pfam_result.provenance["resource_origin"] = pfam_origin
     proteins_by_id = {protein.protein_id: protein for protein in proteins}
     for evidence in pfam_result.evidence:
@@ -520,7 +603,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     vog_adapter = VOGHMMAdapter(vog_path, vog_annotations, vog_hmmscan, vog_evalue, vog_coverage, database_version=vog_version, threads=threads)
     progress.start("VOGDB")
     timed_start("vogdb")
-    vog_result = vog_adapter.analyze(proteins)
+    vog_result = _analyze_evidence(vog_adapter, proteins, shared_evidence_cache)
     vog_result.provenance["resource_origin"] = vog_origin
     for evidence in vog_result.evidence:
         protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
@@ -543,7 +626,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     swiss_adapter = SwissProtEvidenceAdapter(swissprot_path, swissprot_metadata, diamond, database_version=swiss_version, evalue_threshold=swissprot_evalue, threads=threads)
     progress.start("Swiss-Prot")
     timed_start("swissprot")
-    swiss_result = swiss_adapter.analyze(proteins)
+    swiss_result = _analyze_evidence(swiss_adapter, proteins, shared_evidence_cache)
     swiss_result.provenance["resource_origin"] = swiss_origin
     for evidence in swiss_result.evidence:
         protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
@@ -574,9 +657,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         phrogs_evalue, phrogs_coverage, phrogs_score, threads=threads)
     progress.start("PHROGs")
     timed_start("phrogs")
-    phrogs_result = phrogs_adapter.analyze(proteins)
+    phrogs_result = _analyze_evidence(phrogs_adapter, proteins, shared_evidence_cache)
     phrogs_result.provenance["resource_origin"] = phrogs_origin
-    phrogs_hmm_result = phrogs_hmm_adapter.analyze(proteins)
+    phrogs_hmm_result = _analyze_evidence(phrogs_hmm_adapter, proteins, shared_evidence_cache)
     phrogs_hmm_result.provenance["resource_origin"] = phrogs_hmm_origin
     merged_phrogs = merge_phrogs_evidence(phrogs_result.evidence, phrogs_hmm_result.evidence)
     for evidence in merged_phrogs:
