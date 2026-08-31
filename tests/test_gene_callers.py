@@ -10,6 +10,8 @@ from phagemine.gene_callers import (
     registered_provider_ids,
     compare_gene_model_sets,
 )
+from phagemine.gene_callers import _model_from_protein
+from phagemine.models import Protein
 from phagemine.gene_models import GeneModel
 
 
@@ -118,3 +120,10 @@ def test_pairwise_provider_comparison_is_deterministic_and_descriptive():
     assert rows[1]["comparison_class"] == "PHANOTATE_ONLY"
     assert rows[2]["comparison_class"] == "PYRODIGAL_ONLY"
     assert rows == compare_gene_model_sets(left, right, primary_id="phanotate", secondary_id="pyrodigal")
+
+
+def test_phanotate_normalization_preserves_segment_identity():
+    protein = Protein("genome", "p1", 2, 10, "+", "ATGAAATAA", "MK", "phanotate")
+    model = _model_from_protein(protein, provider_id="phanotate", version="1", command=[], input_sha="sha", source_file="x", segment_id="segment-1")
+    assert model.genome_id == "genome"
+    assert model.segment_id == "segment-1"

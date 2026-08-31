@@ -130,13 +130,13 @@ class GeneModelProvider(ABC):
         return []
 
 
-def _model_from_protein(protein, *, provider_id: str, version: str, command, input_sha: str, source_file, method_family: str | None = None, method_lineage: str | None = None):
+def _model_from_protein(protein, *, provider_id: str, version: str, command, input_sha: str, source_file, segment_id: str | None = None, method_family: str | None = None, method_lineage: str | None = None):
     params = dict(getattr(protein, "gene_call_parameters", {}) or {})
     return GeneModel(
         caller=provider_id, identifier=protein.protein_id, start=protein.start,
         end=protein.end, strand=protein.strand, sequence=protein.sequence,
         caller_version=version, command=command, options=params,
-        genome_id=protein.genome_id, start_codon=protein.start_codon,
+        genome_id=protein.genome_id, segment_id=segment_id, start_codon=protein.start_codon,
         stop_codon=protein.stop_codon, cds_sequence=protein.cds,
         protein_sequence=protein.sequence, input_sequence_sha256=input_sha,
         raw_start=params.get("raw_start", protein.start), raw_end=params.get("raw_end", protein.end),
@@ -179,7 +179,7 @@ class PHANOTATEProvider(GeneModelProvider):
         except RuntimeError as exc:
             raise ProviderExecutionFailure(str(exc)) from exc
         digest = hashlib.sha256(sequence.encode()).hexdigest()
-        models = [_model_from_protein(p, provider_id=self.provider_id, version=self.version(), command=self.predictor.last_command, input_sha=digest, source_file=input_fasta, method_family=self.method_family, method_lineage=self.method_lineage) for p in proteins]
+        models = [_model_from_protein(p, provider_id=self.provider_id, version=self.version(), command=self.predictor.last_command, input_sha=digest, source_file=input_fasta, segment_id=segment_id, method_family=self.method_family, method_lineage=self.method_lineage) for p in proteins]
         if not models:
             raise NoParseableCalls("PHANOTATE produced no parseable models")
         return GenePredictionResult(self.provider_id, self.name, self.version(), models,
