@@ -17,6 +17,14 @@ def test_three_caller_exact_agreement_and_provider_model_counts():
     assert len(locus.exact_coordinate_groups) == 1
 
 
+def test_nonsegmented_missing_segment_id_cannot_split_equivalent_locus():
+    left = GeneModel("phanotate", "p", 100, 400, "+", sequence="M" * 100, genome_id="g", segment_id=None)
+    right = GeneModel("pyrodigal", "y", 100, 400, "+", sequence="M" * 100, genome_id="g", segment_id="g")
+    loci = reconcile_gene_models({"phanotate": [left], "pyrodigal": [right]})
+    assert len(loci) == 1
+    assert loci[0].candidate_count == 2
+
+
 def test_common_stop_and_common_start_classes():
     assert reconcile_gene_models({"a": [model("a", "1", 100, 400)], "b": [model("b", "1", 120, 400)]})[0].reconciliation_class == "COMMON_STOP_ALTERNATE_START"
     assert reconcile_gene_models({"a": [model("a", "1", 100, 400)], "b": [model("b", "1", 100, 420)]})[0].reconciliation_class == "COMMON_START_ALTERNATE_STOP"

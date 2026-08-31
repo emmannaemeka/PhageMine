@@ -104,7 +104,11 @@ def reconcile_gene_models(provider_models: dict[str, list[GeneModel]], *,
     # while their intervals remain active rather than through a global N² loop.
     groups: dict[tuple[str, str], list[int]] = {}
     for idx, (_, model) in enumerate(flattened):
-        groups.setdefault((model.genome_id or "", model.segment_id or ""), []).append(idx)
+        # Non-segmented providers may omit segment_id while another provider
+        # uses the sequence/genome identifier. Canonicalize that representation
+        # so equivalent calls cannot be split into duplicate loci.
+        segment_key = model.segment_id or (model.genome_id if model.genome_id else "")
+        groups.setdefault((model.genome_id or "", segment_key), []).append(idx)
     for indices in groups.values():
         ordered = sorted(indices, key=lambda idx: (flattened[idx][1].start, flattened[idx][1].end, flattened[idx][0], flattened[idx][1].raw_identifier))
         active: list[int] = []
