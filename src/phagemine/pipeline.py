@@ -294,6 +294,8 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
     with (root / "performance_profile.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=["stage", "scope", "segment_id", "item_count", "wall_seconds", "status"], delimiter="\t")
         writer.writeheader(); writer.writerows(performance_rows)
+    from .triage import write_triage_report
+    write_triage_report(root)
     return len(aggregate_proteins)
 
 
@@ -847,4 +849,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     timed_end("genbank")
     manifest["stage_timings_seconds"] = timings
     (Path(output) / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    from .triage import write_triage_report
+    write_triage_report(output)
     return len(proteins)
