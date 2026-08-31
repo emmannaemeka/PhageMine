@@ -247,6 +247,17 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
         performance_rows.append({"stage": "pyrodigal_rv", "scope": "SEGMENT", "segment_id": segment_id,
                                  "item_count": len(proteins), "wall_seconds": time.time() - started, "status": "SUCCESS"})
         segment_objects.append((segment_id, safe, sequence, representation, proteins, segment_dir))
+        # Packaging is a writer-only operation over already selected segment
+        # proteins; it does not initialize or rerun evidence adapters.
+        try:
+            write_package(segment_dir, segment_id, sequence, proteins,
+                          {"molecule_type": "rna", "segment_id": segment_id},
+                          kwargs.get("metadata"), kwargs.get("table2asn_executable"),
+                          kwargs.get("sequencing_provenance"))
+        except Exception:
+            # Keep RNA annotation usable when optional GenBank tooling is not
+            # available; the aggregate biological outputs remain authoritative.
+            pass
         segment_rows.append({"segment_id": segment_id, "safe_segment_key": safe, "length": len(sequence), "sha256": hashlib.sha256(sequence.encode()).hexdigest()})
         aggregate_proteins.extend(proteins)
     evidence_started = time.time()
