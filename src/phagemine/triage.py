@@ -18,9 +18,12 @@ def build_triage(root: str | Path) -> dict:
     annotation = _read(root / "annotation.tsv")
     conflicts = [row for row in decisions + review if (row.get("decision_class") or row.get("reconciliation_class")) in CONFLICTS]
     changes = [row for row in final if str(row.get("changed_from_legacy", "")).lower() == "true"]
-    unresolved = [row for row in annotation if (row.get("functional_state") or row.get("classification")) in {"UNRESOLVED", "UNKNOWN_OR_UNINFORMATIVE", "UNKNOWN"}]
-    return {"final_genes": len(final), "conflicts": conflicts, "rescue_candidates": rescue, "boundary_changes": changes, "unresolved_functions": unresolved,
-            "counts": {"final_genes": len(final), "unresolved_conflicts": len(conflicts), "rescue_candidates": len(rescue), "boundary_changes": len(changes), "unresolved_function_proteins": len(unresolved)}}
+    unresolved = [row for row in annotation if (row.get("functional_state") or row.get("classification")) in {"UNRESOLVED", "UNKNOWN_OR_UNINFORMATIVE", "UNKNOWN"} or row.get("functional_review_flag") == "REVIEW_REQUIRED" or row.get("classification") == "No reliable function identified"]
+    # Some legacy/single-RNA runs do not emit final_gene_models.tsv but do
+    # emit the authoritative annotation table. Use it only as a count fallback.
+    final_count = len(final) or len(annotation)
+    return {"final_genes": final_count, "conflicts": conflicts, "rescue_candidates": rescue, "boundary_changes": changes, "unresolved_functions": unresolved,
+            "counts": {"final_genes": final_count, "unresolved_conflicts": len(conflicts), "rescue_candidates": len(rescue), "boundary_changes": len(changes), "unresolved_function_proteins": len(unresolved)}}
 
 def write_triage_report(root: str | Path) -> Path:
     root = Path(root); data = build_triage(root); c = data["counts"]
