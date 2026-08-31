@@ -747,7 +747,11 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
         # Adapter objects are reused with isolated one-protein inputs; canonical evidence is untouched.
-        alt = acquire_alternative_evidence(alt, (pfam_adapter, vog_adapter, swiss_adapter, phrogs_adapter), Path(output)/"checkpoints"/"alternative_evidence")
+        # Boundary adjudication must give incumbent and alternative
+        # translations the same configured evidence opportunity.  The normal
+        # protein path includes both PHROGs backends, so alternatives receive
+        # the PyHMMER adapter as well as MMseqs2.
+        alt = acquire_alternative_evidence(alt, (pfam_adapter, vog_adapter, swiss_adapter, phrogs_adapter, phrogs_hmm_adapter), Path(output)/"checkpoints"/"alternative_evidence")
         write_alternative_evidence(output, alt, {"input_sha256": checksum(fasta), "cached": True})
         progress.finish("alternative evidence persisted")
         evidence_map = {p.protein_id: [asdict(e) for e in p.evidence] for p in proteins}
