@@ -19,5 +19,5 @@ def test_sentinel_diagnostic_reports_raw_overlap_and_final_selection(tmp_path):
 def test_sentinel_diagnostic_is_explicit_when_outputs_are_missing(tmp_path):
     sent = tmp_path / "sentinels.tsv"; sent.write_text("sentinel_id\tstart\tend\nS1\t1\t10\n")
     result = diagnose(tmp_path, load_sentinels(sent))[0]
-    assert result["stage"] == "NEVER_CALLED_BY_AVAILABLE_RAW_OUTPUTS"
+    assert result["stage"] == "STAGE_UNKNOWN_INSUFFICIENT_PROVENANCE"
     assert all(not info["raw_overlap"] for info in result["callers"].values())

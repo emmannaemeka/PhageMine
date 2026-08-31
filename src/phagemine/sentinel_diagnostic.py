@@ -51,18 +51,30 @@ def diagnose(run_dir: str | Path, sentinels: list[dict]) -> list[dict]:
                     "pyrodigal": [raw / "pyrodigal.tsv"],
                     "prodigal_gv": [raw / "prodigal_gv.tsv", raw / "prodigal_gv.gff"],
                     "prodigal": [raw / "prodigal.tsv", raw / "prodigal.gff"]}
-    calls = {}
+    calls = {}; availability = {}
     for caller, paths in caller_paths.items():
         rows = []
         for path in paths:
             rows = _rows(path)
             if rows: break
+        availability[caller] = bool(rows)
         normalized = []
         for row in rows:
             start = _num(row, "start", "raw_start", "source_start"); end = _num(row, "end", "raw_end", "source_end")
             if start is not None and end is not None:
                 normalized.append({"start": start, "end": end, "strand": row.get("strand", row.get("raw_strand", "")), "id": row.get("raw_identifier") or row.get("identifier") or row.get("protein_id", "")})
         calls[caller] = normalized
+    # v1.1 commonly preserved only the final GFF, not raw caller streams.
+    # Parse it as final-output evidence, never as fabricated raw provenance.
+    final_gff = []
+    gff_path = root / "genes.gff3"
+    if gff_path.exists():
+        for line in gff_path.read_text().splitlines():
+            if not line or line.startswith("#"): continue
+            fields = line.split("\t")
+            if len(fields) >= 6:
+                try: final_gff.append({"segment_id": fields[0], "start": int(fields[3]), "end": int(fields[4]), "strand": fields[6] if len(fields) > 6 else "", "id": fields[8] if len(fields) > 8 else ""})
+                except ValueError: pass
     final_rows = _rows(root / "gene_calls" / "final_gene_models.tsv")
     reconciliation_rows = _rows(root / "gene_calls" / "reconciliation_v2.tsv")
     decisions = _rows(root / "gene_calls" / "model_decisions.tsv")
@@ -74,9 +86,10 @@ def diagnose(run_dir: str | Path, sentinels: list[dict]) -> list[dict]:
             overlaps = [m for m in models if _overlap(sentinel, m) > 0]
             any_raw |= bool(overlaps)
             nearest = min(models, key=lambda m: abs(m["start"] - sentinel["start"])) if models else None
-            caller_results[caller] = {"raw_overlap": bool(overlaps), "overlapping_calls": overlaps,
+            caller_results[caller] = {"status": "AVAILABLE" if availability[caller] else "PROVENANCE_UNAVAILABLE", "raw_overlap": bool(overlaps), "overlapping_calls": overlaps,
                                       "nearest_call": nearest}
-        final_overlap = any(_overlap(sentinel, {"start": _num(r, "start"), "end": _num(r, "end"), "segment_id": r.get("segment_id", "")}) > 0 for r in final_rows if _num(r, "start") and _num(r, "end"))
+        final_records = final_rows + final_gff
+        final_overlap = any(_overlap(sentinel, {"start": _num(r, "start"), "end": _num(r, "end"), "segment_id": r.get("segment_id", "")}) > 0 for r in final_records if _num(r, "start") and _num(r, "end"))
         if final_overlap:
             stage = "FINAL_SELECTED"
         elif any_raw and decisions:
@@ -85,8 +98,10 @@ def diagnose(run_dir: str | Path, sentinels: list[dict]) -> list[dict]:
             stage = "DROPPED_AT_RECONCILIATION_OR_LATER"
         elif any_raw:
             stage = "RAW_CALL_PRESENT_STAGE_UNKNOWN"
+        elif final_gff and not any(availability.values()):
+            stage = "STAGE_UNKNOWN_INSUFFICIENT_PROVENANCE"
         else:
-            stage = "NEVER_CALLED_BY_AVAILABLE_RAW_OUTPUTS" if calls else "UNKNOWN_RAW_OUTPUT_UNAVAILABLE"
+            stage = "NEVER_CALLED_BY_AVAILABLE_V1.1_CALLER" if any(availability.values()) else "STAGE_UNKNOWN_INSUFFICIENT_PROVENANCE"
         output.append({"sentinel_id": sentinel["sentinel_id"], "segment_id": sentinel.get("segment_id", ""),
                        "start": sentinel["start"], "end": sentinel["end"], "stage": stage,
                        "callers": caller_results})
