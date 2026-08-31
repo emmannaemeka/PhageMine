@@ -158,8 +158,71 @@ def _safe_segment_key(segment_id: str, used: set[str]) -> str:
     return key
 
 
+def _annotate_shared_proteins(proteins, output, kwargs):
+    """Acquire evidence once for an aggregate segmented-genome protein set."""
+    cache = kwargs.get("shared_evidence_cache") or _SegmentEvidenceCache()
+    use_mock = kwargs.get("use_mock_evidence", False)
+    threads = kwargs.get("threads", 1)
+    evidence_adapters = []
+    if use_mock:
+        result = _analyze_evidence(MockEvidenceBackend(), proteins, cache)
+        evidence_adapters.append({"adapter": result.adapter, "status": result.status,
+                                  "provenance": result.provenance, "message": result.message})
+    specs = [
+        ("pfam", PfamHMMAdapter, (kwargs.get("pfam_path"), kwargs.get("pfam_hmmscan"), kwargs.get("pfam_evalue"), kwargs.get("pfam_coverage"), kwargs.get("pfam_trusted_cutoff", False)),
+         {"threshold_mode": kwargs.get("pfam_threshold_mode"), "threads": threads}),
+        ("vogdb", VOGHMMAdapter, (kwargs.get("vog_path"), kwargs.get("vog_annotations"), kwargs.get("vog_hmmscan"), kwargs.get("vog_evalue", 1e-5), kwargs.get("vog_coverage", .5)),
+         {"database_version": None, "threads": threads}),
+        ("swissprot", SwissProtEvidenceAdapter, (kwargs.get("swissprot_path"), kwargs.get("swissprot_metadata"), kwargs.get("diamond")),
+         {"database_version": None, "evalue_threshold": kwargs.get("swissprot_evalue", 1e-5), "threads": threads}),
+    ]
+    proteins_by_id = {p.protein_id: p for p in proteins}
+    for name, cls, args, extra in specs:
+        try:
+            adapter = cls(*args, **extra)
+            result = _analyze_evidence(adapter, proteins, cache)
+        except TypeError:
+            # Preserve compatibility with adapters whose optional constructor
+            # arguments differ between releases.
+            adapter = cls(*args)
+            result = _analyze_evidence(adapter, proteins, cache)
+        for evidence in result.evidence:
+            pid = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+            if pid in proteins_by_id:
+                evidence.provenance.setdefault("protein_id", pid)
+                if not any(e.provenance == evidence.provenance and e.identifier == evidence.identifier and e.source == evidence.source for e in proteins_by_id[pid].evidence):
+                    proteins_by_id[pid].evidence.append(evidence)
+        evidence_adapters.append({"adapter": result.adapter, "status": result.status,
+                                  "provenance": result.provenance, "message": result.message})
+    # PHROGs is a paired backend but one genome-level invocation per backend.
+    phrogs = PHROGSMMseqsAdapter(kwargs.get("phrogs_path"), kwargs.get("phrogs_annotations"), kwargs.get("mmseqs"), None,
+                                  kwargs.get("phrogs_evalue", 1e-5), kwargs.get("phrogs_coverage", .5), kwargs.get("phrogs_score"), kwargs.get("phrogs_identity"), kwargs.get("phrogs_alignment_length"), threads=threads)
+    phrogs_hmm = PHROGSPyHMMERAdapter(kwargs.get("phrogs_hmm_path"), kwargs.get("phrogs_annotations"), None,
+                                      kwargs.get("phrogs_evalue", 1e-5), kwargs.get("phrogs_coverage", .5), kwargs.get("phrogs_score"), threads=threads)
+    mm = _analyze_evidence(phrogs, proteins, cache)
+    hh = _analyze_evidence(phrogs_hmm, proteins, cache)
+    merged = merge_phrogs_evidence(mm.evidence, hh.evidence)
+    for evidence in merged:
+        pid = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+        if pid in proteins_by_id:
+            evidence.provenance.setdefault("protein_id", pid)
+            proteins_by_id[pid].evidence.append(evidence)
+    evidence_adapters.extend([
+        {"adapter": mm.adapter, "status": mm.status, "provenance": mm.provenance, "message": mm.message},
+        {"adapter": hh.adapter, "status": hh.status, "provenance": hh.provenance, "message": hh.message},
+    ])
+    classifications = classify_proteins(proteins)
+    by_id = {row["protein_id"]: row for row in classifications}
+    for protein in proteins:
+        row = by_id[protein.protein_id]
+        protein.annotation = row["display_product"]
+        protein.functional_confidence = row["confidence"].title()
+        protein.annotation_level = EvidenceLevel.CURATED if row["functional_state"] == "KNOWN_FUNCTION" else EvidenceLevel.COMPUTATIONAL if row["functional_state"] in {"PROBABLE_FUNCTION", "FUNCTIONAL_CLASS_ONLY", "CONSERVED_UNKNOWN"} else EvidenceLevel.HYPOTHESIS
+    return classifications, evidence_adapters
+
+
 def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
-    """Annotate explicit multi-record RNA FASTA one segment at a time."""
+    """Annotate segments independently, then annotate their proteins once."""
     from .io import read_fasta_records
     from .genome_representation import GenomeRecord, SegmentRecord
     records = read_fasta_records(fasta)
@@ -167,7 +230,7 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
         raise ValueError("--segmented requires a multi-record FASTA")
     root = Path(output); root.mkdir(parents=True, exist_ok=True)
     used: set[str] = set(); segment_rows = []; aggregate_proteins = []
-    performance_rows = []
+    performance_rows = []; segment_objects = []
     shared_evidence_cache = _SegmentEvidenceCache()
     for segment_id, sequence in records:
         safe = _safe_segment_key(segment_id, used)
@@ -175,26 +238,28 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
         segment_dir.mkdir(parents=True, exist_ok=True)
         segment_fasta = root / "gene_calls" / "segments" / f"{safe}.fasta"
         segment_fasta.write_text(f">{segment_id}\n{sequence}\n")
-        segment_kwargs = dict(kwargs)
-        segment_kwargs.update({"molecule_type": "rna", "segmented": False,
-                               "shared_evidence_cache": shared_evidence_cache})
-        run(segment_fasta, segment_dir, command=command, progress=progress, **segment_kwargs)
-        run_manifest = segment_dir / "run_manifest.json"
-        if run_manifest.exists():
-            try:
-                timings = json.loads(run_manifest.read_text()).get("stage_timings_seconds", {})
-                for stage, seconds in timings.items():
-                    performance_rows.append({"stage": stage, "scope": "SEGMENT", "segment_id": segment_id,
-                                             "item_count": 1, "wall_seconds": seconds, "status": "SUCCESS"})
-            except (OSError, ValueError, TypeError):
-                pass
+        representation = GenomeRepresentation.original(segment_id, sequence)
+        started = time.time()
+        proteins = _run_rna_gene_models(segment_fasta, segment_dir, representation, progress=progress)
+        for protein in proteins:
+            protein.gene_call_parameters["segment_id"] = segment_id
+            protein.gene_call_parameters["safe_segment_key"] = safe
+        performance_rows.append({"stage": "pyrodigal_rv", "scope": "SEGMENT", "segment_id": segment_id,
+                                 "item_count": len(proteins), "wall_seconds": time.time() - started, "status": "SUCCESS"})
+        segment_objects.append((segment_id, safe, sequence, representation, proteins, segment_dir))
         segment_rows.append({"segment_id": segment_id, "safe_segment_key": safe, "length": len(sequence), "sha256": hashlib.sha256(sequence.encode()).hexdigest()})
-        proteins_path = segment_dir / "proteins.faa"
-        cds_path = segment_dir / "cds.fna"
-        if proteins_path.exists(): aggregate_proteins.extend(proteins_path.read_text().splitlines(True))
-    manifest = {"schema_version": "1.2-step8b", "genome_id": Path(fasta).stem, "molecule_type": "rna", "segmented": True, "segment_count": len(segment_rows), "segments": segment_rows, "coordinate_scope": "segment-local; segments are never concatenated"}
+        aggregate_proteins.extend(proteins)
+    evidence_started = time.time()
+    kwargs["shared_evidence_cache"] = shared_evidence_cache
+    classifications, evidence_adapters = _annotate_shared_proteins(aggregate_proteins, root, kwargs)
+    performance_rows.append({"stage": "functional_evidence", "scope": "GENOME", "segment_id": "",
+                             "item_count": len(aggregate_proteins), "wall_seconds": time.time() - evidence_started, "status": "SUCCESS"})
+    manifest = {"schema_version": "1.2-step9b", "genome_id": Path(fasta).stem, "molecule_type": "rna", "segmented": True, "segment_count": len(segment_rows), "segments": segment_rows, "coordinate_scope": "segment-local; segments are never concatenated", "evidence_scope": "GENOME", "evidence_adapters": evidence_adapters, "biological_protein_count": len(aggregate_proteins), "unique_search_protein_count": len({hashlib.sha256(p.sequence.encode()).hexdigest() for p in aggregate_proteins})}
     (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
-    (root / "proteins.faa").write_text("".join(aggregate_proteins))
+    # Aggregate writers consume the single genome-level result collection.
+    with (root / "proteins.faa").open("w") as handle:
+        for protein in aggregate_proteins:
+            handle.write(f">{protein.protein_id} genome={protein.genome_id} segment={protein.gene_call_parameters.get('segment_id', protein.genome_id)} start={protein.start} end={protein.end} strand={protein.strand}\n{protein.sequence}\n")
     # Aggregate segment-local files without changing their seqids or offsets.
     cds_lines = []
     gff_lines = ["##gff-version 3\n"]
@@ -202,35 +267,23 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
     final_header = None
     trace_lines = []
     trace_header = None
-    for row in segment_rows:
-        seg_root = root / "gene_calls" / "segments" / row["safe_segment_key"]
-        path = seg_root / "cds.fna"
-        if path.exists(): cds_lines.extend(path.read_text().splitlines(True))
-        gff = seg_root / "genes.gff3"
-        if gff.exists():
-            gff_lines.extend(line for line in gff.read_text().splitlines(True) if not line.startswith("##gff-version"))
-        models = seg_root / "gene_calls" / "final_gene_models.tsv"
-        if models.exists():
-            lines = models.read_text().splitlines(True)
-            if lines and final_header is None: final_header = lines[0]
-            final_rows.extend(lines[1:])
-        trace = seg_root / "gene_calls" / "final_gene_model_trace.tsv"
-        if trace.exists():
-            lines = trace.read_text().splitlines(True)
-            if lines and trace_header is None: trace_header = lines[0]
-            trace_lines.extend(lines[1:])
+    final_header = "protein_id\tsegment_id\tstart\tend\tstrand\tprovider\n"
+    trace_header = "protein_id\tsegment_id\tstart\tend\tstrand\tprovider\n"
+    for protein in aggregate_proteins:
+        segment_id = protein.gene_call_parameters.get("segment_id", protein.genome_id)
+        cds_lines.extend([f">{protein.protein_id} segment={segment_id} start={protein.start} end={protein.end} strand={protein.strand}\n", f"{protein.cds}\n"])
+        gff_lines.append(f"{segment_id}\tPhageMine\tCDS\t{protein.start}\t{protein.end}\t.\t{protein.strand}\t0\tID={protein.protein_id};segment={segment_id}\n")
+        final_rows.append(f"{protein.protein_id}\t{segment_id}\t{protein.start}\t{protein.end}\t{protein.strand}\tpyrodigal_rv\n")
+        trace_lines.append(f"{protein.protein_id}\t{segment_id}\t{protein.start}\t{protein.end}\t{protein.strand}\tpyrodigal_rv\n")
     (root / "cds.fna").write_text("".join(cds_lines))
     (root / "genes.gff3").write_text("".join(gff_lines))
     (root / "gene_calls" / "final_gene_models.tsv").write_text((final_header or "") + "".join(final_rows))
     (root / "gene_calls" / "final_gene_model_trace.tsv").write_text((trace_header or "") + "".join(trace_lines))
-    performance_rows.append({"stage": "aggregate_downstream_annotation", "scope": "GENOME",
-                             "segment_id": "", "item_count": len(segment_rows),
-                             "wall_seconds": sum(float(row["wall_seconds"]) for row in performance_rows),
-                             "status": "SUCCESS"})
+    performance_rows.append({"stage": "writers", "scope": "GENOME", "segment_id": "", "item_count": len(aggregate_proteins), "wall_seconds": 0.0, "status": "SUCCESS"})
     with (root / "performance_profile.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=["stage", "scope", "segment_id", "item_count", "wall_seconds", "status"], delimiter="\t")
         writer.writeheader(); writer.writerows(performance_rows)
-    return sum(1 for line in aggregate_proteins if line.startswith(">"))
+    return len(aggregate_proteins)
 
 
 def _run_consensus_gene_models(fasta, output, representation, predictor, *, profile, progress):
