@@ -22,12 +22,16 @@ def build_triage(root: str | Path) -> dict:
     # Some legacy/single-RNA runs do not emit final_gene_models.tsv but do
     # emit the authoritative annotation table. Use it only as a count fallback.
     final_count = len(final) or len(annotation)
+    tiers = {tier: sum(1 for row in decisions + review if row.get("review_priority") == tier)
+             for tier in ("NO_REVIEW", "LOW_PRIORITY_REVIEW", "MODERATE_REVIEW", "HIGH_PRIORITY_REVIEW")}
     return {"final_genes": final_count, "conflicts": conflicts, "rescue_candidates": rescue, "boundary_changes": changes, "unresolved_functions": unresolved,
+            "review_priority_counts": tiers,
             "counts": {"final_genes": final_count, "unresolved_conflicts": len(conflicts), "rescue_candidates": len(rescue), "boundary_changes": len(changes), "unresolved_function_proteins": len(unresolved)}}
 
 def write_triage_report(root: str | Path) -> Path:
     root = Path(root); data = build_triage(root); c = data["counts"]
-    lines = ["# Annotator's triage report", "", "## Summary", "", f"- Final genes: **{c['final_genes']}**", f"- Unresolved conflicts: **{c['unresolved_conflicts']}**", f"- Rescue candidates (not included by default): **{c['rescue_candidates']}**", f"- Boundary changes from legacy PHANOTATE: **{c['boundary_changes']}**", f"- Unresolved-function proteins: **{c['unresolved_function_proteins']}**", ""]
+    tiers = data.get("review_priority_counts", {})
+    lines = ["# Annotator's triage report", "", "## Summary", "", f"- Final genes: **{c['final_genes']}**", f"- Unresolved conflicts: **{c['unresolved_conflicts']}**", f"- Rescue candidates (not included by default): **{c['rescue_candidates']}**", f"- Boundary changes from legacy PHANOTATE: **{c['boundary_changes']}**", f"- Unresolved-function proteins: **{c['unresolved_function_proteins']}**", "", "### Review priority", "", f"- NO_REVIEW: **{tiers.get('NO_REVIEW', 0)}**", f"- LOW_PRIORITY_REVIEW: **{tiers.get('LOW_PRIORITY_REVIEW', 0)}**", f"- MODERATE_REVIEW: **{tiers.get('MODERATE_REVIEW', 0)}**", f"- HIGH_PRIORITY_REVIEW: **{tiers.get('HIGH_PRIORITY_REVIEW', 0)}**", ""]
     lines += ["## Unresolved conflicts", ""]
     if data["conflicts"]:
         for row in data["conflicts"]:

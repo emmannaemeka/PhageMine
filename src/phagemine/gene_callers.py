@@ -17,6 +17,7 @@ from typing import Any
 from .gene_models import GeneModel
 from .gene_prediction import PHANOTATEPredictor
 from .reconciliation import ProdigalPredictor
+from .io import normalize_sequence
 
 
 class MoleculeType(str, Enum):
@@ -73,6 +74,7 @@ class GenePredictionResult:
     segment_id: str | None = None
     status: str = "SUCCESS"
     warnings: list[str] = field(default_factory=list)
+    audit_warnings: list[dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -88,6 +90,7 @@ class GenePredictionResult:
             "segment_id": self.segment_id,
             "status": self.status,
             "warnings": list(self.warnings),
+            "audit_warnings": list(self.audit_warnings),
         }
 
 
@@ -334,16 +337,19 @@ class PyrodigalProvider(GeneModelProvider):
     def predict(self, genome_id, sequence, input_fasta=None, *, molecule_type=MoleculeType.DNA, segment_id=None):
         if not self.supports_molecule_type(molecule_type):
             raise UnsupportedMoleculeType(f"{self.provider_id} does not support {molecule_type}")
-        if not sequence or any(base.upper() not in {"A", "C", "G", "T", "N"} for base in sequence):
-            raise InvalidCallerOutput("Pyrodigal input must contain only A/C/G/T/N")
+        try:
+            provider_sequence, normalization = normalize_sequence(
+                sequence, record_id=genome_id, provider_id=self.provider_id)
+        except ValueError as exc:
+            raise InvalidCallerOutput(str(exc)) from exc
         finder = self._new_finder()
         if not self.meta:
             try:
-                finder.train(sequence, translation_table=self.translation_table)
+                finder.train(provider_sequence, translation_table=self.translation_table)
             except (ValueError, RuntimeError) as exc:
                 raise InvalidCallerOutput(f"Pyrodigal training failed: {exc}") from exc
         try:
-            genes = finder.find_genes(sequence)
+            genes = finder.find_genes(provider_sequence)
         except (TypeError, RuntimeError, MemoryError) as exc:
             raise ProviderExecutionFailure(f"Pyrodigal prediction failed: {exc}") from exc
         digest = hashlib.sha256(sequence.encode()).hexdigest()
@@ -370,7 +376,7 @@ class PyrodigalProvider(GeneModelProvider):
             models.append(GeneModel(
                 caller=self.provider_id, identifier=raw_id, start=start, end=end,
                 strand=strand, sequence=protein, frame=frame, caller_version=self.version(),
-                command=["pyrodigal.GeneFinder.find_genes"], options=self.parameters(),
+                command=["pyrodigal.GeneFinder.find_genes"], options={**self.parameters(), "sequence_normalization": normalization},
                 genome_id=genome_id, segment_id=segment_id,
                 start_codon=cds[:3] if len(cds) >= 3 else None,
                 stop_codon=cds[-3:] if len(cds) >= 3 else None,
@@ -383,11 +389,13 @@ class PyrodigalProvider(GeneModelProvider):
         if not models:
             raise NoParseableCalls("Pyrodigal produced no gene models")
         return GenePredictionResult(self.provider_id, self.name, self.version(), models,
-                                    command=["pyrodigal.GeneFinder.find_genes"], parameters=self.parameters(),
-                                    input_sequence_sha256=digest, molecule_type="dna", segment_id=segment_id)
+                                    command=["pyrodigal.GeneFinder.find_genes"], parameters={**self.parameters(), "sequence_normalization": normalization},
+                                    input_sequence_sha256=digest, molecule_type="dna", segment_id=segment_id,
+                                    warnings=([f"{self.provider_id}: replaced {normalization['replacement_count']} unsupported/ambiguous symbol(s) with N" ] if normalization["changed"] else []),
+                                    audit_warnings=([normalization] if normalization["changed"] else []))
 
     def raw_output_metadata(self):
-        return {"provider": "pyrodigal", "records": list(self._raw_records), "parameters": self.parameters()}
+        return {"provider": self.provider_id, "records": list(self._raw_records), "parameters": self.parameters()}
 
     def persist_raw_output(self, result, output_dir):
         root = Path(output_dir)
@@ -400,7 +408,8 @@ class PyrodigalProvider(GeneModelProvider):
             writer.writeheader(); writer.writerows(self._raw_records)
         native = root / "pyrodigal.json"
         native.write_text(json.dumps({"provider_id": self.provider_id, "version": self.version(),
-                                      "parameters": self.parameters(), "records": self._raw_records}, indent=2, sort_keys=True))
+                                      "parameters": self.parameters(), "records": self._raw_records,
+                                      "sequence_normalization": result.audit_warnings}, indent=2, sort_keys=True))
         result.raw_output_paths = [str(tsv), str(native)]
         return [str(tsv), str(native)]
 
@@ -505,7 +514,7 @@ class PyrodigalRVProvider(PyrodigalProvider):
             columns = ["raw_identifier", "begin", "end", "strand", "partial_begin", "partial_end", "start_type", "translation_table", "sequence", "protein_sequence"]
             writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader(); writer.writerows(self._raw_records)
         native = root / "pyrodigal_rv.json"
-        native.write_text(json.dumps({"provider_id": self.provider_id, "version": self.version(), "parameters": self.parameters(), "records": self._raw_records}, indent=2, sort_keys=True))
+        native.write_text(json.dumps({"provider_id": self.provider_id, "version": self.version(), "parameters": self.parameters(), "records": self._raw_records, "sequence_normalization": result.audit_warnings}, indent=2, sort_keys=True))
         result.raw_output_paths = [str(tsv), str(native)]
         return result.raw_output_paths
 

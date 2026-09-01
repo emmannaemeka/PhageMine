@@ -41,7 +41,12 @@ Phage genomes contain many hypothetical or uncharacterized proteins. Conventiona
 
 `genome FASTA → validation → PHANOTATE → proteins → Pfam/VOGDB/Swiss-Prot/PHROGs → evidence fusion → classification → context/modules → ranking/QC → figures/report → GenBank package`
 
-Evidence annotates predicted proteins; it never silently changes PHANOTATE ORF boundaries. A report records coordinates, strand, classification, proposed function, confidence, supporting evidence, and a deterministic reason.
+For DNA genomes, PHANOTATE is the sole primary structural caller. Pyrodigal and
+Prodigal-gv are diagnostic corroboration/conflict-detection callers; they never
+vote, alter PHANOTATE boundaries, or add caller-specific CDSs. Evidence
+annotates predicted proteins and never silently changes primary ORF boundaries.
+A report records coordinates, strand, classification, proposed function,
+confidence, supporting evidence, and a deterministic reason.
 
 Illustrative example (not a guaranteed result):
 

@@ -100,7 +100,7 @@ def _protein_from_gene_model(model, protein_id: str, *, candidate_id: str | None
     """Materialize a normalized GeneModel as the downstream Protein record."""
     from .models import Protein
     params = dict(model.options or {})
-    params.update({"candidate_id": candidate_id, "locus_id": locus_id, "selection_reason": "consensus-selected model"})
+    params.update({"candidate_id": candidate_id, "locus_id": locus_id, "selection_reason": "consensus-selected model", "input_sequence_sha256": model.input_sequence_sha256})
     return Protein(model.genome_id or "", protein_id, model.start, model.end, model.strand,
                    model.cds_sequence or "", model.protein_sequence or model.sequence or "",
                    model.caller, gene_call_parameters=params,
@@ -315,10 +315,10 @@ def _run_consensus_gene_models(fasta, output, representation, predictor, *, prof
     # fourth Prodigal vote).
     providers = [PHANOTATEProvider(getattr(predictor, "executable", None)), PyrodigalProvider(), ProdigalGVProvider()]
     unavailable = [provider.provider_id for provider in providers if not provider.available()]
-    if unavailable:
-        raise ProviderUnavailable("Consensus %s profile requires %s; unavailable: %s" % (profile, ", ".join(p.provider_id for p in providers), ", ".join(unavailable)))
+    if "phanotate" in unavailable:
+        raise ProviderUnavailable("PHANOTATE is required as the primary DNA caller; it is unavailable")
     progress.start("consensus gene callers")
-    _, loci = run_provider_reconciliation(providers, representation.analysis_sequence_id,
+    provider_results, loci = run_provider_reconciliation(providers, representation.analysis_sequence_id,
                                            representation.analysis_sequence, fasta,
                                            Path(output) / "gene_calls", molecule_type="dna")
     candidates = [candidate for locus in loci for candidate in candidates_from_locus(locus)]
@@ -344,7 +344,11 @@ def _run_consensus_gene_models(fasta, output, representation, predictor, *, prof
         "provider_versions": {provider.provider_id: provider.version() for provider in providers},
         "reconciliation_performed": True, "model_specific_evidence_performed": False,
         "adjudication_performed": True, "selection_performed": True,
-        "final_cds_source": "CONSENSUS_SELECTED_MODELS", "selection_summary": selection_counts,
+        "final_cds_source": "PHANOTATE_PRIMARY", "selection_summary": selection_counts,
+        "alternative_callers_role": "diagnostic-only; corroboration and conflict detection; never changes final DNA CDS",
+        "provider_outcomes": {pid: {"status": result.status, "warnings": result.warnings,
+                                      "audit_warnings": result.audit_warnings}
+                              for pid, result in provider_results.items()},
     }, indent=2, sort_keys=True))
     # Consensus-specific review/rescue ledgers and a complete final trace.
     with (root / "rescue_candidates.tsv").open("w", newline="") as handle:
@@ -357,10 +361,10 @@ def _run_consensus_gene_models(fasta, output, representation, predictor, *, prof
                     writer.writerow([locus.locus_id, candidate.candidate_id, candidate.provider_id, candidate.start, candidate.end, candidate.evidence_status, decision.decision_status, "Non-PHANOTATE caller-specific model is not automatically rescued."])
     with (root / "gene_model_review.tsv").open("w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t")
-        writer.writerow(["locus_id", "reconciliation_class", "decision_class", "review_required", "reason"])
+        writer.writerow(["locus_id", "reconciliation_class", "decision_class", "review_required", "review_priority", "reason"])
         for locus, decision, selection in zip(loci, decisions, selections):
             if selection.review_required:
-                writer.writerow([locus.locus_id, locus.reconciliation_class, decision.decision_class, "true", selection.selection_reason])
+                writer.writerow([locus.locus_id, locus.reconciliation_class, decision.decision_class, "true", selection.review_priority, selection.selection_reason])
     with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
         columns = ["protein_id", "locus_id", "candidate_id", "start", "end", "strand", "selected_source", "changed_from_legacy", "selection_policy", "selection_rule", "selection_reason", "adjudication_class", "review_required", "input_sha256"]
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader()
@@ -368,17 +372,43 @@ def _run_consensus_gene_models(fasta, output, representation, predictor, *, prof
             selected_candidate = next((candidate for candidate in candidates_from_locus(by_locus[selection.locus_id]) if candidate.candidate_id == selection.selected_candidate_id), None) if selection.selected_candidate_id else None
             writer.writerow({"protein_id": f"PM_{index:06d}", "locus_id": selection.locus_id, "candidate_id": selection.selected_candidate_id or "", "start": selected_candidate.start if selected_candidate else "", "end": selected_candidate.end if selected_candidate else "", "strand": selected_candidate.strand if selected_candidate else "", "selected_source": selected_candidate.provider_id if selected_candidate else "UNRESOLVED", "changed_from_legacy": str(selection.changed_from_legacy).lower(), "selection_policy": selection.selection_policy, "selection_rule": selection.selection_rule, "selection_reason": selection.selection_reason, "adjudication_class": selection.adjudication_decision_class or "", "review_required": str(selection.review_required).lower(), "input_sha256": selected_candidate.input_sequence_sha256 if selected_candidate else ""})
     selected = []
-    for index, selection in enumerate(selections, 1):
-        locus = by_locus[selection.locus_id]
-        if not selection.selected_candidate_id:
-            continue
-        candidate = next((item for item in candidates_from_locus(locus) if item.candidate_id == selection.selected_candidate_id), None)
-        if candidate is None:
-            raise ValueError(f"Selected candidate {selection.selected_candidate_id} is not present in locus {selection.locus_id}")
-        model = next(model for model in locus.candidate_models if CandidateModel.from_model(locus.locus_id, model).candidate_id == candidate.candidate_id)
-        selected.append(_protein_from_gene_model(model, f"PM_{len(selected)+1:06d}", candidate_id=candidate.candidate_id, locus_id=locus.locus_id))
+    primary_result = provider_results.get("phanotate")
+    if primary_result is None or primary_result.status != "SUCCESS":
+        raise ProviderUnavailable("PHANOTATE primary prediction did not complete successfully")
+    for model in sorted(primary_result.models, key=lambda item: (item.start, item.end, item.strand, item.raw_identifier)):
+        containing = next((locus for locus in loci if any(
+            candidate.caller == "phanotate" and candidate.raw_identifier == model.raw_identifier
+            and candidate.start == model.start and candidate.end == model.end
+            and candidate.strand == model.strand for candidate in locus.candidate_models)), None)
+        if containing is None:
+            raise ValueError(f"PHANOTATE model {model.raw_identifier} was not represented in reconciliation output")
+        candidate = next(candidate for candidate in candidates_from_locus(containing)
+                         if candidate.provider_id == "phanotate" and candidate.raw_identifier == model.raw_identifier
+                         and candidate.start == model.start and candidate.end == model.end
+                         and candidate.strand == model.strand)
+        selected.append(_protein_from_gene_model(model, f"PM_{len(selected)+1:06d}",
+                                                 candidate_id=candidate.candidate_id,
+                                                 locus_id=containing.locus_id))
     if not selected:
         raise ValueError("Consensus selection produced no final models")
+    # Keep the authoritative final table/trace one-row-per-primary-CDS.  The
+    # selection engine's locus records remain available as diagnostic output,
+    # but alternative candidates are never emitted as final DNA genes.
+    selection_by_locus = {item.locus_id: item for item in selections}
+    final_columns = ["final_protein_id", "locus_id", "candidate_id", "genome_id", "segment_id", "start", "end", "strand", "provider_source", "supporting_providers", "supporting_method_families", "supporting_method_lineages", "reconciliation_class", "adjudication_class", "selection_policy", "selection_rule", "selection_reason", "changed_from_legacy", "review_required", "review_priority", "gene_model_confidence", "confidence_calibrated"]
+    with (root / "final_gene_models.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=final_columns, delimiter="\t"); writer.writeheader()
+        for protein in selected:
+            locus = by_locus[protein.gene_call_parameters["locus_id"]]
+            selection = selection_by_locus[locus.locus_id]
+            candidate = next(c for c in candidates_from_locus(locus) if c.candidate_id == protein.gene_call_parameters["candidate_id"])
+            writer.writerow({"final_protein_id": protein.protein_id, "locus_id": locus.locus_id, "candidate_id": candidate.candidate_id, "genome_id": locus.genome_id or "", "segment_id": locus.segment_id or "", "start": protein.start, "end": protein.end, "strand": protein.strand, "provider_source": "phanotate", "supporting_providers": ",".join(locus.supporting_providers), "supporting_method_families": ",".join(locus.supporting_method_families), "supporting_method_lineages": ",".join(locus.supporting_method_lineages), "reconciliation_class": locus.reconciliation_class, "adjudication_class": selection.adjudication_decision_class or "", "selection_policy": "phanotate-primary", "selection_rule": "PHANOTATE_PRIMARY_DIAGNOSTIC_CALLERS", "selection_reason": "PHANOTATE is the sole primary DNA caller; alternative callers are diagnostic-only.", "changed_from_legacy": "false", "review_required": str(selection.review_required).lower(), "review_priority": selection.review_priority, "gene_model_confidence": "HIGH", "confidence_calibrated": "false"})
+    trace_columns = ["protein_id", "locus_id", "candidate_id", "start", "end", "strand", "selected_source", "changed_from_legacy", "selection_policy", "selection_rule", "selection_reason", "adjudication_class", "review_required", "review_priority", "input_sha256"]
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=trace_columns, delimiter="\t"); writer.writeheader()
+        for protein in selected:
+            locus = by_locus[protein.gene_call_parameters["locus_id"]]; selection = selection_by_locus[locus.locus_id]
+            writer.writerow({"protein_id": protein.protein_id, "locus_id": locus.locus_id, "candidate_id": protein.gene_call_parameters["candidate_id"], "start": protein.start, "end": protein.end, "strand": protein.strand, "selected_source": "PHANOTATE", "changed_from_legacy": "false", "selection_policy": "phanotate-primary", "selection_rule": "PHANOTATE_PRIMARY_DIAGNOSTIC_CALLERS", "selection_reason": "PHANOTATE is the sole primary DNA caller; alternative callers are diagnostic-only.", "adjudication_class": selection.adjudication_decision_class or "", "review_required": str(selection.review_required).lower(), "review_priority": selection.review_priority, "input_sha256": protein.gene_call_parameters.get("input_sequence_sha256", "")})
     progress.finish(f"{len(selected)} consensus-selected proteins")
     return selected, providers, loci, decisions, selections
 

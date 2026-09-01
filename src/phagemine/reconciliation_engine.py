@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from .gene_models import GeneModel, ReconciledLocus
+from .gene_callers import GenePredictionResult, ProviderError
 
 ALGORITHM_VERSION = "1.0"
 
@@ -24,10 +25,21 @@ def run_provider_reconciliation(providers: list[Any], genome_id: str, sequence: 
     model_sets = {}
     raw_root = Path(output_dir) / "raw"
     for provider in sorted(providers, key=lambda item: item.provider_id):
-        result = provider.predict(genome_id, sequence, input_fasta, molecule_type=molecule_type)
-        provider.persist_raw_output(result, raw_root)
+        try:
+            result = provider.predict(genome_id, sequence, input_fasta, molecule_type=molecule_type)
+            provider.persist_raw_output(result, raw_root)
+            model_sets[provider.provider_id] = result.models
+        except ProviderError as exc:
+            # Alternative callers are diagnostic.  A provider-specific input
+            # incompatibility is recorded and does not suppress the primary
+            # PHANOTATE stream or masquerade as consensus support.
+            result = GenePredictionResult(
+                provider_id=provider.provider_id, provider_name=provider.name,
+                provider_version=provider.version(), molecule_type=molecule_type,
+                segment_id=None, status="SKIPPED_INCOMPATIBLE" if getattr(exc, "code", "") == "INVALID_CALLER_OUTPUT" else "FAILED_PROVIDER",
+                warnings=[str(exc)])
+            model_sets[provider.provider_id] = []
         results[provider.provider_id] = result
-        model_sets[provider.provider_id] = result.models
     loci = reconcile_gene_models(model_sets)
     write_reconciliation_v2(Path(output_dir) / "reconciliation", model_sets, loci)
     return results, loci

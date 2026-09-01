@@ -15,6 +15,7 @@ from typing import Any, Iterable
 
 from .gene_models import GeneModel, ReconciledLocus
 from .model_adjudication import CandidateModel, GeneModelDecision, candidates_from_locus
+from .review_priority import review_priority
 
 
 PHANOTATE_ONLY = "phanotate-only"
@@ -42,6 +43,7 @@ class FinalGeneModelSelection:
     changed_from_legacy: bool
     confidence_class: str
     confidence_calibrated: bool = False
+    review_priority: str = "NO_REVIEW"
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -85,6 +87,7 @@ def _selection_base(locus: ReconciledLocus, policy: str, decision: GeneModelDeci
         fallback_used=fallback,
         changed_from_legacy=changed,
         confidence_class=confidence,
+        review_priority=review_priority(locus, decision),
     )
 
 
@@ -195,15 +198,15 @@ def write_selection_outputs(root: str | Path, loci: Iterable[ReconciledLocus], s
     root = Path(root); root.mkdir(parents=True, exist_ok=True)
     loci = list(loci); selections = list(selections); decisions = list(decisions or [])
     candidate_by_locus = {locus.locus_id: _candidate_map(locus) for locus in loci}
-    columns = ["final_protein_id", "locus_id", "candidate_id", "genome_id", "segment_id", "start", "end", "strand", "provider_source", "supporting_providers", "supporting_method_families", "supporting_method_lineages", "reconciliation_class", "adjudication_class", "selection_policy", "selection_rule", "selection_reason", "changed_from_legacy", "review_required", "gene_model_confidence", "confidence_calibrated"]
+    columns = ["final_protein_id", "locus_id", "candidate_id", "genome_id", "segment_id", "start", "end", "strand", "provider_source", "supporting_providers", "supporting_method_families", "supporting_method_lineages", "reconciliation_class", "adjudication_class", "selection_policy", "selection_rule", "selection_reason", "changed_from_legacy", "review_required", "review_priority", "gene_model_confidence", "confidence_calibrated"]
     with (root / "final_gene_models.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader()
         for index, selection in enumerate(selections, 1):
             locus = next((item for item in loci if item.locus_id == selection.locus_id), None)
             candidate = candidate_by_locus.get(selection.locus_id, {}).get(selection.selected_candidate_id or "")
             if not locus or not candidate: continue
-            writer.writerow({"final_protein_id": f"protein_{index:06d}", "locus_id": selection.locus_id, "candidate_id": candidate.candidate_id, "genome_id": locus.genome_id or "", "segment_id": locus.segment_id or "", "start": candidate.start, "end": candidate.end, "strand": candidate.strand, "provider_source": candidate.provider_id, "supporting_providers": ",".join(locus.supporting_providers), "supporting_method_families": ",".join(locus.supporting_method_families), "supporting_method_lineages": ",".join(locus.supporting_method_lineages), "reconciliation_class": locus.reconciliation_class, "adjudication_class": selection.adjudication_decision_class or "", "selection_policy": selection.selection_policy, "selection_rule": selection.selection_rule, "selection_reason": selection.selection_reason, "changed_from_legacy": str(selection.changed_from_legacy).lower(), "review_required": str(selection.review_required).lower(), "gene_model_confidence": selection.confidence_class, "confidence_calibrated": str(selection.confidence_calibrated).lower()})
-    counts = {"total_loci": len(selections), "exact_consensus": sum(s.selection_rule == "EXACT_CONSENSUS_SELECTED" for s in selections), "unchanged_phanotate": sum(s.selected_provider_id == "phanotate" and not s.changed_from_legacy for s in selections), "alternate_start_selected": sum(s.selection_rule == "EVIDENCE_RESOLVED_ALTERNATE_START" for s in selections), "alternate_stop_selected": sum(s.selection_rule == "EVIDENCE_RESOLVED_ALTERNATE_STOP" for s in selections), "phanotate_fallback_boundary": sum(s.selection_rule == "PHANOTATE_FALLBACK_BOUNDARY_UNRESOLVED" for s in selections), "phanotate_fallback_strand": sum(s.selection_rule == "PHANOTATE_FALLBACK_STRAND_CONFLICT" for s in selections), "phanotate_fallback_split_merge": sum(s.selection_rule == "PHANOTATE_FALLBACK_SPLIT_MERGE" for s in selections), "rescue_candidates_not_selected": sum(s.selection_rule == "RESCUE_CANDIDATE_NOT_AUTOMATICALLY_SELECTED" for s in selections), "review_required": sum(s.review_required for s in selections), "changed_from_legacy": sum(s.changed_from_legacy for s in selections)}
+            writer.writerow({"final_protein_id": f"protein_{index:06d}", "locus_id": selection.locus_id, "candidate_id": candidate.candidate_id, "genome_id": locus.genome_id or "", "segment_id": locus.segment_id or "", "start": candidate.start, "end": candidate.end, "strand": candidate.strand, "provider_source": candidate.provider_id, "supporting_providers": ",".join(locus.supporting_providers), "supporting_method_families": ",".join(locus.supporting_method_families), "supporting_method_lineages": ",".join(locus.supporting_method_lineages), "reconciliation_class": locus.reconciliation_class, "adjudication_class": selection.adjudication_decision_class or "", "selection_policy": selection.selection_policy, "selection_rule": selection.selection_rule, "selection_reason": selection.selection_reason, "changed_from_legacy": str(selection.changed_from_legacy).lower(), "review_required": str(selection.review_required).lower(), "review_priority": selection.review_priority, "gene_model_confidence": selection.confidence_class, "confidence_calibrated": str(selection.confidence_calibrated).lower()})
+    counts = {"total_loci": len(selections), "exact_consensus": sum(s.selection_rule == "EXACT_CONSENSUS_SELECTED" for s in selections), "unchanged_phanotate": sum(s.selected_provider_id == "phanotate" and not s.changed_from_legacy for s in selections), "alternate_start_selected": sum(s.selection_rule == "EVIDENCE_RESOLVED_ALTERNATE_START" for s in selections), "alternate_stop_selected": sum(s.selection_rule == "EVIDENCE_RESOLVED_ALTERNATE_STOP" for s in selections), "phanotate_fallback_boundary": sum(s.selection_rule == "PHANOTATE_FALLBACK_BOUNDARY_UNRESOLVED" for s in selections), "phanotate_fallback_strand": sum(s.selection_rule == "PHANOTATE_FALLBACK_STRAND_CONFLICT" for s in selections), "phanotate_fallback_split_merge": sum(s.selection_rule == "PHANOTATE_FALLBACK_SPLIT_MERGE" for s in selections), "rescue_candidates_not_selected": sum(s.selection_rule == "RESCUE_CANDIDATE_NOT_AUTOMATICALLY_SELECTED" for s in selections), "review_required": sum(s.review_required for s in selections), "changed_from_legacy": sum(s.changed_from_legacy for s in selections), "no_review": sum(s.review_priority == "NO_REVIEW" for s in selections), "low_priority_review": sum(s.review_priority == "LOW_PRIORITY_REVIEW" for s in selections), "moderate_review": sum(s.review_priority == "MODERATE_REVIEW" for s in selections), "high_priority_review": sum(s.review_priority == "HIGH_PRIORITY_REVIEW" for s in selections)}
     with (root / "gene_model_selection_summary.tsv").open("w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t"); writer.writerow(["metric", "count"]); writer.writerows(counts.items())
     (root / "gene_model_selection.json").write_text(json.dumps({"policy_version": CONSENSUS_POLICY_VERSION, "selections": [s.to_dict() for s in selections]}, indent=2, sort_keys=True))

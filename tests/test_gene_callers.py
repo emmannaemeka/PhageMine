@@ -96,8 +96,9 @@ def test_pyrodigal_rejects_rna_and_invalid_sequence():
     provider = get_gene_model_provider("pyrodigal")
     with pytest.raises(Exception, match="does not support"):
         provider.predict("rna", "A" * 120, molecule_type=MoleculeType.RNA)
-    with pytest.raises(Exception, match="only A/C/G/T/N"):
-        provider.predict("bad", "A" * 100 + "U")
+    result = provider.predict("bad", "A" * 100 + "U")
+    assert result.audit_warnings[0]["replaced_symbol_counts"] == {"U": 1}
+    assert result.audit_warnings[0]["provider_id"] == "pyrodigal"
 
 
 def test_prodigal_gv_normalizes_and_preserves_native_raw_provenance(tmp_path):
