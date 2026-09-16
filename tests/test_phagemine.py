@@ -516,8 +516,8 @@ class PhageMineTests(unittest.TestCase):
 
     @pytest.mark.integration
     def test_compare_real_mmseqs_provenance_for_non_phrog_match(self):
-        mmseqs = shutil.which("mmseqs") or "/opt/anaconda3/envs/phagemine/bin/mmseqs"
-        if not Path(mmseqs).exists():
+        mmseqs = shutil.which("mmseqs")
+        if not mmseqs:
             self.skipTest("MMseqs2 unavailable")
         with tempfile.TemporaryDirectory() as temp:
             roots=[]

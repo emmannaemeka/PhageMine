@@ -639,7 +639,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             source_file=str(getattr(predictor, "last_input_fasta", fasta)),
         ) for p in proteins]
         reconciliation_rows = reconcile_models(phanotate_models, prodigal_models, checksum(fasta))
-        write_reconciliation(output, reconciliation_rows, {"input_sha256": checksum(fasta), "phanotate": predictor.parameters(), "prodigal": {"executable": prodigal or "PATH"}})
+        write_reconciliation(output, reconciliation_rows, {"input_sha256": checksum(fasta), "phanotate": predictor.parameters(), "prodigal": prodigal_predictor.parameters(), "prodigal_command": prodigal_predictor.last_command})
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")

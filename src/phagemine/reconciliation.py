@@ -99,22 +99,37 @@ def write_gene_call_review(root: str|Path, records: list[dict]) -> None:
 
 class ProdigalPredictor:
     name="Prodigal"
+    # Prodigal 2.6.x cannot train a single-genome model below this length.
+    # Its supported meta mode supplies pretrained models instead. This is
+    # secondary, observational evidence; it never replaces PHANOTATE calls.
+    MIN_SINGLE_GENOME_NT = 20_000
     def __init__(self, executable: str|None=None):
         self.executable=executable or shutil.which("prodigal")
         self.last_command: list[str] | None = None
         self.last_stdout = ""
         self.last_stderr = ""
         self.last_raw_gff = ""
+        self.selected_mode: str | None = None
+        self.mode_reason: str | None = None
     def version(self) -> str:
         if not self.executable:
             return "unavailable"
         result = subprocess.run([self.executable, "-v"], capture_output=True, text=True, check=False)
         return ((result.stdout or result.stderr).strip().splitlines() or ["reported"])[0]
     def parameters(self) -> dict:
-        return {"executable": self.executable, "format": "gff", "quiet": True}
+        return {"executable": self.executable, "format": "gff", "quiet": True,
+                "mode_policy": "meta_below_single_training_minimum",
+                "minimum_single_genome_nt": self.MIN_SINGLE_GENOME_NT,
+                "selected_mode": self.selected_mode, "mode_reason": self.mode_reason,
+                "translation_table": 11}
     def predict(self, fasta: str|Path, sequence: str) -> list[GeneModel]:
         if not self.executable: raise RuntimeError("Prodigal is required for --reconcile-orfs")
         handle=tempfile.NamedTemporaryFile(prefix="phagemine_prodigal_",suffix=".gff",delete=False); gff=Path(handle.name); handle.close(); cmd=[self.executable,"-i",str(fasta),"-o",str(gff),"-f","gff","-q"]
+        self.selected_mode = "meta" if len(sequence) < self.MIN_SINGLE_GENOME_NT else "single"
+        self.mode_reason = ("Input is below Prodigal single-genome training minimum; use supported pretrained models"
+                            if self.selected_mode == "meta" else "Input meets single-genome training minimum; retain historical default")
+        if self.selected_mode == "meta":
+            cmd.extend(["-p", "meta", "-g", "11"])
         self.last_command = cmd
         result=subprocess.run(cmd,capture_output=True,text=True,check=False)
         self.last_stdout, self.last_stderr = result.stdout or "", result.stderr or ""
@@ -128,6 +143,6 @@ class ProdigalPredictor:
             f=line.split("\t");
             if len(f)<9 or f[2]!="CDS": continue
             attrs=dict(x.split("=",1) for x in f[8].split(";") if "=" in x); s,e=int(f[3]),int(f[4]); strand=f[6]
-            models.append(GeneModel("Prodigal",attrs.get("ID",f"PRODIGAL_{len(models)+1}"),s,e,strand,caller_version="reported",command=cmd,options={"format":"gff"}))
+            models.append(GeneModel("Prodigal",attrs.get("ID",f"PRODIGAL_{len(models)+1}"),s,e,strand,caller_version="reported",command=cmd,options=self.parameters()))
         gff.unlink(missing_ok=True)
         return models

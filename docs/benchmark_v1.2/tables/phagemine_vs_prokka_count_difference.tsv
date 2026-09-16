@@ -1,0 +1,8 @@
+genome	accession	phagemine_cds	prokka_cds	net_phagemine_excess
+T4	NC_000866.4	294	261	33
+Lambda	NC_001416.1	88	62	26
+T7	NC_001604.1	61	51	10
+T5	NC_005859.1	217	177	40
+PhiX174	NC_001422.1	8	6	2
+P22	NC_002371.2	79	64	15
+Mu	NC_000929.1	57	54	3

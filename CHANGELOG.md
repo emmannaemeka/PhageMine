@@ -10,6 +10,10 @@
   MODERATE_REVIEW, and HIGH_PRIORITY_REVIEW tiers while retaining detailed
   underlying conflict fields.
 - Added a reproducible PHANOTATE-versus-PhageMine structural benchmark.
+- Integrated validated INPHARED nearest-reference genomic context into
+  single-genome and cohort workflows, with Mash screening, optional
+  bidirectional BLASTN similarity, resource manifests, and conservative
+  taxonomy interpretation.
 
 ## 1.1.0
 

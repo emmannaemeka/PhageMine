@@ -11,7 +11,7 @@ conda create -n phagemine phagemine \
 conda activate phagemine
 ```
 
-The Bioconda recipe for PhageMine 1.0.4 must require PHANOTATE, Prodigal, HMMER,
+The Bioconda recipe for PhageMine 1.2.0 must require PHANOTATE, Prodigal, HMMER,
 MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do not treat package installation alone as proof that these
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
@@ -22,7 +22,7 @@ For a local wheel:
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-python -m pip install phagemine-1.0.0-py3-none-any.whl
+python -m pip install phagemine-1.2.0-py3-none-any.whl
 ```
 
 ## Required post-installation database setup

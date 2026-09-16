@@ -269,6 +269,10 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
             writer.writerow(["NA" if insufficient else rank, p.protein_id, p.annotation, p.biological_interest, p.functional_confidence, p.evidence_diversity, json.dumps(p.score_components, sort_keys=True)])
     (root / "evidence.json").write_text(json.dumps([asdict(p) for p in proteins], indent=2, default=str))
     write_classification(root, proteins, classifications)
+    # Additive export for prospective blinded validation. This serializes the
+    # existing evidence/classification objects without changing their meaning.
+    from .validation import write_validation_export
+    write_validation_export(root, proteins, classifications, manifest)
     if context_records is not None and modules is not None:
         write_context(root, context_records, modules)
     if quality_control is not None:
