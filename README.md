@@ -1,6 +1,7 @@
 # PhageMine
 
 [![Release: v1.2.0](https://img.shields.io/badge/release-v1.2.0-2ea44f)](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.2.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22794629.svg)](https://doi.org/10.5281/zenodo.22794629)
 
 PhageMine v1.2 is a phage-focused genome annotation workflow that combines
 PHANOTATE structural gene prediction with evidence-supported functional
@@ -408,7 +409,14 @@ Pin the release version, record `phagemine doctor --json`, retain database
 manifests and checksums, and preserve the complete output directory. The
 compact public benchmark package includes accession lists, reference
 provenance, tables, figures, and checksums; third-party databases are not
-redistributed. See [CITATION.cff](CITATION.cff) for citation metadata and
+redistributed. PhageMine v1.2.0 is permanently archived on Zenodo.
+
+### Citation
+
+Nnadi, Nnaemeka Emmanuel. (2026). *PhageMine v1.2.0*. Zenodo.
+https://doi.org/10.5281/zenodo.22794629
+
+See [CITATION.cff](CITATION.cff) for machine-readable citation metadata and
 [CHANGELOG.md](CHANGELOG.md) for release history. Contributions and issue
 reports are welcome through the GitHub repository.
 For zero-distance Mash hits, PhageMine directly compares the query and
