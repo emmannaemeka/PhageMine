@@ -11,6 +11,7 @@ authors:
 license: MIT
 repository-code: "https://github.com/emmannaemeka/PhageMine"
 url: "https://github.com/emmannaemeka/PhageMine"
+doi: "10.5281/zenodo.22794629"
 keywords:
   - bacteriophage
   - genome annotation
