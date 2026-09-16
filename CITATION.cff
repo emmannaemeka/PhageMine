@@ -6,7 +6,8 @@ message: "If you use PhageMine, please cite this release."
 authors:
   - family-names: Nnadi
     given-names: Nnaemeka Emmanuel
-    affiliation: Centre for Phage Biology and Therapeutics LTD/GTE, Jos, Plateau State, Nigeria
+    orcid: https://orcid.org/0000-0002-8424-4859
+    affiliation: Department of Microbiology, Plateau State University, Bokkos, Plateau State, Nigeria; Centre for Phage Biology and Therapeutics LTD/GTE, Jos, Plateau State, Nigeria
 license: MIT
 repository-code: "https://github.com/emmannaemeka/PhageMine"
 url: "https://github.com/emmannaemeka/PhageMine"
