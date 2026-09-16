@@ -1,5 +1,7 @@
 # PhageMine
 
+[![Release: v1.2.0](https://img.shields.io/badge/release-v1.2.0-2ea44f)](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.2.0)
+
 PhageMine v1.2 is a phage-focused genome annotation workflow that combines
 PHANOTATE structural gene prediction with evidence-supported functional
 annotation. It keeps gene calls, evidence, uncertainty, provenance, and
@@ -31,6 +33,28 @@ captured from a validated release build.
 
 PhageMine is beta research software for evidence-based bacteriophage genome annotation and discovery mining. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel, and its rule-based evidence-strength labels are not calibrated probabilities.
 
+## Complete workflow
+
+```text
+Genome FASTA
+    ↓
+Phage-focused CDS prediction
+    ↓
+Functional annotation
+PHROGs • VOGDB • Pfam • Swiss-Prot
+    ↓
+Evidence-supported annotated genome
+    ↓
+INPHARED comparative analysis
+    ↓
+Nearest known phages + genomic/taxonomic context
+```
+
+INPHARED adds comparative genomic context through Mash nearest-reference screening
+and, when configured, optional bidirectional BLASTN confirmation. It reports
+supported reference and host/taxonomy metadata; it is not formal ICTV
+classification.
+
 ## Why PhageMine?
 
 Phage genomes contain many hypothetical or uncharacterized proteins. Conventional annotation often stops at “hypothetical protein”. PhageMine combines conservative evidence fusion for defensible annotation with cohort-level discovery of recurrent, context-preserved protein families. Predictions are computational hypotheses, not experimental confirmation.
@@ -45,6 +69,40 @@ Phage genomes contain many hypothetical or uncharacterized proteins. Conventiona
 - PMF (PhageMine protein family) clustering, recurrence, synteny/context analysis, and PMFDB validation
 - publication-oriented PNG/SVG figures and retained figure source tables
 - checkpointing, fingerprints, resume, provenance, and BOTH-mode evidence reuse
+
+## Benchmark Results — v1.2
+
+PhageMine v1.2 was evaluated on seven curated reference bacteriophage genomes
+against Pharokka and Prokka.
+
+| Tool | Predicted CDSs | Strict F1 | Relaxed F1 | Named products |
+|------|---------------:|----------:|-----------:|---------------:|
+| PhageMine | 804 | 0.7762 | 0.8821 | 439 |
+| Pharokka | 804 | 0.7762 | 0.8821 | 398 |
+| Prokka | 675 | 0.8846 | 0.9352 | 328 |
+
+PhageMine and Pharokka produced identical CDS coordinates across the
+seven-genome benchmark panel. Of PhageMine's 216 strict non-exact predictions,
+141 were alternative-boundary or same-strand-overlap cases. Consequently,
+PhageMine's F1 increased from 0.7762 under strict exact-coordinate scoring to
+0.8821 under relaxed gene-level scoring. Prokka showed stronger
+reference-relative structural agreement on this curated seven-phage panel.
+PhageMine assigned 439 named products compared with 398 for Pharokka and 328
+for Prokka. Named-product yield is not equivalent to functional annotation
+accuracy. These results apply to this seven-genome curated benchmark and must
+not be interpreted as universal tool rankings. INPHARED comparative/taxonomic
+performance was not evaluated by this structural benchmark.
+
+![Strict versus relaxed F1 across tools](docs/benchmark_v1.2/figures/strict_vs_relaxed_f1.png)
+
+*Strict and relaxed reference-relative structural F1. See the full benchmark
+page for per-genome results and definitions.*
+
+![Named-product yield comparison](docs/benchmark_v1.2/figures/functional_yield.png)
+
+*Named-product yield is an output metric and is not functional accuracy.*
+
+**Full benchmark methodology, per-genome results, figures and limitations: [docs/BENCHMARK.md](docs/BENCHMARK.md)**
 
 ## The three modes
 
@@ -180,12 +238,23 @@ phagemine doctor --json
 
 ## Quick start
 
+Install the pinned INPHARED comparative resource, check the environment, and
+run one genome:
+
 ```bash
-phagemine run genome.fasta
+phagemine databases install inphared
+phagemine doctor
+phagemine run genome.fasta --output results/genome
+```
 
-# Optional: choose a different destination explicitly.
-phagemine run genome.fasta --output /path/to/results/genome
+The run writes predicted CDSs and proteins, functional product assignments,
+evidence and provenance records, INPHARED nearest-phage results when the
+resource is available, comparative reports, and a run manifest. See
+[docs/INPHARED.md](docs/INPHARED.md) for comparative outputs and
+[docs/BENCHMARK.md](docs/BENCHMARK.md) for validated benchmark interpretation.
 
+```bash
+# Optional: annotate a batch with a different destination.
 phagemine batch genomes/ --output results/annotation --mode annotate \
   --evidence full --threads 8
 
