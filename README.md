@@ -1,5 +1,18 @@
 # PhageMine
 
+[![Release: v1.2.0](https://img.shields.io/badge/release-v1.2.0-2ea44f)](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.2.0)
+
+PhageMine v1.2 is a phage-focused genome annotation workflow that combines
+PHANOTATE structural gene prediction with evidence-supported functional
+annotation. It keeps gene calls, evidence, uncertainty, provenance, and
+review flags separate so that a named product is never mistaken for
+experimental confirmation.
+
+This repository contains the source, tests, installation metadata, examples,
+and compact benchmark summaries suitable for public reproducibility. Large
+evidence databases and local benchmark evidence are intentionally kept out of
+the public source tree.
+
 ## Local graphical interface (GUI v0.1)
 
 Install the optional GUI dependencies and launch the interface:
@@ -20,6 +33,28 @@ captured from a validated release build.
 
 PhageMine is beta research software for evidence-based bacteriophage genome annotation and discovery mining. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel, and its rule-based evidence-strength labels are not calibrated probabilities.
 
+## Complete workflow
+
+```text
+Genome FASTA
+    ↓
+Phage-focused CDS prediction
+    ↓
+Functional annotation
+PHROGs • VOGDB • Pfam • Swiss-Prot
+    ↓
+Evidence-supported annotated genome
+    ↓
+INPHARED comparative analysis
+    ↓
+Nearest known phages + genomic/taxonomic context
+```
+
+INPHARED adds comparative genomic context through Mash nearest-reference screening
+and, when configured, optional bidirectional BLASTN confirmation. It reports
+supported reference and host/taxonomy metadata; it is not formal ICTV
+classification.
+
 ## Why PhageMine?
 
 Phage genomes contain many hypothetical or uncharacterized proteins. Conventional annotation often stops at “hypothetical protein”. PhageMine combines conservative evidence fusion for defensible annotation with cohort-level discovery of recurrent, context-preserved protein families. Predictions are computational hypotheses, not experimental confirmation.
@@ -35,13 +70,52 @@ Phage genomes contain many hypothetical or uncharacterized proteins. Conventiona
 - publication-oriented PNG/SVG figures and retained figure source tables
 - checkpointing, fingerprints, resume, provenance, and BOTH-mode evidence reuse
 
+## Benchmark Results — v1.2
+
+PhageMine v1.2 was evaluated on seven curated reference bacteriophage genomes
+against Pharokka and Prokka.
+
+| Tool | Predicted CDSs | Strict F1 | Relaxed F1 | Named products |
+|------|---------------:|----------:|-----------:|---------------:|
+| PhageMine | 804 | 0.7762 | 0.8821 | 439 |
+| Pharokka | 804 | 0.7762 | 0.8821 | 398 |
+| Prokka | 675 | 0.8846 | 0.9352 | 328 |
+
+PhageMine and Pharokka produced identical CDS coordinates across the
+seven-genome benchmark panel. Of PhageMine's 216 strict non-exact predictions,
+141 were alternative-boundary or same-strand-overlap cases. Consequently,
+PhageMine's F1 increased from 0.7762 under strict exact-coordinate scoring to
+0.8821 under relaxed gene-level scoring. Prokka showed stronger
+reference-relative structural agreement on this curated seven-phage panel.
+PhageMine assigned 439 named products compared with 398 for Pharokka and 328
+for Prokka. Named-product yield is not equivalent to functional annotation
+accuracy. These results apply to this seven-genome curated benchmark and must
+not be interpreted as universal tool rankings. INPHARED comparative/taxonomic
+performance was not evaluated by this structural benchmark.
+
+![Strict versus relaxed F1 across tools](docs/benchmark_v1.2/figures/strict_vs_relaxed_f1.png)
+
+*Strict and relaxed reference-relative structural F1. See the full benchmark
+page for per-genome results and definitions.*
+
+![Named-product yield comparison](docs/benchmark_v1.2/figures/functional_yield.png)
+
+*Named-product yield is an output metric and is not functional accuracy.*
+
+**Full benchmark methodology, per-genome results, figures and limitations: [docs/BENCHMARK.md](docs/BENCHMARK.md)**
+
 ## The three modes
 
 ### Annotation mode
 
-`genome FASTA → validation → PHANOTATE → proteins → Pfam/VOGDB/Swiss-Prot/PHROGs → evidence fusion → classification → context/modules → ranking/QC → figures/report → GenBank package`
+`genome FASTA → validation → PHANOTATE → proteins → Pfam/VOGDB/Swiss-Prot/PHROGs → evidence fusion → classification → annotated genome/proteins → INPHARED comparative context → ranking/QC → figures/report → GenBank package`
 
-Evidence annotates predicted proteins; it never silently changes PHANOTATE ORF boundaries. A report records coordinates, strand, classification, proposed function, confidence, supporting evidence, and a deterministic reason.
+For DNA genomes, PHANOTATE is the sole primary structural caller. Pyrodigal and
+Prodigal-gv are diagnostic corroboration/conflict-detection callers; they never
+vote, alter PHANOTATE boundaries, or add caller-specific CDSs. Evidence
+annotates predicted proteins and never silently changes primary ORF boundaries.
+A report records coordinates, strand, classification, proposed function,
+confidence, supporting evidence, and a deterministic reason.
 
 Illustrative example (not a guaranteed result):
 
@@ -164,12 +238,23 @@ phagemine doctor --json
 
 ## Quick start
 
+Install the pinned INPHARED comparative resource, check the environment, and
+run one genome:
+
 ```bash
-phagemine run genome.fasta
+phagemine databases install inphared
+phagemine doctor
+phagemine run genome.fasta --output results/genome
+```
 
-# Optional: choose a different destination explicitly.
-phagemine run genome.fasta --output /path/to/results/genome
+The run writes predicted CDSs and proteins, functional product assignments,
+evidence and provenance records, INPHARED nearest-phage results when the
+resource is available, comparative reports, and a run manifest. See
+[docs/INPHARED.md](docs/INPHARED.md) for comparative outputs and
+[docs/BENCHMARK.md](docs/BENCHMARK.md) for validated benchmark interpretation.
 
+```bash
+# Optional: annotate a batch with a different destination.
 phagemine batch genomes/ --output results/annotation --mode annotate \
   --evidence full --threads 8
 
@@ -213,6 +298,119 @@ Discovery outputs include `pmf_families.tsv`, `pmf_members.tsv`, `family_recurre
 When the INPHARED genome resource is READY, discovery also writes
 `inphared_nearest_phages.tsv` as the accession-level audit trail and
 `inphared_summary.tsv` as the duplicate-collapsed researcher summary.
+
+## What a researcher receives from `phagemine run`
+
+Run a genome with:
+
+```bash
+phagemine run genome.fasta --output results/genome
+```
+
+The workflow validates the input, calls CDSs with PHANOTATE, translates the
+CDSs, searches the registered evidence resources, and writes a linked set of
+machine-readable and human-readable outputs. The primary downstream files are
+`genes.gff3` (coordinates and strand), `proteins.faa` (stable protein IDs),
+`cds.fna` (nucleotide CDSs), `annotation.tsv` (one row per predicted CDS),
+`functional_classification.tsv/json` (structured evidence and classifications),
+`evidence.json` (source-level evidence), `gene_call_confidence.tsv`,
+`quality_control.json`, and `report.html`/`report.md`.
+
+An annotation row contains the protein ID, start, end, strand, amino-acid
+length, gene label when available, product or proposed function, confidence,
+classification, evidence sources, and review flags. A small illustrative row is:
+
+```text
+protein_id  start  end   strand  product                    confidence  evidence_sources
+PM_000023   1452   2387  +       terminase large subunit     HIGH        PHROGs;VOGDB;Swiss-Prot
+```
+
+Coordinates identify a computational CDS hypothesis. A product assignment is
+an evidence-backed annotation statement, not a laboratory result. “Hypothetical”
+and “uncharacterized” remain meaningful outputs when evidence does not support
+greater specificity.
+
+PHANOTATE is the primary DNA caller. The supported small-genome rule selects
+Prodigal metagenomic mode for sequences below its single-genome minimum when
+secondary corroboration is requested; secondary callers do not silently alter
+the PHANOTATE primary coordinates. Functional evidence may come from PHROGs,
+VOGDB, Pfam, Swiss-Prot, and related registered resources. Each output records
+which sources contributed to the conclusion.
+
+## System requirements and troubleshooting
+
+Use Python 3.10 or newer. A Conda environment is recommended for PHANOTATE,
+Prodigal, HMMER, MMseqs2, DIAMOND, Mash, BLASTN, PyHMMER, and the optional
+Streamlit GUI. Core annotation can run without evidence databases, but full
+functional annotation requires the relevant resources to be installed and
+reported `READY` by `phagemine doctor`.
+
+If a run stops before annotation, run `phagemine doctor` and then
+`phagemine doctor --deep`. Check executable versions, database manifests,
+write permissions, temporary disk space, and the run's `scientific_validation_status.json`.
+Keep 15–20 GiB free when installing the full evidence set. Do not interpret an
+unavailable database as zero biological evidence.
+
+## Benchmark summary
+
+The corrected seven-reference-phage benchmark and its limitations are
+documented in [docs/BENCHMARK.md](docs/BENCHMARK.md). It reports measured
+strict and relaxed structural metrics, functional annotation yield, and the
+distinction between the frozen original benchmark and the corrected analysis.
+The benchmark does not establish universal superiority for any tool.
+
+## INPHARED comparative genomic context
+
+When a validated INPHARED resource is installed, `phagemine run` and
+`phagemine annotate` append nearest-reference genomic context automatically;
+batch `discover` and `both` workflows do the same for their discovery output.
+Install it with:
+
+```bash
+phagemine databases install inphared
+phagemine doctor
+phagemine run genome.fasta --output results/genome
+```
+
+The pinned INPHARED release is **2026-04-07**. Installation verifies provider
+checksums, prepares the reference FASTA and metadata sidecars, and builds a
+per-genome Mash sketch. Mash ranks nearest reference phages by distance,
+p-value, and matching hashes. When `blastn` and reference sequences are
+available, PhageMine also reports its own bidirectional, length-normalized
+nucleotide similarity and alignment coverage. This is not ANI or VIRIDIC.
+Reference accession, description, host genus, phage genus, subfamily, and
+family are returned as metadata; PhageMine does not make formal ICTV
+assignments. Partial or poorly aligned queries are withheld from numerical
+taxonomy, and a 95% species working boundary is labelled as requiring ICTV
+review.
+
+Results are written to `comparative/inphared_nearest_phages.tsv` and `.json`,
+`comparative/inphared_summary.tsv`, the run manifest, and the HTML/Markdown
+report. If the resource is unavailable or invalid, the workflow records
+`SKIPPED` with a reason and does not fabricate zero matches. See
+[docs/INPHARED.md](docs/INPHARED.md) for columns, provenance, interpretation,
+and limitations. The structural benchmark in [docs/BENCHMARK.md](docs/BENCHMARK.md)
+did not validate INPHARED taxonomic performance.
+
+## Limitations
+
+The validation panel contains seven curated phages and does not represent the
+full diversity of phage genomes. Exact-coordinate scoring penalizes legitimate
+alternative starts and stops; relaxed overlap scoring addresses gene-level
+detection but does not prove biological truth. Named-product yield is not
+functional accuracy. Runtime ranking is unsupported by the available timing
+provenance. The historical T4 PHANOTATE 294-versus-297 discrepancy remains
+unresolved. Independent validation on broader panels is appropriate.
+
+## Reproducibility and citation
+
+Pin the release version, record `phagemine doctor --json`, retain database
+manifests and checksums, and preserve the complete output directory. The
+compact public benchmark package includes accession lists, reference
+provenance, tables, figures, and checksums; third-party databases are not
+redistributed. See [CITATION.cff](CITATION.cff) for citation metadata and
+[CHANGELOG.md](CHANGELOG.md) for release history. Contributions and issue
+reports are welcome through the GitHub repository.
 For zero-distance Mash hits, PhageMine directly compares the query and
 reference nucleotide sequences, including reverse-complement and
 rotation-equivalent representations. Numerical-boundary interpretation is

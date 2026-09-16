@@ -126,6 +126,11 @@ def validate_resource(resource: dict[str, Any], *, check_checksum: bool = True) 
         declared_tools.append(required_tool)
     for key in ("annotations_path", "metadata_path", "hmm_profiles_path"):
         value = provenance.get(key)
+        # INPHARED runtime files are canonical members of its validated root;
+        # old provenance locations are audit metadata and may become stale if
+        # the complete installation directory is moved.
+        if kind == "INPHARED_GENOMES":
+            continue
         if value and not Path(value).expanduser().is_file():
             problems.append(f"{key} does not exist")
     for tool in declared_tools:
@@ -253,6 +258,16 @@ class EvidenceResourceManager:
         return [validate_resource(resource.metadata(check_checksum), check_checksum=check_checksum)
                 for resource in self._load().values()]
 
+    def validate_type(self, resource_type: ResourceType | str,
+                      check_checksum: bool = True) -> list[dict[str, Any]]:
+        """Strictly validate only resources of one registered type."""
+        target = resource_type if isinstance(resource_type, ResourceType) else ResourceType(str(resource_type).upper())
+        return [
+            validate_resource(resource.metadata(check_checksum), check_checksum=check_checksum)
+            for resource in self._load().values()
+            if resource.resource_type == target
+        ]
+
     def validate(self, name: str, check_checksum: bool = True) -> dict[str, Any] | None:
         resource = self._load().get(name)
         return validate_resource(resource.metadata(check_checksum), check_checksum=check_checksum) if resource else None
@@ -273,3 +288,42 @@ class EvidenceResourceManager:
     @staticmethod
     def checksum(path: str | Path) -> str:
         return _sha256(Path(path).expanduser())
+
+
+def resolve_validated_inphared(
+    manager: EvidenceResourceManager | None = None,
+) -> tuple[dict[str, Any] | None, str]:
+    """Return one operational INPHARED resource with canonical runtime paths.
+
+    Registry provenance is an audit record and can become stale after a resource
+    directory is moved. Runtime paths therefore come from the validated resource
+    root, never from the stored provenance path strings.
+    """
+    manager = manager or EvidenceResourceManager()
+    candidates = manager.validate_type(ResourceType.INPHARED_GENOMES, check_checksum=True)
+    if not candidates:
+        return None, "INPHARED genomes are not registered"
+
+    ready = next((item for item in candidates if item.get("status") == ResourceStatus.READY.value), None)
+    if ready is None:
+        problems = sorted({
+            str(problem)
+            for item in candidates
+            for problem in (item.get("validation_errors") or [item.get("status") or "not ready"])
+        })
+        return None, "INPHARED resource is not operationally READY: " + "; ".join(problems)
+
+    primary = Path(str(ready["path"])).expanduser()
+    root = primary.parent if primary.is_file() else primary
+    runtime_paths = {
+        "reference_fasta": str(root / "reference_phage_genomes.fna"),
+        "metadata": str(root / "genome_metadata.tsv"),
+        "qc": str(root / "genome_qc.tsv"),
+        "manifest": str(root / "genome_manifest.json"),
+        "mash_index": str(root / "inphared.msh"),
+    }
+    resolved = dict(ready)
+    resolved["path"] = runtime_paths["reference_fasta"]
+    resolved["resource_root"] = str(root)
+    resolved["runtime_paths"] = runtime_paths
+    return resolved, "INPHARED resource is operationally READY"

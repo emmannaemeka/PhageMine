@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import json
 import time
+import csv
+import hashlib
+import copy
 from pathlib import Path
 from dataclasses import asdict
 
@@ -19,7 +22,7 @@ from .pfam import PfamHMMAdapter
 from .vog import VOGHMMAdapter
 from .swissprot import SwissProtEvidenceAdapter
 from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
-from .resources import EvidenceResourceManager, ResourceType
+from .resources import EvidenceResourceManager, ResourceType, resolve_validated_inphared
 from .progress import ProgressReporter
 from .fusion import attach_gene_call_assessments, classify_proteins
 from .context import build_context
@@ -31,6 +34,464 @@ from .hallmarks import assess_hallmarks, write_hallmarks
 from .review import build_annotation_review, write_annotation_review
 
 
+class _SegmentEvidenceCache:
+    """Run-scoped cache for identical protein/database evidence queries.
+
+    The cache is deliberately private to one biological run.  Its fingerprint
+    includes the adapter implementation and provenance (which contains the
+    database/program parameters), so evidence is never shared across
+    incompatible configurations.
+    """
+    def __init__(self):
+        self._entries = {}
+
+    @staticmethod
+    def _adapter_key(adapter):
+        try:
+            provenance = adapter.provenance()
+        except Exception:
+            provenance = getattr(adapter, "__dict__", {})
+        return (adapter.__class__.__module__, adapter.__class__.__qualname__,
+                json.dumps(provenance, sort_keys=True, default=str))
+
+    def analyze(self, adapter, proteins):
+        from .evidence import EvidenceAdapterResult
+        if not proteins:
+            return adapter.analyze(proteins)
+        adapter_key = self._adapter_key(adapter)
+        unique = {}
+        for protein in proteins:
+            digest = hashlib.sha256(protein.sequence.encode()).hexdigest()
+            unique.setdefault(digest, protein)
+        missing = [protein for digest, protein in unique.items() if (adapter_key, digest) not in self._entries]
+        fresh = adapter.analyze(missing) if missing else None
+        if fresh is not None:
+            for protein in missing:
+                digest = hashlib.sha256(protein.sequence.encode()).hexdigest()
+                hits = [copy.deepcopy(e) for e in fresh.evidence
+                        if (e.provenance.get("protein_id") == protein.protein_id or
+                            e.metrics.get("query_protein_id") == protein.protein_id)]
+                for evidence in hits:
+                    evidence.provenance["protein_id"] = protein.protein_id
+                self._entries[(adapter_key, digest)] = (fresh.status, fresh.provenance, fresh.message, hits)
+        template = fresh or next((entry for key, entry in self._entries.items() if key[0] == adapter_key), None)
+        if isinstance(template, tuple):
+            status, provenance, message = template[:3]
+        else:
+            status, provenance, message = template.status, template.provenance, template.message
+        evidence = []
+        for protein in proteins:
+            digest = hashlib.sha256(protein.sequence.encode()).hexdigest()
+            entry = self._entries.get((adapter_key, digest))
+            if entry:
+                for item in entry[3]:
+                    item = copy.deepcopy(item)
+                    item.provenance["protein_id"] = protein.protein_id
+                    evidence.append(item)
+        return EvidenceAdapterResult(adapter=adapter.name, status=status,
+                                     evidence=evidence, provenance=dict(provenance or {}), message=message)
+
+
+def _analyze_evidence(adapter, proteins, cache=None):
+    return cache.analyze(adapter, proteins) if cache is not None else adapter.analyze(proteins)
+
+
+def _protein_from_gene_model(model, protein_id: str, *, candidate_id: str | None = None, locus_id: str | None = None):
+    """Materialize a normalized GeneModel as the downstream Protein record."""
+    from .models import Protein
+    params = dict(model.options or {})
+    params.update({"candidate_id": candidate_id, "locus_id": locus_id, "selection_reason": "consensus-selected model", "input_sequence_sha256": model.input_sequence_sha256})
+    return Protein(model.genome_id or "", protein_id, model.start, model.end, model.strand,
+                   model.cds_sequence or "", model.protein_sequence or model.sequence or "",
+                   model.caller, gene_call_parameters=params,
+                   start_codon=model.start_codon, stop_codon=model.stop_codon)
+
+
+def _consensus_provider_ids(profile: str = "standard") -> tuple[str, ...]:
+    """Return the one shared v1.2 DNA consensus provider profile."""
+    if profile not in {"standard", "extended"}:
+        raise ValueError(f"unknown gene-model profile: {profile}")
+    return ("phanotate", "pyrodigal", "prodigal_gv")
+
+
+def _run_rna_gene_models(fasta, output, representation, *, progress):
+    from .gene_callers import PyrodigalRVProvider, ProviderUnavailable
+    provider = PyrodigalRVProvider()
+    if not provider.available():
+        raise ProviderUnavailable("RNA mode requires Pyrodigal-rv; install pyrodigal-rv in the active environment")
+    progress.start("RNA gene caller (Pyrodigal-rv)")
+    result = provider.predict(representation.analysis_sequence_id, representation.analysis_sequence,
+                              fasta, molecule_type="rna", segment_id=representation.analysis_sequence_id)
+    provider.persist_raw_output(result, Path(output) / "gene_calls" / "raw")
+    from .model_adjudication import CandidateModel
+    proteins = []
+    for index, model in enumerate(result.models, 1):
+        proteins.append(_protein_from_gene_model(model, f"PM_{index:06d}", candidate_id=CandidateModel.from_model(f"RNA_{representation.analysis_sequence_id}", model).candidate_id, locus_id=f"RNA_{representation.analysis_sequence_id}"))
+    root = Path(output) / "gene_calls"; root.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(representation.analysis_sequence.encode()).hexdigest()
+    (root / "gene_call_manifest.json").write_text(json.dumps({
+        "schema_version": "1.2-step8", "input_fasta": str(Path(fasta).resolve()),
+        "input_sequence_sha256": digest, "genome_id": representation.analysis_sequence_id,
+        "molecule_type": "rna", "segment_count": 1,
+        "segments": [{"segment_id": representation.analysis_sequence_id, "sha256": digest, "length": len(representation.analysis_sequence)}],
+        "rna_provider": provider.provider_id, "rna_provider_version": provider.version(),
+        "rna_policy": "RNA_PYRODIGAL_RV_PRIMARY_V1", "final_cds_source": "PYRODIGAL_RV",
+        "functional_annotation_status": "PENDING_DOWNSTREAM", "confidence_calibrated": False,
+    }, indent=2, sort_keys=True))
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t"); writer.writerow(["protein_id", "locus_id", "segment_id", "start", "end", "strand", "selected_source", "selection_policy", "input_sha256"])
+        for protein in proteins:
+            writer.writerow([protein.protein_id, f"RNA_{representation.analysis_sequence_id}", representation.analysis_sequence_id, protein.start, protein.end, protein.strand, "pyrodigal_rv", "RNA_PYRODIGAL_RV_PRIMARY_V1", digest])
+    progress.finish(f"{len(proteins)} RNA proteins")
+    if not proteins:
+        raise ValueError("Pyrodigal-rv produced no parseable RNA gene models")
+    return proteins
+
+
+def _safe_segment_key(segment_id: str, used: set[str]) -> str:
+    import re
+    base = re.sub(r"[^A-Za-z0-9_.-]+", "_", segment_id).strip("._") or "segment"
+    key = base; index = 2
+    while key in used:
+        key = f"{base}_{index}"; index += 1
+    used.add(key)
+    return key
+
+
+def _annotate_shared_proteins(proteins, output, kwargs):
+    """Acquire evidence once for an aggregate segmented-genome protein set."""
+    cache = kwargs.get("shared_evidence_cache") or _SegmentEvidenceCache()
+    use_mock = kwargs.get("use_mock_evidence", False)
+    threads = kwargs.get("threads", 1)
+    evidence_adapters = []
+    if use_mock:
+        result = _analyze_evidence(MockEvidenceBackend(), proteins, cache)
+        evidence_adapters.append({"adapter": result.adapter, "status": result.status,
+                                  "provenance": result.provenance, "message": result.message})
+    specs = [
+        ("pfam", PfamHMMAdapter, (kwargs.get("pfam_path"), kwargs.get("pfam_hmmscan"), kwargs.get("pfam_evalue"), kwargs.get("pfam_coverage"), kwargs.get("pfam_trusted_cutoff", False)),
+         {"threshold_mode": kwargs.get("pfam_threshold_mode"), "threads": threads}),
+        ("vogdb", VOGHMMAdapter, (kwargs.get("vog_path"), kwargs.get("vog_annotations"), kwargs.get("vog_hmmscan"), kwargs.get("vog_evalue", 1e-5), kwargs.get("vog_coverage", .5)),
+         {"database_version": None, "threads": threads}),
+        ("swissprot", SwissProtEvidenceAdapter, (kwargs.get("swissprot_path"), kwargs.get("swissprot_metadata"), kwargs.get("diamond")),
+         {"database_version": None, "evalue_threshold": kwargs.get("swissprot_evalue", 1e-5), "threads": threads}),
+    ]
+    proteins_by_id = {p.protein_id: p for p in proteins}
+    for name, cls, args, extra in specs:
+        try:
+            adapter = cls(*args, **extra)
+            result = _analyze_evidence(adapter, proteins, cache)
+        except TypeError:
+            # Preserve compatibility with adapters whose optional constructor
+            # arguments differ between releases.
+            adapter = cls(*args)
+            result = _analyze_evidence(adapter, proteins, cache)
+        for evidence in result.evidence:
+            pid = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+            if pid in proteins_by_id:
+                evidence.provenance.setdefault("protein_id", pid)
+                if not any(e.provenance == evidence.provenance and e.identifier == evidence.identifier and e.source == evidence.source for e in proteins_by_id[pid].evidence):
+                    proteins_by_id[pid].evidence.append(evidence)
+        evidence_adapters.append({"adapter": result.adapter, "status": result.status,
+                                  "provenance": result.provenance, "message": result.message})
+    # PHROGs is a paired backend but one genome-level invocation per backend.
+    phrogs = PHROGSMMseqsAdapter(kwargs.get("phrogs_path"), kwargs.get("phrogs_annotations"), kwargs.get("mmseqs"), None,
+                                  kwargs.get("phrogs_evalue", 1e-5), kwargs.get("phrogs_coverage", .5), kwargs.get("phrogs_score"), kwargs.get("phrogs_identity"), kwargs.get("phrogs_alignment_length"), threads=threads)
+    phrogs_hmm = PHROGSPyHMMERAdapter(kwargs.get("phrogs_hmm_path"), kwargs.get("phrogs_annotations"), None,
+                                      kwargs.get("phrogs_evalue", 1e-5), kwargs.get("phrogs_coverage", .5), kwargs.get("phrogs_score"), threads=threads)
+    mm = _analyze_evidence(phrogs, proteins, cache)
+    hh = _analyze_evidence(phrogs_hmm, proteins, cache)
+    merged = merge_phrogs_evidence(mm.evidence, hh.evidence)
+    for evidence in merged:
+        pid = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
+        if pid in proteins_by_id:
+            evidence.provenance.setdefault("protein_id", pid)
+            proteins_by_id[pid].evidence.append(evidence)
+    evidence_adapters.extend([
+        {"adapter": mm.adapter, "status": mm.status, "provenance": mm.provenance, "message": mm.message},
+        {"adapter": hh.adapter, "status": hh.status, "provenance": hh.provenance, "message": hh.message},
+    ])
+    classifications = classify_proteins(proteins)
+    by_id = {row["protein_id"]: row for row in classifications}
+    for protein in proteins:
+        row = by_id[protein.protein_id]
+        protein.annotation = row["display_product"]
+        protein.functional_confidence = row["confidence"].title()
+        protein.annotation_level = EvidenceLevel.CURATED if row["functional_state"] == "KNOWN_FUNCTION" else EvidenceLevel.COMPUTATIONAL if row["functional_state"] in {"PROBABLE_FUNCTION", "FUNCTIONAL_CLASS_ONLY", "CONSERVED_UNKNOWN"} else EvidenceLevel.HYPOTHESIS
+    return classifications, evidence_adapters
+
+
+def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
+    """Annotate segments independently, then annotate their proteins once."""
+    from .io import read_fasta_records
+    from .genome_representation import GenomeRecord, SegmentRecord
+    records = read_fasta_records(fasta)
+    if len(records) < 2:
+        raise ValueError("--segmented requires a multi-record FASTA")
+    root = Path(output); root.mkdir(parents=True, exist_ok=True)
+    used: set[str] = set(); segment_rows = []; aggregate_proteins = []
+    performance_rows = []; segment_objects = []
+    shared_evidence_cache = _SegmentEvidenceCache()
+    for segment_id, sequence in records:
+        safe = _safe_segment_key(segment_id, used)
+        segment_dir = root / "gene_calls" / "segments" / safe
+        segment_dir.mkdir(parents=True, exist_ok=True)
+        segment_fasta = root / "gene_calls" / "segments" / f"{safe}.fasta"
+        segment_fasta.write_text(f">{segment_id}\n{sequence}\n")
+        representation = GenomeRepresentation.original(segment_id, sequence)
+        started = time.time()
+        proteins = _run_rna_gene_models(segment_fasta, segment_dir, representation, progress=progress)
+        for protein in proteins:
+            protein.gene_call_parameters["segment_id"] = segment_id
+            protein.gene_call_parameters["safe_segment_key"] = safe
+        performance_rows.append({"stage": "pyrodigal_rv", "scope": "SEGMENT", "segment_id": segment_id,
+                                 "item_count": len(proteins), "wall_seconds": time.time() - started, "status": "SUCCESS"})
+        segment_objects.append((segment_id, safe, sequence, representation, proteins, segment_dir))
+        # Packaging is a writer-only operation over already selected segment
+        # proteins; it does not initialize or rerun evidence adapters.
+        try:
+            write_package(segment_dir, segment_id, sequence, proteins,
+                          {"molecule_type": "rna", "segment_id": segment_id},
+                          kwargs.get("metadata"), kwargs.get("table2asn_executable"),
+                          kwargs.get("sequencing_provenance"))
+        except Exception:
+            # Keep RNA annotation usable when optional GenBank tooling is not
+            # available; the aggregate biological outputs remain authoritative.
+            pass
+        segment_rows.append({"segment_id": segment_id, "safe_segment_key": safe, "length": len(sequence), "sha256": hashlib.sha256(sequence.encode()).hexdigest()})
+        aggregate_proteins.extend(proteins)
+    evidence_started = time.time()
+    kwargs["shared_evidence_cache"] = shared_evidence_cache
+    classifications, evidence_adapters = _annotate_shared_proteins(aggregate_proteins, root, kwargs)
+    performance_rows.append({"stage": "functional_evidence", "scope": "GENOME", "segment_id": "",
+                             "item_count": len(aggregate_proteins), "wall_seconds": time.time() - evidence_started, "status": "SUCCESS"})
+    manifest = {"schema_version": "1.2-step9b", "genome_id": Path(fasta).stem, "molecule_type": "rna", "segmented": True, "segment_count": len(segment_rows), "segments": segment_rows, "coordinate_scope": "segment-local; segments are never concatenated", "evidence_scope": "GENOME", "evidence_adapters": evidence_adapters, "biological_protein_count": len(aggregate_proteins), "unique_search_protein_count": len({hashlib.sha256(p.sequence.encode()).hexdigest() for p in aggregate_proteins})}
+    (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    # Aggregate writers consume the single genome-level result collection.
+    with (root / "proteins.faa").open("w") as handle:
+        for protein in aggregate_proteins:
+            handle.write(f">{protein.protein_id} genome={protein.genome_id} segment={protein.gene_call_parameters.get('segment_id', protein.genome_id)} start={protein.start} end={protein.end} strand={protein.strand}\n{protein.sequence}\n")
+    # Aggregate segment-local files without changing their seqids or offsets.
+    cds_lines = []
+    gff_lines = ["##gff-version 3\n"]
+    final_rows = []
+    final_header = None
+    trace_lines = []
+    trace_header = None
+    final_header = "protein_id\tsegment_id\tstart\tend\tstrand\tprovider\n"
+    trace_header = "protein_id\tsegment_id\tstart\tend\tstrand\tprovider\n"
+    for protein in aggregate_proteins:
+        segment_id = protein.gene_call_parameters.get("segment_id", protein.genome_id)
+        cds_lines.extend([f">{protein.protein_id} segment={segment_id} start={protein.start} end={protein.end} strand={protein.strand}\n", f"{protein.cds}\n"])
+        gff_lines.append(f"{segment_id}\tPhageMine\tCDS\t{protein.start}\t{protein.end}\t.\t{protein.strand}\t0\tID={protein.protein_id};segment={segment_id}\n")
+        final_rows.append(f"{protein.protein_id}\t{segment_id}\t{protein.start}\t{protein.end}\t{protein.strand}\tpyrodigal_rv\n")
+        trace_lines.append(f"{protein.protein_id}\t{segment_id}\t{protein.start}\t{protein.end}\t{protein.strand}\tpyrodigal_rv\n")
+    (root / "cds.fna").write_text("".join(cds_lines))
+    (root / "genes.gff3").write_text("".join(gff_lines))
+    (root / "gene_calls" / "final_gene_models.tsv").write_text((final_header or "") + "".join(final_rows))
+    (root / "gene_calls" / "final_gene_model_trace.tsv").write_text((trace_header or "") + "".join(trace_lines))
+    performance_rows.append({"stage": "writers", "scope": "GENOME", "segment_id": "", "item_count": len(aggregate_proteins), "wall_seconds": 0.0, "status": "SUCCESS"})
+    with (root / "performance_profile.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["stage", "scope", "segment_id", "item_count", "wall_seconds", "status"], delimiter="\t")
+        writer.writeheader(); writer.writerows(performance_rows)
+    from .triage import write_triage_report
+    write_triage_report(root)
+    return len(aggregate_proteins)
+
+
+def _run_consensus_gene_models(fasta, output, representation, predictor, *, profile, progress):
+    """Run providers, reconciliation, observational adjudication and selection."""
+    from .gene_callers import PHANOTATEProvider, PyrodigalProvider, ProdigalGVProvider, ProviderUnavailable
+    from .reconciliation_engine import run_provider_reconciliation
+    from .model_adjudication import CandidateModel, candidates_from_locus, decide_locus, write_model_adjudication
+    from .gene_model_selection import select_final_gene_models, write_selection_outputs, CONSENSUS
+
+    if profile not in {"standard", "extended"}:
+        raise ValueError(f"unknown gene-model profile: {profile}")
+    # v1.2's single DNA consensus profile intentionally uses all three
+    # caller implementations.  ``profile`` is retained as an explicit
+    # provenance field; both supported profiles currently resolve to this
+    # provider set (extended is reserved for future additions, not a hidden
+    # fourth Prodigal vote).
+    providers = [PHANOTATEProvider(getattr(predictor, "executable", None)), PyrodigalProvider(), ProdigalGVProvider()]
+    unavailable = [provider.provider_id for provider in providers if not provider.available()]
+    if "phanotate" in unavailable:
+        raise ProviderUnavailable("PHANOTATE is required as the primary DNA caller; it is unavailable")
+    progress.start("consensus gene callers")
+    provider_results, loci = run_provider_reconciliation(providers, representation.analysis_sequence_id,
+                                           representation.analysis_sequence, fasta,
+                                           Path(output) / "gene_calls", molecule_type="dna")
+    candidates = [candidate for locus in loci for candidate in candidates_from_locus(locus)]
+    decisions = [decide_locus(locus, candidates_from_locus(locus)) for locus in loci]
+    write_model_adjudication(Path(output) / "gene_calls", candidates, decisions)
+    selections = select_final_gene_models(loci, decisions, policy=CONSENSUS, profile=profile)
+    write_selection_outputs(Path(output) / "gene_calls", loci, selections, decisions)
+    by_locus = {locus.locus_id: locus for locus in loci}
+    root = Path(output) / "gene_calls"
+    selection_counts = {
+        "number_loci": len(selections),
+        "number_boundary_changes": sum(item.changed_from_legacy for item in selections),
+        "number_fallback_phanotate": sum(item.fallback_used for item in selections),
+        "number_rescue_candidates": sum(item.selection_rule == "RESCUE_CANDIDATE_NOT_AUTOMATICALLY_SELECTED" for item in selections),
+        "number_review_required": sum(item.review_required for item in selections),
+    }
+    (root / "gene_call_manifest.json").write_text(json.dumps({
+        "schema_version": "1.2-step7b", "input_fasta": str(Path(fasta).resolve()),
+        "input_sequence_sha256": hashlib.sha256(representation.analysis_sequence.encode()).hexdigest(),
+        "genome_id": representation.analysis_sequence_id, "declared_molecule_type": "dna",
+        "gene_model_policy": "consensus", "gene_model_profile": profile,
+        "selection_policy_version": "1.0", "active_providers": [provider.provider_id for provider in providers],
+        "provider_versions": {provider.provider_id: provider.version() for provider in providers},
+        "reconciliation_performed": True, "model_specific_evidence_performed": False,
+        "adjudication_performed": True, "selection_performed": True,
+        "final_cds_source": "PHANOTATE_PRIMARY", "selection_summary": selection_counts,
+        "alternative_callers_role": "diagnostic-only; corroboration and conflict detection; never changes final DNA CDS",
+        "provider_outcomes": {pid: {"status": result.status, "warnings": result.warnings,
+                                      "audit_warnings": result.audit_warnings}
+                              for pid, result in provider_results.items()},
+    }, indent=2, sort_keys=True))
+    # Consensus-specific review/rescue ledgers and a complete final trace.
+    with (root / "rescue_candidates.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(["locus_id", "candidate_id", "provider", "start", "end", "evidence_status", "adjudication_status", "reason"])
+        for locus, decision in zip(loci, decisions):
+            cmap = {candidate.candidate_id: candidate for candidate in candidates_from_locus(locus)}
+            for candidate in cmap.values():
+                if candidate.provider_id != "phanotate" and candidate.candidate_id != (next((s.selected_candidate_id for s in selections if s.locus_id == locus.locus_id), None)):
+                    writer.writerow([locus.locus_id, candidate.candidate_id, candidate.provider_id, candidate.start, candidate.end, candidate.evidence_status, decision.decision_status, "Non-PHANOTATE caller-specific model is not automatically rescued."])
+    with (root / "gene_model_review.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(["locus_id", "reconciliation_class", "decision_class", "review_required", "review_priority", "reason"])
+        for locus, decision, selection in zip(loci, decisions, selections):
+            if selection.review_required:
+                writer.writerow([locus.locus_id, locus.reconciliation_class, decision.decision_class, "true", selection.review_priority, selection.selection_reason])
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        columns = ["protein_id", "locus_id", "candidate_id", "start", "end", "strand", "selected_source", "changed_from_legacy", "selection_policy", "selection_rule", "selection_reason", "adjudication_class", "review_required", "input_sha256"]
+        writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t"); writer.writeheader()
+        for index, selection in enumerate(selections, 1):
+            selected_candidate = next((candidate for candidate in candidates_from_locus(by_locus[selection.locus_id]) if candidate.candidate_id == selection.selected_candidate_id), None) if selection.selected_candidate_id else None
+            writer.writerow({"protein_id": f"PM_{index:06d}", "locus_id": selection.locus_id, "candidate_id": selection.selected_candidate_id or "", "start": selected_candidate.start if selected_candidate else "", "end": selected_candidate.end if selected_candidate else "", "strand": selected_candidate.strand if selected_candidate else "", "selected_source": selected_candidate.provider_id if selected_candidate else "UNRESOLVED", "changed_from_legacy": str(selection.changed_from_legacy).lower(), "selection_policy": selection.selection_policy, "selection_rule": selection.selection_rule, "selection_reason": selection.selection_reason, "adjudication_class": selection.adjudication_decision_class or "", "review_required": str(selection.review_required).lower(), "input_sha256": selected_candidate.input_sequence_sha256 if selected_candidate else ""})
+    selected = []
+    primary_result = provider_results.get("phanotate")
+    if primary_result is None or primary_result.status != "SUCCESS":
+        raise ProviderUnavailable("PHANOTATE primary prediction did not complete successfully")
+    for model in sorted(primary_result.models, key=lambda item: (item.start, item.end, item.strand, item.raw_identifier)):
+        containing = next((locus for locus in loci if any(
+            candidate.caller == "phanotate" and candidate.raw_identifier == model.raw_identifier
+            and candidate.start == model.start and candidate.end == model.end
+            and candidate.strand == model.strand for candidate in locus.candidate_models)), None)
+        if containing is None:
+            raise ValueError(f"PHANOTATE model {model.raw_identifier} was not represented in reconciliation output")
+        candidate = next(candidate for candidate in candidates_from_locus(containing)
+                         if candidate.provider_id == "phanotate" and candidate.raw_identifier == model.raw_identifier
+                         and candidate.start == model.start and candidate.end == model.end
+                         and candidate.strand == model.strand)
+        selected.append(_protein_from_gene_model(model, f"PM_{len(selected)+1:06d}",
+                                                 candidate_id=candidate.candidate_id,
+                                                 locus_id=containing.locus_id))
+    if not selected:
+        raise ValueError("Consensus selection produced no final models")
+    # Keep the authoritative final table/trace one-row-per-primary-CDS.  The
+    # selection engine's locus records remain available as diagnostic output,
+    # but alternative candidates are never emitted as final DNA genes.
+    selection_by_locus = {item.locus_id: item for item in selections}
+    final_columns = ["final_protein_id", "locus_id", "candidate_id", "genome_id", "segment_id", "start", "end", "strand", "provider_source", "supporting_providers", "supporting_method_families", "supporting_method_lineages", "reconciliation_class", "adjudication_class", "selection_policy", "selection_rule", "selection_reason", "changed_from_legacy", "review_required", "review_priority", "gene_model_confidence", "confidence_calibrated"]
+    with (root / "final_gene_models.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=final_columns, delimiter="\t"); writer.writeheader()
+        for protein in selected:
+            locus = by_locus[protein.gene_call_parameters["locus_id"]]
+            selection = selection_by_locus[locus.locus_id]
+            candidate = next(c for c in candidates_from_locus(locus) if c.candidate_id == protein.gene_call_parameters["candidate_id"])
+            writer.writerow({"final_protein_id": protein.protein_id, "locus_id": locus.locus_id, "candidate_id": candidate.candidate_id, "genome_id": locus.genome_id or "", "segment_id": locus.segment_id or "", "start": protein.start, "end": protein.end, "strand": protein.strand, "provider_source": "phanotate", "supporting_providers": ",".join(locus.supporting_providers), "supporting_method_families": ",".join(locus.supporting_method_families), "supporting_method_lineages": ",".join(locus.supporting_method_lineages), "reconciliation_class": locus.reconciliation_class, "adjudication_class": selection.adjudication_decision_class or "", "selection_policy": "phanotate-primary", "selection_rule": "PHANOTATE_PRIMARY_DIAGNOSTIC_CALLERS", "selection_reason": "PHANOTATE is the sole primary DNA caller; alternative callers are diagnostic-only.", "changed_from_legacy": "false", "review_required": str(selection.review_required).lower(), "review_priority": selection.review_priority, "gene_model_confidence": "HIGH", "confidence_calibrated": "false"})
+    trace_columns = ["protein_id", "locus_id", "candidate_id", "start", "end", "strand", "selected_source", "changed_from_legacy", "selection_policy", "selection_rule", "selection_reason", "adjudication_class", "review_required", "review_priority", "input_sha256"]
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=trace_columns, delimiter="\t"); writer.writeheader()
+        for protein in selected:
+            locus = by_locus[protein.gene_call_parameters["locus_id"]]; selection = selection_by_locus[locus.locus_id]
+            writer.writerow({"protein_id": protein.protein_id, "locus_id": locus.locus_id, "candidate_id": protein.gene_call_parameters["candidate_id"], "start": protein.start, "end": protein.end, "strand": protein.strand, "selected_source": "PHANOTATE", "changed_from_legacy": "false", "selection_policy": "phanotate-primary", "selection_rule": "PHANOTATE_PRIMARY_DIAGNOSTIC_CALLERS", "selection_reason": "PHANOTATE is the sole primary DNA caller; alternative callers are diagnostic-only.", "adjudication_class": selection.adjudication_decision_class or "", "review_required": str(selection.review_required).lower(), "review_priority": selection.review_priority, "input_sha256": protein.gene_call_parameters.get("input_sequence_sha256", "")})
+    progress.finish(f"{len(selected)} consensus-selected proteins")
+    return selected, providers, loci, decisions, selections
+
+
+def _write_gene_call_provenance(output, fasta, representation, predictor, proteins, *,
+                                prodigal_predictor=None, prodigal_models=None,
+                                reconciliation_enabled=False):
+    """Persist raw caller streams and a machine-readable final-model trace.
+
+    This is intentionally observational in v1.2 Step 1: the existing PHANOTATE
+    proteins remain the final CDS set and no model-selection rule is changed.
+    """
+    root = Path(output) / "gene_calls"
+    raw = root / "raw"
+    raw.mkdir(parents=True, exist_ok=True)
+    phanotate_raw = getattr(predictor, "last_raw_output", "")
+    (raw / "phanotate.raw.txt").write_text(phanotate_raw)
+    with (raw / "phanotate.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t")
+        writer.writerow(["caller", "raw_identifier", "start", "end", "strand", "length_nt", "length_aa"])
+        for protein in proteins:
+            writer.writerow(["PHANOTATE", protein.protein_id, protein.start, protein.end,
+                             protein.strand, len(protein.cds), len(protein.sequence)])
+
+    if reconciliation_enabled and prodigal_predictor is not None:
+        (raw / "prodigal.gff").write_text(getattr(prodigal_predictor, "last_raw_gff", ""))
+        with (raw / "prodigal.tsv").open("w", newline="") as handle:
+            writer = csv.writer(handle, delimiter="\t")
+            writer.writerow(["caller", "raw_identifier", "start", "end", "strand", "length_nt"])
+            for model in prodigal_models or []:
+                writer.writerow([model.caller, model.raw_identifier, model.start, model.end,
+                                 model.strand, model.length_nt])
+
+    input_sha = checksum(fasta)
+    manifest = {
+        "schema_version": "1.2-step1",
+        "input_fasta": str(Path(fasta).resolve()),
+        "input_sequence_sha256": input_sha,
+        "analysis_sequence_sha256": hashlib.sha256(representation.analysis_sequence.encode()).hexdigest(),
+        "genome_id": representation.analysis_sequence_id,
+        "segment_id": None,
+        "genome_length": len(representation.analysis_sequence),
+        "declared_molecule_type": None,
+        "selected_gene_caller_policy": "phanotate-only-legacy-compatible",
+        "callers_invoked": ["PHANOTATE"] + (["Prodigal"] if reconciliation_enabled else []),
+        "caller_versions": {"PHANOTATE": predictor.version(), **({"Prodigal": prodigal_predictor.version()} if reconciliation_enabled else {})},
+        "exact_commands": {"PHANOTATE": getattr(predictor, "last_command", None), **({"Prodigal": getattr(prodigal_predictor, "last_command", None)} if reconciliation_enabled else {})},
+        "parameters": {"PHANOTATE": predictor.parameters(), **({"Prodigal": prodigal_predictor.parameters()} if reconciliation_enabled else {})},
+        "raw_output_paths": {"PHANOTATE": [str(raw / "phanotate.raw.txt"), str(raw / "phanotate.tsv")], **({"Prodigal": [str(raw / "prodigal.gff"), str(raw / "prodigal.tsv")]} if reconciliation_enabled else {})},
+        "coordinate_conventions": {"PHANOTATE": "1-based-inclusive", "Prodigal": "1-based-inclusive"},
+        "phagemine_version": __version__,
+        "reconciliation_policy": "observational-only; PHANOTATE remains final",
+        "decision_policy": "v1.1 final CDS behavior preserved",
+    }
+    manifest["providers"] = [{
+        "provider_id": "phanotate", "name": "PHANOTATE", "version": predictor.version(),
+        "role": "PRIMARY", "status": "SUCCESS", "command": getattr(predictor, "last_command", None),
+        "parameters": predictor.parameters(),
+    }]
+    if reconciliation_enabled and prodigal_predictor is not None:
+        manifest["providers"].append({
+            "provider_id": "prodigal", "name": "Prodigal", "version": prodigal_predictor.version(),
+            "role": "SECONDARY_OBSERVATIONAL", "status": "SUCCESS",
+            "command": getattr(prodigal_predictor, "last_command", None),
+            "parameters": prodigal_predictor.parameters(),
+        })
+    (root / "gene_call_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    with (root / "final_gene_model_trace.tsv").open("w", newline="") as handle:
+        columns = ["protein_id", "locus_id", "start", "end", "strand", "selected_source",
+                   "phanotate_id", "prodigal_id", "caller_agreement", "decision_class",
+                   "decision_reason", "review_required", "input_sha256"]
+        writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t")
+        writer.writeheader()
+        for index, protein in enumerate(proteins, 1):
+            writer.writerow({"protein_id": protein.protein_id, "locus_id": f"LOCUS_{index:06d}",
+                             "start": protein.start, "end": protein.end, "strand": protein.strand,
+                             "selected_source": "PHANOTATE", "phanotate_id": protein.protein_id,
+                             "prodigal_id": "", "caller_agreement": "PHANOTATE_FINAL",
+                             "decision_class": "LEGACY_PHANOTATE_FINAL",
+                             "decision_reason": "Step 1 preserves v1.1 final CDS selection",
+                             "review_required": "false", "input_sha256": input_sha})
+
+
 def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
     """Keep resource absence distinct from a completed zero-hit search."""
     if result.status == "UNAVAILABLE":
@@ -40,19 +501,82 @@ def _evidence_progress_summary(result, unavailable_fallback: str) -> str:
     return f"{len(accepted)} accepted hits / {len(proteins)} proteins"
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1) -> int:
+def _run_validated_inphared(
+    output: str | Path,
+    manifest: dict,
+    progress: ProgressReporter,
+    validated_resolution: tuple[dict | None, str] | None = None,
+) -> dict:
+    """Run the automatic genome comparison, or record an explicit safe skip."""
+    from .inphared import compare_genomes
+
+    progress.start("INPHARED genome comparison")
+    resource, reason = validated_resolution or resolve_validated_inphared()
+    comparative_directory = Path(output) / "comparative"
+    if resource is None:
+        result = {"status": "SKIPPED", "reason": reason, "matches": []}
+        progress.skip(reason)
+    else:
+        paths = resource["runtime_paths"]
+        analysis_fasta = Path(output) / "analysis_genome.fasta"
+        result = compare_genomes(
+            {Path(output).name: analysis_fasta},
+            mash_index=paths["mash_index"],
+            metadata=paths["metadata"],
+            output=comparative_directory,
+            reference_fasta=paths["reference_fasta"],
+        )
+        result["resource_version"] = resource.get("version")
+        result["resource_manifest"] = paths["manifest"]
+        progress.finish(f"{len(result.get('matches') or [])} nearest-reference rows")
+
+    manifest.setdefault("comparative_analysis", {})["inphared"] = result
+    manifest["comparative_analysis"]["output_directory"] = str(comparative_directory)
+    update_comparative_report(output, {"inphared": result})
+    return result
+
+
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None) -> int:
     progress = progress or ProgressReporter(quiet=True)
-    if reconcile_orfs:
+    shared_evidence_cache = shared_evidence_cache or _SegmentEvidenceCache()
+    molecule_type = str(molecule_type).lower()
+    if molecule_type not in {"dna", "rna"}:
+        raise ValueError("molecule_type must be dna or rna")
+    consensus_active = gene_model_policy == "consensus"
+    if molecule_type == "rna" and consensus_active:
+        raise ValueError("RNA mode uses the explicit Pyrodigal-rv RNA policy; DNA consensus is not applicable")
+    if segmented and molecule_type != "rna":
+        raise ValueError("--segmented is valid only with --molecule-type rna")
+    if segmented:
+        from .io import read_fasta_records
+        if len(read_fasta_records(fasta)) > 1:
+            return _run_segmented_rna(fasta, output, command=command, progress=progress,
+                                      metadata=metadata, table2asn_executable=table2asn_executable,
+                                      predictor=predictor, sequencing_provenance=sequencing_provenance,
+                                      pfam_path=pfam_path, pfam_hmmscan=pfam_hmmscan, pfam_evalue=pfam_evalue,
+                                      pfam_coverage=pfam_coverage, pfam_trusted_cutoff=pfam_trusted_cutoff,
+                                      use_mock_evidence=use_mock_evidence, pfam_threshold_mode=pfam_threshold_mode,
+                                      vog_path=vog_path, vog_annotations=vog_annotations, vog_hmmscan=vog_hmmscan,
+                                      vog_evalue=vog_evalue, vog_coverage=vog_coverage, swissprot_path=swissprot_path,
+                                      swissprot_metadata=swissprot_metadata, diamond=diamond,
+                                      swissprot_evalue=swissprot_evalue, phrogs_path=phrogs_path,
+                                      phrogs_annotations=phrogs_annotations, phrogs_hmm_path=phrogs_hmm_path,
+                                      mmseqs=mmseqs, phrogs_evalue=phrogs_evalue, phrogs_coverage=phrogs_coverage,
+                                      phrogs_score=phrogs_score, phrogs_identity=phrogs_identity,
+                                      phrogs_alignment_length=phrogs_alignment_length, reconcile_orfs=reconcile_orfs,
+                                      prodigal=prodigal, threads=threads, inphared_resolution=inphared_resolution,
+                                      gene_model_policy=gene_model_policy, gene_model_profile=gene_model_profile)
+    if reconcile_orfs and not consensus_active and molecule_type == "dna":
         stages = [
             "input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
             "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
             "ORF adjudication", "evidence integration", "candidate ranking/mining", "QC/report generation",
         ]
-        if command == "annotate":
+        if command in {"annotate", "run"}:
             stages.append("INPHARED genome comparison")
         stages.append("GenBank pre-submission package")
         progress.STAGES = tuple(stages)
-    elif command == "annotate":
+    elif command in {"annotate", "run"}:
         stages = list(progress.STAGES)
         if "INPHARED genome comparison" not in stages:
             stages.insert(-1, "INPHARED genome comparison")
@@ -75,32 +599,69 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         Path(output).mkdir(parents=True, exist_ok=True)
         predictor_input = Path(output) / "analysis_predictor_input.fasta"
         predictor_input.write_text(f">{representation.analysis_sequence_id}\n{representation.analysis_sequence}\n")
-    progress.start("gene prediction")
-    timed_start("phanotate")
-    proteins = predictor.predict(representation.analysis_sequence_id, representation.analysis_sequence, predictor_input)
-    timed_end("phanotate")
+    consensus_context = None
+    if molecule_type == "rna":
+        proteins = _run_rna_gene_models(fasta, output, representation, progress=progress)
+    elif consensus_active:
+        # Generic providers own prediction/provenance in this branch.  Legacy
+        # --reconcile-orfs is intentionally not duplicated here.
+        proteins, active_providers, consensus_loci, consensus_decisions, consensus_selections = _run_consensus_gene_models(
+            fasta, output, representation, predictor, profile=gene_model_profile, progress=progress)
+        consensus_context = (active_providers, consensus_loci, consensus_decisions, consensus_selections)
+    else:
+        progress.start("gene prediction")
+        timed_start("phanotate")
+        proteins = predictor.predict(representation.analysis_sequence_id, representation.analysis_sequence, predictor_input)
+        timed_end("phanotate")
     if not proteins:
         raise ValueError("No ORFs met the MVP minimum length; use a genome with coding sequences or lower the configured threshold in a future adapter.")
-    gene_manifest = {"stage": "gene_prediction", "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "input_sha256": checksum(fasta)}
+    gene_manifest = {"stage": "gene_prediction", "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "input_sha256": checksum(fasta), "gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile, "selection_policy_version": "1.0"}
     write_checkpoint_snapshot(output, Path(output) / "checkpoints" / "gene_prediction", representation, sequencing_provenance, proteins, gene_manifest, fasta)
     reconciliation_rows = None
     prodigal_models = None
     gene_review_records = []
     progress.finish(f"{len(proteins)} proteins")
-    if reconcile_orfs:
+    if reconcile_orfs and not consensus_active and molecule_type == "dna":
         progress.start("Prodigal secondary gene prediction")
-        prodigal_models = ProdigalPredictor(prodigal).predict(fasta, representation.analysis_sequence)
+        prodigal_predictor = ProdigalPredictor(prodigal)
+        prodigal_models = prodigal_predictor.predict(fasta, representation.analysis_sequence)
         progress.finish(f"{len(prodigal_models)} proteins")
         progress.start("ORF reconciliation")
-        phanotate_models = [GeneModel("PHANOTATE", p.protein_id, p.start, p.end, p.strand, p.cds, caller_version=predictor.version(), options=p.gene_call_parameters) for p in proteins]
+        phanotate_models = [GeneModel(
+            caller="PHANOTATE", identifier=p.protein_id, start=p.start, end=p.end,
+            strand=p.strand, sequence=p.sequence, frame=None,
+            caller_version=predictor.version(), command=getattr(predictor, "last_command", None),
+            options=p.gene_call_parameters, genome_id=p.genome_id,
+            start_codon=p.start_codon, stop_codon=p.stop_codon,
+            cds_sequence=p.cds, protein_sequence=p.sequence,
+            input_sequence_sha256=checksum(fasta), raw_start=p.gene_call_parameters.get("raw_start"),
+            raw_end=p.gene_call_parameters.get("raw_end"), raw_strand=p.gene_call_parameters.get("reported_strand"),
+            source_file=str(getattr(predictor, "last_input_fasta", fasta)),
+        ) for p in proteins]
         reconciliation_rows = reconcile_models(phanotate_models, prodigal_models, checksum(fasta))
-        write_reconciliation(output, reconciliation_rows, {"input_sha256": checksum(fasta), "phanotate": predictor.parameters(), "prodigal": {"executable": prodigal or "PATH"}})
+        write_reconciliation(output, reconciliation_rows, {"input_sha256": checksum(fasta), "phanotate": predictor.parameters(), "prodigal": prodigal_predictor.parameters(), "prodigal_command": prodigal_predictor.last_command})
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
+    if not consensus_active and molecule_type == "dna":
+        _write_gene_call_provenance(
+            output, fasta, representation, predictor, proteins,
+            prodigal_predictor=locals().get("prodigal_predictor"),
+            prodigal_models=prodigal_models,
+            reconciliation_enabled=reconcile_orfs,
+        )
+    # Selection is an additive policy record at this stage.  The legacy
+    # PHANOTATE final path remains unchanged; consensus selection is exposed
+    # through the dedicated selection layer and is opt-in for future wiring.
+    manifest_path = Path(output) / "gene_calls" / "gene_call_manifest.json"
+    if manifest_path.is_file():
+        manifest = json.loads(manifest_path.read_text())
+        manifest.update({"gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile,
+                         "selection_policy_version": "1.0"})
+        manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
     evidence_adapters = []
     if use_mock_evidence:
-        mock_result = MockEvidenceBackend().analyze(proteins)
+        mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
         evidence_adapters.append({"adapter": mock_result.adapter, "status": mock_result.status, "provenance": mock_result.provenance, "message": mock_result.message})
     pfam_origin = "explicit_cli" if pfam_path else "unavailable"
     if pfam_path is None:
@@ -111,7 +672,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     pfam_adapter = PfamHMMAdapter(pfam_path, pfam_hmmscan, pfam_evalue, pfam_coverage, pfam_trusted_cutoff, threshold_mode=pfam_threshold_mode, threads=threads)
     progress.start("Pfam")
     timed_start("pfam")
-    pfam_result = pfam_adapter.analyze(proteins)
+    pfam_result = _analyze_evidence(pfam_adapter, proteins, shared_evidence_cache)
     pfam_result.provenance["resource_origin"] = pfam_origin
     proteins_by_id = {protein.protein_id: protein for protein in proteins}
     for evidence in pfam_result.evidence:
@@ -138,7 +699,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     vog_adapter = VOGHMMAdapter(vog_path, vog_annotations, vog_hmmscan, vog_evalue, vog_coverage, database_version=vog_version, threads=threads)
     progress.start("VOGDB")
     timed_start("vogdb")
-    vog_result = vog_adapter.analyze(proteins)
+    vog_result = _analyze_evidence(vog_adapter, proteins, shared_evidence_cache)
     vog_result.provenance["resource_origin"] = vog_origin
     for evidence in vog_result.evidence:
         protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
@@ -161,7 +722,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     swiss_adapter = SwissProtEvidenceAdapter(swissprot_path, swissprot_metadata, diamond, database_version=swiss_version, evalue_threshold=swissprot_evalue, threads=threads)
     progress.start("Swiss-Prot")
     timed_start("swissprot")
-    swiss_result = swiss_adapter.analyze(proteins)
+    swiss_result = _analyze_evidence(swiss_adapter, proteins, shared_evidence_cache)
     swiss_result.provenance["resource_origin"] = swiss_origin
     for evidence in swiss_result.evidence:
         protein_id = evidence.provenance.get("protein_id") or evidence.metrics.get("query_protein_id")
@@ -192,9 +753,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         phrogs_evalue, phrogs_coverage, phrogs_score, threads=threads)
     progress.start("PHROGs")
     timed_start("phrogs")
-    phrogs_result = phrogs_adapter.analyze(proteins)
+    phrogs_result = _analyze_evidence(phrogs_adapter, proteins, shared_evidence_cache)
     phrogs_result.provenance["resource_origin"] = phrogs_origin
-    phrogs_hmm_result = phrogs_hmm_adapter.analyze(proteins)
+    phrogs_hmm_result = _analyze_evidence(phrogs_hmm_adapter, proteins, shared_evidence_cache)
     phrogs_hmm_result.provenance["resource_origin"] = phrogs_hmm_origin
     merged_phrogs = merge_phrogs_evidence(phrogs_result.evidence, phrogs_hmm_result.evidence)
     for evidence in merged_phrogs:
@@ -212,11 +773,15 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
     progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
     timed_end("phrogs")
-    if reconcile_orfs:
+    if reconcile_orfs and not consensus_active and molecule_type == "dna":
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
         # Adapter objects are reused with isolated one-protein inputs; canonical evidence is untouched.
-        alt = acquire_alternative_evidence(alt, (pfam_adapter, vog_adapter, swiss_adapter, phrogs_adapter), Path(output)/"checkpoints"/"alternative_evidence")
+        # Boundary adjudication must give incumbent and alternative
+        # translations the same configured evidence opportunity.  The normal
+        # protein path includes both PHROGs backends, so alternatives receive
+        # the PyHMMER adapter as well as MMseqs2.
+        alt = acquire_alternative_evidence(alt, (pfam_adapter, vog_adapter, swiss_adapter, phrogs_adapter, phrogs_hmm_adapter), Path(output)/"checkpoints"/"alternative_evidence")
         write_alternative_evidence(output, alt, {"input_sha256": checksum(fasta), "cached": True})
         progress.finish("alternative evidence persisted")
         evidence_map = {p.protein_id: [asdict(e) for e in p.evidence] for p in proteins}
@@ -278,57 +843,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta, classifications, context_records, modules)
     progress.finish(f"outputs written to {output}")
     timed_end("reporting")
-    # ``annotate`` performs the genome-level INPHARED nearest-reference
-    # comparison when the validated resource is available.  It deliberately
-    # does not invoke PMFDB family mining or the broader discovery workflow.
-    # ``run`` continues to consume INPHARED through build_discovery_outputs(),
-    # so the whole-genome comparison is executed exactly once per workflow.
     if command == "annotate":
-        from .inphared import compare_genomes
-
-        progress.start("INPHARED genome comparison")
         timed_start("inphared")
-
-        manager = EvidenceResourceManager()
-        inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
-
-        comparative_directory = Path(output) / "comparative"
-        unavailable = {"status": "INPHARED_UNAVAILABLE", "matches": []}
-
-        manifest["comparative_analysis"] = {
-            "output_directory": str(comparative_directory),
-            "inphared": unavailable,
-        }
-
-        if inphared_resource:
-            provenance = inphared_resource.get("provenance") or {}
-            analysis_fasta = Path(output) / "analysis_genome.fasta"
-
-            inphared_comparison = compare_genomes(
-                {Path(output).name: analysis_fasta},
-                mash_index=provenance.get("mash_index_path"),
-                metadata=provenance.get("metadata_path"),
-                output=comparative_directory,
-                reference_fasta=inphared_resource.get("path"),
-            )
-
-            inphared_comparison["resource_version"] = inphared_resource.get("version")
-            inphared_comparison["resource_manifest"] = provenance.get("reference_manifest_path")
-
-            comparative_directory.mkdir(parents=True, exist_ok=True)
-            (comparative_directory / "inphared_nearest_phages.json").write_text(
-                json.dumps(inphared_comparison, indent=2, sort_keys=True) + "\n"
-            )
-
-            manifest["comparative_analysis"]["inphared"] = inphared_comparison
-            update_comparative_report(output, {"inphared": inphared_comparison})
-
-            progress.finish(
-                f"{len(inphared_comparison.get('matches') or [])} nearest-reference rows"
-            )
-        else:
-            progress.skip("INPHARED genomes not configured")
-
+        _run_validated_inphared(output, manifest, progress, inphared_resolution)
         timed_end("inphared")
 
     # ``run`` is the complete single-genome workflow.  Installed comparative
@@ -337,15 +854,14 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         from .discovery import build_discovery_outputs
         manager = EvidenceResourceManager()
         pmfdb_resource = manager.find(ResourceType.PMFDB)
-        inphared_resource = manager.find(ResourceType.INPHARED_GENOMES)
         comparative = {"pmfdb": {"status": "PMFDB_UNAVAILABLE"},
-                       "inphared": {"status": "INPHARED_UNAVAILABLE", "matches": []}}
-        if pmfdb_resource or inphared_resource:
+                       "inphared": {"status": "SKIPPED", "matches": []}}
+        if pmfdb_resource:
             comparative = build_discovery_outputs(
                 [Path(output)], Path(output) / "comparative",
                 mmseqs=mmseqs or "mmseqs",
                 pmfdb=pmfdb_resource.get("path") if pmfdb_resource else None,
-                inphared=inphared_resource,
+                inphared=None,
                 progress=progress,
                 source_mode="single-run",
             )
@@ -354,6 +870,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             "pmfdb": comparative.get("pmfdb"),
             "inphared": comparative.get("inphared"),
         }
+        timed_start("inphared")
+        inphared_result = _run_validated_inphared(output, manifest, progress, inphared_resolution)
+        timed_end("inphared")
+        comparative["inphared"] = inphared_result
         update_comparative_report(output, comparative)
     # Local package generation follows annotation, mining, ranking, and QC evidence collection.
     progress.start("GenBank pre-submission package")
@@ -363,4 +883,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     timed_end("genbank")
     manifest["stage_timings_seconds"] = timings
     (Path(output) / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    from .triage import write_triage_report
+    write_triage_report(output)
     return len(proteins)

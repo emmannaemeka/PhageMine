@@ -47,10 +47,17 @@ def update_comparative_report(output: str | Path, comparative: dict) -> None:
         table = "<table><thead><tr><th>Rank</th><th>Reference phage</th><th>Accession</th><th>Host</th><th>ICTV family</th><th>ICTV genus</th><th>Intergenomic similarity</th><th>Query aligned</th><th>Reference aligned</th><th>Interpretation</th></tr></thead><tbody>" + "".join(table_rows) + "</tbody></table>"
     else:
         table = "<p>No INPHARED reference comparison was available.</p>"
+    downloads = []
+    if (root / "comparative" / "inphared_nearest_phages.tsv").is_file():
+        downloads.append("<a href='comparative/inphared_nearest_phages.tsv'>Download accession-level results</a>")
+    if (root / "comparative" / "inphared_summary.tsv").is_file():
+        downloads.append("<a href='comparative/inphared_summary.tsv'>Download numerical-taxonomy summary</a>")
+    if (root / "comparative" / "discovery_report.html").is_file():
+        downloads.append("<a href='comparative/discovery_report.html'>Open comparative report</a>")
     section = ("<section id='inphared-numerical-taxonomy'><h2>INPHARED nearest-reference nucleotide comparison</h2>"
         "<p><b>Method:</b> Mash is used only to select candidate references. Reported similarity is PhageMine's bidirectional BLASTN length-normalized calculation; it is not presented as VIRIDIC output. Mash distance is not converted to similarity.</p>"
         "<p><b>Taxonomic caution:</b> PhageMine does not assign taxa. Boundary interpretation is withheld for partial or poorly aligned queries; current family-specific ICTV criteria and formal phylogenetic analysis take precedence.</p>"
-        + table + "<p><a href='comparative/inphared_nearest_phages.tsv'>Download accession-level results</a> · <a href='comparative/inphared_summary.tsv'>Download numerical-taxonomy summary</a> · <a href='comparative/discovery_report.html'>Open comparative report</a></p></section>")
+        + table + ("<p>" + " · ".join(downloads) + "</p>" if downloads else "") + "</section>")
     content = report.read_text()
 
     # Report updates can occur during resume/recovery.  Remove any previously
@@ -262,6 +269,10 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
             writer.writerow(["NA" if insufficient else rank, p.protein_id, p.annotation, p.biological_interest, p.functional_confidence, p.evidence_diversity, json.dumps(p.score_components, sort_keys=True)])
     (root / "evidence.json").write_text(json.dumps([asdict(p) for p in proteins], indent=2, default=str))
     write_classification(root, proteins, classifications)
+    # Additive export for prospective blinded validation. This serializes the
+    # existing evidence/classification objects without changing their meaning.
+    from .validation import write_validation_export
+    write_validation_export(root, proteins, classifications, manifest)
     if context_records is not None and modules is not None:
         write_context(root, context_records, modules)
     if quality_control is not None:

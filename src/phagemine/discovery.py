@@ -206,7 +206,7 @@ def _reports(root, samples, proteins, families, ranking, figures, evidence_reuse
 
 
 def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None, inphared=None, mash="mash", progress=None,
-                            resume_existing=False, evidence_reused=False, source_mode="discover"):
+                            inphared_skip_reason=None, resume_existing=False, evidence_reused=False, source_mode="discover"):
     root=Path(output); root.mkdir(parents=True, exist_ok=True); started=time.monotonic(); timings={}
     checkpoints_path=root/"discovery_checkpoints.json"
     checkpoints=json.loads(checkpoints_path.read_text()) if resume_existing and checkpoints_path.is_file() else {}
@@ -269,27 +269,27 @@ def build_discovery_outputs(sample_dirs, output, *, mmseqs="mmseqs", pmfdb=None,
     mark(stage,pmf_sig,[root/"pmfdb_validation.tsv",root/"pmfdb_validation.json"],reuse_pmf); emit("DONE" if pmfdb or reuse_pmf else "SKIPPED",stage,t,"reused" if reuse_pmf else (pmfdb_provenance.get("pmfdb_version") or "PMFDB not configured"))
 
     stage="INPHARED genome comparison"; t=time.monotonic(); emit("RUNNING",stage)
-    inphared_comparison={"status":"INPHARED_UNAVAILABLE","matches":[]}
+    inphared_comparison={"status":"SKIPPED","reason":inphared_skip_reason or "INPHARED genomes are not registered","matches":[]}
     if inphared:
-        provenance=inphared.get("provenance") or {}
+        runtime_paths=inphared["runtime_paths"]
         fastas={Path(sample).name:Path(sample)/"analysis_genome.fasta" for sample in sample_dirs if (Path(sample)/"analysis_genome.fasta").is_file()}
         inphared_comparison=compare_genomes(
             fastas,
-            mash_index=provenance.get("mash_index_path"),
-            metadata=provenance.get("metadata_path"),
+            mash_index=runtime_paths["mash_index"],
+            metadata=runtime_paths["metadata"],
             output=root,
             mash=mash,
-            reference_fasta=inphared.get("path"),
+            reference_fasta=runtime_paths["reference_fasta"],
         )
         inphared_comparison["resource_version"]=inphared.get("version")
-        inphared_comparison["resource_manifest"]=provenance.get("reference_manifest_path")
+        inphared_comparison["resource_manifest"]=runtime_paths["manifest"]
         (root/"inphared_nearest_phages.json").write_text(json.dumps(inphared_comparison,indent=2,sort_keys=True)+"\n")
         emit("DONE",stage,t,f"{len(inphared_comparison.get('matches') or [])} nearest-reference rows")
     else:
         _write_tsv(root/"inphared_nearest_phages.tsv",[],["sample_id","rank","reference_accession","mash_distance","p_value","matching_hashes","reference_description","host_genus","phage_genus","phage_subfamily","phage_family","intergenomic_similarity_percent","query_aligned_percent","reference_aligned_percent","genome_length_ratio","similarity_method","species_threshold_percent","genus_threshold_percent","threshold_source","taxonomy_eligible","comparison_scope","taxonomic_interpretation","interpretation"])
         _write_tsv(root/"inphared_summary.tsv",[],["sample_id","relationship","reference_description","reference_accessions","best_mash_distance","matching_hashes","intergenomic_similarity_percent","query_aligned_percent","reference_aligned_percent","genome_length_ratio","similarity_method","species_threshold_percent","genus_threshold_percent","threshold_source","taxonomy_eligible","comparison_scope","taxonomic_interpretation","interpretation"])
         (root/"inphared_nearest_phages.json").write_text(json.dumps(inphared_comparison,indent=2,sort_keys=True)+"\n")
-        emit("SKIPPED",stage,t,"INPHARED genomes not configured")
+        emit("SKIPPED",stage,t,inphared_comparison["reason"])
     mark(stage,_signature({"inputs":fingerprints,"inphared":str((inphared or {}).get('path'))}),[root/"inphared_nearest_phages.tsv",root/"inphared_summary.tsv",root/"inphared_nearest_phages.json"])
 
     stage="Discovery ranking"; t=time.monotonic(); emit("RUNNING",stage)

@@ -1,0 +1,8 @@
+accession	source_file	locus	definition	accession_line	version	sha256
+NC_000866.4	inputs/NC_000866.4.gb	NC_000866             168903 bp    DNA     linear   PHG 11-JAN-2023	Enterobacteria phage T4, complete genome.	NC_000866	NC_000866.4	24acc08a8ecaa62d6a7a58b9f59e15b3935a9f787012ea5f24ed7191df552764
+NC_001416.1	inputs/NC_001416.1.gb	NC_001416              48502 bp    DNA     linear   PHG 11-JAN-2023	Enterobacteria phage lambda, complete genome.	NC_001416	NC_001416.1	3c624302adeeb3c00649f549903ab781b9e75bab16069ae655833d536407367f
+NC_001604.1	inputs/NC_001604.1.gb	NC_001604              39937 bp    DNA     linear   PHG 07-JAN-2023	Enterobacteria phage T7, complete genome.	NC_001604	NC_001604.1	96d4200c2410f4ac0195dfd43f7daf78456ed61e72600b223cace24123f37273
+NC_005859.1	inputs/NC_005859.1.gb	NC_005859             121750 bp    DNA     linear   PHG 13-MAY-2023	Enterobacteria phage T5, complete genome.	NC_005859	NC_005859.1	da3fb8a690a2c15ac465a36c1909be6716fdbed8d7233a83696253e3a4fca7ae
+NC_001422.1	inputs/NC_001422.1.gb	NC_001422               5386 bp ss-DNA     circular PHG 11-JAN-2023	Escherichia phage phiX174, complete genome.	NC_001422	NC_001422.1	0a8099e207633f8c3ba998bfe2a198518e1de356c7956691101b2512324b807c
+NC_002371.2	inputs/NC_002371.2.gb	NC_002371              41724 bp    DNA     linear   PHG 11-JAN-2023	TPA: Salmonella phage P22, complete genome.	NC_002371	NC_002371.2	40a4527ce3a1d9f48c6f2ce37cf9e0f1193ba7491429effbd204191c92e88a5b
+NC_000929.1	inputs/NC_000929.1.gb	NC_000929              36717 bp    DNA     linear   PHG 11-JAN-2023	Enterobacteria phage Mu, complete genome.	NC_000929	NC_000929.1	be402002be4f98a7cd407525b620b4d9072bd45730d424af20c4a31c8da60c55

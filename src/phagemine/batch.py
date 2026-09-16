@@ -37,7 +37,7 @@ from .vog import VOGHMMAdapter
 from .swissprot import SwissProtEvidenceAdapter
 from .phrogs import PHROGSMMseqsAdapter, PHROGSPyHMMERAdapter, merge_phrogs_evidence
 from .evidence import EvidenceAdapterResult
-from .resources import EvidenceResourceManager, ResourceType
+from .resources import EvidenceResourceManager, ResourceType, resolve_validated_inphared
 from .hmmer_chunking import run_chunked
 from .discovery import build_discovery_outputs
 
@@ -50,12 +50,13 @@ SUMMARY_FIELDS = ("sample_id", "input_file", "status", "error_message", "genome_
                   "UNRESOLVED", "module_count", "output_directory")
 
 
-def _comparative_resources() -> tuple[str | None, dict | None]:
+def _comparative_resources() -> tuple[str | None, dict | None, str]:
     """Resolve only fully validated comparative resources for automatic use."""
-    resources = EvidenceResourceManager().validate_all(check_checksum=True)
-    pmfdb = next((item for item in resources if item.get("resource_type") == "PMFDB" and item.get("status") == "READY"), None)
-    inphared = next((item for item in resources if item.get("resource_type") == "INPHARED_GENOMES" and item.get("status") == "READY"), None)
-    return (pmfdb.get("path") if pmfdb else None), inphared
+    manager = EvidenceResourceManager()
+    pmfdb_resources = manager.validate_type(ResourceType.PMFDB, check_checksum=True)
+    pmfdb = next((item for item in pmfdb_resources if item.get("status") == "READY"), None)
+    inphared, inphared_reason = resolve_validated_inphared(manager)
+    return (pmfdb.get("path") if pmfdb else None), inphared, inphared_reason
 
 
 def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predictor="phanotate", phanotate=None, progress=None, resume_existing=False):
@@ -286,7 +287,9 @@ def _write_batch_presentation(project: Path, rows: list[dict]) -> None:
 def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_existing=False,
           fail_fast=False, gene_predictor="phanotate", phanotate=None, progress=None,
           reconcile_orfs=False, prodigal=None, threads: int = 1, evidence_profile: str = "core",
-          mode: str = "annotate") -> list[dict]:
+          mode: str = "annotate", gene_model_policy: str = "phanotate-only",
+          gene_model_profile: str = "standard", molecule_type: str = "dna",
+          segmented: bool = False) -> list[dict]:
     root = Path(input_dir).resolve()
     from .preflight import preflight_profile
     profile_resolution = preflight_profile(evidence_profile)
@@ -303,22 +306,27 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
         # always materialize PMFs, recurrence, context, PMFDB validation, ranking,
         # reports, and figures from the completed per-genome artifacts.
         sample_dirs = [project / _sample_id(path) for path in inputs]
-        pmfdb, inphared = _comparative_resources()
+        pmfdb, inphared, inphared_reason = _comparative_resources()
         build_discovery_outputs(sample_dirs, project, progress=progress, pmfdb=pmfdb, inphared=inphared,
+                                inphared_skip_reason=inphared_reason,
                                 resume_existing=resume_existing, source_mode="discover")
         return rows
     if mode == "both":
         batch(input_dir, project / "annotation", recursive, resume_existing, fail_fast,
               gene_predictor, phanotate, progress, reconcile_orfs, prodigal, threads,
-              evidence_profile, mode="annotate")
+              evidence_profile, mode="annotate", gene_model_policy=gene_model_policy,
+              gene_model_profile=gene_model_profile, molecule_type=molecule_type,
+              segmented=segmented)
         samples = discovery_from_annotation(project / "annotation", project / "discovery")
         sample_dirs = [project / "discovery" / _sample_id(path) for path in inputs]
-        pmfdb, inphared = _comparative_resources()
+        pmfdb, inphared, inphared_reason = _comparative_resources()
         build_discovery_outputs(sample_dirs, project / "discovery", progress=progress, pmfdb=pmfdb, inphared=inphared,
+                                inphared_skip_reason=inphared_reason,
                                 resume_existing=resume_existing, evidence_reused=True,
                                 source_mode="both")
         return samples
     progress = progress or ProgressReporter(quiet=True)
+    inphared_resolution = resolve_validated_inphared()
     started = datetime.now(timezone.utc).isoformat()
     rows: list[dict] = []
     manifest = {"batch_schema_version": "1.2", "pipeline": "PhageMine", "started_at": started,
@@ -327,6 +335,9 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
                 "configuration": {"gene_predictor": gene_predictor, "resume_existing": resume_existing,
                                    "fail_fast": fail_fast, "threads": threads,
                                    "evidence_profile": evidence_profile,
+                                   "gene_model_policy": gene_model_policy,
+                                   "gene_model_profile": gene_model_profile,
+                                   "molecule_type": molecule_type,
                                    "mode": mode,
                                    "evidence_profile_resolution": profile_resolution,
                                    "pooled_execution": False,
@@ -424,7 +435,11 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
             else:
                 run(path, destination, command="annotate", predictor=create_predictor(gene_predictor, phanotate),
                     reconcile_orfs=reconcile_orfs, prodigal=prodigal,
-                    progress=sample_progress, threads=threads)
+                    progress=sample_progress, threads=threads,
+                    inphared_resolution=inphared_resolution,
+                    gene_model_policy=gene_model_policy,
+                    gene_model_profile=gene_model_profile,
+                    molecule_type=molecule_type, segmented=segmented)
                 row["status"] = "SUCCESS"
                 status["status"] = "SUCCESS"
                 _atomic_json(status_path, status)

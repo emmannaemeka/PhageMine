@@ -29,3 +29,47 @@ databases/
 *.dmnd
 *.hmmpress
 PMFDB*/
+
+# Local benchmark evidence and machine-specific development captures
+evaluation/v1.2_tool_comparison/raw_outputs/
+evaluation/v1.2_tool_comparison/final_audit_20260916/
+evaluation/v1.2_tool_comparison/correction_validation_20260916/
+evaluation/v1.2_tool_comparison/final_structural_interpretation_20260916/
+evaluation/v1.2_validation/
+evaluation/v1.2_heldout/
+evaluation/v1.2_outputs/
+evaluation/v1.2_regression/
+evaluation/v1.2_finalization/rerun/
+evaluation/v1.2_finalization/development_heldout/
+evaluation/v1.2_finalization/challenge/
+evaluation/v1.2_finalization/canonical/
+evaluation/v1.2_finalization/*.json
+evaluation/v1.2_finalization/*.log
+environment/v1.2-dev-conda.yml
+diagnostics/
+*.log
+*.status.json
+*.pytest_cache/
+.pytest_cache/
+.coverage
+
+# Local development notes and command transcripts
+docs/v1.2-*-pytest*.txt
+docs/v1.2-*install*.log
+docs/v1.2-external-tools.txt
+docs/v1.2-development-plan.md
+
+# Keep only the compact, curated public benchmark package in version control.
+evaluation/PhageMine_v1.2_tool_comparison/
+evaluation/v1.2_tool_comparison/
+evaluation/v1.2_finalization/*.tsv
+docs/v1.2-baseline*.md
+docs/v1.2-cli-help.txt
+docs/v1.2-step*.txt
+tests/test_reference_validation_normalizer.py
+docs/v1.2-gene-calling-design.md
+docs/v1.2-pyrodigal-rv-install-diagnostic.txt
+
+# The generic benchmark pattern above must not hide the public package.
+!docs/benchmark_v1.2/
+!docs/benchmark_v1.2/**

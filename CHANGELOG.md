@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.0 (finalization)
+
+- Fixed IUPAC ambiguity-code handling and provider-specific sequence
+  normalization with auditable provenance and controlled provider outcomes.
+- Established PHANOTATE as the sole primary DNA caller; Pyrodigal and
+  Prodigal-gv remain available for corroboration and conflict detection only.
+- Added deterministic NO_REVIEW, LOW_PRIORITY_REVIEW,
+  MODERATE_REVIEW, and HIGH_PRIORITY_REVIEW tiers while retaining detailed
+  underlying conflict fields.
+- Added a reproducible PHANOTATE-versus-PhageMine structural benchmark.
+- Integrated validated INPHARED nearest-reference genomic context into
+  single-genome and cohort workflows, with Mash screening, optional
+  bidirectional BLASTN similarity, resource manifests, and conservative
+  taxonomy interpretation.
+
 ## 1.1.0
 
 - Promote the scientifically hardened development line to the PhageMine 1.1.0

@@ -1,0 +1,7 @@
+Python: 3.12.14
+Installation: pip install pyrodigal-rv==0.1.0 (PyPI)
+pyrodigal: 3.7.1
+pyrodigal_gv: 0.3.2
+pyrodigal_rv: 0.1.0
+Imports: pyrodigal, pyrodigal_gv, pyrodigal_rv all successful.
+API smoke: GeneFinder(meta=True), ViralGeneFinder(meta=True) for gv and rv all instantiated successfully.
