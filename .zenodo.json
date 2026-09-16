@@ -1,0 +1,21 @@
+{
+  "title": "PhageMine",
+  "version": "1.2.0",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Nnaemeka Emmanuel Nnadi",
+      "orcid": "https://orcid.org/0000-0002-8424-4859",
+      "affiliation": "Department of Microbiology, Plateau State University, Bokkos, Plateau State, Nigeria; Centre for Phage Biology and Therapeutics LTD/GTE, Jos, Plateau State, Nigeria"
+    }
+  ],
+  "keywords": [
+    "bacteriophage",
+    "genome annotation",
+    "comparative genomics",
+    "bioinformatics",
+    "INPHARED",
+    "PHANOTATE"
+  ]
+}
