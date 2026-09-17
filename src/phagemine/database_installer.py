@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -286,7 +287,7 @@ class DatabaseInstaller:
         headers = {"User-Agent": "PhageMine/1.0 database-installer"}
         if offset:
             headers["Range"] = f"bytes={offset}-"
-        self.reporter(f"Downloading {url}")
+        self.reporter(f"Downloading {url} (connection/read timeout: 60 seconds)")
         try:
             request = urllib.request.Request(url, headers=headers)
             with urllib.request.urlopen(request, timeout=60) as response:
@@ -298,22 +299,43 @@ class DatabaseInstaller:
                 total = (int(total_header) + offset) if total_header else None
                 mode = "ab" if append else "wb"
                 downloaded = offset
-                next_report = downloaded + 64 * 1024**2
+                started = last_report = time.monotonic()
+
+                def report_progress(label: str) -> None:
+                    elapsed = max(time.monotonic() - started, 0.001)
+                    speed = (downloaded - offset) / elapsed
+                    detail = human_size(downloaded)
+                    if total:
+                        detail += f" / {human_size(total)} ({100 * downloaded / total:.1f}%)"
+                    else:
+                        detail += " (total size unknown)"
+                    detail += f" | {human_size(speed)}/s"
+                    if total and speed > 0:
+                        detail += f" | ETA {max(0, (total - downloaded) / speed):.0f}s"
+                    self.reporter(f"  {label}: {detail}")
+
+                report_progress("Resuming" if append else "Starting")
+                # read1 returns available data without waiting to fill a MiB buffer.
+                read_chunk = getattr(response, "read1", response.read)
                 with part.open(mode) as handle:
                     while True:
-                        chunk = response.read(1024 * 1024)
+                        chunk = read_chunk(1024 * 1024)
                         if not chunk:
                             break
                         handle.write(chunk)
                         downloaded += len(chunk)
-                        if downloaded >= next_report:
-                            suffix = f" / {human_size(total)}" if total else ""
-                            self.reporter(f"  received {human_size(downloaded)}{suffix}")
-                            next_report = downloaded + 64 * 1024**2
+                        now = time.monotonic()
+                        if now - last_report >= 2:
+                            report_progress("Received")
+                            last_report = now
+                if total is not None and downloaded != total:
+                    raise OSError(f"incomplete download: received {downloaded} of {total} bytes")
+                report_progress("Download complete")
         except (OSError, urllib.error.URLError) as exc:
             raise DatabaseInstallError(f"download failed; partial data retained for resume: {url}: {exc}") from exc
         part.replace(destination)
         if expected:
+            self.reporter(f"Verifying {algorithm} checksum: {destination.name}")
             observed = self._digest(destination, algorithm)
             if observed != expected.lower():
                 destination.unlink(missing_ok=True)

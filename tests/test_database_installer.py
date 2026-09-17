@@ -248,3 +248,35 @@ def test_inphared_install_builds_genome_mash_resource(tmp_path, monkeypatch):
     assert manifest["genome_count"] == 1
     install_manifest = json.loads((root / "install_manifest.json").read_text())
     assert "-i" in install_manifest["preparation_commands"][0]
+
+
+@pytest.mark.parametrize("total", [6, None])
+def test_download_reports_progress_before_64_mib(tmp_path, monkeypatch, total):
+    messages = []
+    installer = DatabaseInstaller(tmp_path / "db", reporter=messages.append)
+    response = io.BytesIO(b"abcdef")
+    response.status = 200
+    response.headers = {} if total is None else {"Content-Length": str(total)}
+    monkeypatch.setattr("urllib.request.urlopen", lambda *a, **kw: response)
+    ticks = iter(range(0, 100, 3))
+    monkeypatch.setattr("phagemine.database_installer.time.monotonic", lambda: next(ticks))
+    destination = tmp_path / "download"
+    installer._download("https://example.test/db", destination)
+    assert destination.read_bytes() == b"abcdef"
+    assert any("Received:" in m and "/s" in m for m in messages)
+    assert any("Download complete:" in m for m in messages)
+    assert any(("100.0%" if total else "total size unknown") in m for m in messages)
+
+
+def test_truncated_download_retains_partial_for_resume(tmp_path, monkeypatch):
+    from phagemine.database_installer import DatabaseInstallError
+    installer = DatabaseInstaller(tmp_path / "db", reporter=lambda m: None)
+    response = io.BytesIO(b"abc")
+    response.status = 200
+    response.headers = {"Content-Length": "6"}
+    monkeypatch.setattr("urllib.request.urlopen", lambda *a, **kw: response)
+    destination = tmp_path / "download"
+    with pytest.raises(DatabaseInstallError, match="incomplete download"):
+        installer._download("https://example.test/db", destination)
+    assert not destination.exists()
+    assert destination.with_suffix(".part").read_bytes() == b"abc"
