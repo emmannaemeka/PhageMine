@@ -27,7 +27,13 @@ Issues = "https://github.com/emmannaemeka/PhageMine/issues"
 
 [project.optional-dependencies]
 gui = ["streamlit>=1.36,<2"]
-test = ["build>=1,<2", "pytest>=8,<10"]
+test = [
+    "build>=1,<2",
+    "pytest>=8,<10",
+    "pyrodigal==3.7.1",
+    "pyrodigal-gv==0.3.2",
+    "pyrodigal-rv==0.1.0",
+]
 
 [project.scripts]
 phagemine = "phagemine.cli:main"

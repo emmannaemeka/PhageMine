@@ -142,31 +142,78 @@ A PMF is a homologous PhageMine protein family based on biological sequence simi
 
 Both mode completes per-genome annotation, then reuses valid proteins, coordinates, evidence, classifications, and provenance for cohort discovery. Equivalent expensive searches are not intentionally repeated.
 
-## Installation
+## Quick start
 
-PhageMine supports Python 3.10 or newer.
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -e .
-```
-
-Production runs require these executables on `PATH`: PHANOTATE, HMMER
-(`hmmscan`), MMseqs2 (`mmseqs`), PyHMMER, DIAMOND (`diamond`), Mash (`mash`) and BLASTN
-(`blastn`) when whole-genome INPHARED comparison is installed. Mash selects
-candidate references; BLASTN supplies PhageMine's own bidirectional,
-length-normalized nucleotide comparison. It is not presented as VIRIDIC output
-and does not assign taxonomy. `table2asn` is optional and
-never blocks the normal GenBank pre-submission package.
-
-After installation, PhageMine displays the database setup commands in its
-top-level help. Install all evidence databases and validate the environment:
+PhageMine supports Python 3.10 or newer. The recommended first-time route is
+Conda (or a compatible `mamba`/`micromamba` client), because the repository's
+`environment.yml` installs the external command-line tools alongside Python.
+Run these commands exactly from a Terminal:
 
 ```bash
-phagemine databases install --all
+git clone https://github.com/emmannaemeka/PhageMine.git
+cd PhageMine
+conda env create --file environment.yml
+conda activate phagemine
+python -m pip install .
+
+phagemine --help
 phagemine doctor
+
+phagemine databases install --all
+phagemine doctor --deep
 ```
+
+The first two Doctor commands check the executable environment before database
+downloads. The final command checks both executable availability and the
+operational database formats. The complete database download is approximately
+3.4 GiB compressed; preparation and temporary files require additional space,
+so keep at least 15–20 GiB free. Database installation is a separate step: it
+does not install missing executables.
+
+The Conda environment installs these external executables: PHANOTATE,
+Prodigal, HMMER (`hmmscan`), MMseqs2 (`mmseqs`), DIAMOND (`diamond`), Mash
+(`mash`) and BLASTN (`blastn`). PyHMMER is a Python library used by the PHROGs
+provider, not an executable replacement for HMMER. `table2asn` is optional and
+is not required for ordinary analysis. Mash selects candidate references;
+BLASTN supplies PhageMine's bidirectional, length-normalized nucleotide
+comparison. It is not presented as VIRIDIC output and does not assign taxonomy.
+
+The repository's automated matrix covers Ubuntu Linux, Intel macOS (`macos-13`)
+and Apple-silicon macOS (`macos-14`) for the Python package and unit suite. The
+external-tool Conda workflow is exercised on Ubuntu. Local Conda solver and
+Bioconda availability can vary by architecture; if the environment solver
+cannot provide a package, use the documented error and platform-specific
+package channel rather than a universal command that has not been tested.
+
+For developers who need source changes to take effect immediately, use the
+separate editable route after creating the environment:
+
+```bash
+python -m pip install -e ".[test]"
+```
+
+Do not use editable installation for a normal user installation.
+
+The native Pyrodigal, Prodigal-gv and Pyrodigal-rv Python providers are
+developer/test extras. They provide optional diagnostic and RNA-provider
+capabilities; they are not needed for the default PHANOTATE-based Core run.
+The developer command above installs their pinned versions for the test suite.
+
+### Troubleshooting installation
+
+* `Neither setup.py nor pyproject.toml found` means the command was run outside
+  the project directory. Run `cd PhageMine` (or `cd /path/to/PhageMine`) and
+  repeat `python -m pip install .`.
+* `phagemine: command not found` usually means the environment is not active.
+  Run `conda activate phagemine`; then check `python -m pip show phagemine`.
+  If it is still absent, repeat `python -m pip install .` while the environment
+  is active.
+* A Doctor message about a missing external tool means the executable is not
+  available or is broken. It is not fixed by downloading a database. Activate
+  `phagemine`, verify `command -v hmmscan mmseqs diamond mash blastn phanotate`
+  (and `prodigal`), then run `phagemine doctor` again.
+* A new Terminal session does not retain activation. Run `cd /path/to/PhageMine`
+  followed by `conda activate phagemine` before using `phagemine`.
 
 For an operational database-format check before a long run, use:
 

@@ -17,5 +17,3 @@ dependencies:
   - pyhmmer>=0.10,<0.13
   - pytest
   - python-build
-  - pip:
-      - -e .

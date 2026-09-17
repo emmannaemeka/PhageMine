@@ -1,29 +1,56 @@
 # Installation
 
-Install PhageMine in a clean environment. A Conda installation is recommended
-because it supplies PHANOTATE, Prodigal, HMMER, MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN together:
+## Quick start
+
+Use the repository environment for a first installation. It installs the
+external bioinformatics executables from Conda channels and leaves the Python
+package installation explicit:
 
 ```bash
-conda create -n phagemine phagemine \
-  --channel conda-forge \
-  --channel bioconda \
-  --strict-channel-priority
+git clone https://github.com/emmannaemeka/PhageMine.git
+cd PhageMine
+conda env create --file environment.yml
 conda activate phagemine
+python -m pip install .
+phagemine --help
+phagemine doctor
+phagemine databases install --all
+phagemine doctor --deep
 ```
+
+The command sequence assumes a supported Conda-compatible client. The package
+and unit-test CI matrix covers Ubuntu Linux, Intel macOS (`macos-13`) and
+Apple-silicon macOS (`macos-14`); external-tool integration is exercised on
+Ubuntu. This is not a claim that every Conda package is available on every
+local architecture.
+
+The environment supplies PHANOTATE, Prodigal, HMMER (`hmmscan`), MMseqs2,
+DIAMOND, Mash and BLASTN. PyHMMER is a Python library used by the PHROGs
+provider; it is not the HMMER executable. `table2asn` is optional. Database
+downloads do not install missing executables.
+
+For development, install the test extras in editable mode after the environment
+has been created:
+
+```bash
+python -m pip install -e ".[test]"
+```
+
+That developer-only extra also installs the pinned Pyrodigal, Prodigal-gv and
+Pyrodigal-rv Python providers used by diagnostic, RNA and test workflows. They
+are optional; the default PHANOTATE-based Core workflow does not require them.
+
+If `pip` reports that neither `setup.py` nor `pyproject.toml` exists, the
+command is not running inside `PhageMine`; run `cd /path/to/PhageMine` first.
+If `phagemine` is not found, activate the environment with `conda activate
+phagemine` and rerun `python -m pip install .`. A new Terminal session also
+requires `cd /path/to/PhageMine` and `conda activate phagemine` again.
 
 The Bioconda recipe for PhageMine 1.2.0 must require PHANOTATE, Prodigal, HMMER,
 MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do not treat package installation alone as proof that these
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
 errors.
-
-For a local wheel:
-
-```bash
-python -m venv .venv
-. .venv/bin/activate
-python -m pip install phagemine-1.2.0-py3-none-any.whl
-```
 
 ## Required post-installation database setup
 
