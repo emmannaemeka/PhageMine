@@ -1,4 +1,4 @@
-# Step 3 native DNA provider dependency
+# Automatic production DNA observational provider dependencies
 pyrodigal==3.7.1
 pyrodigal-gv==0.3.2
 # Step 8 RNA-virus provider

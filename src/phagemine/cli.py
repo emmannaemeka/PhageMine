@@ -199,7 +199,8 @@ Individual installers are also available:
         executables_ready = all(x.get("status") == "READY" for x in payload["executables"]
                                 if x.get("name") in required)
         deep_ready = all(item.get("status") == "READY" for item in payload.get("deep_checks", []))
-        return 0 if executables_ready and deep_ready else 1
+        provider_ready = payload.get("capabilities", {}).get("PYRODIGAL_GV_OBSERVATION") == "READY"
+        return 0 if executables_ready and deep_ready and provider_ready else 1
     if args.command == "families":
         from .family import build_database, assign_protein_family, write_assignments, _fasta
         if args.families_command == 'build':

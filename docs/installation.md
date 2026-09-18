@@ -36,9 +36,11 @@ has been created:
 python -m pip install -e ".[test]"
 ```
 
-That developer-only extra also installs the pinned Pyrodigal, Prodigal-gv and
-Pyrodigal-rv Python providers used by diagnostic, RNA and test workflows. They
-are optional; the default PHANOTATE-based Core workflow does not require them.
+The ordinary package installation also installs the pinned Pyrodigal,
+Prodigal-gv and Pyrodigal-rv Python providers. Pyrodigal-gv is required by the
+automatic secondary observation performed during fresh PHANOTATE DNA analyses;
+Pyrodigal-rv supports RNA workflows. The editable developer route uses the
+same dependency declarations.
 
 If `pip` reports that neither `setup.py` nor `pyproject.toml` exists, the
 command is not running inside `PhageMine`; run `cd /path/to/PhageMine` first.

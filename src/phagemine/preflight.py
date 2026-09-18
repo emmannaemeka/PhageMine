@@ -147,13 +147,17 @@ def doctor(*, deep: bool = False) -> dict[str, Any]:
     manager = EvidenceResourceManager()
     tools = ["phanotate.py", "prodigal", "hmmscan", "mmseqs", "diamond", "mash", "blastn", "table2asn"]
     executables = [executable_status(tool) for tool in tools]
-    python_modules = [python_module_status("pyhmmer")]
+    python_modules = [python_module_status(name) for name in ("pyhmmer", "pyrodigal", "pyrodigal_gv", "pyrodigal_rv")]
     resources = manager.validate_all(check_checksum=True)
     by_type = {kind: [r for r in resources if r.get("resource_type") == kind and r.get("status") == "READY"]
                for kind in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS", "PMFDB", "INPHARED_GENOMES")}
     tool_by_name = {item["name"]: item for item in executables}
     table2asn_ready = tool_by_name["table2asn"]["status"] == "READY"
-    pyhmmer_ready = python_modules[0]["status"] == "READY"
+    module_by_name = {item["name"]: item for item in python_modules}
+    pyhmmer_ready = module_by_name["pyhmmer"]["status"] == "READY"
+    pyrodigal_ready = module_by_name["pyrodigal"]["status"] == "READY"
+    pyrodigal_gv_ready = module_by_name["pyrodigal_gv"]["status"] == "READY"
+    pyrodigal_rv_ready = module_by_name["pyrodigal_rv"]["status"] == "READY"
     phrogs_hmm_ready = any(
         Path(str(resource.get("provenance", {}).get("hmm_profiles_path", ""))).expanduser().is_file()
         for resource in by_type["PHROGS"])
@@ -162,6 +166,8 @@ def doctor(*, deep: bool = False) -> dict[str, Any]:
     deep_hmm = next((item for item in deep_checks if item["name"] == "PHROGs PyHMMER database"), None)
     capabilities = {
         "CORE_ANALYSIS": "READY" if tool_by_name["phanotate.py"]["status"] == "READY" else "UNAVAILABLE",
+        "PYRODIGAL_GV_OBSERVATION": "READY" if pyrodigal_ready and pyrodigal_gv_ready else "UNAVAILABLE",
+        "PYRODIGAL_RV_ANALYSIS": "READY" if pyrodigal_ready and pyrodigal_rv_ready else "UNAVAILABLE",
         "STANDARD_EVIDENCE": "READY" if by_type["PHROGS"] and tool_by_name["mmseqs"]["status"] == "READY" else "UNAVAILABLE",
         "FULL_EVIDENCE": "READY" if all(by_type[k] for k in ("PFAM", "VOGDB", "SWISSPROT", "PHROGS")) and all(tool_by_name[t]["status"] == "READY" for t in ("hmmscan", "mmseqs", "diamond")) else "UNAVAILABLE",
         "SENSITIVE_PHROGS_PROFILE_SEARCH": ("READY" if phrogs_hmm_ready and pyhmmer_ready and
@@ -214,10 +220,17 @@ def doctor(*, deep: bool = False) -> dict[str, Any]:
             "command": "conda install --channel conda-forge --channel bioconda --strict-channel-priority " + " ".join(packages),
             "verify_command": "phagemine doctor",
         })
-    if not pyhmmer_ready:
+    missing_modules = [name for name, item in module_by_name.items() if item["status"] != "READY"]
+    if missing_modules:
+        pins = {
+            "pyhmmer": "pyhmmer>=0.10,<0.13",
+            "pyrodigal": "pyrodigal==3.7.1",
+            "pyrodigal_gv": "pyrodigal-gv==0.3.2",
+            "pyrodigal_rv": "pyrodigal-rv==0.1.0",
+        }
         recommendations.append({
-            "action": "INSTALL_PYTHON_MODULES", "modules": ["pyhmmer"],
-            "command": "python -m pip install 'pyhmmer>=0.10,<0.13'",
+            "action": "INSTALL_PYTHON_MODULES", "modules": missing_modules,
+            "command": "python -m pip install " + " ".join(f"'{pins[name]}'" for name in missing_modules),
             "verify_command": "phagemine doctor",
         })
     return {"phagemine_version": __version__, "python": executable_status("python"),

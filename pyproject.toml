@@ -18,7 +18,14 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-dependencies = ["matplotlib>=3.7,<4", "pyhmmer>=0.10,<0.13"]
+dependencies = [
+    "matplotlib>=3.7,<4",
+    "pyhmmer>=0.10,<0.13",
+    # These providers are invoked automatically for fresh genome analyses.
+    "pyrodigal==3.7.1",
+    "pyrodigal-gv==0.3.2",
+    "pyrodigal-rv==0.1.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/emmannaemeka/PhageMine"
@@ -31,9 +38,7 @@ test = [
     "biopython>=1.85,<2",
     "build>=1,<2",
     "pytest>=8,<10",
-    "pyrodigal==3.7.1",
-    "pyrodigal-gv==0.3.2",
-    "pyrodigal-rv==0.1.0",
+    "tomli; python_version < '3.11'",
 ]
 
 [project.scripts]
