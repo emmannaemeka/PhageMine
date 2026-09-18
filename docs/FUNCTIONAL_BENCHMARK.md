@@ -94,3 +94,9 @@ include checksums, explicit synonym rules, blinded A/B review, a separate key,
 per-locus evidence, source tables and PNG/SVG/PDF figures.
 
 ![Automated agreement and unresolved review](../evaluation/v1.2_functional/figures/adjudication_status.png)
+
+## Frozen adjudication workflow
+
+The benchmark freeze is identified by merge commit `4933d8fa532a0157c24c3c01dbf1d8adfa787ed7`. The neutral reviewer package is under `evaluation/v1.2_adjudication/reviewer_files/`. It contains 689 stable unresolved tool-locus units (`FB0001`–`FB0689`) across the exact and relaxed strata, with Prediction_A/Prediction_B order randomized by a recorded seed. Raw archived evidence is exposed without new searches; the confidential mapping is separate. Reviewer judgments never modify the frozen evaluation files.
+
+The utility definition was frozen before review in `evaluation/v1.2_adjudication/frozen/utility_definition.md`. Its primary seven-genome endpoint gives CORRECT 1.00, PARTIALLY_CORRECT 0.50, TOO_GENERAL 0.25, and zero to unsupported or incorrect calls; UNRESOLVABLE is missing and NOT_EVALUABLE is excluded. Strict and inclusive endpoints, the +0.05 utility margin, −0.03 structural margin, and +0.02 unsupported-specificity safety bound are prespecified. Final analysis refuses incomplete submissions. A separate post-unblinding error-analysis dataset is development data and cannot be fed back into v1.2 scoring.

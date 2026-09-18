@@ -1,0 +1,12 @@
+{
+  "case_count": 689,
+  "seed": 12020260918,
+  "generated_at_utc": "2026-09-18T08:50:26.241065+00:00",
+  "source_commit": "4933d8fa532a0157c24c3c01dbf1d8adfa787ed7",
+  "source_functional_by_locus_sha256": "1fc9c9a5afa73475144973546aa30c5228040da5a206f179203d46ab1746e9f6",
+  "source_prediction_sha256": {
+    "PhageMine": "e8839d05e5ed8cb7ace1b9b27b58bca50314c07a7686fa0b901a45a92b198fdb",
+    "Pharokka": "5edf3906b4c821a8776e582209d9f576de66ceceea2dc73e86b98b839908cb54"
+  },
+  "blinding": "Prediction_A/Prediction_B randomized independently per unresolved tool-locus unit; key is confidential and excluded from reviewer package."
+}
