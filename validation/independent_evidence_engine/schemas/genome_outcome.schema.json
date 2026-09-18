@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Genome-level validation outcome",
+  "type": "object",
+  "required": ["validation_unit_id", "n_reference_loci", "n_evaluable_loci", "n_unresolved"],
+  "properties": {
+    "validation_unit_id": {"type": "string", "pattern": "^IV[0-9]{4,}$"},
+    "n_reference_loci": {"type": "integer", "minimum": 0},
+    "n_evaluable_loci": {"type": "integer", "minimum": 0},
+    "n_unresolved": {"type": "integer", "minimum": 0},
+    "functional_utility": {"type": ["number", "null"]},
+    "coverage": {"type": ["number", "null"]},
+    "architecture_status": {"type": ["string", "null"]},
+    "review_required_fraction": {"type": ["number", "null"]}
+  },
+  "additionalProperties": true
+}

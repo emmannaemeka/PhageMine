@@ -1,0 +1,73 @@
+{
+  "protocol_version": "1.0.0",
+  "protocol_status": "DESIGN_ONLY_NOT_RUN",
+  "repository": "emmannaemeka/PhageMine",
+  "protocol_commit": null,
+  "validation_branch": "validation/independent-evidence-engine-validation",
+  "panel": {
+    "status": "NOT_SELECTED",
+    "genomes": [],
+    "excluded_development_genomes": [
+      "k141_1259522",
+      "k141_247505",
+      "k141_371497",
+      "k141_731777",
+      "k141_516427"
+    ],
+    "excluded_previous_reference_genomes": [
+      "T4",
+      "Lambda",
+      "T7",
+      "T5",
+      "PhiX174",
+      "P22",
+      "Mu"
+    ]
+  },
+  "engine": {
+    "status": "NOT_RUN",
+    "repository_commit": "318e963db1288c400925e3eaaf02e512f774949a"
+  },
+  "reference_standard": {
+    "status": "PROTOCOL_DEFINED_NOT_POPULATED",
+    "quality_states": [
+      "TIER_1_EXPERIMENTALLY_ESTABLISHED",
+      "TIER_2_EXPERT_CURATED",
+      "TIER_3_STRONGLY_ORTHOLOGY_SUPPORTED",
+      "TIER_4_COMPUTATIONALLY_SUPPORTED",
+      "UNRESOLVED",
+      "NOT_EVALUABLE"
+    ]
+  },
+  "panel_design": {
+    "minimum_analyzable": 32,
+    "preferred_target": 64,
+    "reserve_pool": 16,
+    "primary_clustering": {"ani_percent": 95, "aligned_coverage_percent": 80},
+    "sensitivity_clustering": {"ani_percent": 90, "aligned_coverage_percent": 70},
+    "database_overlap_classes": [
+      "EXACT_REFERENCE_OVERLAP",
+      "CLOSE_HOMOLOG_OVERLAP",
+      "REMOTE_HOMOLOGY",
+      "NO_SIGNIFICANT_REFERENCE",
+      "UNKNOWN_DATABASE_RELATIONSHIP"
+    ]
+  },
+  "adjudication": {
+    "status": "NOT_STARTED",
+    "unit_ids": [],
+    "tool_key_checksum": null,
+    "random_seed": null
+  },
+  "analysis": {
+    "primary_endpoint": "genome_level_resolved_functional_utility_with_mandatory_resolution_and_assertion_coverage",
+    "margins": null,
+    "outcomes": "NOT_AVAILABLE"
+  },
+  "checksums": {},
+  "provenance": {
+    "validation_genomes_run": false,
+    "validation_outcomes_accessed": false,
+    "frozen_v1_2_accessed_for_design": false
+  }
+}
