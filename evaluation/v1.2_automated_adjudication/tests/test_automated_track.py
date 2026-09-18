@@ -1,5 +1,6 @@
 import csv, hashlib, json, re
 from pathlib import Path
+import pytest
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'automated_benchmark_results'
@@ -26,7 +27,8 @@ def test_categories_and_confidence_are_controlled():
     assert {r['automated_confidence'] for r in rows} <= {'HIGH','MODERATE','LOW'}
 
 def test_workbook_has_no_hidden_sheets_or_formulas():
-    from openpyxl import load_workbook
+    openpyxl=pytest.importorskip('openpyxl')
+    load_workbook=openpyxl.load_workbook
     wb=load_workbook(OUT/'automated_blinded_adjudication.xlsx',data_only=False)
     assert all(s.sheet_state=='visible' for s in wb.worksheets)
     assert all(cell.data_type!='f' for ws in wb.worksheets for row in ws.iter_rows() for cell in row)
