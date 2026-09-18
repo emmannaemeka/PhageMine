@@ -58,6 +58,14 @@ HIGH, MODERATE, and LOW are tested for monotonic reliability; UNRESOLVED is
 reported as a separate abstention/triage category and is never placed on that
 confidence scale.
 
+Calibration review also examines whether reliability improves meaningfully from
+LOW toward MODERATE/HIGH, whether HIGH-confidence correctness is poor, whether
+unsupported specificity is concentrated in HIGH calls, whether category
+intervals provide useful discrimination, and whether apparent calibration
+vanishes after exact/close database-overlap control. These conditions use the
+reported estimates, confidence intervals, ordered analyses, and documented
+biological review; no arbitrary numerical safety margin is introduced.
+
 Architecture, module, and novelty outcomes are summarized by genome and by
 architecture stratum. Multiple secondary tests are labelled exploratory; if a
 family of formal tests is declared, Holm adjustment is applied within that

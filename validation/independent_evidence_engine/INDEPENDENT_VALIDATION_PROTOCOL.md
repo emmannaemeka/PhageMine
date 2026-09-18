@@ -82,6 +82,17 @@ repeated strong-reference contradictions, leakage-stratum divergence, or
 failure of REVIEW_REQUIRED loci to have lower adjudication resolution than
 ordinary loci.
 
+Additional calibration review conditions are prespecified without arbitrary
+safety margins: no meaningful improvement in independently adjudicated
+reliability from LOW toward MODERATE/HIGH when category sample sizes provide
+identifiable intervals; unexpectedly poor HIGH-confidence correctness;
+unsupported-specificity errors concentrated in HIGH-confidence specific calls;
+confidence categories whose intervals substantially overlap and provide little
+discrimination; or apparently favorable calibration that disappears in the
+EXACT_REFERENCE_OVERLAP/CLOSE_HOMOLOG_OVERLAP sensitivity analysis. These are
+calibration-failure or major-review conditions, not automatic threshold changes
+or post hoc reclassification.
+
 Allowed conclusions are limited to observed endpoints and uncertainty:
 `technically operational` requires reproducible execution; `structurally
 validated`, `functionally validated`, `confidence-calibrated`, and
