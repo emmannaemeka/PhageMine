@@ -17,3 +17,8 @@ The validation archive distinguishes development, validation, and external
 test data. Validation genomes are never used as the sole tuning set. Reports
 identify unavailable databases, failed providers, missing evidence, and
 unresolved reference functions rather than substituting values.
+
+`sample_size_scenarios.py` is the outcome-independent planning calculation. It
+uses only declared variance, precision, effect-size, power, and confidence
+assumptions and writes a JSON scenario table; it never reads a genome or tool
+output.

@@ -10,8 +10,8 @@
     "status": {"enum": ["CANDIDATE", "INCLUDED", "EXCLUDED"]},
     "exclusion_reason": {"type": ["string", "null"]},
     "architecture_stratum": {"type": ["string", "null"]},
-    "database_overlap_class": {"enum": ["EXACT", "CLOSE_CLUSTER", "REMOTE", "NONE", "UNKNOWN", null]},
-    "reference_quality": {"enum": ["EXPERIMENTALLY_ESTABLISHED", "STRONGLY_CURATED", "COMPUTATIONALLY_SUPPORTED", "UNRESOLVED", "NOT_EVALUABLE", null]}
+    "database_overlap_class": {"enum": ["EXACT_REFERENCE_OVERLAP", "CLOSE_HOMOLOG_OVERLAP", "REMOTE_HOMOLOGY", "NO_SIGNIFICANT_REFERENCE", "UNKNOWN_DATABASE_RELATIONSHIP", null]},
+    "reference_quality": {"enum": ["TIER_1_EXPERIMENTALLY_ESTABLISHED", "TIER_2_EXPERT_CURATED", "TIER_3_STRONGLY_ORTHOLOGY_SUPPORTED", "TIER_4_COMPUTATIONALLY_SUPPORTED", "UNRESOLVED", "NOT_EVALUABLE", null]}
   },
   "additionalProperties": true
 }

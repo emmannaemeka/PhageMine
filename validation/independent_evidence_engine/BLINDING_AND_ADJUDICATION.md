@@ -23,3 +23,21 @@ Allowed outcomes and definitions are frozen before review: `CORRECT`,
 Each reviewer submission is immutable. Agreement, disagreements, consensus,
 and reviewer IDs are preserved independently. Unblinding is an explicit later
 operation; no performance result is generated during blinded QC.
+
+## Reviewer requirements
+
+Primary reviewers must have documented training in bacteriophage gene/function
+annotation and evidence interpretation, complete a protocol training set that
+is not part of the validation panel, and pass a competency check before seeing
+validation packets. They declare conflicts of interest and do not participate
+in cases where they have a direct authorship or database-curation conflict.
+Two independent reviewers are required for primary functional and architecture
+judgments where feasible. If only one qualified reviewer is available, the
+analysis is labelled single-reviewer and difficult cases receive a second
+review or an `UNRESOLVABLE` status.
+
+Disagreements remain separate until a prespecified consensus meeting. Consensus
+decisions retain both original labels, the reason for resolution, reviewer
+identifiers, and timestamp. Report raw agreement, Cohen's kappa for two
+reviewers, or a suitable multi-rater statistic; do not replace disagreements
+with a silent majority label.

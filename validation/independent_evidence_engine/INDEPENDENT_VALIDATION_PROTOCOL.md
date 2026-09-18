@@ -29,19 +29,29 @@ phages T4, Lambda, T7, T5, PhiX174, P22, and Mu, are permanently excluded.
 
 ## Primary endpoint
 
-The primary endpoint is **genome-level independently adjudicated functional
-utility among eligible, evaluable reference loci, reported together with
-coverage and unresolved fraction**. Utility is calculated as the mean of
-prespecified adjudication weights for each genome; unresolved and non-evaluable
-observations remain missing/excluded under the reference-standard rules and
-are never silently scored as incorrect. The primary report contains one
-estimate per genome and a confidence interval that respects genome clustering.
-The protocol does not specify superiority, non-inferiority, or a margin.
-
-This endpoint is selected because it rewards defensible information while
-making abstention and denominator changes visible. Exact definitions and
-sensitivity estimands are frozen in `STATISTICAL_ANALYSIS_PLAN.md` before
+The primary endpoint family is **genome-level independently adjudicated
+functional utility with mandatory resolution and assertion coverage**. It is a
+paired estimand only when a comparator is run; it is not a superiority claim.
+Exact definitions are in `STATISTICAL_ANALYSIS_PLAN.md` and are frozen before
 panel outcomes are inspected.
+
+For genome `g` and tool `t`, let `E_g` be the number of reference loci in the
+primary reference tiers that are evaluable for a functional assertion. Let
+`R_gt` be the subset of `E_g` with a valid resolved adjudication and let
+`u_i` be the fixed utility weight for locus `i`. The primary genome-level
+utility is `U_gt = sum(u_i for i in R_gt) / |R_gt|`, undefined and reported as
+missing when `|R_gt|=0`. Resolution coverage is `C_gt = |R_gt| / |E_g|` and
+assertion coverage is reported separately. `UNRESOLVABLE` is missing from
+`U_gt`, never zero; `NOT_EVALUABLE` is outside `E_g`; missing tool output is a
+failure of availability and is reported separately. The panel estimand is the
+unweighted mean of genome-level `U_gt` values, with its genome-level interval,
+and the paired difference when a comparator exists. No genome receives more
+weight because it contains more CDSs.
+
+The primary report always contains the pair `(mean U, mean C)` and the
+unresolved fraction. A high utility with poor resolution coverage cannot be
+described as broadly reliable. The protocol specifies no superiority,
+non-inferiority, or numerical margin.
 
 ## Secondary endpoints
 
@@ -54,6 +64,31 @@ panel outcomes are inspected.
 - Architecture classification and architecture-specific hallmark agreement.
 - Comparative significance/conservatism, including false novelty claims.
 - Reviewer time, review-required fraction, and inter-reviewer agreement.
+
+## Prespecified failure and claim controls
+
+Formal evidence against confidence calibration is a statistically supported
+reverse ordering in which HIGH has lower correctness than LOW (one-sided
+ordered trend test, alpha 0.05, with direction and test frozen before review).
+Failure to demonstrate a positive trend is inconclusive, not success. No
+numerical unsupported-specificity safety margin is asserted without an
+independent scientific basis; its estimate and interval are descriptive.
+
+Descriptive warnings include a large unresolved fraction, loss of utility after
+database-overlap control, architecture contradictions, module status based on
+weak isolated evidence, and unsupported specificity concentrated in
+HIGH/MODERATE calls. Review triggers include reverse confidence ordering,
+repeated strong-reference contradictions, leakage-stratum divergence, or
+failure of REVIEW_REQUIRED loci to have lower adjudication resolution than
+ordinary loci.
+
+Allowed conclusions are limited to observed endpoints and uncertainty:
+`technically operational` requires reproducible execution; `structurally
+validated`, `functionally validated`, `confidence-calibrated`, and
+`biologically informative` each require their corresponding endpoint
+evidence. “Improved on endpoint X” requires a paired estimate and interval for
+X. “Superior,” “more accurate,” or “replaces Pharokka” is not permitted unless
+a separately approved superiority analysis directly supports that exact claim.
 
 ## Reference and adjudication
 
