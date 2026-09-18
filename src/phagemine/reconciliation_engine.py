@@ -12,6 +12,163 @@ from .gene_callers import GenePredictionResult, ProviderError
 
 ALGORITHM_VERSION = "1.0"
 
+PRODUCTION_RELATIONSHIP_CLASSES = {
+    "EXACT_CONCORDANCE": "EXACT_MATCH",
+    "COMMON_STOP_ALTERNATE_START": "SAME_STOP_DIFFERENT_START",
+    "COMMON_START_ALTERNATE_STOP": "NEAR_BOUNDARY_MATCH",
+    "BOUNDARY_DISCORDANCE": "NEAR_BOUNDARY_MATCH",
+    "CALLER_SPECIFIC": "PHANOTATE_ONLY",
+    "STRAND_DISCORDANCE": "CONFLICTING_ORF",
+    "COMPLEX_CONFLICT": "CONFLICTING_ORF",
+    "SPLIT_MODEL": "OVERLAPPING_ALTERNATIVE",
+    "MERGED_MODEL": "OVERLAPPING_ALTERNATIVE",
+}
+
+
+def _production_class(locus: ReconciledLocus) -> str:
+    """Map the caller-neutral topology to the production vocabulary.
+
+    This is a reporting translation only.  The generic reconciliation graph
+    remains unchanged so historical consumers retain their schema.
+    """
+    if locus.reconciliation_class != "CALLER_SPECIFIC":
+        return PRODUCTION_RELATIONSHIP_CLASSES.get(locus.reconciliation_class, "CONFLICTING_ORF")
+    return "PYRODIGAL_GV_ONLY" if "phanotate" not in {p.lower() for p in locus.supporting_providers} else "PHANOTATE_ONLY"
+
+
+def _production_confidence(relation: str, *, secondary_status: str) -> tuple[str, str]:
+    if secondary_status != "SUCCESS":
+        return "UNRESOLVED", "Pyrodigal-gv observational evidence was unavailable; reconciliation-dependent confidence is unresolved."
+    if relation == "EXACT_MATCH":
+        return "MODERATE", "PHANOTATE and Pyrodigal-gv agree exactly; caller agreement alone is not sufficient for HIGH confidence."
+    if relation in {"SAME_STOP_DIFFERENT_START", "NEAR_BOUNDARY_MATCH"}:
+        return "LOW", "Callers overlap but disagree at a boundary; the PHANOTATE model remains authoritative pending independent evidence."
+    if relation == "PHANOTATE_ONLY":
+        return "LOW", "The PHANOTATE model has no matching Pyrodigal-gv observation; independent biological support must be assessed separately."
+    if relation == "PYRODIGAL_GV_ONLY":
+        return "UNRESOLVED", "Only the observational caller proposed this locus; it is not added to the final CDS model."
+    return "LOW", "The callers present a structural conflict; neither disagreement nor overlap establishes biological truth."
+
+
+def write_production_observational_outputs(root: str | Path, provider_models: dict[str, list[GeneModel]],
+                                           loci: list[ReconciledLocus], provider_results: dict[str, GenePredictionResult],
+                                           *, final_provider: str = "phanotate") -> list[dict[str, Any]]:
+    """Write the automatic PHANOTATE/Pyrodigal-gv observation layer.
+
+    The returned records are keyed to PHANOTATE models for downstream review
+    flags.  No candidate selection occurs here and PHANOTATE coordinates are
+    never rewritten.
+    """
+    root = Path(root); root.mkdir(parents=True, exist_ok=True)
+    secondary = provider_results.get("prodigal_gv")
+    secondary_status = secondary.status if secondary else "FAILED_PROVIDER"
+    records = []
+    rows = []
+    for locus in loci:
+        relation = _production_class(locus)
+        confidence, rationale = _production_confidence(relation, secondary_status=secondary_status)
+        phanotate = next((model for model in locus.candidate_models if model.caller.lower() == final_provider), None)
+        if phanotate is not None:
+            records.append({"protein_id": phanotate.raw_identifier, "locus_id": locus.locus_id, "gene_call_confidence": confidence,
+                            "review_flag": "REVIEW_REQUIRED" if confidence in {"LOW", "UNRESOLVED"} else "NONE",
+                            "structural_CDS_confidence": confidence, "structural_relationship": relation,
+                            "review_reason": rationale})
+        rows.append({"locus_id": locus.locus_id, "start": locus.start, "end": locus.end,
+                     "strand": locus.strand_status, "relationship": relation,
+                     "phanotate_ids": ",".join(m.raw_identifier for m in locus.candidate_models if m.caller.lower() == final_provider),
+                     "pyrodigal_gv_ids": ",".join(m.raw_identifier for m in locus.candidate_models if m.caller.lower() == "prodigal_gv"),
+                     "structural_CDS_confidence": confidence, "rationale": rationale,
+                     "independent_biological_evidence": "NOT_ASSESSED_AT_STRUCTURAL_STAGE",
+                     "independent_evidence_sources": "", "independent_evidence_count": 0, "evidence_conflict": False,
+                     "review_required": "true" if confidence in {"LOW", "UNRESOLVED"} else str(locus.review_required).lower()})
+    fields = ["locus_id", "start", "end", "strand", "relationship", "phanotate_ids", "pyrodigal_gv_ids",
+              "structural_CDS_confidence", "rationale", "independent_biological_evidence",
+              "independent_evidence_sources", "independent_evidence_count", "evidence_conflict", "review_required"]
+    with (root / "structural_reconciliation.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, delimiter="\t"); writer.writeheader(); writer.writerows(rows)
+    (root / "structural_reconciliation.json").write_text(json.dumps({
+        "schema_version": "production-observational-v1", "final_model_policy": "PHANOTATE_AUTHORITATIVE",
+        "caller_roles": {"phanotate": "PRIMARY", "prodigal_gv": "SECONDARY_OBSERVATIONAL"},
+        "secondary_status": secondary_status, "relationships": rows,
+    }, indent=2, sort_keys=True))
+    return records
+
+
+def run_automatic_observational_reconciliation(primary_models: list[GeneModel], genome_id: str, sequence: str,
+                                               input_fasta: str | Path, output_dir: str | Path,
+                                               *, pyrodigal_gv_kwargs: dict[str, Any] | None = None) -> tuple[dict[str, GenePredictionResult], list[ReconciledLocus], list[dict[str, Any]]]:
+    """Run the production secondary observation without changing final CDSs."""
+    from .gene_callers import ProdigalGVProvider
+    root = Path(output_dir); raw_root = root / "raw"; raw_root.mkdir(parents=True, exist_ok=True)
+    provider = ProdigalGVProvider(**(pyrodigal_gv_kwargs or {}))
+    digest = hashlib.sha256(sequence.encode()).hexdigest()
+    results: dict[str, GenePredictionResult] = {}
+    try:
+        result = provider.predict(genome_id, sequence, input_fasta, molecule_type="dna")
+        provider.persist_raw_output(result, raw_root)
+    except Exception as exc:  # observational failures are deliberately non-fatal
+        result = GenePredictionResult(provider_id=provider.provider_id, provider_name=provider.name,
+                                      provider_version=provider.version(), input_sequence_sha256=digest,
+                                      molecule_type="dna", status="FAILED_PROVIDER", warnings=[str(exc)],
+                                      parameters=provider.parameters())
+    results[provider.provider_id] = result
+    model_sets = {"phanotate": list(primary_models), "prodigal_gv": list(result.models)}
+    loci = reconcile_gene_models(model_sets)
+    write_reconciliation_v2(root / "reconciliation", model_sets, loci)
+    records = write_production_observational_outputs(root, model_sets, loci, results)
+    return results, loci, records
+
+
+def finalize_production_structural_confidence(root: str | Path, records: list[dict[str, Any]], proteins: list[Any]) -> list[dict[str, Any]]:
+    """Integrate independent protein evidence without changing CDS coordinates."""
+    by_id = {str(p.protein_id): p for p in proteins}
+    for record in records:
+        protein = by_id.get(str(record.get("protein_id")))
+        evidence = list(getattr(protein, "evidence", []) or []) if protein else []
+        supported = [item for item in evidence if getattr(item, "supports", False)]
+        strong = [item for item in supported if getattr(item, "evidence_strength", "").upper() in {"STRONG", "EXPERIMENTAL"}]
+        conflicts = [item for item in evidence if not getattr(item, "supports", True) or getattr(item, "conflict", False)]
+        relation = record.get("structural_relationship")
+        if strong and relation == "EXACT_MATCH":
+            confidence = "HIGH"
+        elif supported and not conflicts and relation in {"EXACT_MATCH", "PHANOTATE_ONLY"}:
+            confidence = "MODERATE"
+        elif conflicts and not supported:
+            confidence = "LOW"
+        else:
+            confidence = record.get("structural_CDS_confidence", "UNRESOLVED")
+        record["structural_CDS_confidence"] = confidence
+        record["gene_call_confidence"] = confidence
+        record["independent_evidence_sources"] = ";".join(sorted({str(item.source) for item in evidence if getattr(item, "source", None)}))
+        record["independent_evidence_count"] = len(evidence)
+        record["evidence_conflict"] = bool(conflicts)
+        record["review_reason"] = (record.get("review_reason", "") +
+                                    " Independent biological evidence was incorporated after evidence fusion.").strip()
+    path = Path(root)
+    json_path = path / "structural_reconciliation.json"
+    if json_path.is_file():
+        payload = json.loads(json_path.read_text())
+        by_locus = {row["locus_id"]: row for row in payload.get("relationships", [])}
+        for record in records:
+            row = by_locus.get(record.get("locus_id"))
+            if row:
+                row.update({key: record[key] for key in ("structural_CDS_confidence", "independent_evidence_sources", "independent_evidence_count", "evidence_conflict") if key in record})
+        json_path.write_text(json.dumps(payload, indent=2, sort_keys=True))
+    tsv_path = path / "structural_reconciliation.tsv"
+    if tsv_path.is_file():
+        with tsv_path.open(newline="") as handle:
+            rows = list(csv.DictReader(handle, delimiter="\t"))
+        by_locus = {record.get("locus_id"): record for record in records}
+        for row in rows:
+            record = by_locus.get(row.get("locus_id"))
+            if record:
+                for key in ("structural_CDS_confidence", "independent_evidence_sources", "independent_evidence_count", "evidence_conflict"):
+                    row[key] = str(record.get(key, ""))
+        with tsv_path.open("w", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]) if rows else ["locus_id"], delimiter="\t")
+            writer.writeheader(); writer.writerows(rows)
+    return records
+
 
 def run_provider_reconciliation(providers: list[Any], genome_id: str, sequence: str,
                                 input_fasta: str | Path, output_dir: str | Path,

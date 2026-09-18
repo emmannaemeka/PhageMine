@@ -2,7 +2,7 @@ from phagemine.pipeline import _consensus_provider_ids
 
 
 def test_shared_consensus_provider_set_for_all_profiles():
-    expected = ("phanotate", "pyrodigal", "prodigal_gv")
+    expected = ("phanotate", "prodigal_gv")
     assert _consensus_provider_ids("standard") == expected
     assert _consensus_provider_ids("extended") == expected
 
