@@ -1,0 +1,3 @@
+# Benchmark leakage safeguards
+
+The seven classic phages and all adjudications remain evaluation data. They must not be the sole tuning set for v1.3 thresholds, weights, synonym rules, or product-selection logic. Any development use must be logged separately and followed by a validation panel and an untouched external test panel whose genomes were not used for design. The frozen inputs, coordinates, checksums, matching rules, and synonym rules are immutable. Review judgments are never written back into the v1.2 benchmark. A future improvement must be evaluated on temporally or sequence-held-out genomes and reported separately from v1.2.

@@ -1,0 +1,5 @@
+# Future evidence-aware annotation design (proposal only)
+
+This document is a design proposal, not a v1.2 implementation. A future PhageMine version should separate: candidate function generation; evidence collection; evidence integration; specificity control; confidence estimation; conflict detection; final product-name selection; and provenance reporting. The governing rule is: **the specificity of an annotation must not exceed the specificity supported by the evidence**. A broad defensible label should beat an unsupported highly specific assertion.
+
+Proposed output fields include `CDS_ID`, `Product`, `Functional_Category`, `Confidence`, `Evidence_Level`, `Evidence_Sources`, `Supporting_Evidence_Count`, `Conflicting_Evidence`, `Specificity_Level`, `Best_Hit`, `Best_Hit_Score`, `Domain_Evidence`, `Context_Evidence`, `Annotation_Provenance`, `Alternative_Function`, and `Reason_For_Product_Selection`. Each raw source value, database version, identifier, score, threshold, and evidence type should remain auditable. This proposal does not change current behavior or frozen benchmark files.

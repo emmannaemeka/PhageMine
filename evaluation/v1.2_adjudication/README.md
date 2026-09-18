@@ -1,0 +1,7 @@
+# Frozen v1.2 adjudication infrastructure
+
+This directory prepares human review and later analysis for the frozen seven-phage evaluation. It does not alter PhageMine behavior, frozen predictions, coordinates, reference data, scoring, or synonym rules. `reviewer_files/` is the reviewer package; `blinding/` is confidential; `raw_reviews/` is append-only input; `analysis/` is reserved for genuine post-unblinding results; `tests/` contains synthetic validation only.
+
+Run `python evaluation/v1.2_adjudication/scripts/prepare_review.py` to regenerate reviewer files from immutable archived inputs. Run `python evaluation/v1.2_adjudication/scripts/freeze.py` to audit the merged snapshot. Run `python evaluation/v1.2_adjudication/scripts/post_adjudication.py --reviews completed.csv --output analysis --final` only after every case has a genuine judgment. It refuses incomplete submissions. Run `error_analysis.py --unblind` only after the completed review is formally unblinded; its output is development/error-analysis data, never v1.2 evaluation data.
+
+Run `python evaluation/v1.2_adjudication/scripts/progress.py reviewer.csv` for non-scoring progress QC. It never reads the confidential key and reports no tool-specific performance. `freeze_record.py` records public reviewer-material checksums and excludes the key.
