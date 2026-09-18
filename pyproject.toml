@@ -38,6 +38,7 @@ test = [
     "biopython>=1.85,<2",
     "build>=1,<2",
     "pytest>=8,<10",
+    "tomli; python_version < '3.11'",
 ]
 
 [project.scripts]
