@@ -5,10 +5,10 @@
   "error_taxonomy_sha256": "23cff0ac77861f58a92ad8968b2ec6a5121a92833a76ad5dce5767ed11e7e120",
   "evaluable_loci": 390,
   "evidence_dictionary_sha256": "fd1558e6dcb7caa95ae51ea0bc6f81875e03543865643c51b9ee9321f2d6d22e",
-  "git_commit": "5b84a13298c4a5a152e25c7a1d76ca4dd26c201b",
+  "git_commit": "7780c071c5a94f7480685dc3e2ec4b58ef2d8516",
   "number_of_fb_units": 689,
   "pr_number": 15,
-  "recorded_at_utc": "2026-09-18T09:43:38.739137+00:00",
+  "recorded_at_utc": "2026-09-18T09:45:35.347196+00:00",
   "reviewer_guide_sha256": "dc35b9aadbabddb3b0a698319f436414ca024e4c4c8ff309d8e339c0db7b9b59",
   "software": {
     "platform": "macOS-12.7.6-x86_64-i386-64bit",
