@@ -14,6 +14,8 @@ def test_review_file_is_neutral_and_complete():
     assert {r['case_id'] for r in rows}=={f'FB{i:04d}' for i in range(1,690)}
     assert all('PhageMine' not in r['prediction_A_evidence_raw'] and 'Pharokka' not in r['prediction_A_evidence_raw'] for r in rows)
     assert {r['review_target'] for r in rows}=={'A','B'}
+    assert {'blinded_unit_id','adjudication_class','reviewer_notes','evidence_basis','uncertainty','review_required'} <= set(rows[0])
+    assert all(r['review_required']=='YES' for r in rows)
     assert all(not r['final_judgment'] for r in rows)
 
 def test_workbook_has_validation_and_neutral_sheets():

@@ -2,7 +2,7 @@
 
 Review only the unresolved cases in `blinded_adjudication_cases.xlsx`. The seven genomes and all prediction files are evaluation data. Do not use these cases to tune PhageMine v1.2, alter the frozen benchmark, or infer which tool produced Prediction_A or Prediction_B. Evidence fields are copied from the frozen archive and may contain conflicting or incomplete database support. No new searches are part of this review.
 
-For each prediction, complete `final_judgment`, evidence support, strength, specificity, conflict, preferred product name, error category, and a short rationale. `NOT_EVALUABLE` is reserved for cases excluded by the frozen rules; `UNRESOLVABLE` means the case is eligible but the supplied evidence cannot distinguish plausible functions. A blank decision is missing data, never an incorrect call.
+For each target prediction, complete `final_judgment` (also recorded as `adjudication_class`), evidence basis, uncertainty, evidence support, strength, specificity, conflict, preferred product name, error category, and a short rationale (`reviewer_notes`). `NOT_EVALUABLE` is reserved for cases excluded by the frozen rules; `UNRESOLVABLE` means the case is eligible but the supplied evidence cannot distinguish plausible functions. A blank decision is missing data, never an incorrect call.
 
 Use the controlled definitions below:
 

@@ -86,7 +86,7 @@ def build_cases():
             b = pm[locus] if order[1] == "PhageMine" else ph[locus]
             ev_a=archived_evidence(order[0],row["accession"],a,case_id); ev_b=archived_evidence(order[1],row["accession"],b,case_id)
             cases.append({
-                "case_id": case_id, "matching_mode": row["matching_mode"], "genome": row["accession"],
+                "case_id": case_id, "blinded_unit_id": case_id, "matching_mode": row["matching_mode"], "genome": row["accession"],
                 "review_target": "A" if order[0] == tool else "B",
                 "reference_locus": row["reference_id"], "start": row["start"], "end": row["end"], "strand": row["strand"],
                 "reference_product": row["reference_product"], "reference_start": row["reference_start"], "reference_end": row["reference_end"],
@@ -100,7 +100,8 @@ def build_cases():
                 "prediction_A_evidence_source": "archived functional evidence / GFF attributes",
                 "prediction_B_evidence_source": "archived functional evidence / GFF attributes",
                 "existing_evidence_note": "Raw value copied from frozen prediction archive; no new search or interpretation performed.",
-                "final_judgment": "", "evidence_supports_prediction": "", "evidence_strength": "", "specificity_appropriate": "",
+                "final_judgment": "", "adjudication_class": "", "evidence_basis": "", "uncertainty": "", "review_required": "YES", "reviewer_notes": "",
+                "evidence_supports_prediction": "", "evidence_strength": "", "specificity_appropriate": "",
                 "conflicting_evidence": "", "preferred_product_name": "", "error_category": "", "reviewer_rationale": "",
                 "reviewer_id": "", "review_timestamp": "", "reviewer_confidence": "", "reviewer_comment": "",
             })
