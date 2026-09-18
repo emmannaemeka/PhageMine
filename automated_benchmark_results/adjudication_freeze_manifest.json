@@ -1,0 +1,24 @@
+{
+  "benchmark_commit": "81fafddfee7c38b5a142ec9a36abb9e00a6f94c4",
+  "blinding_audit": "AUTOMATED_ADJUDICATION_BLINDING_PASS",
+  "category_counts": {
+    "PARTIALLY_CORRECT": 161,
+    "TOO_GENERAL": 52,
+    "UNRESOLVABLE": 476
+  },
+  "confidence_counts": {
+    "HIGH": 38,
+    "LOW": 476,
+    "MODERATE": 175
+  },
+  "created_utc": "2026-09-18T10:00:55.963133+00:00",
+  "input_sha256": "cca18ad4bebad1c5b009340a56cc33353b0e14864874476699f3b6f5137a9513",
+  "method": "AUTOMATED_EVIDENCE_ADJUDICATION",
+  "outputs": {
+    "automated_adjudication_audit.jsonl": "a2a8905453a16336feb8e3ed6ee4ac7ac07732cc05628c76438c1678251d9ef9",
+    "automated_blinded_adjudication.tsv": "6f42adf551e618ee36a2810922277b06a509ad36b36268693c5fdcf3ee9106a0",
+    "automated_blinded_adjudication.xlsx": "85c6e679f7625043b4c7b0edd9ae1f8c96eb0f20419e6284d59e5cc3d6fa9d35"
+  },
+  "units": 689,
+  "utility_sha256": "21ec057aab5bb94f12e0ec692043e8657f79028b342896e99296f46783348dee"
+}
