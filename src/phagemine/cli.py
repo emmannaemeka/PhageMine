@@ -109,6 +109,9 @@ Individual installers are also available:
     truth = benchmark_command.add_mutually_exclusive_group()
     truth.add_argument("--truth-gff", help="Expert-reviewed truth-set GFF3; required for accuracy claims")
     truth.add_argument("--truth-genbank", help="Expert-reviewed truth-set GenBank file; required for accuracy claims")
+    engine_command = subcommands.add_parser("evidence-engine", help="Run evidence-aware adjudication")
+    engine_command.add_argument("--input-json", required=True, help="JSON evidence packet")
+    engine_command.add_argument("--output", required=True)
     batch_command = subcommands.add_parser("batch", help="Process a directory of phage FASTA files")
     batch_command.add_argument("input_dir"); batch_command.add_argument("--output", required=True); batch_command.add_argument("--mode", choices=("annotate", "discover", "both"), default="annotate"); batch_command.add_argument("--recursive", action="store_true"); batch_command.add_argument("--resume-existing", action="store_true"); batch_command.add_argument("--fail-fast", action="store_true"); batch_command.add_argument("--gene-predictor", choices=("phanotate","demo"), default="phanotate"); batch_command.add_argument("--gene-model-policy", choices=("phanotate-only", "consensus"), default="phanotate-only"); batch_command.add_argument("--gene-model-profile", choices=("standard", "extended"), default="standard"); batch_command.add_argument("--molecule-type", choices=("dna", "rna"), default="dna"); batch_command.add_argument("--segmented", action="store_true"); batch_command.add_argument("--phanotate"); batch_command.add_argument("--reconcile-orfs", action="store_true"); batch_command.add_argument("--prodigal"); batch_command.add_argument("--threads", type=int, default=1); batch_command.add_argument("--evidence", dest="evidence_profile", choices=("core", "standard", "full"), default="core")
     extract_command = subcommands.add_parser("extract", help="Retrieve stable protein records and FASTA from a completed run")
@@ -169,6 +172,21 @@ Individual installers are also available:
     args = parser.parse_args(argv)
     if args.command is None:
         parser.print_help()
+        return 0
+    if args.command == "evidence-engine":
+        from .evidence_engine import (adjudicate_function, adjudicate_structure,
+                                      aggregate_module_evidence, assess_architecture,
+                                      architecture_hallmarks, assess_comparative, write_engine_outputs)
+        payload=json.loads(Path(args.input_json).read_text())
+        structural=[]; functional=[]
+        for item in payload.get("loci", []):
+            structural.append(adjudicate_structure(item["locus_id"], item["phanotate"], item.get("prodigal_gv"), item.get("independent_support", []), provenance=item.get("provenance")))
+            functional.append(adjudicate_function(item["locus_id"], item.get("product"), item.get("evidence", []), structural_confidence=structural[-1].structural_cds_confidence))
+        modules=aggregate_module_evidence(payload.get("loci", []))
+        architecture=assess_architecture(modules, context=payload.get("context", []), declared_type=payload.get("declared_genome_type"))
+        comparative=assess_comparative(**payload.get("comparative", {}))
+        hallmarks=architecture_hallmarks(architecture["architecture_hypothesis"], modules)
+        print(json.dumps(write_engine_outputs(args.output, structural=structural, functional=functional, modules=modules, architecture=architecture, comparative=comparative, hallmarks=hallmarks), indent=2, sort_keys=True))
         return 0
     if args.command == "gui":
         from .gui.launcher import main as gui_main
