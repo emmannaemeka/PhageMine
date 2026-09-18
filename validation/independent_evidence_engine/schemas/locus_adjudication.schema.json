@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blinded locus adjudication",
+  "type": "object",
+  "required": ["validation_unit_id", "adjudication_class", "evidence_basis", "review_required"],
+  "properties": {
+    "validation_unit_id": {"type": "string", "pattern": "^IV[0-9]{4,}$"},
+    "adjudication_class": {"enum": ["CORRECT", "PARTIALLY_CORRECT", "TOO_GENERAL", "UNSUPPORTED_SPECIFIC", "INCORRECT", "UNRESOLVABLE", "NOT_EVALUABLE"]},
+    "evidence_basis": {"type": "string"},
+    "reviewer_notes": {"type": "string"},
+    "uncertainty": {"enum": ["LOW", "MODERATE", "HIGH", "UNRESOLVED"]},
+    "review_required": {"type": "boolean"},
+    "specificity_appropriate": {"enum": ["YES", "TOO_SPECIFIC", "TOO_GENERAL", "UNCLEAR"]}
+  },
+  "additionalProperties": true
+}

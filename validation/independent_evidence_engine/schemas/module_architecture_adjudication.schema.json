@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Module and architecture adjudication",
+  "type": "object",
+  "required": ["validation_unit_id", "module", "status", "evidence_provenance"],
+  "properties": {
+    "validation_unit_id": {"type": "string", "pattern": "^IV[0-9]{4,}$"},
+    "module": {"type": "string"},
+    "status": {"enum": ["ESTABLISHED", "STRONGLY_SUPPORTED", "SUPPORTED", "CANDIDATE", "EVIDENCE_PRESENT_REVIEW_REQUIRED", "NOT_ESTABLISHED", "NOT_ASSESSABLE", "NOT_APPLICABLE_TO_ARCHITECTURE"]},
+    "architecture_hypothesis": {"enum": ["TAILED_DSDNA_LIKE", "FILAMENTOUS_PHAGE_LIKE", "SMALL_SSDNA_PHAGE_LIKE", "OTHER_PHAGE_ARCHITECTURE", "MIXED_OR_CONFLICTING", "ARCHITECTURE_UNRESOLVED", "NOT_ASSESSABLE", null]},
+    "evidence_provenance": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}

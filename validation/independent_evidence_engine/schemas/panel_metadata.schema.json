@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Independent validation panel metadata",
+  "type": "object",
+  "required": ["validation_unit_id", "accession_version", "sequence_sha256", "status"],
+  "properties": {
+    "validation_unit_id": {"type": "string", "pattern": "^IV[0-9]{4,}$"},
+    "accession_version": {"type": "string", "minLength": 1},
+    "sequence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["CANDIDATE", "INCLUDED", "EXCLUDED"]},
+    "exclusion_reason": {"type": ["string", "null"]},
+    "architecture_stratum": {"type": ["string", "null"]},
+    "database_overlap_class": {"enum": ["EXACT", "CLOSE_CLUSTER", "REMOTE", "NONE", "UNKNOWN", null]},
+    "reference_quality": {"enum": ["EXPERIMENTALLY_ESTABLISHED", "STRONGLY_CURATED", "COMPUTATIONALLY_SUPPORTED", "UNRESOLVED", "NOT_EVALUABLE", null]}
+  },
+  "additionalProperties": true
+}
