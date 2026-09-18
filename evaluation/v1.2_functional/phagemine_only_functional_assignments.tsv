@@ -1,0 +1,76 @@
+accession	start	end	strand	locus_id	product	other_product	reference_product	category
+NC_000866.4	5842	6267	-	PM_000011	protein comc-alpha	unknown function	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_000866.4	7218	7307	-	PM_000015	motb-like transcriptional regulator	unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	19132	19758	-	PM_000042	anti-dart factor a	hypothetical protein	gp61.2 hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_000866.4	33058	33246	-	PM_000063	protein gp45.2	hypothetical protein	protein GP45.2	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	63078	63344	-	PM_000128	anti-cbass protein 2	hypothetical protein	Vs.4 conserved hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_000866.4	63557	63919	-	PM_000130	autonomous glycyl radical cofactor	hypothetical protein	autonomous glycyl radical cofactor GrcA	UNRESOLVED_REVIEW_REQUIRED
+NC_000866.4	66503	66997	-	PM_000136	endolysin	hypothetical protein	glycoside hydrolase family protein	UNRESOLVED_REVIEW_REQUIRED
+NC_000866.4	67472	67570	-	PM_000138	membrane protein	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	128307	128765	-	PM_000217	anti-dart factor nadar	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001416.1	6135	7160	+	PM_000008	major capsid protein	hypothetical protein	major capsid protein	EXACT_PRODUCT_AGREEMENT
+NC_001416.1	7977	8555	+	PM_000011	tail completion protein z	hypothetical protein	tail protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	9711	10133	+	PM_000014	tail assembly protein g	hypothetical protein	minor tail protein G	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	14276	14875	+	PM_000020	tail tip assembly protein k	hypothetical protein	C40 family peptidase	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	14773	15444	+	PM_000021	tail tip assembly protein i	hypothetical protein	tail assembly protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	22686	23918	-	PM_000028	protein ea47	hypothetical protein	ea47	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	25396	26973	-	PM_000032	protein ea59	hypothetical protein	AAA family ATPase	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	29374	29655	-	PM_000040	protein ea8.5	hypothetical protein	ea8.5	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	29847	30347	-	PM_000041	protein ea22	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001416.1	33536	33904	-	PM_000051	protein ea10	unknown function	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001416.1	37227	37940	-	PM_000062	helix-turn-helix transcriptional regulator	hypothetical protein	LexA family transcriptional regulator	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	39582	40283	+	PM_000067	helicase loader	hypothetical protein	DNA replication protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001416.1	42227	42439	+	PM_000072	protein ninf	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001416.1	43152	43889	+	PM_000074	serine/threonine-protein phosphatase	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001604.1	1278	1433	+	PM_000006	gene 0.4 protein	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	1430	1639	+	PM_000007	protein 0.5	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001604.1	1639	1797	+	PM_000008	protein 0.6b	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001604.1	1781	1972	+	PM_000009	protein 0.6b	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001604.1	7608	7763	+	PM_000015	protein 1.4	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	7906	8166	+	PM_000017	protein 1.6	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	8749	8895	+	PM_000019	protein 1.8	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	13352	13564	+	PM_000027	protein 4.3	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	13584	13853	+	PM_000028	inhibitor of toxin/antitoxin system	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	13798	14334	+	PM_000029	protein 4.7	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_001604.1	16483	16839	+	PM_000031	protein 5.3	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	16851	17150	+	PM_000032	protein suppressor of silencing	hypothetical protein	DUF2675 domain-containing protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001604.1	17150	17359	+	PM_000033	gene 5.7 protein	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	18394	18507	+	PM_000036	protein 6.3	hypothetical protein	DUF5516 domain-containing protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001604.1	18605	18859	+	PM_000037	protein 6.5	hypothetical protein	DUF2717 domain-containing protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001604.1	18864	19130	+	PM_000038	protein 6.7	hypothetical protein	DUF5476 family protein	UNRESOLVED_REVIEW_REQUIRED
+NC_001604.1	39389	39538	+	PM_000058	protein 19.5	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_001604.1	39834	39935	-	PM_000061	minor capsid protein p14	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_005859.1	5411	5929	-	PM_000012	hnh endonuclease	hypothetical protein	putative H-N-H-endonuclease P-TflVII	UNRESOLVED_REVIEW_REQUIRED
+NC_005859.1	8300	8644	+	PM_000018	dna-(apurinic or apyrimidinic site) endonuclease	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_005859.1	13199	13747	-	PM_000034	putative endonuclease	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_005859.1	18929	19360	-	PM_000051	dna binding protein	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_005859.1	27656	28024	-	PM_000070	autonomous glycyl radical cofactor	hypothetical protein	putative acetyltransferase-related protein	UNRESOLVED_REVIEW_REQUIRED
+NC_005859.1	39051	39467	+	PM_000099	capsid protein	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_005859.1	45179	45415	-	PM_000113	exonuclease	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_005859.1	86055	86318	-	PM_000165	collar protein p132	unknown function	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_005859.1	105346	105783	-	PM_000184	nicking endonuclease	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_005859.1	116942	117460	-	PM_000206	hnh endonuclease	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_005859.1	119831	120175	+	PM_000212	dna-(apurinic or apyrimidinic site) endonuclease	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	203	1702	+	PM_000002	terminase, large subunit	hypothetical protein	terminase large subunit	EXACT_PRODUCT_AGREEMENT
+NC_002371.2	1702	3879	+	PM_000003	portal protein	hypothetical protein	portal protein	EXACT_PRODUCT_AGREEMENT
+NC_002371.2	15091	15993	+	PM_000018	antirepressor protein ant	hypothetical protein	Ant	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	22746	23381	-	PM_000027	eac protein	hypothetical protein	EaC	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	23758	24711	-	PM_000029	eaa protein	hypothetical protein	EaA	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	24715	24903	-	PM_000030	eai protein	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	24906	25616	-	PM_000031	ead protein	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	25496	25855	-	PM_000032	eaf protein	hypothetical protein	EaF	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	25964	26461	-	PM_000034	eae protein	hypothetical protein	EaE	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	31013	31663	-	PM_000049	helix-turn-helix transcriptional regulator	hypothetical protein	C2	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	33300	34676	+	PM_000054	replicative dna helicase	hypothetical protein	hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_002371.2	35184	35357	+	PM_000056	protein nind	hypothetical protein	NinD	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	35324	35500	+	PM_000057	protein nine	hypothetical protein	NinE	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	35497	35835	+	PM_000058	putative protein ninx	hypothetical protein	NinX	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	35828	36004	+	PM_000059	protein ninf	hypothetical protein	NinF	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	36605	36829	+	PM_000061	putative protein niny	hypothetical protein	NinY	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	36856	37029	+	PM_000062	protein ninh	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_000929.1	1328	3319	+	PM_000005	dde-recombinase a	hypothetical protein	Mu transposase C-terminal domain-containing protein	UNRESOLVED_REVIEW_REQUIRED
+NC_000929.1	8233	8784	+	PM_000018	gema protein	hypothetical protein	regulatory protein GemA	UNRESOLVED_REVIEW_REQUIRED
+NC_000929.1	11718	12017	+	PM_000027	releasin protein	hypothetical protein	DUF2730 family protein	UNRESOLVED_REVIEW_REQUIRED
+NC_000929.1	12707	14554	+	PM_000030	probable terminase, large subunit gp28	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_000929.1	21486	21692	+	PM_000039	putative sheath terminator protein	hypothetical protein	NA	NO_EXACT_REFERENCE_MATCH
+NC_000929.1	26208	27695	+	PM_000045	dna circularization protein n	hypothetical protein	DNA circularization N-terminal domain-containing protein	UNRESOLVED_REVIEW_REQUIRED

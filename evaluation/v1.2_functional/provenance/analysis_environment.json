@@ -1,0 +1,9 @@
+{
+  "python": "3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 21:00:12) [Clang 16.0.6 ]",
+  "platform": "macOS-12.7.6-x86_64-i386-64bit",
+  "packages": {
+    "biopython": "1.85",
+    "matplotlib": "3.9.2",
+    "numpy": "1.26.4"
+  }
+}

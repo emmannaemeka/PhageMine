@@ -1,0 +1,35 @@
+accession	start	end	strand	locus_id	product	other_product	reference_product	category
+NC_000866.4	2458	2751	-	PHAR_NC_000866_4_CDS_0003	DNA topoisomerase II	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	5702	5839	-	PHAR_NC_000866_4_CDS_0010	FmdB-like transcriptional regulator	uncharacterized 5.1 kda protein in gp39-comca intergenic region	FmdB-like transcriptional regulator	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	11039	11785	-	PHAR_NC_000866_4_CDS_0023	Srd anti-sigma factor	uncharacterized 29.0 kda protein in dda-moda intergenic region	Srd anti-sigma factor	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	13389	13859	-	PHAR_NC_000866_4_CDS_0027	Mrh transcription modulator under heat shock	uncharacterized 18.3 kda protein in modb-mrh intergenic region	Mrh transcription modulator under heat shock	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	14013	14198	-	PHAR_NC_000866_4_CDS_0029	decoy of host sigma32	uncharacterized 8.1 kda protein in modb-mrh intergenic region	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	41805	42113	-	PHAR_NC_000866_4_CDS_0082	thioredoxin domain	uncharacterized 11.8 kda protein in gp55-nrdg intergenic region	NrdH glutaredoxin	UNRESOLVED_REVIEW_REQUIRED
+NC_000866.4	43535	44728	-	PHAR_NC_000866_4_CDS_0087	anaerobic ribonucleoside reductase large subunit	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	47506	47826	-	PHAR_NC_000866_4_CDS_0094	ribonucleotide reductase	uncharacterized 12.6 kda protein in pin-nrdc intergenic region	ribonucleotide reductase	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	55435	56469	-	PHAR_NC_000866_4_CDS_0108	nucleotidyltransferase	uncharacterized 38.9 kda protein in nrdc-mobd intergenic region	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	58819	59205	-	PHAR_NC_000866_4_CDS_0116	starvation-inducible transcriptional regulator	uncharacterized 14.6 kda protein in mobd-ri intergenic region	starvation-inducible transcriptional regulator	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	60922	61389	-	PHAR_NC_000866_4_CDS_0123	phosphatase	uncharacterized 17.5 kda protein in tk-vs intergenic region	phosphatase	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	67035	67490	-	PHAR_NC_000866_4_CDS_0137	nudix hydrolase	uncharacterized 17.7 kda protein in e-segb intergenic region	nudix hydrolase	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	102781	103023	+	PHAR_NC_000866_4_CDS_0183	prohead	conserved phage protein of unknown function	prohead	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	137955	138434	-	PHAR_NC_000866_4_CDS_0243	aerobic NDP reductase small subunit	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_000866.4	139716	139967	-	PHAR_NC_000866_4_CDS_0248	homing endonuclease	uncharacterized 9.4 kda protein in nrdb-nrda intergenic region	Nrd.1 hypothetical protein	NON_EVALUABLE_REFERENCE
+NC_000866.4	147909	148541	-	PHAR_NC_000866_4_CDS_0261	homing endonuclease	uncharacterized 24.6 kda protein in gp32-gp59 intergenic region	homing endonuclease	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	166432	166554	-	PHAR_NC_000866_4_CDS_0287	periplasmic protein	uncharacterized 4.3 kda protein in ndd-denb intergenic region	periplasmic protein	EXACT_PRODUCT_AGREEMENT
+NC_000866.4	166815	166913	-	PHAR_NC_000866_4_CDS_0290	outer membrane protein	uncharacterized 3.7 kda protein in ndd-denb intergenic region	outer membrane protein	EXACT_PRODUCT_AGREEMENT
+NC_001416.1	191	736	+	PHAR_NC_001416_1_CDS_0001	terminase small subunit	conserved phage protein of unknown function	terminase small subunit	EXACT_PRODUCT_AGREEMENT
+NC_001416.1	41063	41953	+	PHAR_NC_001416_1_CDS_0070	phosphoadenosine phosphosulfate reductase	uncharacterized nin region protein orf290	NA	NO_EXACT_REFERENCE_MATCH
+NC_001416.1	47042	47494	-	PHAR_NC_001416_1_CDS_0084	head protein	uncharacterized protein ydfo	NA	NO_EXACT_REFERENCE_MATCH
+NC_001604.1	3171	5822	+	PHAR_NC_001604_1_CDS_0011	RNA polymerase	conserved phage protein of unknown function	RNA polymerase	EXACT_PRODUCT_AGREEMENT
+NC_001604.1	22967	24004	+	PHAR_NC_001604_1_CDS_0044	major head protein	conserved phage protein of unknown function	major head protein	EXACT_PRODUCT_AGREEMENT
+NC_005859.1	46412	46888	-	PHAR_NC_005859_1_CDS_0116	Rnase H	conserved phage protein of unknown function	Rnase H	EXACT_PRODUCT_AGREEMENT
+NC_005859.1	48391	49536	-	PHAR_NC_005859_1_CDS_0119	ribonucleoside diphosphate reductase small subunit	conserved phage protein of unknown function	putative aerobic ribonucleoside diphosphate reductase, small subunit	UNRESOLVED_REVIEW_REQUIRED
+NC_002371.2	1	225	+	PHAR_NC_002371_2_CDS_0001	terminase small subunit	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	13336	14046	-	PHAR_NC_002371_2_CDS_0014	superinfection exclusion SieA-like	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	18266	19498	-	PHAR_NC_002371_2_CDS_0020	GtrC-like O-antigen conversion translocase	uncharacterized 55.3 kda protein in gtrb 5'region	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	29581	30336	+	PHAR_NC_002371_2_CDS_0046	superinfection exclusion inhibits SieB	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	32349	32495	+	PHAR_NC_002371_2_CDS_0052	tail protein	uncharacterized 5.8 kda protein	tail protein	EXACT_PRODUCT_AGREEMENT
+NC_002371.2	39644	40180	+	PHAR_NC_002371_2_CDS_0071	Rha-like transcriptional regulator	uncharacterized 22.8 kda protein in gp15-gp3 intergenic region	NA	NO_EXACT_REFERENCE_MATCH
+NC_002371.2	41455	41724	+	PHAR_NC_002371_2_CDS_0079	terminase small subunit	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH
+NC_000929.1	5482	5781	+	PHAR_NC_000929_1_CDS_0011	transcriptional regulator, D5-like	uncharacterized protein gp9	transcriptional regulator, D5-like	EXACT_PRODUCT_AGREEMENT
+NC_000929.1	35299	35673	+	PHAR_NC_000929_1_CDS_0055	DNA invertase	conserved phage protein of unknown function	NA	NO_EXACT_REFERENCE_MATCH

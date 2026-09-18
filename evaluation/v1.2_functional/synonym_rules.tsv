@@ -1,0 +1,2 @@
+rule_id	term_a	term_b	rationale
+S001	major head protein	major capsid protein	Explicit terminology equivalence specified in the benchmark protocol; exact full-term match only, no subunit or maturation inference.

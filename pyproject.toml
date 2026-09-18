@@ -28,6 +28,7 @@ Issues = "https://github.com/emmannaemeka/PhageMine/issues"
 [project.optional-dependencies]
 gui = ["streamlit>=1.36,<2"]
 test = [
+    "biopython>=1.85,<2",
     "build>=1,<2",
     "pytest>=8,<10",
     "pyrodigal==3.7.1",

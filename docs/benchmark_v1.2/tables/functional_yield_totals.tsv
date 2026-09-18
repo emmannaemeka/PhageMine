@@ -1,0 +1,4 @@
+tool	predicted_cds	named_product_calls	hypothetical_or_uncharacterized	named_fraction
+PhageMine	804	439	365	0.546020
+Pharokka	804	398	406	0.495025
+Prokka	675	328	347	0.485926

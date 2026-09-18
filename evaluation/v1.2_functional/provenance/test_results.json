@@ -1,0 +1,9 @@
+{
+  "command": "PYTHONPATH=src MPLCONFIGDIR=/tmp/phagemine-mpl /tmp/phagemine-functional-tests/bin/python -m pytest -q",
+  "passed": 298,
+  "failed": 0,
+  "skipped": 0,
+  "deselected": 10,
+  "seconds": 30.27,
+  "notes": "Default repository selection excludes integration tests. Isolated system-site-packages venv added pinned pyrodigal 3.7.1, pyrodigal-gv 0.3.2, pyrodigal-rv 0.1.0. Initial base-environment run had 5 failures from missing dependencies; a subsequent assertion typo (709 vs 711 reference CDS) was corrected before the final passing run."
+}

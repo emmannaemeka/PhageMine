@@ -101,7 +101,10 @@ page for per-genome results and definitions.*
 
 ![Named-product yield comparison](docs/benchmark_v1.2/figures/functional_yield.png)
 
-*Named-product yield is an output metric and is not functional accuracy.*
+*Named-product yield is an output metric and is not functional accuracy. The
+previous erroneous per-genome PhageMine zeros have been corrected from frozen
+annotation tables; the aggregate remains 439. See the [correction note](docs/BENCHMARK.md)
+and [functional reference-concordance analysis](docs/FUNCTIONAL_BENCHMARK.md).*
 
 **Full benchmark methodology, per-genome results, figures and limitations: [docs/BENCHMARK.md](docs/BENCHMARK.md)**
 
@@ -178,7 +181,7 @@ is not required for ordinary analysis. Mash selects candidate references;
 BLASTN supplies PhageMine's bidirectional, length-normalized nucleotide
 comparison. It is not presented as VIRIDIC output and does not assign taxonomy.
 
-The repository's automated matrix covers Ubuntu Linux, Intel macOS (`macos-13`)
+The repository's automated matrix covers Ubuntu Linux, Intel macOS (`macos-15-intel`)
 and Apple-silicon macOS (`macos-14`) for the Python package and unit suite. The
 external-tool Conda workflow is exercised on Ubuntu. Local Conda solver and
 Bioconda availability can vary by architecture; if the environment solver

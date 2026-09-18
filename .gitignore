@@ -73,3 +73,6 @@ docs/v1.2-pyrodigal-rv-install-diagnostic.txt
 # The generic benchmark pattern above must not hide the public package.
 !docs/benchmark_v1.2/
 !docs/benchmark_v1.2/**
+
+# Public benchmark inclusion must not re-include Python bytecode.
+docs/benchmark_v1.2/**/__pycache__/
