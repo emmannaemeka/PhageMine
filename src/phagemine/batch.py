@@ -84,11 +84,28 @@ def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predict
     predictor_factory = lambda: create_predictor(gene_predictor, phanotate)
     def predict(path):
         gid, seq = read_fasta(path)
-        proteins = predictor_factory().predict(gid, seq, path)
+        primary_predictor = predictor_factory()
+        proteins = primary_predictor.predict(gid, seq, path)
         if not proteins: raise ValueError(f"No proteins predicted for {path}")
-        return path, gid, seq, proteins
+        observational = None
+        if str(gene_predictor).lower() == "phanotate":
+            from .gene_callers import ProdigalGVProvider, GenePredictionResult
+            provider = ProdigalGVProvider()
+            pooled_raw = project / "_pooled_gene_calls" / gid / "raw"
+            pooled_raw.mkdir(parents=True, exist_ok=True)
+            (pooled_raw / "phanotate.raw.txt").write_text(getattr(primary_predictor, "last_raw_output", ""))
+            try:
+                observational = provider.predict(gid, seq, path, molecule_type="dna")
+                provider.persist_raw_output(observational, pooled_raw)
+            except Exception as exc:
+                observational = GenePredictionResult(provider_id="prodigal_gv", provider_name=provider.name,
+                                                     provider_version=provider.version(), molecule_type="dna",
+                                                     input_sequence_sha256=checksum(path), status="FAILED_PROVIDER",
+                                                     warnings=[str(exc)], parameters=provider.parameters())
+        return path, gid, seq, proteins, observational
     pred_started = stage_start("Gene prediction")
-    if reusable and state.get("input_fingerprint") == fingerprint:
+    if (reusable and state.get("input_fingerprint") == fingerprint and
+            state.get("observational_schema") == "automatic-prodigal-gv-v1"):
         predicted = state["predicted"]
     else:
         with ThreadPoolExecutor(max_workers=max(1, int(threads))) as pool:
@@ -98,14 +115,16 @@ def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predict
                 predicted.append(future.result())
                 progress._write(f"[Discovery] Gene prediction {index}/{len(input_paths)} complete: {futures[future].name}")
             predicted.sort(key=lambda item: str(item[0]))
-        state = {"input_fingerprint": fingerprint, "predicted": predicted}
+        state = {"input_fingerprint": fingerprint, "predicted": predicted,
+                 "observational_schema": "automatic-prodigal-gv-v1"}
         mark("GENE_PREDICTION")
     stage_done("Gene prediction", pred_started, f"{len(predicted)}/{len(input_paths)} genomes")
     pool_started = stage_start("Protein pooling")
-    all_proteins = [p for _, _, _, ps in predicted for p in ps]
+    all_proteins = [p for _, _, _, ps, _ in predicted for p in ps]
     stage_done("Protein pooling", pool_started, f"{len(all_proteins)} protein occurrences")
     dedup_started = stage_start("Exact protein deduplication")
-    if reusable and state.get("input_fingerprint") == fingerprint and state.get("representatives"):
+    if (reusable and state.get("input_fingerprint") == fingerprint and
+            state.get("observational_schema") == "automatic-prodigal-gv-v1" and state.get("representatives")):
         representatives, occurrences = state["representatives"], state["occurrences"]
     else:
         representatives, occurrences = deduplicate_proteins(all_proteins)
@@ -169,13 +188,39 @@ def pooled_batch(input_paths, output, *, profile="full", threads=1, gene_predict
     mark("EVIDENCE_REMAP")
     map_started = stage_start("Evidence mapping/classification")
     rows=[]
-    for path, gid, seq, proteins in predicted:
+    for path, gid, seq, proteins, observational in predicted:
         destination = project / _sample_id(path); destination.mkdir(parents=True, exist_ok=True)
+        if observational is not None:
+            from .gene_callers import _model_from_protein
+            from .reconciliation_engine import reconcile_gene_models, write_production_observational_outputs
+            primary_models = [_model_from_protein(
+                p, provider_id="phanotate", version=predictor_factory().version(), command=None,
+                input_sha=checksum(path), source_file=path, segment_id=gid,
+                method_family="phanotate", method_lineage="phanotate") for p in proteins]
+            model_sets = {"phanotate": primary_models, "prodigal_gv": list(observational.models)}
+            loci = reconcile_gene_models(model_sets)
+            gene_call_root = destination / "gene_calls"
+            write_production_observational_outputs(gene_call_root, model_sets, loci, {"prodigal_gv": observational})
+            (gene_call_root / "gene_call_manifest.json").write_text(json.dumps({
+                "schema_version": "production-observational-v1", "input_fasta": str(Path(path).resolve()),
+                "input_sequence_sha256": checksum(path), "genome_id": gid,
+                "selected_gene_caller_policy": "phanotate-only-legacy-compatible", "final_cds_source": "PHANOTATE",
+                "phanotate_authoritative": True,
+                "caller_roles": {"PHANOTATE": "PRIMARY", "Pyrodigal-gv": "SECONDARY_OBSERVATIONAL"},
+                "providers": [{"provider_id": "phanotate", "name": predictor_factory().name, "role": "PRIMARY", "status": "SUCCESS"},
+                              {"provider_id": "prodigal_gv", "name": observational.provider_name,
+                               "role": "SECONDARY_OBSERVATIONAL", "status": observational.status,
+                               "version": observational.provider_version, "parameters": observational.parameters,
+                               "warnings": observational.warnings}],
+                "reconciliation_policy": "observational-only; PHANOTATE remains final",
+                "reconciliation_dependent_confidence": "AVAILABLE" if observational.status == "SUCCESS" else "UNAVAILABLE",
+            }, indent=2, sort_keys=True))
         local = [p for p in all_proteins if p.genome_id == gid]
         classifications = classify_proteins(local); contexts, modules = build_context(local, classifications)
         mine(local); candidates = ranked_candidates(local); quality = assess(seq, local)
         manifest = {"pipeline":"PhageMine", "command":"batch", "pooled_execution":True,
                     "threads":threads, "evidence_profile":profile, "input":str(path), "input_sha256":checksum(path),
+                    "observational_reconciliation":"automatic-prodigal-gv" if observational is not None else "not_applicable",
                     "gene_caller":{"name":predictor_factory().name,"version":predictor_factory().version(),"parameters":predictor_factory().parameters()},
                     "evidence_adapters":evidence_adapters, "pooled_proteins":{"total_occurrences":len(all_proteins),"unique_sequences":len(representatives),"occurrence_map":occurrences},
                     "discovery_ranking":{"status":"RANKED"}}
@@ -338,6 +383,7 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
                                    "gene_model_policy": gene_model_policy,
                                    "gene_model_profile": gene_model_profile,
                                    "molecule_type": molecule_type,
+                                   "observational_reconciliation": "automatic-prodigal-gv" if gene_predictor == "phanotate" and molecule_type == "dna" else "not_applicable",
                                    "mode": mode,
                                    "evidence_profile_resolution": profile_resolution,
                                    "pooled_execution": False,
@@ -434,7 +480,7 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
                 raise ValueError(f"output directory exists but is not a valid completed run: {destination}")
             else:
                 run(path, destination, command="annotate", predictor=create_predictor(gene_predictor, phanotate),
-                    reconcile_orfs=reconcile_orfs, prodigal=prodigal,
+                    reconcile_orfs=(reconcile_orfs or (gene_predictor == "phanotate" and molecule_type == "dna")), prodigal=prodigal,
                     progress=sample_progress, threads=threads,
                     inphared_resolution=inphared_resolution,
                     gene_model_policy=gene_model_policy,

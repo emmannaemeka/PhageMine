@@ -111,7 +111,7 @@ def _consensus_provider_ids(profile: str = "standard") -> tuple[str, ...]:
     """Return the one shared v1.2 DNA consensus provider profile."""
     if profile not in {"standard", "extended"}:
         raise ValueError(f"unknown gene-model profile: {profile}")
-    return ("phanotate", "pyrodigal", "prodigal_gv")
+    return ("phanotate", "prodigal_gv")
 
 
 def _run_rna_gene_models(fasta, output, representation, *, progress):
@@ -301,19 +301,17 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
 
 def _run_consensus_gene_models(fasta, output, representation, predictor, *, profile, progress):
     """Run providers, reconciliation, observational adjudication and selection."""
-    from .gene_callers import PHANOTATEProvider, PyrodigalProvider, ProdigalGVProvider, ProviderUnavailable
+    from .gene_callers import PHANOTATEProvider, ProdigalGVProvider, ProviderUnavailable
     from .reconciliation_engine import run_provider_reconciliation
     from .model_adjudication import CandidateModel, candidates_from_locus, decide_locus, write_model_adjudication
     from .gene_model_selection import select_final_gene_models, write_selection_outputs, CONSENSUS
 
     if profile not in {"standard", "extended"}:
         raise ValueError(f"unknown gene-model profile: {profile}")
-    # v1.2's single DNA consensus profile intentionally uses all three
-    # caller implementations.  ``profile`` is retained as an explicit
-    # provenance field; both supported profiles currently resolve to this
-    # provider set (extended is reserved for future additions, not a hidden
-    # fourth Prodigal vote).
-    providers = [PHANOTATEProvider(getattr(predictor, "executable", None)), PyrodigalProvider(), ProdigalGVProvider()]
+    # The optional model-policy path uses PHANOTATE plus Pyrodigal-gv only.
+    # Ordinary Prodigal is retained as a legacy provider but is never part of
+    # the production reconciliation layer.
+    providers = [PHANOTATEProvider(getattr(predictor, "executable", None)), ProdigalGVProvider()]
     unavailable = [provider.provider_id for provider in providers if not provider.available()]
     if "phanotate" in unavailable:
         raise ProviderUnavailable("PHANOTATE is required as the primary DNA caller; it is unavailable")
@@ -346,8 +344,14 @@ def _run_consensus_gene_models(fasta, output, representation, predictor, *, prof
         "adjudication_performed": True, "selection_performed": True,
         "final_cds_source": "PHANOTATE_PRIMARY", "selection_summary": selection_counts,
         "alternative_callers_role": "diagnostic-only; corroboration and conflict detection; never changes final DNA CDS",
+        "phanotate_authoritative": True,
+        "caller_roles": {"phanotate": "PRIMARY", "prodigal_gv": "SECONDARY_OBSERVATIONAL"},
+        "reconciliation_policy": "observational-only; PHANOTATE remains final",
+        "reconciliation_policy_version": "production-observational-v1",
         "provider_outcomes": {pid: {"status": result.status, "warnings": result.warnings,
-                                      "audit_warnings": result.audit_warnings}
+                                      "audit_warnings": result.audit_warnings,
+                                      "command": result.command, "parameters": result.parameters,
+                                      "raw_output_paths": result.raw_output_paths}
                               for pid, result in provider_results.items()},
     }, indent=2, sort_keys=True))
     # Consensus-specific review/rescue ledgers and a complete final trace.
@@ -566,9 +570,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                                       phrogs_alignment_length=phrogs_alignment_length, reconcile_orfs=reconcile_orfs,
                                       prodigal=prodigal, threads=threads, inphared_resolution=inphared_resolution,
                                       gene_model_policy=gene_model_policy, gene_model_profile=gene_model_profile)
-    if reconcile_orfs and not consensus_active and molecule_type == "dna":
+    if (reconcile_orfs or (molecule_type == "dna" and not consensus_active)):
         stages = [
-            "input/genome validation", "gene prediction", "Prodigal secondary gene prediction",
+            "input/genome validation", "gene prediction", "Pyrodigal-gv observational gene prediction",
             "ORF reconciliation", "Pfam", "VOGDB", "Swiss-Prot", "PHROGs", "alternative ORF evidence",
             "ORF adjudication", "evidence integration", "candidate ranking/mining", "QC/report generation",
         ]
@@ -620,8 +624,75 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     reconciliation_rows = None
     prodigal_models = None
     gene_review_records = []
+    production_observation = False
+    legacy_reconciliation = False
     progress.finish(f"{len(proteins)} proteins")
-    if reconcile_orfs and not consensus_active and molecule_type == "dna":
+    # Every genuine PHANOTATE DNA analysis receives a non-fatal Pyrodigal-gv
+    # observation.  The helper writes diagnostics only; PHANOTATE proteins
+    # remain the sole final CDS model.
+    if not consensus_active and molecule_type == "dna" and predictor.name == "PHANOTATE":
+        from .gene_callers import _model_from_protein
+        from .reconciliation_engine import run_automatic_observational_reconciliation
+        primary_models = [_model_from_protein(
+            protein, provider_id="phanotate", version=predictor.version(),
+            command=getattr(predictor, "last_command", None), input_sha=checksum(fasta),
+            source_file=getattr(predictor, "last_input_fasta", fasta),
+            segment_id=representation.analysis_sequence_id, method_family="phanotate", method_lineage="phanotate")
+            for protein in proteins]
+        progress.start("Pyrodigal-gv observational gene prediction")
+        provider_results, _loci, gene_review_records = run_automatic_observational_reconciliation(
+            primary_models, representation.analysis_sequence_id, representation.analysis_sequence,
+            predictor_input, Path(output) / "gene_calls")
+        gv_result = provider_results["prodigal_gv"]
+        gene_call_root = Path(output) / "gene_calls"
+        raw_root = gene_call_root / "raw"
+        raw_root.mkdir(parents=True, exist_ok=True)
+        phanotate_raw_path = raw_root / "phanotate.raw.txt"
+        phanotate_raw_path.write_text(getattr(predictor, "last_raw_output", ""))
+        phanotate_tsv_path = raw_root / "phanotate.tsv"
+        with phanotate_tsv_path.open("w", newline="") as handle:
+            writer = csv.writer(handle, delimiter="\t")
+            writer.writerow(["caller", "raw_identifier", "start", "end", "strand", "length_nt", "length_aa"])
+            writer.writerows([["PHANOTATE", p.protein_id, p.start, p.end, p.strand, len(p.cds), len(p.sequence)] for p in proteins])
+        automatic_manifest = {
+            "schema_version": "production-observational-v1",
+            "input_fasta": str(Path(fasta).resolve()),
+            "input_sequence_sha256": checksum(fasta),
+            "analysis_sequence_sha256": hashlib.sha256(representation.analysis_sequence.encode()).hexdigest(),
+            "genome_id": representation.analysis_sequence_id,
+            "declared_molecule_type": "dna",
+            "selected_gene_caller_policy": "phanotate-only-legacy-compatible",
+            "final_cds_source": "PHANOTATE",
+            "phanotate_authoritative": True,
+            "callers_invoked": ["PHANOTATE", "Pyrodigal-gv"],
+            "caller_roles": {"PHANOTATE": "PRIMARY", "Pyrodigal-gv": "SECONDARY_OBSERVATIONAL"},
+            "providers": [
+                {"provider_id": "phanotate", "name": predictor.name, "role": "PRIMARY", "status": "SUCCESS",
+                 "version": predictor.version(), "command": getattr(predictor, "last_command", None),
+                 "parameters": predictor.parameters(), "mode": "phanotate-only-legacy-compatible",
+                 "raw_output_paths": [str(phanotate_raw_path), str(phanotate_tsv_path)]},
+                {"provider_id": "prodigal_gv", "name": gv_result.provider_name, "role": "SECONDARY_OBSERVATIONAL",
+                 "status": gv_result.status, "version": gv_result.provider_version, "command": gv_result.command,
+                 "parameters": gv_result.parameters, "raw_output_paths": gv_result.raw_output_paths,
+                 "warnings": gv_result.warnings},
+            ],
+            "reconciliation_policy": "observational-only; PHANOTATE remains final",
+            "reconciliation_policy_version": "production-observational-v1",
+            "reconciliation_status": "COMPLETE" if gv_result.status == "SUCCESS" else "SECONDARY_FAILED_NONFATAL",
+            "reconciliation_dependent_confidence": "AVAILABLE" if gv_result.status == "SUCCESS" else "UNAVAILABLE",
+            "coordinate_conventions": {"PHANOTATE": "1-based-inclusive", "Pyrodigal-gv": "0-based-inclusive-normalized-to-1-based-inclusive"},
+        }
+        (gene_call_root / "gene_call_manifest.json").write_text(json.dumps(automatic_manifest, indent=2, sort_keys=True))
+        production_observation = True
+        secondary_status = provider_results["prodigal_gv"].status
+        if secondary_status == "SUCCESS":
+            progress.finish(f"{len(provider_results['prodigal_gv'].models)} observational models")
+        else:
+            progress.skip(f"Pyrodigal-gv unavailable or failed: {provider_results['prodigal_gv'].warnings[0] if provider_results['prodigal_gv'].warnings else secondary_status}")
+    elif reconcile_orfs and not consensus_active and molecule_type == "dna" and prodigal is not None:
+        # Explicit legacy compatibility only.  It is never the production
+        # default and remains clearly labelled as external Prodigal.
+        legacy_reconciliation = True
         progress.start("Prodigal secondary gene prediction")
         prodigal_predictor = ProdigalPredictor(prodigal)
         prodigal_models = prodigal_predictor.predict(fasta, representation.analysis_sequence)
@@ -643,12 +714,12 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         (Path(output) / "checkpoints" / "orf_reconciliation").mkdir(parents=True, exist_ok=True)
         (Path(output) / "checkpoints" / "orf_reconciliation" / "predictions.json").write_text(json.dumps([m.__dict__ for m in prodigal_models], indent=2, sort_keys=True))
         progress.finish("reconciliation persisted")
-    if not consensus_active and molecule_type == "dna":
+    if not consensus_active and molecule_type == "dna" and not production_observation:
         _write_gene_call_provenance(
             output, fasta, representation, predictor, proteins,
             prodigal_predictor=locals().get("prodigal_predictor"),
             prodigal_models=prodigal_models,
-            reconciliation_enabled=reconcile_orfs,
+            reconciliation_enabled=legacy_reconciliation,
         )
     # Selection is an additive policy record at this stage.  The legacy
     # PHANOTATE final path remains unchanged; consensus selection is exposed
@@ -773,7 +844,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     backend_states = f"MMseqs2={phrogs_result.state.value}; PyHMMER={phrogs_hmm_result.state.value}"
     progress.finish(f"{accepted} accepted deduplicated hits; {backend_states}")
     timed_end("phrogs")
-    if reconcile_orfs and not consensus_active and molecule_type == "dna":
+    if legacy_reconciliation:
         alt = alternative_models(reconciliation_rows, representation.analysis_sequence)
         progress.start("alternative ORF evidence")
         # Adapter objects are reused with isolated one-protein inputs; canonical evidence is untouched.
@@ -794,6 +865,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         gene_review_records = gene_call_review(reconciliation_rows, evidence_map, lengths)
         write_gene_call_review(output, gene_review_records)
         progress.finish("adjudication persisted")
+    if production_observation:
+        from .reconciliation_engine import finalize_production_structural_confidence
+        gene_review_records = finalize_production_structural_confidence(
+            Path(output) / "gene_calls", gene_review_records, proteins)
     progress.start("evidence integration")
     timed_start("evidence_fusion")
     checkpoint_manifest = {"pipeline": "PhageMine", "pipeline_version": __version__, "command": command,
