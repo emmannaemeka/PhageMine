@@ -1,0 +1,20 @@
+{
+  "benchmark": "PhageMine v1.2",
+  "analysis_track": "AUTOMATED_EVIDENCE_ADJUDICATION",
+  "source_commit": "477a6dea7f35c65edc76d5176fe2314e17071a66",
+  "baseline_main_commit": "81fafddfee7c38b5a142ec9a36abb9e00a6f94c4",
+  "total_blinded_units": 689,
+  "resolved_scored": 213,
+  "unresolvable": 476,
+  "not_evaluable": 0,
+  "category_counts": {"CORRECT": 0, "PARTIALLY_CORRECT": 161, "TOO_GENERAL": 52, "UNSUPPORTED/INCORRECT": 0, "UNRESOLVABLE": 476, "NOT_EVALUABLE": 0},
+  "confidence_counts": {"HIGH": 38, "MODERATE": 175, "LOW": 476},
+  "utility_bounds": {"PhageMine": {"lower": 0.107692, "upper": 0.869231}, "Pharokka": {"lower": 0.004487, "upper": 0.986538}},
+  "observed_lower_bound_difference": 0.103205,
+  "functional_margin": 0.05,
+  "unsupported_specificity_difference": 0.0,
+  "human_adjudication": false,
+  "annotation_rerun": false,
+  "confidence_interval": "not reported because unresolved fraction prevents valid superiority inference",
+  "final_archive_commit": "see git history for the commit adding this manifest"
+}
