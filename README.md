@@ -101,7 +101,10 @@ page for per-genome results and definitions.*
 
 ![Named-product yield comparison](docs/benchmark_v1.2/figures/functional_yield.png)
 
-*Named-product yield is an output metric and is not functional accuracy.*
+*Named-product yield is an output metric and is not functional accuracy. The
+previous erroneous per-genome PhageMine zeros have been corrected from frozen
+annotation tables; the aggregate remains 439. See the [correction note](docs/BENCHMARK.md)
+and [functional reference-concordance analysis](docs/FUNCTIONAL_BENCHMARK.md).*
 
 **Full benchmark methodology, per-genome results, figures and limitations: [docs/BENCHMARK.md](docs/BENCHMARK.md)**
 
