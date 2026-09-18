@@ -1,0 +1,1529 @@
+{
+  "annotation_review": {
+    "high_priority": 4,
+    "path": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/annotation_review.tsv",
+    "records": 75
+  },
+  "command": "run",
+  "comparative_analysis": {
+    "inphared": {
+      "commands": [
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mash",
+          "dist",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/inphared/2026-04-07/inphared.msh",
+          "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/analysis_genome.fasta"
+        ]
+      ],
+      "database": "INPHARED",
+      "matches": [
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.99248835695329,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0,
+          "matching_hashes": "1000/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 1,
+          "reference_accession": "AY264774",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_IDENTICAL_LENGTH_OR_SEQUENCE",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mrbewz7e/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mrbewz7e/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mrbewz7e/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mrbewz7e/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": 1.0,
+          "genome_length_ratio": 1.0,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 100.0,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0,
+          "matching_hashes": "1000/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 2,
+          "reference_accession": "NC_001604",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "CONFIRMED_IDENTICAL_SEQUENCE",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-95zdjvzq/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-95zdjvzq/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-95zdjvzq/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-95zdjvzq/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": 1.0,
+          "genome_length_ratio": 1.0,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 100.0,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0,
+          "matching_hashes": "1000/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 3,
+          "reference_accession": "V01146",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "CONFIRMED_IDENTICAL_SEQUENCE",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-aow7jr2_/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-aow7jr2_/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-aow7jr2_/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-aow7jr2_/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.99499223796886,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 2.38274e-05,
+          "matching_hashes": "999/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 4,
+          "reference_accession": "PP384398",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-1ove9v2m/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-1ove9v2m/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-1ove9v2m/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-1ove9v2m/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.98998447593772,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 2.38274e-05,
+          "matching_hashes": "999/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 5,
+          "reference_accession": "PP384407",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3fnfpyzd/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3fnfpyzd/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3fnfpyzd/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3fnfpyzd/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.98748059492213,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 4.76906e-05,
+          "matching_hashes": "998/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 6,
+          "reference_accession": "PP384400",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3q0si9w7/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3q0si9w7/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3q0si9w7/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3q0si9w7/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.99248835695329,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 4.76906e-05,
+          "matching_hashes": "998/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 7,
+          "reference_accession": "PP384405",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-r0lo3xis/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-r0lo3xis/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-r0lo3xis/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-r0lo3xis/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.99248835695329,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 4.76906e-05,
+          "matching_hashes": "998/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 8,
+          "reference_accession": "PP384410",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3zhzr95r/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3zhzr95r/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3zhzr95r/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-3zhzr95r/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9960187294989609,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.99247328033441,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 7.15897e-05,
+          "matching_hashes": "997/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 9,
+          "reference_accession": "LR745710",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-uwnsz1os/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-uwnsz1os/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-uwnsz1os/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-uwnsz1os/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9960187294989609,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.987455467224,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 9.55247e-05,
+          "matching_hashes": "996/1000",
+          "p_value": 0.0,
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 10,
+          "reference_accession": "GU071091",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-eguqyly4/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-eguqyly4/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-eguqyly4/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-eguqyly4/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        }
+      ],
+      "resource_manifest": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/inphared/2026-04-07/genome_manifest.json",
+      "resource_version": "2026-04-07",
+      "scientific_interpretation": "Mash selects candidate references only. PhageMine reports its own bidirectional BLASTN length-normalized similarity and does not claim VIRIDIC equivalence or make an ICTV assignment. Taxonomic boundary interpretation is withheld for partial or poorly aligned queries.",
+      "status": "COMPLETE",
+      "unique_reference_summaries": [
+        {
+          "best_mash_distance": 0.0,
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999749611898443,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.99248835695329,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "matching_hashes": "1000/1000",
+          "phage_family": "Autotranscriptaviridae",
+          "phage_genus": "Teseptimavirus",
+          "phage_subfamily": "Studiervirinae",
+          "query_aligned_percent": 100.0,
+          "reference_accessions": "AY264774;GU071091;LR745710;NC_001604;PP384398;PP384400;PP384405;PP384407;PP384410;V01146",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T7",
+          "relationship": "EXACT_MASH_SKETCH_MATCH",
+          "sample_id": "NC_001604.1",
+          "sequence_confirmation": "NOT_IDENTICAL_LENGTH_OR_SEQUENCE",
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        }
+      ]
+    },
+    "output_directory": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/comparative",
+    "pmfdb": {
+      "annotation_interpretation": "INPHARED product labels are computational predictions unless independent experimental evidence is explicitly recorded.",
+      "command": [
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+          "createdb",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/q.faa",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/query_db"
+        ],
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+          "search",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/query_db",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/mmseqs/target_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/result_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/tmp",
+          "--max-seqs",
+          "100"
+        ],
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+          "convertalis",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/query_db",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/mmseqs/target_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/result_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-87r_n71k/hits",
+          "--format-output",
+          "query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov"
+        ]
+      ],
+      "phagemine_version": "1.1.0",
+      "pmfdb_manifest_sha256": "91c53620a9f4dd5927c51b73d080d11cc59a17144f923441c63a7fe6c11bf081",
+      "pmfdb_schema_version": "1.0",
+      "pmfdb_version": "INPHARED-2026-04-07",
+      "prebuilt_target_database": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/mmseqs/target_db",
+      "prebuilt_target_manifest": {
+        "commands": [
+          [
+            "mmseqs",
+            "createdb",
+            "reference_phage_proteins.faa",
+            "mmseqs/target_db"
+          ],
+          [
+            "mmseqs",
+            "createindex",
+            "mmseqs/target_db",
+            "mmseqs/tmp",
+            "--threads",
+            "1"
+          ]
+        ],
+        "created_at": "2026-08-24T20:35:50.572589+00:00",
+        "index_status": "SUCCESS",
+        "pmfdb_reference_fasta_sha256": "90a17f397b2ac87200ed9175948eac0afe4cc19e0d3f3c3f5f4ff91774537606",
+        "pmfdb_version": "INPHARED-2026-04-07"
+      },
+      "reference": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/reference_phage_proteins.faa",
+      "reference_metadata_sha256": "312d1f96af88594644b78aa909862726f644546d4d3dd6b9d8b7ce2e6588f54e",
+      "reference_protein_sha256": "90a17f397b2ac87200ed9175948eac0afe4cc19e0d3f3c3f5f4ff91774537606",
+      "reference_qc_sha256": "83cee938a39d8b15331a6182df8ac1647215ee43058f1dbf0c1ba81631efccd3",
+      "reference_type": "PMFDB",
+      "validation_timestamp": "2026-09-16T03:02:05.748271+00:00"
+    }
+  },
+  "created_at": "2026-09-16T02:59:56.038947+00:00",
+  "discovery_ranking": {
+    "message": "Candidate prioritization was not performed because sufficient evidence was unavailable.",
+    "status": "INSUFFICIENT_EVIDENCE"
+  },
+  "evidence_adapters": [
+    {
+      "adapter": "PfamHMMAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "PfamHMMAdapter",
+        "adapter_version": "0.1.0",
+        "evidence_pack_id": null,
+        "hmmer_version": "3.4",
+        "hmmscan": "/usr/local/bin/hmmscan",
+        "pfam_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+        "pfam_version": "unknown",
+        "resource_origin": "explicit_cli",
+        "search_command": [
+          "/usr/local/bin/hmmscan",
+          "--cut_ga",
+          "--cpu",
+          "8",
+          "--domtblout",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-chslyu5c/hmmscan.domtblout",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-chslyu5c/proteins.faa"
+        ],
+        "search_parameters": {
+          "domtblout": true
+        },
+        "status": "REAL",
+        "threshold_mode": "GA",
+        "thresholds": {
+          "coverage": null,
+          "evalue": null,
+          "mode": "GA",
+          "trusted_cutoff": true
+        },
+        "trusted_cutoff": true
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "VOGHMMAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "VOGHMMAdapter",
+        "adapter_version": "0.1.0",
+        "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+        "hmmer_version": "3.4",
+        "hmmscan": "/usr/local/bin/hmmscan",
+        "resource_origin": "explicit_cli",
+        "search_command": [
+          "/usr/local/bin/hmmscan",
+          "--cpu",
+          "8",
+          "--domtblout",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-o6wvk2a3/hmmscan.domtblout",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-o6wvk2a3/proteins.faa"
+        ],
+        "search_parameters": {
+          "domtblout": true,
+          "threshold_mode": "MANUAL"
+        },
+        "status": "REAL",
+        "threshold_mode": "MANUAL",
+        "thresholds": {
+          "coverage": 0.5,
+          "evalue": 1e-05
+        },
+        "trusted_cutoff": false,
+        "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+        "vogdb_version": "unknown"
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "SwissProtEvidenceAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "SwissProtEvidenceAdapter",
+        "adapter_version": "0.1.0",
+        "diamond": "/opt/anaconda3/envs/phagemine_v12_dev/bin/diamond",
+        "diamond_version": "2.2.5",
+        "metadata_path": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/normalized/uniprot_sprot_benchmark_subset.dat",
+        "resource_origin": "explicit_cli",
+        "search_command": [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/diamond",
+          "blastp",
+          "--db",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/swissprot/2026_02/uniprot_sprot.dmnd",
+          "--query",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-swissprot-hwkti_7z/proteins.faa",
+          "--out",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-swissprot-hwkti_7z/diamond.tsv",
+          "--outfmt",
+          "6",
+          "qseqid",
+          "sseqid",
+          "pident",
+          "length",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "evalue",
+          "bitscore",
+          "--threads",
+          "8"
+        ],
+        "search_parameters": {
+          "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+        },
+        "status": "REAL",
+        "swissprot_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/swissprot/2026_02/uniprot_sprot.dmnd",
+        "swissprot_version": "unknown",
+        "thresholds": {
+          "evalue": 1e-05,
+          "min_alignment_length": 30,
+          "moderate_coverage": 0.4,
+          "moderate_identity": 0.35,
+          "strong_coverage": 0.7,
+          "strong_identity": 0.7
+        }
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "PHROGSMMseqsAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "PHROGSMMseqsAdapter",
+        "adapter_version": "0.2.0",
+        "annotations_path": "/Users/emmanuelnnadi/pharokka_databases/phrog_annot_v4.tsv",
+        "mmseqs": "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+        "mmseqs_version": "18.8cc5c",
+        "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+        "phrogs_path": "/Users/emmanuelnnadi/pharokka_databases/phrogs_profile_db",
+        "phrogs_version": "unknown",
+        "resource_origin": "explicit_cli",
+        "search_commands": [
+          [
+            "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+            "createdb",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/proteins.faa",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/query"
+          ],
+          [
+            "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+            "search",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/query",
+            "/Users/emmanuelnnadi/pharokka_databases/phrogs_profile_db",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/result",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/tmp",
+            "--threads",
+            "8"
+          ],
+          [
+            "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+            "convertalis",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/query",
+            "/Users/emmanuelnnadi/pharokka_databases/phrogs_profile_db",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/result",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-ilt3cwoa/phrogs.tsv",
+            "--format-output",
+            "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+          ]
+        ],
+        "search_parameters": {
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "threshold_mode": "MANUAL"
+        },
+        "status": "REAL",
+        "threshold_mode": "MANUAL",
+        "thresholds": {
+          "alignment_length": null,
+          "evalue": 1e-05,
+          "identity": null,
+          "query_coverage": 0.5,
+          "score": null
+        }
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "PHROGSPyHMMERAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "adapter_version": "0.1.0",
+        "annotations_path": "/Users/emmanuelnnadi/pharokka_databases/phrog_annot_v4.tsv",
+        "phrogs_hmm_path": "/Users/emmanuelnnadi/pharokka_databases/all_phrogs.h3m",
+        "phrogs_version": "unknown",
+        "pyhmmer_version": "0.12.3",
+        "resource_origin": "explicit_cli",
+        "status": "REAL",
+        "threshold_mode": "MANUAL",
+        "thresholds": {
+          "evalue": 1e-05,
+          "query_coverage": 0.5,
+          "score": null
+        }
+      },
+      "status": "REAL"
+    }
+  ],
+  "figures": {
+    "created": [
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/figures/functional_classification_distribution.png",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/figures/functional_classification_distribution.svg",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/figures/evidence_source_summary.png",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/figures/evidence_source_summary.svg",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/figures/genome_functional_map.png",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/figures/genome_functional_map.svg"
+    ],
+    "failed": [],
+    "skipped": [],
+    "source_data": [
+      "functional_classification.tsv",
+      "evidence.json",
+      "genes.gff3",
+      "functional_classification.tsv",
+      "figure_data/functional_classification_distribution.tsv",
+      "figure_data/evidence_support_matrix.tsv"
+    ]
+  },
+  "gene_caller": {
+    "name": "PHANOTATE",
+    "parameters": {
+      "executable": "/opt/anaconda3/envs/phagemine_v12_dev/bin/phanotate.py",
+      "extra_args": []
+    },
+    "version": "1.6.7"
+  },
+  "genome_representation": {
+    "analysis_sequence_id": "NC_001604.1",
+    "coordinate_scope": "All PhageMine gene, protein, neighborhood, and annotation coordinates refer to analysis_sequence_id.",
+    "evidence": [],
+    "orientation": "ORIGINAL",
+    "original_sequence_id": "NC_001604.1",
+    "reference": null,
+    "rotation": "NONE",
+    "topology": "UNKNOWN",
+    "transform_history": []
+  },
+  "hallmark_summary": {
+    "dna_replication": "DETECTED",
+    "lysis": "DETECTED",
+    "major_capsid": "POSSIBLE_DOMAIN_OR_CATEGORY_SUPPORT",
+    "portal": "DETECTED",
+    "tail_structure": "DETECTED",
+    "tape_measure": "NOT_ESTABLISHED",
+    "terminase": "DETECTED"
+  },
+  "input": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/inputs/NC_001604.1.fasta",
+  "input_sha256": "4411e203f3ffac4d85f42d6994714cb86d495440b678ebab9e5a075f5fdc7c7a",
+  "pipeline": "PhageMine",
+  "pipeline_version": "1.1.0",
+  "protein_detail_records": [
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000001.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000002.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000003.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000004.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000005.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000006.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000007.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000008.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000009.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000010.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000011.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000012.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000013.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000014.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000015.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000016.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000017.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000018.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000019.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000020.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000021.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000022.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000023.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000024.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000025.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000026.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000027.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000028.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000029.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000030.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000031.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000032.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000033.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000034.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000035.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000036.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000037.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000038.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000039.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000040.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000041.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000042.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000043.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000044.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000045.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000046.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000047.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000048.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000049.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000050.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000051.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000052.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000053.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000054.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000055.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000056.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000057.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000058.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000059.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000060.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_001604.1/protein_details/PM_000061.html"
+  ],
+  "quality_control": {
+    "coordinate_scope": "analysis_sequence",
+    "coordinate_system": "1-based-inclusive",
+    "errors": [],
+    "info": [
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000005",
+          "PM_000006"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000007",
+          "PM_000008"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000017",
+          "PM_000018"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000023",
+          "PM_000024"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000032",
+          "PM_000033"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000033",
+          "PM_000034"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000038",
+          "PM_000039"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000044",
+          "PM_000045"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      }
+    ],
+    "predicted_cds": 61,
+    "sequence_length": 39937,
+    "status": "review_required",
+    "warnings": [
+      {
+        "code": "noncanonical_start_codon",
+        "end": 98,
+        "message": "Predicted CDS begins with TCA; review whether this is supported by the gene caller.",
+        "protein_id": "PM_000001",
+        "start": 3,
+        "strand": "+"
+      },
+      {
+        "code": "noncanonical_start_codon",
+        "end": 39935,
+        "message": "Predicted CDS begins with GGA; review whether this is supported by the gene caller.",
+        "protein_id": "PM_000061",
+        "start": 39834,
+        "strand": "-"
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000006",
+          "PM_000007"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 17,
+        "proteins": [
+          "PM_000008",
+          "PM_000009"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000018",
+          "PM_000019"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000019",
+          "PM_000020"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 20,
+        "proteins": [
+          "PM_000022",
+          "PM_000023"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 26,
+        "proteins": [
+          "PM_000025",
+          "PM_000026"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 56,
+        "proteins": [
+          "PM_000028",
+          "PM_000029"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 14,
+        "proteins": [
+          "PM_000034",
+          "PM_000035"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 13,
+        "proteins": [
+          "PM_000035",
+          "PM_000036"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 16,
+        "proteins": [
+          "PM_000041",
+          "PM_000042"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 26,
+        "proteins": [
+          "PM_000054",
+          "PM_000055"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 45,
+        "proteins": [
+          "PM_000058",
+          "PM_000059"
+        ],
+        "same_strand": false,
+        "strand_pair": [
+          "+",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 14,
+        "proteins": [
+          "PM_000060",
+          "PM_000061"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      }
+    ]
+  },
+  "scientific_validation": {
+    "accuracy_claim_permitted_from_this_run": false,
+    "feature_scope": {
+      "CDS": "PREDICTED",
+      "intron": "NOT_CALLED",
+      "other_structured_RNA": "NOT_CALLED",
+      "programmed_frameshift": "NOT_CALLED",
+      "tRNA": "NOT_CALLED",
+      "tmRNA": "NOT_CALLED",
+      "translational_bypass": "NOT_CALLED"
+    },
+    "functional_strength_empirically_calibrated": false,
+    "hallmark_method": "ANNOTATION_TEXT_SCREEN",
+    "hallmark_profile_validated": false,
+    "interpretation": "This run produces computational hypotheses. Accuracy requires a separate expert-reviewed truth-set benchmark.",
+    "software_maturity": "BETA_RESEARCH_SOFTWARE",
+    "taxonomy_assignment_performed": false
+  },
+  "sequencing_provenance": {
+    "assembler": null,
+    "assembler_version": null,
+    "assembly_method": null,
+    "assembly_version": null,
+    "interpretation": "Sequencing provenance describes how an assembly was generated. It does not determine topology, orientation, rotation, or biological interpretation.",
+    "library_type": null,
+    "metadata_source": null,
+    "polishing_method": null,
+    "polishing_version": null,
+    "raw_reads_available": null,
+    "read_type": null,
+    "sequencing_platform": "UNKNOWN",
+    "source_information": {}
+  },
+  "stage_timings_seconds": {
+    "evidence_fusion": {
+      "end": 1789527592.1819022,
+      "seconds": 0.3825390338897705,
+      "start": 1789527591.7993631
+    },
+    "genbank": {
+      "end": 1789527764.492359,
+      "seconds": 0.1345360279083252,
+      "start": 1789527764.357823
+    },
+    "genome_validation": {
+      "end": 1789526870.468107,
+      "seconds": 0.006227970123291016,
+      "start": 1789526870.461879
+    },
+    "inphared": {
+      "end": 1789527764.356918,
+      "seconds": 30.156869173049927,
+      "start": 1789527734.200049
+    },
+    "pfam": {
+      "end": 1789526966.782485,
+      "seconds": 72.48200798034668,
+      "start": 1789526894.300477
+    },
+    "phanotate": {
+      "end": 1789526885.501975,
+      "seconds": 15.03383493423462,
+      "start": 1789526870.4681401
+    },
+    "phrogs": {
+      "end": 1789527325.702921,
+      "seconds": 160.89962911605835,
+      "start": 1789527164.8032918
+    },
+    "ranking_mining": {
+      "end": 1789527592.22223,
+      "seconds": 0.0005679130554199219,
+      "start": 1789527592.221662
+    },
+    "reporting": {
+      "end": 1789527596.0423281,
+      "seconds": 3.623991012573242,
+      "start": 1789527592.418337
+    },
+    "swissprot": {
+      "end": 1789527164.8031318,
+      "seconds": 31.267048835754395,
+      "start": 1789527133.536083
+    },
+    "vogdb": {
+      "end": 1789527133.5359502,
+      "seconds": 166.75337409973145,
+      "start": 1789526966.782576
+    }
+  }
+}

@@ -1,0 +1,622 @@
+adjudication_id	matching_mode	accession	start	end	strand	reference_start	reference_end	curated_reference_product	prediction_A	prediction_B	reviewer_category_A	reviewer_category_B	reviewer_notes
+e30bd2338e4b6294	exact	NC_000866.4	12	2189	-	12	2189	RIIA lysis inhibitor	RIIA lysis inhibitor	protein riia			
+ee5525f2229ec072	exact	NC_000866.4	3778	5328	-	3778	5328	DNA topoisomerase II large subunit	dna topoisomerase large subunit	DNA topoisomerase II large subunit			
+032284f9204055b1	exact	NC_000866.4	6267	6482	-	6267	6482	cef modifier of supressor tRNAs	cef modifier of supressor tRNAs	protein cef			
+75d1b804406eb398	exact	NC_000866.4	6653	7141	-	6653	7141	MotB-like transcriptional regulator	MotB-like transcriptional regulator	transcription regulatory protein motb			
+13d81df8e0e2a6b7	exact	NC_000866.4	8225	8908	-	8225	8908	exonuclease	exodeoxyribonuclease	exonuclease			
+f2dcc88cb49b189c	exact	NC_000866.4	9410	10729	-	9410	10729	Dda-like helicase	atp-dependent dna helicase dda	Dda-like helicase			
+2d2485f92c0fab32	exact	NC_000866.4	11908	12510	-	11908	12510	RNA polymerase ADP-ribosylase	RNA polymerase ADP-ribosylase	nad--protein adp-ribosyltransferase moda			
+2e89b6943123ae91	exact	NC_000866.4	12507	13130	-	12507	13130	RNA polymerase ADP-ribosylase	RNA polymerase ADP-ribosylase	nad--protein adp-ribosyltransferase modb			
+2d1e28ae275668d1	exact	NC_000866.4	14191	14676	-	14191	14676	Mrh transcription modulator under heat shock	rpoh-modulating protein	Mrh transcription modulator under heat shock			
+4cd2ead569a68f77	exact	NC_000866.4	15331	15573	-	15331	15573	virion structural protein	small outer capsid protein	virion structural protein			
+805650b126cf3056	exact	NC_000866.4	15606	16280	-	15606	16280	SegF homing endonuclease	dna replication protein	homing endonuclease			
+b4a9ad42de0ec65c	exact	NC_000866.4	16270	16785	-	16270	16785	dUTPase	nucleoside triphosphate pyrophosphohydrolase	dctp pyrophosphatase			
+4b83acbbe8db3b2b	exact	NC_000866.4	16846	17625	-	16846	17625	Dam family site-specific DNA-(adenine-N6)-methyltransferase	dna adenine methylase	DNA methyltransferase			
+e6007195c645a285	exact	NC_000866.4	19758	20051	-	19758	20051	spackle periplasmic	protein spackle	spackle periplasmic			
+e80e26c584d64eb0	exact	NC_000866.4	20371	20553	-	20371	20553	Dmd discriminator of mRNA degradation	antitoxin dmd	Dmd discriminator of mRNA degradation			
+18bef89aec3fe14c	exact	NC_000866.4	20612	22039	-	20612	22039	AAA family ATPase	DnaB-like replicative helicase	dnab-like replicative helicase			
+a68539eeb53e80d3	exact	NC_000866.4	22049	22393	-	22049	22393	head vertex assembly chaperone	head vertex assembly chaperone	head formation protein			
+98664f3245134a48	exact	NC_000866.4	22386	23561	-	22386	23561	recombinase	recombination and repair protein	recombinase			
+0d807fd30fad7180	exact	NC_000866.4	23570	24235	-	23570	24235	homing endonuclease	homing endonuclease	endonuclease sega			
+c6c53e7e24fc9dff	exact	NC_000866.4	24400	25455	-	24400	25455	beta-glucosyltransferase	dna beta-glucosyltransferase	beta-glucosyltransferase			
+015aa99a7c5c4f55	exact	NC_000866.4	25479	26219	-	25479	26219	thymidylate synthase	thymidylate synthase	deoxycytidylate 5-hydroxymethyltransferase			
+add825fce30174ab	exact	NC_000866.4	26373	26624	-	26373	26624	immunity to superinfection	immunity protein	immunity to superinfection			
+9d19fc53c60eb3ef	exact	NC_000866.4	27197	29893	-	27197	29893	DNA polymerase	dna-directed dna polymerase	DNA polymerase			
+1524ee730b9a7330	exact	NC_000866.4	29972	30340	-	29972	30340	translation repressor	translation repressor	translation repressor protein			
+ea4a68404acbe2a8	exact	NC_000866.4	30342	30905	-	30342	30905	clamp loader of DNA polymerase	clamp loader of DNA polymerase	sliding-clamp-loader small subunit			
+bd02c383b3a4f0a6	exact	NC_000866.4	30907	31866	-	30907	31866	clamp loader of DNA polymerase	clamp loader of DNA polymerase	sliding-clamp-loader large subunit			
+8cdd7dbfccc2cc15	exact	NC_000866.4	31917	32603	-	31917	32603	DNA polymerase processivity factor	DNA polymerase processivity factor	sliding clamp			
+fba589f5107bf3d0	exact	NC_000866.4	32659	33048	-	32659	33048	RNA polymerase binding	15 kda rna polymerase-binding protein	RNA polymerase binding			
+688408c7858f3871	exact	NC_000866.4	35428	36447	-	35428	36447	SbcD-like subunit of palindrome specific endonuclease	exonuclease subunit 1	SbcD-like subunit of palindrome specific endonuclease			
+43ab4d69c5de97cf	exact	NC_000866.4	36624	37826	-	36624	37826	alpha-glucosyltransferase	dna alpha-glucosyltransferase	alpha-glucosyltransferase			
+7ff76a65c1413a4a	exact	NC_000866.4	37885	38679	-	37885	38679	homing endonuclease	homing endonuclease	probable mobile endonuclease b			
+33389cd74214663c	exact	NC_000866.4	39600	40157	-	39600	40157	RNA polymerase sigma factor	late sigma transcription factor	rna polymerase sigma-like factor			
+f36860c9a1240aa3	exact	NC_000866.4	41805	42113	-	41805	42113	NrdH glutaredoxin	thioredoxin domain	uncharacterized 11.8 kda protein in gp55-nrdg intergenic region			
+7bc8d700f697205e	exact	NC_000866.4	42446	42916	-	42446	42916	anaerobic ribonucleotide reductase small subunit	anaerobic ribonucleoside-triphosphate reductase-activating protein	anaerobic ribonucleotide reductase small subunit			
+575d0910edcf63bb	exact	NC_000866.4	42906	43538	-	42906	43538	homing endonuclease	homing endonuclease	probable mobile endonuclease c			
+0a852238000505a0	exact	NC_000866.4	44836	45612	-	44836	45612	I-TevII homing endonuclease	homing endonuclease	intron-associated endonuclease 2			
+1f917b910bc70d51	exact	NC_000866.4	46382	46855	-	46382	46855	endonuclease VII	recombination endonuclease vii	endonuclease VII			
+c9bbcce9aef7ae74	exact	NC_000866.4	46897	47382	-	46897	47382	inhibitor of host Lon protease	host protease inhibitor	inhibitor of host Lon protease			
+d998659e57b2001e	exact	NC_000866.4	48128	48391	-	48128	48391	NrdC thioredoxin	thioredoxin domain	glutaredoxin			
+09ffcc279149453f	exact	NC_000866.4	56429	57208	-	56429	57208	homing endonuclease	homing endonuclease	probable mobile endonuclease d			
+8bbed1d6f914301a	exact	NC_000866.4	59202	59495	-	59202	59495	lysis inhibition	antiholin	lysis inhibition			
+35d357fda4dc58dc	exact	NC_000866.4	61386	61733	-	61386	61733	valyl tRNA synthetase modifier	valyl--trna ligase modifier	valyl tRNA synthetase modifier			
+4078de5f94c60ac1	exact	NC_000866.4	62279	62740	-	62279	62740	endoribonuclease	endoribonuclease	endoribonuclease regb			
+666abbb7cf705102	exact	NC_000866.4	63557	63919	-	63557	63919	autonomous glycyl radical cofactor GrcA	hypothetical protein	autonomous glycyl radical cofactor			
+b5b5542a1968b2b8	exact	NC_000866.4	64939	65355	-	64939	65355	endonuclease V N-glycosylase UV repair enzyme	endonuclease v	endonuclease V N-glycosylase UV repair enzyme			
+2464b7409fccde17	exact	NC_000866.4	65416	65718	-	65416	65718	internal virion protein	internal protein ii	internal virion protein			
+1662995d7d026399	exact	NC_000866.4	65834	66415	-	65834	66415	internal virion protein	internal virion protein	internal protein iii			
+8fd5efddb99649d6	exact	NC_000866.4	66503	66997	-	66503	66997	glycoside hydrolase family protein	hypothetical protein	endolysin			
+a86e50a73f2ccc9e	exact	NC_000866.4	71253	71918	-	71253	71918	homing endonuclease	putative endonuclease segb	homing endonuclease			
+78bc0b607dd3d07a	exact	NC_000866.4	73591	73878	-	73591	73878	internal virion protein	internal virion protein	internal protein i			
+959bae1393c252c9	exact	NC_000866.4	73952	74410	-	73952	74410	RNA ligase	RNA ligase	anti-cbass protein acb1			
+cd03f37df89701b8	exact	NC_000866.4	74407	74649	-	74407	74649	tail fiber chaperone	tail fiber assembly helper protein	tail fiber chaperone			
+78380d8154b5fb1b	exact	NC_000866.4	74649	75374	-	74649	75374	deoxynucleoside monophosphate kinase	deoxynucleotide monophosphate kinase	deoxynucleoside monophosphate kinase			
+d6cd5ff4ae03bd8d	exact	NC_000866.4	75424	75954	-	75424	75954	tail protein	tail tube	tail tube terminator protein			
+5568f5f9219f3f11	exact	NC_000866.4	76061	76885	-	76061	76885	DNA end protector	terminal dna protecting protein	DNA end protector			
+758ba3f3f6add677	exact	NC_000866.4	76885	77337	-	76885	77337	head closure	head closure	head completion nuclease			
+7c04d5108c062da8	exact	NC_000866.4	77385	77975	+	77385	77975	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge protein gp53			
+aafb000401dccb4d	exact	NC_000866.4	77959	79686	+	77959	79686	baseplate hub subunit and tail lysozyme	pre-baseplate central spike protein gp5	baseplate hub subunit and tail lysozyme			
+d438d9d3f0cb1f25	exact	NC_000866.4	80779	81072	+	80779	81072	PAAR motif of membran proteins	baseplate puncturing device gp5.4	PAAR motif of membran proteins			
+f1dd90a3d216f68a	exact	NC_000866.4	81081	83063	+	81081	83063	baseplate wedge subunit	baseplate wedge protein gp6	baseplate wedge subunit			
+17c0a0bca45ae27e	exact	NC_000866.4	83060	86158	+	83060	86158	baseplate wedge subunit	baseplate wedge protein gp7	baseplate wedge subunit			
+c0153a6b935cf91f	exact	NC_000866.4	86151	87155	+	86151	87155	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge protein gp8			
+7fce063b74362176	exact	NC_000866.4	87219	88085	+	87219	88085	baseplate wedge tail fiber protein connector	baseplate protein gp9	baseplate wedge tail fiber protein connector			
+2b6d7fa95443b27e	exact	NC_000866.4	88085	89893	+	88085	89893	baseplate wedge subunit	baseplate wedge protein gp10	baseplate wedge subunit			
+bbc3482e0415eea8	exact	NC_000866.4	89893	90552	+	89893	90552	baseplate wedge subunit	baseplate wedge protein gp11	baseplate wedge subunit			
+d51120b1a8c03e27	exact	NC_000866.4	90549	92132	+	90549	92132	tail collar fiber protein	short tail fiber protein gp12	tail collar fiber protein			
+80a9e3fe57d21d03	exact	NC_000866.4	92129	93592	+	92129	93592	fibritin neck whisker	fibritin neck whisker	fibritin			
+c4c601fb68b256d1	exact	NC_000866.4	93624	94553	+	93624	94553	head-tail adaptor Ad2	neck protein gp13	head-tail adaptor Ad2			
+c57b3420215a7bb2	exact	NC_000866.4	94555	95325	+	94555	95325	head closure Hc2	neck protein gp14	head closure Hc2			
+cd36fa74b373ace2	exact	NC_000866.4	95367	96185	+	95367	96185	tail sheath stabilizer	tail completion protein gp15	tail sheath stabilizer			
+5793a44bec9ce02b	exact	NC_000866.4	98536	100515	+	98536	100515	tail sheath	tail sheath	tail sheath protein			
+bee6e4860255c921	exact	NC_000866.4	100632	101123	+	100632	101123	tail protein	tail tube	tail tube protein gp19			
+e27e0cd30bd9584c	exact	NC_000866.4	103023	103448	+	103023	103448	head scaffolding protein	prohead assembly protein gp68	head scaffolding protein			
+06e17bed8e0c50a5	exact	NC_000866.4	103448	104086	+	103448	104086	head maturation protease	prohead core protein protease	head maturation protease			
+665e4bfc9f63e31e	exact	NC_000866.4	104117	104926	+	104117	104926	head scaffolding protein	head scaffolding protein	capsid assembly scaffolding protein			
+5b270e6697864e67	exact	NC_000866.4	106561	107232	-	106561	107232	homing endonuclease	homing endonuclease	putative endonuclease segd			
+b5b26af2b67414ac	exact	NC_000866.4	107323	108606	+	107323	108606	capsid vertex protein	capsid vertex protein	major head protein			
+ac5a990c0cd4c651	exact	NC_000866.4	108636	109640	-	108636	109640	RNA ligase	RNA ligase	rna ligase 2			
+d7604d44a41537f5	exact	NC_000866.4	110187	111317	-	110187	111317	Hoc-like head decoration	highly immunogenic outer capsid protein	Hoc-like head decoration			
+b9995e500b66f1ab	exact	NC_000866.4	111327	112007	-	111327	112007	minor head protein inhibitor of protease	protein inh	minor head protein inhibitor of protease			
+28969b18f68c8ab7	exact	NC_000866.4	112057	112674	+	112057	112674	homing endonuclease	homing endonuclease	putative endonuclease sege			
+85c810a8ed11d1ea	exact	NC_000866.4	112677	114440	+	112677	114440	DNA helicase	DNA helicase	atp-dependent dna helicase uvsw			
+7d89655a134bc619	exact	NC_000866.4	114914	115327	-	114914	115327	UvsY-like recombination mediator	recombination protein uvsy	UvsY-like recombination mediator			
+c82336de1cc16105	exact	NC_000866.4	115404	115802	-	115404	115802	baseplate wedge subunit	baseplate wedge protein gp25	baseplate wedge subunit			
+ca7fc66a6295b366	exact	NC_000866.4	115802	116428	-	115802	116428	baseplate hub	baseplate hub	baseplate hub assembly protein gp26			
+dd34d27588680553	exact	NC_000866.4	116479	117228	+	116479	117228	baseplate hub assembly protein	baseplate hub	baseplate hub assembly protein gp51			
+a6d010cc9cebeb80	exact	NC_000866.4	118348	118881	+	118348	118881	baseplate hub distal subunit	baseplate hub distal subunit	baseplate hub assembly protein gp28			
+d3e2e63fc9520f97	exact	NC_000866.4	118878	120650	+	118878	120650	baseplate hub subunit and tail length	baseplate hub subunit and tail length	tape measure protein			
+cbcbdc82e277d0c7	exact	NC_000866.4	120659	121753	+	120659	121753	baseplate tail tube cap	baseplate tail-tube junction protein gp48	baseplate tail tube cap			
+503e27b15aadd912	exact	NC_000866.4	121753	122715	+	121753	122715	tail tube	tail tube	baseplate tail-tube junction protein gp54			
+10b77539d1c87440	exact	NC_000866.4	123454	125502	-	123454	125502	Alt-like RNA polymerase ADP-ribosyltransferase	Alt-like RNA polymerase ADP-ribosyltransferase	nad(+)--arginine adp-ribosyltransferase			
+6f0ff303055ab419	exact	NC_000866.4	125745	127208	-	125745	127208	DNA ligase	ATP-dependent DNA ligase	dna ligase			
+130b109a8a5575af	exact	NC_000866.4	131181	131516	-	131181	131516	head morphogenesis	head morphogenesis	capsid assembly protein gp31			
+7d74f9661d233b22	exact	NC_000866.4	132118	132699	-	132118	132699	dCMP deaminase	dCMP deaminase	deoxycytidylate deaminase			
+8ff64fa095c175e7	exact	NC_000866.4	135132	135431	-	135132	135431	Rz-like spanin	Rz-like spanin	spanin, outer lipoprotein subunit			
+7756748fe87a57a5	exact	NC_000866.4	135428	135781	-	135428	135781	Rz-like spanin	spanin, inner membrane subunit	Rz-like spanin			
+058945b2175b59d3	exact	NC_000866.4	136340	137464	-	136340	137464	RNA ligase and tail fiber protein attachment catalyst	rna ligase 1	RNA ligase and tail fiber protein attachment catalyst			
+2a3a61b073999f6c	exact	NC_000866.4	139991	140416	-	139991	140416	homing endonuclease	probable mobile endonuclease e	homing endonuclease			
+70726b23527eda48	exact	NC_000866.4	140416	142680	-	140416	142680	NrdA-like aerobic NDP reductase large subunit	ribonucleotide reductase large subunit	ribonucleoside-diphosphate reductase subunit alpha			
+9a8af27f2530f2ac	exact	NC_000866.4	143694	144431	-	143694	144431	homing endonuclease	intron-associated endonuclease 1	homing endonuclease			
+82019efa566b81eb	exact	NC_000866.4	146948	147853	-	146948	147853	single strand DNA binding protein	single-stranded dna-binding protein	single strand DNA binding protein			
+f5ce0f1af089c2d2	exact	NC_000866.4	149193	149531	-	149193	149531	late promoter transcriptional regulator	late promoter transcriptional regulator	late transcription coactivator			
+a0463071c2c2c6b2	exact	NC_000866.4	149509	149778	-	149509	149778	transcriptional regulator	transcriptional regulator	double-stranded dna-binding protein			
+e1efd3e02a40b410	exact	NC_000866.4	149787	150704	-	149787	150704	RnaseH	ribonuclease h	exonuclease			
+f43930491a81b39e	exact	NC_000866.4	150809	154678	+	150809	154678	tail fiber protein proximal subunit	tail fiber protein proximal subunit	long-tail fiber proximal subunit			
+1013c3cb4ac4246c	exact	NC_000866.4	154687	155805	+	154687	155805	long tail fiber protein proximal connector	long-tail fiber protein gp35	long tail fiber protein proximal connector			
+eb5b7b8b4dca022a	exact	NC_000866.4	155868	156533	+	155868	156533	hinge connector of long tail fiber protein distal connector	hinge connector of long tail fiber protein distal connector	tail fiber protein			
+741ab191732b0e02	exact	NC_000866.4	156542	159622	+	156542	159622	long tail fiber protein distal subunit	long tail fiber protein distal subunit	long-tail fiber protein gp37			
+df0756189dc488f1	exact	NC_000866.4	159649	160200	+	159649	160200	tail fiber assembly	tail fiber assembly	tail fiber assembly protein			
+87df67e7d19bfcdf	exact	NC_000866.4	160878	161150	-	160878	161150	anti-sigma factor	10 kda anti-sigma factor	anti-sigma factor			
+27c1bf0507e825f6	exact	NC_000866.4	161312	161590	-	161312	161590	inhibitor of MrcBC restriction	anti-restriction endonuclease	inhibitor of MrcBC restriction			
+355c89e8ff6c112e	exact	NC_000866.4	162967	163602	-	162967	163602	MotA-like activator of middle period transcription	middle transcription regulatory protein mota	MotA-like activator of middle period transcription			
+276e2e5ca20431d8	exact	NC_000866.4	163876	165204	-	163876	165204	DNA topoisomerase II	dna topoisomerase medium subunit	DNA topoisomerase II			
+d884e21c9d2ba1ff	exact	NC_000866.4	165585	166040	-	165585	166040	Ndd-like nucleoid disruption protein	Ndd-like nucleoid disruption protein	nucleoid disruption protein			
+491bf0aeede95b80	exact	NC_000866.4	167103	167660	-	167103	167660	DenB-like DNA endonuclease IV	endonuclease iv	DenB-like DNA endonuclease IV			
+caf6e39b51c12d93	exact	NC_000866.4	167965	168903	-	167965	168903	RIIB lysis inhibitor	RIIB lysis inhibitor	protein riib			
+ca84e906907acdbd	exact	NC_001416.1	2633	2839	+	2633	2839	head-tail adaptor Ad1	head-tail adaptor Ad1	head completion protein			
+fa7a65b0003fe5a2	exact	NC_001416.1	2836	4437	+	2836	4437	portal protein	portal protein	portal protein b			
+9ecfcae2e0da9d8a	exact	NC_001416.1	5747	6079	+	5747	6079	head decoration	capsid decoration protein	head decoration			
+47dc539b3cdcbb98	exact	NC_001416.1	7977	8555	+	7977	8555	tail protein	tail completion protein z	hypothetical protein			
+b399e279bc91eaec	exact	NC_001416.1	8552	8947	+	8552	8947	tail terminator	tail tube terminator protein	tail terminator			
+7444931865f04f97	exact	NC_001416.1	8955	9695	+	8955	9695	major tail protein	major tail protein	tail tube protein			
+d837aa8c8610b60a	exact	NC_001416.1	9711	10133	+	9711	10133	minor tail protein G	hypothetical protein	tail assembly protein g			
+3bfc6a3f730de6cf	exact	NC_001416.1	10542	13103	+	10542	13103	tail length tape measure protein	tail length tape measure protein	tape measure protein			
+09fffe579cf797bb	exact	NC_001416.1	13100	13429	+	13100	13429	minor tail protein	minor tail protein	tail tip protein m			
+b0634ed277dcba30	exact	NC_001416.1	13429	14127	+	13429	14127	minor tail protein	tail tip protein l	minor tail protein			
+88cd192ff77b3c3f	exact	NC_001416.1	14276	14875	+	14276	14875	C40 family peptidase	hypothetical protein	tail tip assembly protein k			
+297406e31caefd6e	exact	NC_001416.1	14773	15444	+	14773	15444	tail assembly protein	tail tip assembly protein i	hypothetical protein			
+a4011111e402dddc	exact	NC_001416.1	15505	18903	+	15505	18903	central tail fiber J	tip attachment protein j	tail fiber protein			
+37a359a06b6b3f7f	exact	NC_001416.1	18965	19585	+	18965	19585	Lom outer membrane protein	outer membrane protein lom	Lom outer membrane protein			
+d1afeb7fafb1e8a0	exact	NC_001416.1	21973	22557	+	21973	22557	tail fiber assembly	tail fiber assembly protein	tail fiber assembly			
+2616198b66d0b684	exact	NC_001416.1	22686	23918	-	22686	23918	ea47	hypothetical protein	protein ea47			
+820ff10ce504132f	exact	NC_001416.1	24509	25399	-	24509	25399	HNH endonuclease	protein ea31	HNH endonuclease			
+2b92ccba1ff7ff28	exact	NC_001416.1	25396	26973	-	25396	26973	AAA family ATPase	hypothetical protein	protein ea59			
+afd57b86f7af6c67	exact	NC_001416.1	29374	29655	-	29374	29655	ea8.5	hypothetical protein	protein ea8.5			
+e2150ba56094727c	exact	NC_001416.1	32025	32810	-	32025	32810	RecT-like ssDNA annealing protein	recombination protein bet	RecT-like ssDNA annealing protein			
+7fd99f87d9d5bfb1	exact	NC_001416.1	32816	33232	-	32816	33232	gam-like host nuclease inhibitor	gam-like host nuclease inhibitor	host-nuclease inhibitor protein gam			
+ca9ed4ad385ddcc7	exact	NC_001416.1	34087	34287	-	34087	34287	restriction alleviation ral	restriction alleviation ral	restriction inhibitor protein ral			
+da34c94aed5e4dcd	exact	NC_001416.1	35037	35438	-	35037	35438	anti-termination protein N-like	antitermination protein n	anti-termination protein N-like			
+3462634583b5cbe6	exact	NC_001416.1	35825	36259	-	35825	36259	RexB-like exclusion protein	RexB-like exclusion protein	protein rexb			
+bf89531663e38d1f	exact	NC_001416.1	36275	37114	-	36275	37114	RexA-like exclusion protein	RexA-like exclusion protein	protein rexa			
+b081f23aa20bbfbc	exact	NC_001416.1	37227	37940	-	37227	37940	LexA family transcriptional regulator	helix-turn-helix transcriptional regulator	hypothetical protein			
+7cbae52f2f569bd3	exact	NC_001416.1	38041	38241	+	38041	38241	Cro/CI family transcriptional regulator	regulatory protein cro	transcriptional repressor			
+30dbb381a55a7164	exact	NC_001416.1	38686	39585	+	38686	39585	replication initiation O-like	replication protein o	replication initiation O-like			
+9a03d4275249d803	exact	NC_001416.1	39582	40283	+	39582	40283	DNA replication protein	helicase loader	hypothetical protein			
+780c276dc4b049ce	exact	NC_001416.1	40280	40570	+	40280	40570	Ren-like exclusion protein	Ren-like exclusion protein	protein ren			
+bd2dee31c66cf921	exact	NC_001416.1	40644	41084	+	40644	41084	NinB/ Orf homologous recombination mediator	protein ninb	NinB/ Orf homologous recombination mediator			
+a5ce6567a5d22319	exact	NC_001416.1	42429	43043	+	42429	43043	NinG/ Rap DNA junction specific endonuclease	protein ning	NinG/ Rap DNA junction specific endonuclease			
+fa65b56be04e4408	exact	NC_001416.1	43886	44509	+	43886	44509	antitermination protein	anti-termination protein Q-like	antitermination protein q			
+86062b8c81222630	exact	NC_001416.1	45186	45509	+	45186	45509	holin/anti-holin	holin/anti-holin	antiholin			
+eda6c044d5cc02a4	exact	NC_001416.1	45966	46427	+	45966	46427	Rz-like spanin	Rz-like spanin	spanin, inner membrane subunit			
+0927b608c096c50a	exact	NC_001416.1	46459	46752	-	46459	46752	Bor-like outer membrane protein	Bor-like outer membrane protein	lipoprotein bor			
+073c06460b5997a8	exact	NC_001604.1	925	1278	+	925	1278	ocr-like anti-restriction	ocr-like anti-restriction	protein ocr			
+2784e89a793e21ac	exact	NC_001604.1	2021	3100	+	2021	3100	serine-threonine kinase	protein kinase 0.7	serine-threonine kinase			
+a0261af9c818ecb0	exact	NC_001604.1	6137	6394	+	6137	6394	dGTPase inhibitor; target for F exclusion	inhibitor of dgtpase	dGTPase inhibitor target for F exclusion			
+9869b6552f6f6c32	exact	NC_001604.1	8166	8756	+	8166	8756	nucleotide kinase	nucleotide kinase	nucleotide kinase gp1.7			
+e81fa81a809eb093	exact	NC_001604.1	9158	9856	+	9158	9856	Gp2.5-like ssDNA binding protein and ssDNA annealing protein	single-stranded dna-binding protein	Gp2.5-like ssDNA binding protein and ssDNA annealing protein			
+6c770fea09576b17	exact	NC_001604.1	9857	10276	+	9857	10276	endonuclease	endonuclease	hnh endonuclease			
+a3fa71500ae9e61b	exact	NC_001604.1	10257	10706	+	10257	10706	endonuclease	endonuclease i	endonuclease			
+b2e132bf75bf76f6	exact	NC_001604.1	10706	11161	+	10706	11161	amidase	endolysin	amidase			
+906212c0d6c4e5db	exact	NC_001604.1	11225	11590	+	11225	11590	HNH endonuclease	protein 3.8	HNH endonuclease			
+96dbdcc062c95883	exact	NC_001604.1	11565	13265	+	11565	13265	DNA primase/helicase	dna helicase/primase	DNA primase/helicase			
+da5cd49df42e2855	exact	NC_001604.1	14353	16467	+	14353	16467	DNA polymerase I	DNA polymerase I	family-a dna polymerase			
+ace735b74a188e03	exact	NC_001604.1	16851	17150	+	16851	17150	DUF2675 domain-containing protein	hypothetical protein	protein suppressor of silencing			
+41b5f587a1e82af9	exact	NC_001604.1	17359	17517	+	17359	17517	Gp5.9-like inihibitor of recBCD nuclease	gene 5.9 protein	Gp5.9-like inihibitor of recBCD nuclease			
+5d465bc40ac8cd2d	exact	NC_001604.1	18394	18507	+	18394	18507	DUF5516 domain-containing protein	protein 6.3	hypothetical protein			
+8ada1513e4544f53	exact	NC_001604.1	18605	18859	+	18605	18859	DUF2717 domain-containing protein	hypothetical protein	protein 6.5			
+be0b0be64e6a88c5	exact	NC_001604.1	18864	19130	+	18864	19130	DUF5476 family protein	hypothetical protein	protein 6.7			
+5cc76c32545c8da1	exact	NC_001604.1	19130	19531	+	19130	19531	host range and adsorption protein	host range and adsorption protein	protein 7			
+ef6e71c70bd88968	exact	NC_001604.1	19535	19834	+	19535	19834	host range and adsorption protein	protein 7.3	host range and adsorption protein			
+7e5b7fc37d3fae76	exact	NC_001604.1	21950	22873	+	21950	22873	head assembly	capsid assembly scaffolding protein	head assembly			
+2b4fd6af3c46b353	exact	NC_001604.1	24228	24818	+	24228	24818	tail protein	tail tubular protein gp11	tail protein			
+7f6727251878cfce	exact	NC_001604.1	24842	27226	+	24842	27226	tail protein	tail tubular protein gp12	tail protein			
+cea837b548d97a3a	exact	NC_001604.1	27307	27723	+	27307	27723	internal virion protein	internal virion protein	probable scaffold protein gp13			
+c8a9a7136676f014	exact	NC_001604.1	27728	28318	+	27728	28318	internal virion protein	internal virion protein	internal virion protein gp14			
+8a8123fe0dabc0ab	exact	NC_001604.1	28325	30568	+	28325	30568	internal virion protein	internal virion protein	internal virion protein gp15			
+458f5d8a9922e55e	exact	NC_001604.1	30595	34551	+	30595	34551	internal virion protein with endolysin domain	peptidoglycan transglycosylase gp16	internal virion protein with endolysin domain			
+5241862e86c143a2	exact	NC_001604.1	36553	36822	+	36553	36822	terminase small subunit	terminase small subunit	terminase, small subunit gp18			
+b711e41dc58ae1b7	exact	NC_001604.1	36917	37348	+	36917	37348	Rz-like spanin	Rz-like spanin	spanin, inner membrane subunit			
+a7e3183fb6149ca3	exact	NC_005859.1	124	858	-	124	858	deoxynucleoside-5'-monophosphatase	polynucleotide kinase	5'-deoxynucleotidase			
+ba9b5cd53fc0e6e7	exact	NC_005859.1	1706	3376	-	1706	3376	DNA transfer protein	protein a1	DNA transfer protein			
+f12f9ce21af9e9a2	exact	NC_005859.1	3727	4134	-	3727	4134	DNA binding protein	protein a2	DNA binding protein			
+60efd1e630f56a94	exact	NC_005859.1	5411	5929	-	5411	5929	putative H-N-H-endonuclease P-TflVII	hnh endonuclease	hypothetical protein			
+6e57aabe8bfffa96	exact	NC_005859.1	18646	18936	-	18646	18936	putative thioredoxin	thioredoxin domain	thioredoxin domain			
+1c9c6502afc4036c	exact	NC_005859.1	19931	20344	-	19931	20344	endolysin	l-alanyl-d-glutamate peptidase	endolysin			
+c79b23c17c7ac234	exact	NC_005859.1	21766	22518	-	21766	22518	deoxynucleoside monophosphate kinase	deoxynucleoside-5'-monophosphate kinase	deoxynucleoside monophosphate kinase			
+6b78a4600261396a	exact	NC_005859.1	23245	23742	-	23245	23742	H-N-H-endonuclease F-TflVI	hnh endonuclease	HNH endonuclease			
+3068523ae4e55c5c	exact	NC_005859.1	25638	26150	-	25638	26150	H-N-H-endonuclease F-TflV	HNH endonuclease	hnh endonuclease			
+3a88ce75d584f949	exact	NC_005859.1	27656	28024	-	27656	28024	putative acetyltransferase-related protein	hypothetical protein	autonomous glycyl radical cofactor			
+b78224b70c5bbb76	exact	NC_005859.1	31022	31606	-	31022	31606	HNH endonuclease	HNH endonuclease	h-n-h endonuclease f-tfli			
+9b3681b6131e2d8f	exact	NC_005859.1	36379	37062	-	36379	37062	HNH endonuclease	HNH endonuclease	h-n-h endonuclease f-tfliv			
+532f7a0f60a09eb8	exact	NC_005859.1	39791	40738	-	39791	40738	lipoprotein	lipoprotein	band 7/spfh family protein			
+b95f91721b975a2f	exact	NC_005859.1	47861	48394	-	47861	48394	putative dihydrofolate reductase	dihydrofolate reductase	dihydrofolate reductase			
+90f0225ff9916d11	exact	NC_005859.1	48391	49536	-	48391	49536	putative aerobic ribonucleoside diphosphate reductase, small subunit	conserved phage protein of unknown function	ribonucleoside diphosphate reductase small subunit			
+cbfc74f4c527beb2	exact	NC_005859.1	49536	50060	-	49536	50060	putative H-N-H-endonuclease P-TflVIII	HNH endonuclease	hnh endonuclease			
+b812f5a62992fb2e	exact	NC_005859.1	50163	52598	-	50163	52598	ribonucleoside-diphosphate reductase large subunit	ribonucleotide reductase large subunit	ribonucleotide reductase large subunit			
+43bcd6fe6348f61e	exact	NC_005859.1	53961	55685	+	53961	55685	NrdD-like anaerobic ribonucleotide reductase large subunit	NrdD-like anaerobic ribonucleotide reductase large subunit	anaerobic ribonucleoside-triphosphate reductase			
+1b4b62aa5865a613	exact	NC_005859.1	59545	62331	+	59545	62331	replication origin binding	putative replication origin binding protein	replication origin binding			
+95c7f2c811ca7dba	exact	NC_005859.1	67310	68077	+	67310	68077	D5 protein	transcriptional regulator, D5-like	putative transcription factor d5			
+980f24ac1133587a	exact	NC_005859.1	68109	69617	+	68109	69617	D6 protein	DnaB-like replicative helicase	dnab-like replicative helicase			
+b1465083ab6f5733	exact	NC_005859.1	69614	70147	+	69614	70147	putative H-N-H-endonuclease P-TflX	hnh endonuclease	HNH endonuclease			
+96e756f94e94a0e9	exact	NC_005859.1	70144	71034	+	70144	71034	putative DNA replication primase	dna primase	DNA primase			
+486b2702d45caa2b	exact	NC_005859.1	71097	73664	+	71097	73664	DNA polymerase	DNA polymerase	family-a dna polymerase			
+5c94f0ab4faeb0f0	exact	NC_005859.1	74151	75503	+	74151	75503	putative ATP-dependent helicase	probable helicase d10	DNA helicase			
+7400320c59a4eb6c	exact	NC_005859.1	76001	76774	+	76001	76774	single strand DNA binding protein	probable ssdna-binding protein	single strand DNA binding protein			
+eacb541ee1708351	exact	NC_005859.1	76811	77788	+	76811	77788	putative recombination endonuclease, subunit D12	SbcD-like subunit of palindrome specific endonuclease	probable exonuclease subunit 1			
+a693bf737ab649aa	exact	NC_005859.1	77769	79607	+	77769	79607	putative recombination endonuclease, subunit D13	probable exonuclease subunit 2	SbcC-like subunit of palindrome specific endonuclease			
+d93c5a0040d10812	exact	NC_005859.1	79611	80093	+	79611	80093	RusA-like Holliday junction resolvase	RusA-like Holliday junction resolvase	protein d14			
+7703a801a473a537	exact	NC_005859.1	80093	80968	+	80093	80968	flap endonuclease	flap endonuclease	exonuclease			
+059dd52c3f9850dc	exact	NC_005859.1	80965	81411	+	80965	81411	dUTPase	deoxyuridine 5'-triphosphate nucleotidohydrolase	dUTPase			
+c55d13a52ce8a272	exact	NC_005859.1	81865	86055	-	81865	86055	tail fiber protein	side tail fiber protein pb1	tail fiber protein			
+0c9dbce2815240f4	exact	NC_005859.1	86294	86479	-	86294	86479	collar tail protein for L-shaped tail fibre attachment	collar tail protein for L-shaped tail fibre attachment	collar protein p132			
+29831fc1cf5577e7	exact	NC_005859.1	86484	88550	-	86484	88550	straight fibre tail protein	straight fiber protein pb4	straight fibre tail protein			
+c79ff15ae104249a	exact	NC_005859.1	88551	91400	-	88551	91400	tail protein Pb3	central tail fiber J	baseplate hub protein pb3			
+f631fb7f31dacc6d	exact	NC_005859.1	91397	92011	-	91397	92011	distal tail protein	distal tail protein	distal tail protein pb9			
+3e8ac16076b89e90	exact	NC_005859.1	92121	95780	-	92121	95780	tail length tape measure protein	tape measure protein pb2 precursor	tail length tape measure protein			
+ce16a67ca5ac7904	exact	NC_005859.1	97458	98354	-	97458	98354	base plate tail tube protein	base plate tail tube protein	baseplate tube protein p140			
+26900dbeb4659d2b	exact	NC_005859.1	98359	99753	-	98359	99753	major tail protein	major tail protein	tail tube protein pb6			
+dfabbc00198f3bdd	exact	NC_005859.1	99780	100265	-	99780	100265	tail terminator	tail terminator	tail tube terminator protein p142			
+f5767c8d26761c0c	exact	NC_005859.1	100269	101036	-	100269	101036	tail completion or Neck1 protein	tail completion or Neck1 protein	tail completion protein p143			
+6f0e0c34a4d1af4a	exact	NC_005859.1	101036	101548	-	101036	101548	head-tail adaptor	head-tail adaptor	head completion protein			
+630683166c5913e1	exact	NC_005859.1	103002	103634	-	103002	103634	head maturation protease	head maturation protease	prohead protease			
+1b81dec6ce12eccf	exact	NC_005859.1	103638	104132	-	103638	104132	Hoc-like head decoration	decoration protein	tail protein			
+075670fc2e19968e	exact	NC_005859.1	105773	106606	-	105773	106606	endonuclease	endonuclease	putative endonuclease			
+d61679ab4c10c583	exact	NC_005859.1	107934	108416	-	107934	108416	terminase small subunit	terminase small subunit	probable terminase, small subunit			
+184e1df8c775e35f	exact	NC_005859.1	108427	110349	-	108427	110349	receptor binding tail protein	receptor binding tail protein	receptor-binding protein pb5			
+1d8476105fb171dd	exact	NC_005859.1	110429	110662	+	110429	110662	Cor superinfection exclusion protein	lytic conversion lipoprotein	Cor superinfection exclusion protein			
+ba6c6ee0372864e8	exact	NC_001422.1	133	393	+	133	393	terminase	c protein	terminase			
+e1edd82f767e4deb	exact	NC_001422.1	390	848	+	390	848	head morphogenesis	external scaffolding protein d	head morphogenesis			
+d09250ece621b210	exact	NC_001422.1	848	964	+	848	964	DNA condensation	DNA condensation	dna-binding protein j			
+73fe4e253e36d27a	exact	NC_001422.1	1001	2284	+	1001	2284	major head protein	capsid protein f	major head protein			
+fc0fed82616fcd56	exact	NC_001422.1	2395	2922	+	2395	2922	major spike protein	major spike protein g	major spike protein			
+04b3d21d2d326cd6	exact	NC_001422.1	2931	3917	+	2931	3917	pilot protein for DNA ejection	minor spike protein	pilot protein for DNA ejection			
+43fd4d842d86849d	exact	NC_002371.2	3893	4804	+	3893	4804	head scaffolding protein	scaffolding protein	head scaffolding protein			
+2601a8b24ce9d151	exact	NC_002371.2	4804	6096	+	4804	6096	head protein	head protein	major capsid protein			
+cd0a7546200f4947	exact	NC_002371.2	6328	6828	+	6328	6828	head-tail adaptor Ad3	head-to-tail adapter gp4	head-tail adaptor Ad3			
+e1e205d26581bd2a	exact	NC_002371.2	6788	8206	+	6788	8206	head closure Hc3	head closure Hc3	tail hub protein gp10			
+996e6526d8731053	exact	NC_002371.2	8210	8911	+	8210	8911	tail needle protein	tail needle protein	tail needle protein gp26			
+e9f1c3e321c6e92e	exact	NC_002371.2	8911	9366	+	8911	9366	head morphogenesis	protein gp14	head morphogenesis			
+a478d80b5830f187	exact	NC_002371.2	9369	10058	+	9369	10058	DNA ejection	dna transfer protein gp7	DNA ejection			
+62d74ae96f708e21	exact	NC_002371.2	10069	11484	+	10069	11484	released from the phage upon host infection	released from the phage upon host infection	internal virion protein gp20			
+a55497215bb37681	exact	NC_002371.2	11484	13313	+	11484	13313	head morphogenesis	internal virion protein gp16	head morphogenesis			
+de5dc22f81fb738b	exact	NC_002371.2	15091	15993	+	15091	15993	Ant	antirepressor protein ant	hypothetical protein			
+c7e9752c59cf3137	exact	NC_002371.2	20642	21004	-	20642	21004	GtrA-like O-antigen conversion	GtrA-like O-antigen conversion	bactoprenol-linked glucose translocase			
+fb9715723ae82b4a	exact	NC_002371.2	22746	23381	-	22746	23381	EaC	hypothetical protein	eac protein			
+6ac4325ed2a43adb	exact	NC_002371.2	23758	24711	-	23758	24711	EaA	eaa protein	hypothetical protein			
+5fc32e4fd76398d8	exact	NC_002371.2	25496	25855	-	25496	25855	EaF	eaf protein	hypothetical protein			
+3437a5b83043af39	exact	NC_002371.2	25964	26461	-	25964	26461	EaE	hypothetical protein	eae protein			
+11c7890c9da4637a	exact	NC_002371.2	26630	26923	-	26630	26923	abc2 anti-RecBCD	anti-recbcd protein 2	abc2 anti-RecBCD			
+0ccba117ed490089	exact	NC_002371.2	26970	27254	-	26970	27254	Abc1	transcriptional regulator, D5-like	anti-recbcd protein 1			
+f4eafb92e8d586cd	exact	NC_002371.2	27254	27871	-	27254	27871	Erf-like ssDNA annealing protein	essential recombination function protein	Erf-like ssDNA annealing protein			
+33b624553f43be4b	exact	NC_002371.2	27868	28011	-	27868	28011	Erf recombination cofactor Arf	Erf recombination cofactor Arf	accessory recombination function protein			
+64ea843e3d81dd72	exact	NC_002371.2	28001	28189	-	28001	28189	Kil protein for bacterial septation inhibition	Kil protein for bacterial septation inhibition	protein kil			
+48d3f71152e63f24	exact	NC_002371.2	28170	28328	-	28170	28328	CIII anti-termination	regulatory protein c3	CIII anti-termination			
+ff68fc8156ca4add	exact	NC_002371.2	28414	28725	-	28414	28725	superinfection exclusion	superinfection exclusion	superinfection exclusion protein			
+e860e27e230cd35b	exact	NC_002371.2	29349	29543	-	29349	29543	restriction alleviation ral	restriction alleviation ral	restriction inhibitor protein ral			
+c7cfd89cb4f6cb29	exact	NC_002371.2	31013	31663	-	31013	31663	C2	helix-turn-helix transcriptional regulator	hypothetical protein			
+ce3dcf2cf190f0c3	exact	NC_002371.2	31744	31929	+	31744	31929	transcriptional regulator	transcriptional regulator	regulatory protein cro			
+9a8b8ee969a63cb5	exact	NC_002371.2	32036	32314	+	32036	32314	CII-like transcriptional activator	transcriptional activator protein c1	CII-like transcriptional activator			
+67855c4ca7216992	exact	NC_002371.2	32488	33303	+	32488	33303	replication initiation O-like	replication initiation O-like	dna replication protein gp18			
+48128756cad7cb67	exact	NC_002371.2	34750	35187	+	34750	35187	NinB/ Orf homologous recombination mediator	protein ninb	NinB/ Orf homologous recombination mediator			
+ef2231e115f86cc5	exact	NC_002371.2	35184	35357	+	35184	35357	NinD	hypothetical protein	protein nind			
+c5a3bf3df051a5a2	exact	NC_002371.2	35324	35500	+	35324	35500	NinE	protein nine	hypothetical protein			
+8c855d9b83a8728b	exact	NC_002371.2	35497	35835	+	35497	35835	NinX	hypothetical protein	putative protein ninx			
+48710a1d5777218d	exact	NC_002371.2	35828	36004	+	35828	36004	NinF	protein ninf	hypothetical protein			
+922990dbc9bcdf3d	exact	NC_002371.2	35997	36608	+	35997	36608	NinG/ Rap DNA junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	protein ning			
+73d9f0e917af5039	exact	NC_002371.2	36605	36829	+	36605	36829	NinY	hypothetical protein	putative protein niny			
+fda55383b136fcbd	exact	NC_002371.2	37186	37809	+	37186	37809	transcription antitermination protein	antitermination protein q	anti-termination protein Q-like			
+6a802bd8061fa163	exact	NC_002371.2	38244	38570	+	38244	38570	holin/anti-holin	antiholin	holin/anti-holin			
+a5e42531076b24f8	exact	NC_002371.2	38988	39425	+	38988	39425	Rz-like spanin	Rz-like spanin	spanin, inner membrane subunit			
+c6ea740ae39f7889	exact	NC_000929.1	339	863	-	339	863	transcriptional repressor	transcriptional repressor	repressor protein c			
+d1bc25ff8f789b93	exact	NC_000929.1	1099	1326	+	1099	1326	transcriptional repressor	transcriptional repressor	negative regulator of transcription			
+05902279f9708b0b	exact	NC_000929.1	1328	3319	+	1328	3319	Mu transposase C-terminal domain-containing protein	dde-recombinase a	hypothetical protein			
+bcc9f5a0b7046456	exact	NC_000929.1	3358	4296	+	3358	4296	DNA transposition protein	DNA transposition protein	atp-dependent target dna activator b			
+1b2167de7105d741	exact	NC_000929.1	5801	6325	+	5801	6325	host nuclease inhibitor	putative dna ends protecting protein gam	host nuclease inhibitor			
+b193ada90ef2d0ab	exact	NC_000929.1	8233	8784	+	8233	8784	regulatory protein GemA	gema protein	hypothetical protein			
+86e1c0e98a0832ec	exact	NC_000929.1	8781	9170	+	8781	9170	late transcriptional activator	late transcriptional activator	middle operon regulator			
+616019733ac5b719	exact	NC_000929.1	9963	10385	+	9963	10385	late transcriptional activator	late transcription activator c	late transcriptional activator			
+1ee203c1525fb4b9	exact	NC_000929.1	11718	12017	+	11718	12017	DUF2730 family protein	releasin protein	hypothetical protein			
+74e9927d6c228a1f	exact	NC_000929.1	12316	12891	+	12316	12891	terminase small subunit	terminase small subunit	probable terminase, small subunit gp27			
+ba19feeeab15d17d	exact	NC_000929.1	16073	17392	+	16073	17392	minor head protein and DNA pilot	putative capsid assembly protein f	minor head protein and DNA pilot			
+d2a045cc9d0d582c	exact	NC_000929.1	18056	19141	+	18056	19141	head maturation protease	head maturation protease	protease i			
+292b87c6002c20de	exact	NC_000929.1	20529	20954	+	20529	20954	head-tail adaptor	gene product j	head-tail adaptor			
+eb8b2e388945dc45	exact	NC_000929.1	20954	21502	+	20954	21502	portal protein	probable tail terminator protein	portal protein			
+b4e690e7fed9cca2	exact	NC_000929.1	21689	23176	+	21689	23176	tail sheath	tail sheath protein	tail sheath			
+232b2cbc30b6b646	exact	NC_000929.1	23552	23986	+	23552	23986	tail assembly chaperone	probable tail assembly protein gp41	tail assembly chaperone			
+7900adcea88ea06d	exact	NC_000929.1	24131	26203	+	24131	26203	tail length tape measure protein	tail length tape measure protein	probable tape measure protein			
+9ba8201db11a5ebd	exact	NC_000929.1	26208	27695	+	26208	27695	DNA circularization N-terminal domain-containing protein	hypothetical protein	dna circularization protein n			
+8b4ad3224c3065b6	exact	NC_000929.1	27688	28827	+	27688	28827	baseplate hub	baseplate hub	baseplate hub protein gp44			
+60b3a3ed12a7bc0d	exact	NC_000929.1	29405	29842	+	29405	29842	baseplate wedge subunit	baseplate protein gp46	baseplate wedge subunit			
+96e359bff0ed6db5	exact	NC_000929.1	29843	30925	+	29843	30925	baseplate protein	baseplate protein	baseplate protein gp47			
+376f0f0d15c48b2a	exact	NC_000929.1	30916	31458	+	30916	31458	baseplate wedge subunit	baseplate protein gp48	baseplate wedge subunit			
+327b0c8446b56552	exact	NC_000929.1	31458	32972	+	31458	32972	tail fiber protein	tail fiber protein s	tail fiber protein			
+2c700041463f46d1	exact	NC_000929.1	32975	33502	+	32975	33502	tail fiber assembly protein	tail fiber assembly protein	tail fiber assembly protein u			
+a63aeae4997fbc94	exact	NC_000929.1	33531	34064	-	33531	34064	tail fiber assembly protein	tail fiber assembly protein	tail fiber assembly protein u'			
+a5efd645ad1844b5	exact	NC_000929.1	35768	35956	+	35768	35956	gpCom control of modification	translational activator com	gpCom control of modification			
+2056cb6f0339f5ac	exact	NC_000929.1	35877	36602	+	35877	36602	Mom-like DNA modification protein	Mom-like DNA modification protein	methylcarbamoylase mom			
+7c51574a9c4b9aa9	relaxed	NC_000866.4	12	2189	-	12	2189	RIIA lysis inhibitor	protein riia	RIIA lysis inhibitor			
+fac3af3a5091f365	relaxed	NC_000866.4	3778	5328	-	3778	5328	DNA topoisomerase II large subunit	dna topoisomerase large subunit	DNA topoisomerase II large subunit			
+55d87a18ac8cc405	relaxed	NC_000866.4	6267	6482	-	6267	6482	cef modifier of supressor tRNAs	protein cef	cef modifier of supressor tRNAs			
+cca95a5b13e9aa17	relaxed	NC_000866.4	6653	7141	-	6653	7141	MotB-like transcriptional regulator	MotB-like transcriptional regulator	transcription regulatory protein motb			
+c00d3099ed2e3546	relaxed	NC_000866.4	8225	8908	-	8225	8908	exonuclease	exonuclease	exodeoxyribonuclease			
+bb9434667a7453f7	relaxed	NC_000866.4	9410	10729	-	9410	10729	Dda-like helicase	Dda-like helicase	atp-dependent dna helicase dda			
+10d313c72f929d94	relaxed	NC_000866.4	11908	12510	-	11908	12510	RNA polymerase ADP-ribosylase	RNA polymerase ADP-ribosylase	nad--protein adp-ribosyltransferase moda			
+584eadbd0559ca72	relaxed	NC_000866.4	12507	13130	-	12507	13130	RNA polymerase ADP-ribosylase	RNA polymerase ADP-ribosylase	nad--protein adp-ribosyltransferase modb			
+a7bf64b1c199c4ac	relaxed	NC_000866.4	14191	14676	-	14191	14676	Mrh transcription modulator under heat shock	rpoh-modulating protein	Mrh transcription modulator under heat shock			
+4df7d7991ead789d	relaxed	NC_000866.4	15331	15573	-	15331	15573	virion structural protein	virion structural protein	small outer capsid protein			
+828102c379bcafd1	relaxed	NC_000866.4	15606	16280	-	15606	16280	SegF homing endonuclease	dna replication protein	homing endonuclease			
+c644ca9b96ea3778	relaxed	NC_000866.4	16270	16785	-	16270	16785	dUTPase	nucleoside triphosphate pyrophosphohydrolase	dctp pyrophosphatase			
+4b6fa7e28a604906	relaxed	NC_000866.4	16846	17625	-	16846	17625	Dam family site-specific DNA-(adenine-N6)-methyltransferase	dna adenine methylase	DNA methyltransferase			
+5a73ef780830a1e7	relaxed	NC_000866.4	19758	20051	-	19758	20051	spackle periplasmic	protein spackle	spackle periplasmic			
+2965affe131d82a6	relaxed	NC_000866.4	20371	20553	-	20371	20553	Dmd discriminator of mRNA degradation	antitoxin dmd	Dmd discriminator of mRNA degradation			
+e5f1578c30f0ac0d	relaxed	NC_000866.4	20612	22039	-	20612	22039	AAA family ATPase	DnaB-like replicative helicase	dnab-like replicative helicase			
+35fc4a73b6bb760e	relaxed	NC_000866.4	22049	22393	-	22049	22393	head vertex assembly chaperone	head vertex assembly chaperone	head formation protein			
+7ae2b2a88ac9a672	relaxed	NC_000866.4	22386	23561	-	22386	23561	recombinase	recombination and repair protein	recombinase			
+449138e57478a9f0	relaxed	NC_000866.4	23570	24235	-	23570	24235	homing endonuclease	endonuclease sega	homing endonuclease			
+ceea405ca7a80f9b	relaxed	NC_000866.4	24400	25455	-	24400	25455	beta-glucosyltransferase	dna beta-glucosyltransferase	beta-glucosyltransferase			
+169d1815c8bb8442	relaxed	NC_000866.4	25479	26219	-	25479	26219	thymidylate synthase	thymidylate synthase	deoxycytidylate 5-hydroxymethyltransferase			
+3845b3530fa13e73	relaxed	NC_000866.4	26373	26624	-	26373	26624	immunity to superinfection	immunity to superinfection	immunity protein			
+fbd1c1002a9537bb	relaxed	NC_000866.4	27197	29893	-	27197	29893	DNA polymerase	dna-directed dna polymerase	DNA polymerase			
+5608a3fa29144177	relaxed	NC_000866.4	29972	30340	-	29972	30340	translation repressor	translation repressor protein	translation repressor			
+7ad8bea67f36cea5	relaxed	NC_000866.4	30342	30905	-	30342	30905	clamp loader of DNA polymerase	sliding-clamp-loader small subunit	clamp loader of DNA polymerase			
+06364c0589923bb7	relaxed	NC_000866.4	30907	31866	-	30907	31866	clamp loader of DNA polymerase	clamp loader of DNA polymerase	sliding-clamp-loader large subunit			
+22d68a0f75e6362a	relaxed	NC_000866.4	31917	32603	-	31917	32603	DNA polymerase processivity factor	DNA polymerase processivity factor	sliding clamp			
+ab449f713df6f887	relaxed	NC_000866.4	32659	33048	-	32659	33048	RNA polymerase binding	15 kda rna polymerase-binding protein	RNA polymerase binding			
+7eefc590d2467274	relaxed	NC_000866.4	33302	34942	-	33302	34984	SbcC-like subunit of palindrome specific endonuclease	SbcC-like subunit of palindrome specific endonuclease	exonuclease subunit 2			
+196d93b1415b8447	relaxed	NC_000866.4	35428	36447	-	35428	36447	SbcD-like subunit of palindrome specific endonuclease	SbcD-like subunit of palindrome specific endonuclease	exonuclease subunit 1			
+8228adac766bb1ff	relaxed	NC_000866.4	36624	37826	-	36624	37826	alpha-glucosyltransferase	alpha-glucosyltransferase	dna alpha-glucosyltransferase			
+683f6cf5cc645f44	relaxed	NC_000866.4	37885	38679	-	37885	38679	homing endonuclease	probable mobile endonuclease b	homing endonuclease			
+84d2b768225ac4af	relaxed	NC_000866.4	39600	40157	-	39600	40157	RNA polymerase sigma factor	late sigma transcription factor	rna polymerase sigma-like factor			
+0f05ad312b92b9fb	relaxed	NC_000866.4	41805	42113	-	41805	42113	NrdH glutaredoxin	uncharacterized 11.8 kda protein in gp55-nrdg intergenic region	thioredoxin domain			
+447f02381fcd5b5a	relaxed	NC_000866.4	42446	42916	-	42446	42916	anaerobic ribonucleotide reductase small subunit	anaerobic ribonucleotide reductase small subunit	anaerobic ribonucleoside-triphosphate reductase-activating protein			
+74cbfb256065607b	relaxed	NC_000866.4	42906	43538	-	42906	43538	homing endonuclease	probable mobile endonuclease c	homing endonuclease			
+16e47eb80743d450	relaxed	NC_000866.4	44836	45612	-	44836	45612	I-TevII homing endonuclease	intron-associated endonuclease 2	homing endonuclease			
+71be6866e41dacf7	relaxed	NC_000866.4	46382	46855	-	46382	46855	endonuclease VII	endonuclease VII	recombination endonuclease vii			
+77ef2f01e724cb60	relaxed	NC_000866.4	46897	47382	-	46897	47382	inhibitor of host Lon protease	host protease inhibitor	inhibitor of host Lon protease			
+b93b484e6d71ff75	relaxed	NC_000866.4	48128	48391	-	48128	48391	NrdC thioredoxin	thioredoxin domain	glutaredoxin			
+8d0fb7fa7336adfe	relaxed	NC_000866.4	56429	57208	-	56429	57208	homing endonuclease	probable mobile endonuclease d	homing endonuclease			
+f021652f8e1bc843	relaxed	NC_000866.4	59202	59495	-	59202	59495	lysis inhibition	antiholin	lysis inhibition			
+0c2671f2c77ea102	relaxed	NC_000866.4	61386	61733	-	61386	61733	valyl tRNA synthetase modifier	valyl tRNA synthetase modifier	valyl--trna ligase modifier			
+f1f45af80b229636	relaxed	NC_000866.4	62279	62740	-	62279	62740	endoribonuclease	endoribonuclease regb	endoribonuclease			
+adf04b5eec503ced	relaxed	NC_000866.4	63557	63919	-	63557	63919	autonomous glycyl radical cofactor GrcA	autonomous glycyl radical cofactor	hypothetical protein			
+76a25df393a332fd	relaxed	NC_000866.4	64939	65355	-	64939	65355	endonuclease V N-glycosylase UV repair enzyme	endonuclease v	endonuclease V N-glycosylase UV repair enzyme			
+e95e2d1e0fafeefc	relaxed	NC_000866.4	65416	65718	-	65416	65718	internal virion protein	internal virion protein	internal protein ii			
+6d1dd18840f65f06	relaxed	NC_000866.4	65834	66415	-	65834	66415	internal virion protein	internal virion protein	internal protein iii			
+77c8a8db991ff38f	relaxed	NC_000866.4	66503	66997	-	66503	66997	glycoside hydrolase family protein	endolysin	hypothetical protein			
+35fd07fd272c26ca	relaxed	NC_000866.4	71253	71918	-	71253	71918	homing endonuclease	putative endonuclease segb	homing endonuclease			
+7956cde23863b44c	relaxed	NC_000866.4	73591	73878	-	73591	73878	internal virion protein	internal protein i	internal virion protein			
+66b4b050ddd18dc3	relaxed	NC_000866.4	73952	74410	-	73952	74410	RNA ligase	anti-cbass protein acb1	RNA ligase			
+8155079f08b3db8b	relaxed	NC_000866.4	74407	74649	-	74407	74649	tail fiber chaperone	tail fiber assembly helper protein	tail fiber chaperone			
+16b45a999ff71a82	relaxed	NC_000866.4	74649	75374	-	74649	75374	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	deoxynucleotide monophosphate kinase			
+c23825616c0a9970	relaxed	NC_000866.4	75424	75954	-	75424	75954	tail protein	tail tube	tail tube terminator protein			
+1e1f2927ccc37f51	relaxed	NC_000866.4	76061	76885	-	76061	76885	DNA end protector	DNA end protector	terminal dna protecting protein			
+f78c3d922cfc54b7	relaxed	NC_000866.4	76885	77337	-	76885	77337	head closure	head completion nuclease	head closure			
+5bd20fcd7657d657	relaxed	NC_000866.4	77385	77975	+	77385	77975	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge protein gp53			
+190adb3154a27564	relaxed	NC_000866.4	77959	79686	+	77959	79686	baseplate hub subunit and tail lysozyme	baseplate hub subunit and tail lysozyme	pre-baseplate central spike protein gp5			
+94d8dbe32db4c26a	relaxed	NC_000866.4	80779	81072	+	80779	81072	PAAR motif of membran proteins	baseplate puncturing device gp5.4	PAAR motif of membran proteins			
+eb331a457e4e6c77	relaxed	NC_000866.4	81081	83063	+	81081	83063	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge protein gp6			
+b7c0302d839c7be3	relaxed	NC_000866.4	83060	86158	+	83060	86158	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge protein gp7			
+8c621665b415b5ba	relaxed	NC_000866.4	86151	87155	+	86151	87155	baseplate wedge subunit	baseplate wedge protein gp8	baseplate wedge subunit			
+f758380a99d20af0	relaxed	NC_000866.4	87219	88085	+	87219	88085	baseplate wedge tail fiber protein connector	baseplate protein gp9	baseplate wedge tail fiber protein connector			
+c03c8d1b16339890	relaxed	NC_000866.4	88085	89893	+	88085	89893	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge protein gp10			
+d372a5b8b937e697	relaxed	NC_000866.4	89893	90552	+	89893	90552	baseplate wedge subunit	baseplate wedge protein gp11	baseplate wedge subunit			
+fa218f64f766d561	relaxed	NC_000866.4	90549	92132	+	90549	92132	tail collar fiber protein	tail collar fiber protein	short tail fiber protein gp12			
+2d4dde4d2a6e6af5	relaxed	NC_000866.4	92129	93592	+	92129	93592	fibritin neck whisker	fibritin neck whisker	fibritin			
+77a24fdb4b41c51a	relaxed	NC_000866.4	93624	94553	+	93624	94553	head-tail adaptor Ad2	neck protein gp13	head-tail adaptor Ad2			
+06c26ff60c756ab3	relaxed	NC_000866.4	94555	95325	+	94555	95325	head closure Hc2	head closure Hc2	neck protein gp14			
+530128622fdbd4fa	relaxed	NC_000866.4	95367	96185	+	95367	96185	tail sheath stabilizer	tail sheath stabilizer	tail completion protein gp15			
+b446bf2c3ac2e113	relaxed	NC_000866.4	98536	100515	+	98536	100515	tail sheath	tail sheath	tail sheath protein			
+b199d6c61fd22ee2	relaxed	NC_000866.4	100632	101123	+	100632	101123	tail protein	tail tube	tail tube protein gp19			
+754bb4a860db85a2	relaxed	NC_000866.4	103023	103448	+	103023	103448	head scaffolding protein	prohead assembly protein gp68	head scaffolding protein			
+24cf63f5f207fd47	relaxed	NC_000866.4	103448	104086	+	103448	104086	head maturation protease	prohead core protein protease	head maturation protease			
+9417d1f55bce940e	relaxed	NC_000866.4	104117	104926	+	104117	104926	head scaffolding protein	capsid assembly scaffolding protein	head scaffolding protein			
+623bba61c9243af0	relaxed	NC_000866.4	106561	107232	-	106561	107232	homing endonuclease	putative endonuclease segd	homing endonuclease			
+5342b0b74d72443e	relaxed	NC_000866.4	107323	108606	+	107323	108606	capsid vertex protein	capsid vertex protein	major head protein			
+b19753be85337c22	relaxed	NC_000866.4	108636	109640	-	108636	109640	RNA ligase	rna ligase 2	RNA ligase			
+47ad1f5d6d06b0ce	relaxed	NC_000866.4	110187	111317	-	110187	111317	Hoc-like head decoration	Hoc-like head decoration	highly immunogenic outer capsid protein			
+4b63c279b3e15815	relaxed	NC_000866.4	111327	112007	-	111327	112007	minor head protein inhibitor of protease	minor head protein inhibitor of protease	protein inh			
+5f57d7286f014265	relaxed	NC_000866.4	112057	112674	+	112057	112674	homing endonuclease	putative endonuclease sege	homing endonuclease			
+26e4590c0693a205	relaxed	NC_000866.4	112677	114440	+	112677	114440	DNA helicase	DNA helicase	atp-dependent dna helicase uvsw			
+fef0ce13a009814b	relaxed	NC_000866.4	114914	115327	-	114914	115327	UvsY-like recombination mediator	recombination protein uvsy	UvsY-like recombination mediator			
+14b44f850ef75067	relaxed	NC_000866.4	115404	115802	-	115404	115802	baseplate wedge subunit	baseplate wedge protein gp25	baseplate wedge subunit			
+079faf10920e09ca	relaxed	NC_000866.4	115802	116428	-	115802	116428	baseplate hub	baseplate hub assembly protein gp26	baseplate hub			
+77af9d087192b92b	relaxed	NC_000866.4	116479	117228	+	116479	117228	baseplate hub assembly protein	baseplate hub	baseplate hub assembly protein gp51			
+e3a2e4b33fed9d95	relaxed	NC_000866.4	117234	118403	+	117228	118403	baseplate hub	baseplate central spike complex protein gp27	baseplate hub			
+53f2fd2c8d6131c4	relaxed	NC_000866.4	118348	118881	+	118348	118881	baseplate hub distal subunit	baseplate hub assembly protein gp28	baseplate hub distal subunit			
+defaaef1149c92e3	relaxed	NC_000866.4	118878	120650	+	118878	120650	baseplate hub subunit and tail length	baseplate hub subunit and tail length	tape measure protein			
+434d52cd5b024734	relaxed	NC_000866.4	120659	121753	+	120659	121753	baseplate tail tube cap	baseplate tail tube cap	baseplate tail-tube junction protein gp48			
+a2438fb48883ddee	relaxed	NC_000866.4	121753	122715	+	121753	122715	tail tube	baseplate tail-tube junction protein gp54	tail tube			
+19d610543fc4eab4	relaxed	NC_000866.4	123454	125502	-	123454	125502	Alt-like RNA polymerase ADP-ribosyltransferase	nad(+)--arginine adp-ribosyltransferase	Alt-like RNA polymerase ADP-ribosyltransferase			
+d390aeb7268b8f61	relaxed	NC_000866.4	125745	127208	-	125745	127208	DNA ligase	ATP-dependent DNA ligase	dna ligase			
+de9a54d8496a0dac	relaxed	NC_000866.4	131181	131516	-	131181	131516	head morphogenesis	capsid assembly protein gp31	head morphogenesis			
+aa38561b99299651	relaxed	NC_000866.4	132118	132699	-	132118	132699	dCMP deaminase	dCMP deaminase	deoxycytidylate deaminase			
+0c5f056818e8bc28	relaxed	NC_000866.4	135132	135431	-	135132	135431	Rz-like spanin	Rz-like spanin	spanin, outer lipoprotein subunit			
+f6a20e6cbc305e9f	relaxed	NC_000866.4	135428	135781	-	135428	135781	Rz-like spanin	spanin, inner membrane subunit	Rz-like spanin			
+9f2fbd10c6fd3c34	relaxed	NC_000866.4	135772	136278	-	135772	136275	inhibitor of host transcription	inhibitor of host transcription	protein alc			
+1a87475ee1e8bf57	relaxed	NC_000866.4	136340	137464	-	136340	137464	RNA ligase and tail fiber protein attachment catalyst	RNA ligase and tail fiber protein attachment catalyst	rna ligase 1			
+e711e94db7cf90cc	relaxed	NC_000866.4	137517	137927	-	137517	137951	endonuclease	endonuclease ii	endonuclease			
+8e4e11793f91cc51	relaxed	NC_000866.4	139991	140416	-	139991	140416	homing endonuclease	probable mobile endonuclease e	homing endonuclease			
+5440f0fcccf57a47	relaxed	NC_000866.4	140416	142680	-	140416	142680	NrdA-like aerobic NDP reductase large subunit	ribonucleotide reductase large subunit	ribonucleoside-diphosphate reductase subunit alpha			
+fe05428cec5d7364	relaxed	NC_000866.4	143694	144431	-	143694	144431	homing endonuclease	intron-associated endonuclease 1	homing endonuclease			
+5df51a1a6c27fa20	relaxed	NC_000866.4	146948	147853	-	146948	147853	single strand DNA binding protein	single-stranded dna-binding protein	single strand DNA binding protein			
+4c1065557669e09d	relaxed	NC_000866.4	148543	149181	-	148543	149196	DNA helicase loader	dna helicase assembly protein	DNA helicase loader			
+774e0fcea77284b0	relaxed	NC_000866.4	149193	149531	-	149193	149531	late promoter transcriptional regulator	late promoter transcriptional regulator	late transcription coactivator			
+6c9c000affa16377	relaxed	NC_000866.4	149509	149778	-	149509	149778	transcriptional regulator	double-stranded dna-binding protein	transcriptional regulator			
+fdcc3459e9d92156	relaxed	NC_000866.4	149787	150704	-	149787	150704	RnaseH	ribonuclease h	exonuclease			
+5ebc639c3eae92f3	relaxed	NC_000866.4	150809	154678	+	150809	154678	tail fiber protein proximal subunit	long-tail fiber proximal subunit	tail fiber protein proximal subunit			
+7ceec3cf07bfec5c	relaxed	NC_000866.4	154687	155805	+	154687	155805	long tail fiber protein proximal connector	long tail fiber protein proximal connector	long-tail fiber protein gp35			
+375efb5c9ddfb64b	relaxed	NC_000866.4	155868	156533	+	155868	156533	hinge connector of long tail fiber protein distal connector	tail fiber protein	hinge connector of long tail fiber protein distal connector			
+326120539ea6bbad	relaxed	NC_000866.4	156542	159622	+	156542	159622	long tail fiber protein distal subunit	long-tail fiber protein gp37	long tail fiber protein distal subunit			
+dbc0a085b2f5acd1	relaxed	NC_000866.4	159649	160200	+	159649	160200	tail fiber assembly	tail fiber assembly protein	tail fiber assembly			
+a3270390a0dd560e	relaxed	NC_000866.4	160878	161150	-	160878	161150	anti-sigma factor	anti-sigma factor	10 kda anti-sigma factor			
+cd209f4f5578fe24	relaxed	NC_000866.4	161312	161590	-	161312	161590	inhibitor of MrcBC restriction	anti-restriction endonuclease	inhibitor of MrcBC restriction			
+c32e195044bfaba5	relaxed	NC_000866.4	162967	163602	-	162967	163602	MotA-like activator of middle period transcription	MotA-like activator of middle period transcription	middle transcription regulatory protein mota			
+53113257d736dbf4	relaxed	NC_000866.4	163876	165204	-	163876	165204	DNA topoisomerase II	dna topoisomerase medium subunit	DNA topoisomerase II			
+2f4e4f42f1a65dbe	relaxed	NC_000866.4	165585	166040	-	165585	166040	Ndd-like nucleoid disruption protein	nucleoid disruption protein	Ndd-like nucleoid disruption protein			
+012d415aafdf735c	relaxed	NC_000866.4	167103	167660	-	167103	167660	DenB-like DNA endonuclease IV	endonuclease iv	DenB-like DNA endonuclease IV			
+30b074968c319120	relaxed	NC_000866.4	167965	168903	-	167965	168903	RIIB lysis inhibitor	protein riib	RIIB lysis inhibitor			
+995928b4790ebe48	relaxed	NC_001416.1	2633	2839	+	2633	2839	head-tail adaptor Ad1	head completion protein	head-tail adaptor Ad1			
+2fa008ff045c9440	relaxed	NC_001416.1	2836	4437	+	2836	4437	portal protein	portal protein	portal protein b			
+0a3f6245469e71b0	relaxed	NC_001416.1	5747	6079	+	5747	6079	head decoration	capsid decoration protein	head decoration			
+a22aaf8e03057e25	relaxed	NC_001416.1	7163	7600	+	7202	7600	DNA packaging chaperone FI	DNA packaging chaperone FI	dna-packaging protein fi			
+17a17e29d45a9753	relaxed	NC_001416.1	7678	7965	+	7612	7965	head closure Hc1	head closure protein hc1	head closure Hc1			
+000a532e6d14988b	relaxed	NC_001416.1	7977	8555	+	7977	8555	tail protein	hypothetical protein	tail completion protein z			
+2bddbf2e433aa4c3	relaxed	NC_001416.1	8552	8947	+	8552	8947	tail terminator	tail tube terminator protein	tail terminator			
+5217655bec265ce5	relaxed	NC_001416.1	8955	9695	+	8955	9695	major tail protein	tail tube protein	major tail protein			
+67b30ebe7d7d97aa	relaxed	NC_001416.1	9711	10133	+	9711	10133	minor tail protein G	hypothetical protein	tail assembly protein g			
+46e643dd2a95de6a	relaxed	NC_001416.1	10160	10549	+	10115	10549	minor tail protein	putative minor tail protein	minor tail protein			
+1fb2934ec0ab874c	relaxed	NC_001416.1	10542	13103	+	10542	13103	tail length tape measure protein	tail length tape measure protein	tape measure protein			
+9e6cd1e263bdefa2	relaxed	NC_001416.1	13100	13429	+	13100	13429	minor tail protein	tail tip protein m	minor tail protein			
+1a447fc76de3afeb	relaxed	NC_001416.1	13429	14127	+	13429	14127	minor tail protein	minor tail protein	tail tip protein l			
+3bc8588f180a5d7b	relaxed	NC_001416.1	14276	14875	+	14276	14875	C40 family peptidase	tail tip assembly protein k	hypothetical protein			
+cc2a1ba665c2d4c0	relaxed	NC_001416.1	14773	15444	+	14773	15444	tail assembly protein	hypothetical protein	tail tip assembly protein i			
+0aca963ba4b5655c	relaxed	NC_001416.1	15505	18903	+	15505	18903	central tail fiber J	tail fiber protein	tip attachment protein j			
+60c22aa4a49460a4	relaxed	NC_001416.1	18965	19585	+	18965	19585	Lom outer membrane protein	outer membrane protein lom	Lom outer membrane protein			
+0684fde2164c9e7c	relaxed	NC_001416.1	21973	22557	+	21973	22557	tail fiber assembly	tail fiber assembly	tail fiber assembly protein			
+4f576b79fb0a9a23	relaxed	NC_001416.1	22686	23918	-	22686	23918	ea47	protein ea47	hypothetical protein			
+02d48706a66ce47f	relaxed	NC_001416.1	24509	25399	-	24509	25399	HNH endonuclease	protein ea31	HNH endonuclease			
+9b905ca59c0bb2c8	relaxed	NC_001416.1	25396	26973	-	25396	26973	AAA family ATPase	hypothetical protein	protein ea59			
+40826465fe926a21	relaxed	NC_001416.1	29374	29655	-	29374	29655	ea8.5	hypothetical protein	protein ea8.5			
+4874f9e9de3712ad	relaxed	NC_001416.1	29847	30347	-	29847	30395	ead/Ea22-like family protein	protein ea22	hypothetical protein			
+b403be21c958f6a1	relaxed	NC_001416.1	32025	32810	-	32025	32810	RecT-like ssDNA annealing protein	recombination protein bet	RecT-like ssDNA annealing protein			
+2bea8bcb19535fa4	relaxed	NC_001416.1	32816	33232	-	32816	33232	gam-like host nuclease inhibitor	host-nuclease inhibitor protein gam	gam-like host nuclease inhibitor			
+e6593d0213f6748d	relaxed	NC_001416.1	34087	34287	-	34087	34287	restriction alleviation ral	restriction inhibitor protein ral	restriction alleviation ral			
+c784ace5c0039877	relaxed	NC_001416.1	34485	35036	+	34482	35036	SieB superinfection exclusion	superinfection exclusion protein b	SieB superinfection exclusion			
+7da1ab244b1c194f	relaxed	NC_001416.1	35037	35438	-	35037	35438	anti-termination protein N-like	anti-termination protein N-like	antitermination protein n			
+d7b01bef90743aea	relaxed	NC_001416.1	35825	36259	-	35825	36259	RexB-like exclusion protein	protein rexb	RexB-like exclusion protein			
+28b42f71d854f3ae	relaxed	NC_001416.1	36275	37114	-	36275	37114	RexA-like exclusion protein	RexA-like exclusion protein	protein rexa			
+bb9c06cac262c8aa	relaxed	NC_001416.1	37227	37940	-	37227	37940	LexA family transcriptional regulator	helix-turn-helix transcriptional regulator	hypothetical protein			
+356d0cbef6f9d5f0	relaxed	NC_001416.1	38041	38241	+	38041	38241	Cro/CI family transcriptional regulator	regulatory protein cro	transcriptional repressor			
+5c870436f53c9679	relaxed	NC_001416.1	38686	39585	+	38686	39585	replication initiation O-like	replication protein o	replication initiation O-like			
+5cfee7945651ad0d	relaxed	NC_001416.1	39582	40283	+	39582	40283	DNA replication protein	helicase loader	hypothetical protein			
+202bc6ee8f7ed3fa	relaxed	NC_001416.1	40280	40570	+	40280	40570	Ren-like exclusion protein	Ren-like exclusion protein	protein ren			
+4e0a2b5b77ac213f	relaxed	NC_001416.1	40644	41084	+	40644	41084	NinB/ Orf homologous recombination mediator	NinB/ Orf homologous recombination mediator	protein ninb			
+ca9cca0a78d8afec	relaxed	NC_001416.1	42429	43043	+	42429	43043	NinG/ Rap DNA junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	protein ning			
+395ecdc53f02a786	relaxed	NC_001416.1	43886	44509	+	43886	44509	antitermination protein	antitermination protein q	anti-termination protein Q-like			
+b03da99b45869013	relaxed	NC_001416.1	45186	45509	+	45186	45509	holin/anti-holin	holin/anti-holin	antiholin			
+2e4da1532be692dc	relaxed	NC_001416.1	45966	46427	+	45966	46427	Rz-like spanin	spanin, inner membrane subunit	Rz-like spanin			
+a3654d67cbfce480	relaxed	NC_001416.1	46459	46752	-	46459	46752	Bor-like outer membrane protein	lipoprotein bor	Bor-like outer membrane protein			
+619e6b73caaad603	relaxed	NC_001604.1	925	1278	+	925	1278	ocr-like anti-restriction	ocr-like anti-restriction	protein ocr			
+1ec0e4491502cdd2	relaxed	NC_001604.1	2021	3100	+	2021	3100	serine-threonine kinase	serine-threonine kinase	protein kinase 0.7			
+b029dccd0747d105	relaxed	NC_001604.1	6137	6394	+	6137	6394	dGTPase inhibitor; target for F exclusion	dGTPase inhibitor target for F exclusion	inhibitor of dgtpase			
+a5f1d6292fd23c3b	relaxed	NC_001604.1	8166	8756	+	8166	8756	nucleotide kinase	nucleotide kinase gp1.7	nucleotide kinase			
+f917ca9d36f75300	relaxed	NC_001604.1	8892	9092	+	8898	9092	RNA polymerase inhibitor	bacterial rna polymerase inhibitor	RNA polymerase inhibitor			
+651ac3805a2b3ad2	relaxed	NC_001604.1	9158	9856	+	9158	9856	Gp2.5-like ssDNA binding protein and ssDNA annealing protein	Gp2.5-like ssDNA binding protein and ssDNA annealing protein	single-stranded dna-binding protein			
+c38cb997ef185073	relaxed	NC_001604.1	9857	10276	+	9857	10276	endonuclease	hnh endonuclease	endonuclease			
+bbf8eeacff2431bc	relaxed	NC_001604.1	10257	10706	+	10257	10706	endonuclease	endonuclease i	endonuclease			
+ee0d52ac3a63683d	relaxed	NC_001604.1	10706	11161	+	10706	11161	amidase	amidase	endolysin			
+30f1501909708e47	relaxed	NC_001604.1	11225	11590	+	11225	11590	HNH endonuclease	protein 3.8	HNH endonuclease			
+a09e00fb7c430964	relaxed	NC_001604.1	11565	13265	+	11565	13265	DNA primase/helicase	DNA primase/helicase	dna helicase/primase			
+fc87380a75f4069d	relaxed	NC_001604.1	14353	16467	+	14353	16467	DNA polymerase I	DNA polymerase I	family-a dna polymerase			
+34d9a6d0efeae737	relaxed	NC_001604.1	16851	17150	+	16851	17150	DUF2675 domain-containing protein	protein suppressor of silencing	hypothetical protein			
+ff6a5fe2b822f3ba	relaxed	NC_001604.1	17359	17517	+	17359	17517	Gp5.9-like inihibitor of recBCD nuclease	Gp5.9-like inihibitor of recBCD nuclease	gene 5.9 protein			
+e970a0e85e9bf71c	relaxed	NC_001604.1	18394	18507	+	18394	18507	DUF5516 domain-containing protein	protein 6.3	hypothetical protein			
+bf1f2eac3a84ed6b	relaxed	NC_001604.1	18605	18859	+	18605	18859	DUF2717 domain-containing protein	protein 6.5	hypothetical protein			
+4c3bee9130bfd176	relaxed	NC_001604.1	18864	19130	+	18864	19130	DUF5476 family protein	protein 6.7	hypothetical protein			
+a83e6aa8120b8c22	relaxed	NC_001604.1	19130	19531	+	19130	19531	host range and adsorption protein	protein 7	host range and adsorption protein			
+d1d9bc34b41e38d5	relaxed	NC_001604.1	19535	19834	+	19535	19834	host range and adsorption protein	protein 7.3	host range and adsorption protein			
+c734070d9571741c	relaxed	NC_001604.1	20225	21850	+	20240	21850	head-tail adaptor	head-tail adaptor	portal protein			
+7bf286d81eda5d0b	relaxed	NC_001604.1	21950	22873	+	21950	22873	head assembly	head assembly	capsid assembly scaffolding protein			
+e280293e3fe477c6	relaxed	NC_001604.1	24228	24818	+	24228	24818	tail protein	tail protein	tail tubular protein gp11			
+2214c234f2bca1d1	relaxed	NC_001604.1	24842	27226	+	24842	27226	tail protein	tail tubular protein gp12	tail protein			
+0706d315d02fcf76	relaxed	NC_001604.1	27307	27723	+	27307	27723	internal virion protein	internal virion protein	probable scaffold protein gp13			
+5814831e7f36d569	relaxed	NC_001604.1	27728	28318	+	27728	28318	internal virion protein	internal virion protein gp14	internal virion protein			
+83daed9a9c5e9f2a	relaxed	NC_001604.1	28325	30568	+	28325	30568	internal virion protein	internal virion protein gp15	internal virion protein			
+9c1ffd4fad8782b7	relaxed	NC_001604.1	30595	34551	+	30595	34551	internal virion protein with endolysin domain	peptidoglycan transglycosylase gp16	internal virion protein with endolysin domain			
+ae6ce5040587bfd9	relaxed	NC_001604.1	36553	36822	+	36553	36822	terminase small subunit	terminase, small subunit gp18	terminase small subunit			
+14c8042cada795c0	relaxed	NC_001604.1	36917	37348	+	36917	37348	Rz-like spanin	Rz-like spanin	spanin, inner membrane subunit			
+5c16be08c70dfb81	relaxed	NC_005859.1	124	858	-	124	858	deoxynucleoside-5'-monophosphatase	5'-deoxynucleotidase	polynucleotide kinase			
+abc993a65cc3b3d7	relaxed	NC_005859.1	1706	3376	-	1706	3376	DNA transfer protein	protein a1	DNA transfer protein			
+37375f4ca0352d46	relaxed	NC_005859.1	3727	4134	-	3727	4134	DNA binding protein	DNA binding protein	protein a2			
+65b4e25bc868bdee	relaxed	NC_005859.1	5411	5929	-	5411	5929	putative H-N-H-endonuclease P-TflVII	hnh endonuclease	hypothetical protein			
+507a887f16849fb0	relaxed	NC_005859.1	18646	18936	-	18646	18936	putative thioredoxin	thioredoxin domain	thioredoxin domain			
+259043288fde191f	relaxed	NC_005859.1	19931	20344	-	19931	20344	endolysin	endolysin	l-alanyl-d-glutamate peptidase			
+595d02d0f54f5c9a	relaxed	NC_005859.1	21766	22518	-	21766	22518	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	deoxynucleoside-5'-monophosphate kinase			
+30e3ed04f1e6b3ca	relaxed	NC_005859.1	23245	23742	-	23245	23742	H-N-H-endonuclease F-TflVI	HNH endonuclease	hnh endonuclease			
+f1726a8f6bef34f6	relaxed	NC_005859.1	25638	26150	-	25638	26150	H-N-H-endonuclease F-TflV	HNH endonuclease	hnh endonuclease			
+4def697b96edd4ef	relaxed	NC_005859.1	27656	28024	-	27656	28024	putative acetyltransferase-related protein	hypothetical protein	autonomous glycyl radical cofactor			
+c3b890767ce63070	relaxed	NC_005859.1	31022	31606	-	31022	31606	HNH endonuclease	HNH endonuclease	h-n-h endonuclease f-tfli			
+90373519d905308e	relaxed	NC_005859.1	36379	37062	-	36379	37062	HNH endonuclease	HNH endonuclease	h-n-h endonuclease f-tfliv			
+118c967910d79134	relaxed	NC_005859.1	39791	40738	-	39791	40738	lipoprotein	lipoprotein	band 7/spfh family protein			
+1317729c7cda43ea	relaxed	NC_005859.1	47861	48394	-	47861	48394	putative dihydrofolate reductase	dihydrofolate reductase	dihydrofolate reductase			
+77f18e81d945e750	relaxed	NC_005859.1	48391	49536	-	48391	49536	putative aerobic ribonucleoside diphosphate reductase, small subunit	conserved phage protein of unknown function	ribonucleoside diphosphate reductase small subunit			
+470ae3177322a2cc	relaxed	NC_005859.1	49536	50060	-	49536	50060	putative H-N-H-endonuclease P-TflVIII	HNH endonuclease	hnh endonuclease			
+1645b68ea4249b92	relaxed	NC_005859.1	50163	52598	-	50163	52598	ribonucleoside-diphosphate reductase large subunit	ribonucleotide reductase large subunit	ribonucleotide reductase large subunit			
+913b007330b80529	relaxed	NC_005859.1	53961	55685	+	53961	55685	NrdD-like anaerobic ribonucleotide reductase large subunit	NrdD-like anaerobic ribonucleotide reductase large subunit	anaerobic ribonucleoside-triphosphate reductase			
+383cc6a9133e1d5a	relaxed	NC_005859.1	59545	62331	+	59545	62331	replication origin binding	replication origin binding	putative replication origin binding protein			
+e8e379c9d302f5f8	relaxed	NC_005859.1	67310	68077	+	67310	68077	D5 protein	putative transcription factor d5	transcriptional regulator, D5-like			
+e7721c3eb00955c1	relaxed	NC_005859.1	68109	69617	+	68109	69617	D6 protein	dnab-like replicative helicase	DnaB-like replicative helicase			
+2d755b8bd1ab4b67	relaxed	NC_005859.1	69614	70147	+	69614	70147	putative H-N-H-endonuclease P-TflX	hnh endonuclease	HNH endonuclease			
+441970c36e97131d	relaxed	NC_005859.1	70144	71034	+	70144	71034	putative DNA replication primase	dna primase	DNA primase			
+46f99eea0d70bf36	relaxed	NC_005859.1	71097	73664	+	71097	73664	DNA polymerase	family-a dna polymerase	DNA polymerase			
+63ac1aa22274d23d	relaxed	NC_005859.1	74151	75503	+	74151	75503	putative ATP-dependent helicase	DNA helicase	probable helicase d10			
+f61b29ed6ce6dfbd	relaxed	NC_005859.1	76001	76774	+	76001	76774	single strand DNA binding protein	single strand DNA binding protein	probable ssdna-binding protein			
+358dd4db3c6d4e48	relaxed	NC_005859.1	76811	77788	+	76811	77788	putative recombination endonuclease, subunit D12	probable exonuclease subunit 1	SbcD-like subunit of palindrome specific endonuclease			
+1400d5320d622f7c	relaxed	NC_005859.1	77769	79607	+	77769	79607	putative recombination endonuclease, subunit D13	probable exonuclease subunit 2	SbcC-like subunit of palindrome specific endonuclease			
+efacceb7fbf5138d	relaxed	NC_005859.1	79611	80093	+	79611	80093	RusA-like Holliday junction resolvase	RusA-like Holliday junction resolvase	protein d14			
+c26f168de6e0807b	relaxed	NC_005859.1	80093	80968	+	80093	80968	flap endonuclease	flap endonuclease	exonuclease			
+94e7cf25d3cfa613	relaxed	NC_005859.1	80965	81411	+	80965	81411	dUTPase	deoxyuridine 5'-triphosphate nucleotidohydrolase	dUTPase			
+e3db591302f3f202	relaxed	NC_005859.1	81865	86055	-	81865	86055	tail fiber protein	side tail fiber protein pb1	tail fiber protein			
+02d104c5e72c1ee4	relaxed	NC_005859.1	86294	86479	-	86294	86479	collar tail protein for L-shaped tail fibre attachment	collar tail protein for L-shaped tail fibre attachment	collar protein p132			
+a6be804b968939a3	relaxed	NC_005859.1	86484	88550	-	86484	88550	straight fibre tail protein	straight fiber protein pb4	straight fibre tail protein			
+db7b620a6feea257	relaxed	NC_005859.1	88551	91400	-	88551	91400	tail protein Pb3	baseplate hub protein pb3	central tail fiber J			
+f391f2488c9ed891	relaxed	NC_005859.1	91397	92011	-	91397	92011	distal tail protein	distal tail protein pb9	distal tail protein			
+40d09163786cc9a3	relaxed	NC_005859.1	92121	95780	-	92121	95780	tail length tape measure protein	tape measure protein pb2 precursor	tail length tape measure protein			
+ade344c74f30cb34	relaxed	NC_005859.1	95777	96574	-	95777	96529	endonuclease	endonuclease	putative endonuclease			
+44675d79ee241e28	relaxed	NC_005859.1	97458	98354	-	97458	98354	base plate tail tube protein	baseplate tube protein p140	base plate tail tube protein			
+6b912ade74f024c0	relaxed	NC_005859.1	98359	99753	-	98359	99753	major tail protein	tail tube protein pb6	major tail protein			
+a91222b17aaf54bc	relaxed	NC_005859.1	99780	100265	-	99780	100265	tail terminator	tail tube terminator protein p142	tail terminator			
+69c2eac2d456f203	relaxed	NC_005859.1	100269	101036	-	100269	101036	tail completion or Neck1 protein	tail completion protein p143	tail completion or Neck1 protein			
+04cd065f62ce9f8f	relaxed	NC_005859.1	101036	101548	-	101036	101548	head-tail adaptor	head-tail adaptor	head completion protein			
+3a1306ac9f2d72dc	relaxed	NC_005859.1	103002	103634	-	103002	103634	head maturation protease	prohead protease	head maturation protease			
+516e2ae805b109c6	relaxed	NC_005859.1	103638	104132	-	103638	104132	Hoc-like head decoration	tail protein	decoration protein			
+f23d605d6067a3b6	relaxed	NC_005859.1	105773	106606	-	105773	106606	endonuclease	endonuclease	putative endonuclease			
+bd46a33a6d5c8dc7	relaxed	NC_005859.1	107934	108416	-	107934	108416	terminase small subunit	terminase small subunit	probable terminase, small subunit			
+c4185bb71d16c3df	relaxed	NC_005859.1	108427	110349	-	108427	110349	receptor binding tail protein	receptor-binding protein pb5	receptor binding tail protein			
+66c7d9d72b39102b	relaxed	NC_005859.1	110429	110662	+	110429	110662	Cor superinfection exclusion protein	lytic conversion lipoprotein	Cor superinfection exclusion protein			
+44ca9cb5fa9e6539	relaxed	NC_001422.1	2	136	+	51	221	K	dna replication initiation	DNA replication initiation			
+ad97cd9b2ab485cd	relaxed	NC_001422.1	133	393	+	133	393	terminase	c protein	terminase			
+a1a99b1b9e881625	relaxed	NC_001422.1	390	848	+	390	848	head morphogenesis	head morphogenesis	external scaffolding protein d			
+86e76caab9864c78	relaxed	NC_001422.1	848	964	+	848	964	DNA condensation	dna-binding protein j	DNA condensation			
+329349fcfb647e48	relaxed	NC_001422.1	1001	2284	+	1001	2284	major head protein	major head protein	capsid protein f			
+eb70c9ed5bee1b55	relaxed	NC_001422.1	2395	2922	+	2395	2922	major spike protein	major spike protein g	major spike protein			
+0b2f3090a01c646b	relaxed	NC_001422.1	2931	3917	+	2931	3917	pilot protein for DNA ejection	minor spike protein	pilot protein for DNA ejection			
+beec691ad8640d90	relaxed	NC_002371.2	3893	4804	+	3893	4804	head scaffolding protein	head scaffolding protein	scaffolding protein			
+a281e12a862ea8e4	relaxed	NC_002371.2	4804	6096	+	4804	6096	head protein	major capsid protein	head protein			
+ba301cedc87a0a9d	relaxed	NC_002371.2	6328	6828	+	6328	6828	head-tail adaptor Ad3	head-to-tail adapter gp4	head-tail adaptor Ad3			
+ac7e487adf69fd4c	relaxed	NC_002371.2	6788	8206	+	6788	8206	head closure Hc3	head closure Hc3	tail hub protein gp10			
+a9bdd86fd4097483	relaxed	NC_002371.2	8210	8911	+	8210	8911	tail needle protein	tail needle protein	tail needle protein gp26			
+0a66ccc7ef9f5032	relaxed	NC_002371.2	8911	9366	+	8911	9366	head morphogenesis	protein gp14	head morphogenesis			
+7c69e644d512f05c	relaxed	NC_002371.2	9369	10058	+	9369	10058	DNA ejection	DNA ejection	dna transfer protein gp7			
+d150f43c44ae4d78	relaxed	NC_002371.2	10069	11484	+	10069	11484	released from the phage upon host infection	internal virion protein gp20	released from the phage upon host infection			
+43267aa617cf69bd	relaxed	NC_002371.2	11484	13313	+	11484	13313	head morphogenesis	internal virion protein gp16	head morphogenesis			
+ba200f5c68de35b2	relaxed	NC_002371.2	14519	15106	-	14519	14770	partition protein ATPase	regulatory protein mnt	partition protein ATPase			
+cb36f1a959f00776	relaxed	NC_002371.2	15091	15993	+	15091	15993	Ant	hypothetical protein	antirepressor protein ant			
+713d0676e6476c63	relaxed	NC_002371.2	19713	20690	-	19713	20645	GtrB glycosyltransferase for O-antigen conversion	bactoprenol glucosyl transferase	GtrB glycosyltransferase for O-antigen conversion			
+077cc5baf053422e	relaxed	NC_002371.2	20642	21004	-	20642	21004	GtrA-like O-antigen conversion	GtrA-like O-antigen conversion	bactoprenol-linked glucose translocase			
+526d61a495ef34e3	relaxed	NC_002371.2	22746	23381	-	22746	23381	EaC	hypothetical protein	eac protein			
+ac4067a32f75395d	relaxed	NC_002371.2	23758	24711	-	23758	24711	EaA	hypothetical protein	eaa protein			
+4bb4c6851a10cf86	relaxed	NC_002371.2	24715	24903	-	24715	24909	EaI	eai protein	hypothetical protein			
+2c5850cfab813123	relaxed	NC_002371.2	24906	25616	-	24906	25499	EaD	ead protein	hypothetical protein			
+29348094b15da7c2	relaxed	NC_002371.2	25496	25855	-	25496	25855	EaF	hypothetical protein	eaf protein			
+b5a7471dc1a29160	relaxed	NC_002371.2	25964	26461	-	25964	26461	EaE	eae protein	hypothetical protein			
+49bc9596d54cd383	relaxed	NC_002371.2	26630	26923	-	26630	26923	abc2 anti-RecBCD	abc2 anti-RecBCD	anti-recbcd protein 2			
+6c4abfac5fd2b2f7	relaxed	NC_002371.2	26970	27254	-	26970	27254	Abc1	transcriptional regulator, D5-like	anti-recbcd protein 1			
+e91eca1fcb2f82f4	relaxed	NC_002371.2	27254	27871	-	27254	27871	Erf-like ssDNA annealing protein	Erf-like ssDNA annealing protein	essential recombination function protein			
+b643e57ecd20bd67	relaxed	NC_002371.2	27868	28011	-	27868	28011	Erf recombination cofactor Arf	accessory recombination function protein	Erf recombination cofactor Arf			
+49f0f30fd21e4c58	relaxed	NC_002371.2	28001	28189	-	28001	28189	Kil protein for bacterial septation inhibition	protein kil	Kil protein for bacterial septation inhibition			
+01cf4c7ca2edf87c	relaxed	NC_002371.2	28170	28328	-	28170	28328	CIII anti-termination	CIII anti-termination	regulatory protein c3			
+bc42b3354c6b1f35	relaxed	NC_002371.2	28414	28725	-	28414	28725	superinfection exclusion	superinfection exclusion	superinfection exclusion protein			
+a7681b774f6e6a88	relaxed	NC_002371.2	29349	29543	-	29349	29543	restriction alleviation ral	restriction inhibitor protein ral	restriction alleviation ral			
+b594b02283760302	relaxed	NC_002371.2	31013	31663	-	31013	31663	C2	hypothetical protein	helix-turn-helix transcriptional regulator			
+624a1d63384dfd73	relaxed	NC_002371.2	31744	31929	+	31744	31929	transcriptional regulator	transcriptional regulator	regulatory protein cro			
+630e818c6ad5c7e4	relaxed	NC_002371.2	32036	32314	+	32036	32314	CII-like transcriptional activator	CII-like transcriptional activator	transcriptional activator protein c1			
+a1e7ea550785f1de	relaxed	NC_002371.2	32488	33303	+	32488	33303	replication initiation O-like	replication initiation O-like	dna replication protein gp18			
+aaa3264c3b0349b2	relaxed	NC_002371.2	34750	35187	+	34750	35187	NinB/ Orf homologous recombination mediator	NinB/ Orf homologous recombination mediator	protein ninb			
+2875f5ea88da5042	relaxed	NC_002371.2	35184	35357	+	35184	35357	NinD	protein nind	hypothetical protein			
+603da021f63c2c76	relaxed	NC_002371.2	35324	35500	+	35324	35500	NinE	hypothetical protein	protein nine			
+c4296b787ebee258	relaxed	NC_002371.2	35497	35835	+	35497	35835	NinX	putative protein ninx	hypothetical protein			
+53edda5bc251875a	relaxed	NC_002371.2	35828	36004	+	35828	36004	NinF	hypothetical protein	protein ninf			
+096e5fb6116f4643	relaxed	NC_002371.2	35997	36608	+	35997	36608	NinG/ Rap DNA junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	protein ning			
+c9ac8f5c44e88c4a	relaxed	NC_002371.2	36605	36829	+	36605	36829	NinY	putative protein niny	hypothetical protein			
+def1c5099ccc86a6	relaxed	NC_002371.2	36856	37029	+	36826	37029	NinH	hypothetical protein	protein ninh			
+f0d23ee8b3c8117b	relaxed	NC_002371.2	37186	37809	+	37186	37809	transcription antitermination protein	anti-termination protein Q-like	antitermination protein q			
+4215aa4f715283cd	relaxed	NC_002371.2	38244	38570	+	38244	38570	holin/anti-holin	antiholin	holin/anti-holin			
+5e09080feb55adb0	relaxed	NC_002371.2	38988	39425	+	38988	39425	Rz-like spanin	Rz-like spanin	spanin, inner membrane subunit			
+fd7af093e162bbab	relaxed	NC_002371.2	39644	40180	+	39575	40180	anti-repressor	Rha-like transcriptional regulator	uncharacterized 22.8 kda protein in gp15-gp3 intergenic region			
+94fc8ff668e510f4	relaxed	NC_000929.1	339	863	-	339	863	transcriptional repressor	repressor protein c	transcriptional repressor			
+3b876b0f58e17917	relaxed	NC_000929.1	1099	1326	+	1099	1326	transcriptional repressor	negative regulator of transcription	transcriptional repressor			
+93b3ae35123e88c6	relaxed	NC_000929.1	1328	3319	+	1328	3319	Mu transposase C-terminal domain-containing protein	dde-recombinase a	hypothetical protein			
+eebb3480d2951b4f	relaxed	NC_000929.1	3358	4296	+	3358	4296	DNA transposition protein	DNA transposition protein	atp-dependent target dna activator b			
+b8dcf52b075f7fa5	relaxed	NC_000929.1	4312	4539	+	4315	4539	Kil protein for bacterial septation inhibition	Kil protein for bacterial septation inhibition	protein kil			
+ef4efa33580ffe4e	relaxed	NC_000929.1	5801	6325	+	5801	6325	host nuclease inhibitor	host nuclease inhibitor	putative dna ends protecting protein gam			
+124a3a7b733faa52	relaxed	NC_000929.1	8233	8784	+	8233	8784	regulatory protein GemA	hypothetical protein	gema protein			
+3ec63895c00ab344	relaxed	NC_000929.1	8781	9170	+	8781	9170	late transcriptional activator	middle operon regulator	late transcriptional activator			
+47c1e2d78b75c6e1	relaxed	NC_000929.1	9963	10385	+	9963	10385	late transcriptional activator	late transcription activator c	late transcriptional activator			
+3ba5746df56c281c	relaxed	NC_000929.1	10477	10995	+	10480	10995	endolysin	endolysin	sar-endolysin			
+859ed84bfe2f490d	relaxed	NC_000929.1	11718	12017	+	11718	12017	DUF2730 family protein	hypothetical protein	releasin protein			
+0c354c13fbf73a94	relaxed	NC_000929.1	12316	12891	+	12316	12891	terminase small subunit	probable terminase, small subunit gp27	terminase small subunit			
+878daed9d44ff9b7	relaxed	NC_000929.1	12707	14554	+	12899	14554	putative portal protein	hypothetical protein	probable terminase, large subunit gp28			
+07396d076c76309e	relaxed	NC_000929.1	16073	17392	+	16073	17392	minor head protein and DNA pilot	minor head protein and DNA pilot	putative capsid assembly protein f			
+9d7d45ce489190ed	relaxed	NC_000929.1	17401	17859	+	17389	17859	tail completion or Neck1 protein	tail completion or Neck1 protein	putative capsid assembly protein g			
+bb9586e8de86f0d6	relaxed	NC_000929.1	18056	19141	+	18056	19141	head maturation protease	head maturation protease	protease i			
+e2b3ada06b7ac8a7	relaxed	NC_000929.1	20529	20954	+	20529	20954	head-tail adaptor	gene product j	head-tail adaptor			
+69c7e7570eed7013	relaxed	NC_000929.1	20954	21502	+	20954	21502	portal protein	probable tail terminator protein	portal protein			
+3fd4c973315b669e	relaxed	NC_000929.1	21486	21692	+	21489	21692	DUF2635 domain-containing protein	putative sheath terminator protein	hypothetical protein			
+b5c0dddab96cba66	relaxed	NC_000929.1	21689	23176	+	21689	23176	tail sheath	tail sheath	tail sheath protein			
+147cdb05f95c4e63	relaxed	NC_000929.1	23552	23986	+	23552	23986	tail assembly chaperone	probable tail assembly protein gp41	tail assembly chaperone			
+1d9307270e59b7e6	relaxed	NC_000929.1	24131	26203	+	24131	26203	tail length tape measure protein	probable tape measure protein	tail length tape measure protein			
+b44de53b382ee891	relaxed	NC_000929.1	26208	27695	+	26208	27695	DNA circularization N-terminal domain-containing protein	dna circularization protein n	hypothetical protein			
+23f24e970b9d6353	relaxed	NC_000929.1	27688	28827	+	27688	28827	baseplate hub	baseplate hub protein gp44	baseplate hub			
+3d3562cd6189986c	relaxed	NC_000929.1	28863	29408	+	28815	29408	baseplate assembly protein V	baseplate puncturing device gp45	baseplate spike			
+80d6dd0999f25799	relaxed	NC_000929.1	29405	29842	+	29405	29842	baseplate wedge subunit	baseplate protein gp46	baseplate wedge subunit			
+1221f59570ddb22e	relaxed	NC_000929.1	29843	30925	+	29843	30925	baseplate protein	baseplate protein	baseplate protein gp47			
+be44462d2b72c4a3	relaxed	NC_000929.1	30916	31458	+	30916	31458	baseplate wedge subunit	baseplate wedge subunit	baseplate protein gp48			
+de4714a8f8b7b574	relaxed	NC_000929.1	31458	32972	+	31458	32972	tail fiber protein	tail fiber protein s	tail fiber protein			
+974ccf92bf9f3606	relaxed	NC_000929.1	32975	33502	+	32975	33502	tail fiber assembly protein	tail fiber assembly protein u	tail fiber assembly protein			
+ee92068ec493d606	relaxed	NC_000929.1	33531	34064	-	33531	34064	tail fiber assembly protein	tail fiber assembly protein u'	tail fiber assembly protein			
+5cc90bf64b56e70c	relaxed	NC_000929.1	34067	35263	-	34067	35053	tail fiber protein	tail fiber protein	tail fiber protein s'			
+fae87b56aa791ed5	relaxed	NC_000929.1	35768	35956	+	35768	35956	gpCom control of modification	translational activator com	gpCom control of modification			
+95a966ef4ce67c57	relaxed	NC_000929.1	35877	36602	+	35877	36602	Mom-like DNA modification protein	Mom-like DNA modification protein	methylcarbamoylase mom			

@@ -1,0 +1,3159 @@
+{
+  "annotation_review": {
+    "high_priority": 9,
+    "path": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/annotation_review.tsv",
+    "records": 320
+  },
+  "command": "run",
+  "comparative_analysis": {
+    "inphared": {
+      "commands": [
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mash",
+          "dist",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/inphared/2026-04-07/inphared.msh",
+          "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/analysis_genome.fasta"
+        ]
+      ],
+      "database": "INPHARED",
+      "matches": [
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": 1.0,
+          "genome_length_ratio": 1.0,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 100.0,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0,
+          "matching_hashes": "1000/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 1,
+          "reference_accession": "AF158101",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "CONFIRMED_IDENTICAL_SEQUENCE",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mheyie00/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mheyie00/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mheyie00/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mheyie00/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": 1.0,
+          "genome_length_ratio": 1.0,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 100.0,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0,
+          "matching_hashes": "1000/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 2,
+          "reference_accession": "NC_000866",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "CONFIRMED_IDENTICAL_SEQUENCE",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ybzk3lhi/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ybzk3lhi/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ybzk3lhi/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ybzk3lhi/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9998875220515978,
+          "genus_threshold_percent": null,
+          "host_genus": "Unspecified",
+          "intergenomic_similarity_percent": 99.84966945034654,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.000956583,
+          "matching_hashes": "961/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 3,
+          "reference_accession": "KJ477684",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Tequatrovirus T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-j8joqc_0/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-j8joqc_0/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-j8joqc_0/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-j8joqc_0/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9998993606440919,
+          "genus_threshold_percent": null,
+          "host_genus": "Enterobacteria",
+          "intergenomic_similarity_percent": 99.85085138998218,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.000981871,
+          "matching_hashes": "960/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 4,
+          "reference_accession": "HM137666",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Enterobacteria phage T4T",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-dcbh95oe/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-dcbh95oe/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-dcbh95oe/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-dcbh95oe/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9996271439224459,
+          "genus_threshold_percent": null,
+          "host_genus": "Enterobacteria",
+          "intergenomic_similarity_percent": 99.80356688279792,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0010072,
+          "matching_hashes": "959/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 99.99348738625127,
+          "rank": 5,
+          "reference_accession": "KM607003",
+          "reference_aligned_percent": 99.9934898145189,
+          "reference_description": "Enterobacteria phage RB59",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-w2gw4zja/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-w2gw4zja/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-w2gw4zja/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-w2gw4zja/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999703980865323,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.84315814393938,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0010072,
+          "matching_hashes": "959/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 6,
+          "reference_accession": "MT984581",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-wipxhoi6/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-wipxhoi6/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-wipxhoi6/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-wipxhoi6/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.999893441312803,
+          "genus_threshold_percent": null,
+          "host_genus": "Unspecified",
+          "intergenomic_similarity_percent": 99.85085303549467,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0010072,
+          "matching_hashes": "959/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "rank": 7,
+          "reference_accession": "OZ035787",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Tequatrovirus T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mfdj53r_/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mfdj53r_/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mfdj53r_/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-mfdj53r_/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999585560943264,
+          "genus_threshold_percent": null,
+          "host_genus": "Enterobacteria",
+          "intergenomic_similarity_percent": 99.82717570214282,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.00103256,
+          "matching_hashes": "958/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 99.99348738625127,
+          "rank": 8,
+          "reference_accession": "KM607002",
+          "reference_aligned_percent": 99.99348711633195,
+          "reference_description": "Enterobacteria phage RB55",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ai72i8ji/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ai72i8ji/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ai72i8ji/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-ai72i8ji/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9951451424782272,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.5952846428906,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.00115999,
+          "matching_hashes": "953/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 99.51984274998075,
+          "rank": 9,
+          "reference_accession": "OZ209057",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-_f1qntxi/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-_f1qntxi/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-_f1qntxi/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-_f1qntxi/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmation_method": "built-in exact nucleotide comparison; no ANI inferred",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9938011758228096,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 99.5308504706468,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "mash_distance": 0.0011856,
+          "matching_hashes": "952/1000",
+          "p_value": 0.0,
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 99.39077458659705,
+          "rank": 10,
+          "reference_accession": "OZ209023",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T4",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_commands": [
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-d_7_4911/query.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-d_7_4911/reference.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ],
+            [
+              "/opt/anaconda3/envs/phagemine_v12_dev/bin/blastn",
+              "-query",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-d_7_4911/reference.fna",
+              "-subject",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-ictv-d_7_4911/query.fna",
+              "-word_size",
+              "7",
+              "-reward",
+              "2",
+              "-penalty",
+              "-3",
+              "-gapopen",
+              "5",
+              "-gapextend",
+              "2",
+              "-outfmt",
+              "6 qstart qend length nident bitscore"
+            ]
+          ],
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        }
+      ],
+      "resource_manifest": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/inphared/2026-04-07/genome_manifest.json",
+      "resource_version": "2026-04-07",
+      "scientific_interpretation": "Mash selects candidate references only. PhageMine reports its own bidirectional BLASTN length-normalized similarity and does not claim VIRIDIC equivalence or make an ICTV assignment. Taxonomic boundary interpretation is withheld for partial or poorly aligned queries.",
+      "status": "COMPLETE",
+      "unique_reference_summaries": [
+        {
+          "best_mash_distance": 0.0,
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmed_identity": 1.0,
+          "genome_length_ratio": 1.0,
+          "genus_threshold_percent": null,
+          "host_genus": "Escherichia",
+          "intergenomic_similarity_percent": 100.0,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "matching_hashes": "1000/1000",
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "reference_accessions": "AF158101;MT984581;NC_000866;OZ209023;OZ209057",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Escherichia phage T4",
+          "relationship": "CONFIRMED_SEQUENCE_EQUIVALENT_REFERENCE",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "CONFIRMED_IDENTICAL_SEQUENCE",
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "best_mash_distance": 0.000956583,
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9998875220515978,
+          "genus_threshold_percent": null,
+          "host_genus": "Unspecified",
+          "intergenomic_similarity_percent": 99.84966945034654,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "matching_hashes": "961/1000",
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "reference_accessions": "KJ477684;OZ035787",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Tequatrovirus T4",
+          "relationship": "NEAREST_NEIGHBOUR_SCREEN",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "best_mash_distance": 0.000981871,
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9998993606440919,
+          "genus_threshold_percent": null,
+          "host_genus": "Enterobacteria",
+          "intergenomic_similarity_percent": 99.85085138998218,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "matching_hashes": "960/1000",
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 100.0,
+          "reference_accessions": "HM137666",
+          "reference_aligned_percent": 100.0,
+          "reference_description": "Enterobacteria phage T4T",
+          "relationship": "NEAREST_NEIGHBOUR_SCREEN",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "best_mash_distance": 0.0010072,
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9996271439224459,
+          "genus_threshold_percent": null,
+          "host_genus": "Enterobacteria",
+          "intergenomic_similarity_percent": 99.80356688279792,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "matching_hashes": "959/1000",
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 99.99348738625127,
+          "reference_accessions": "KM607003",
+          "reference_aligned_percent": 99.9934898145189,
+          "reference_description": "Enterobacteria phage RB59",
+          "relationship": "NEAREST_NEIGHBOUR_SCREEN",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        },
+        {
+          "best_mash_distance": 0.00103256,
+          "comparison_scope": "APPROXIMATELY_COMPLETE_WHOLE_GENOME_COMPARISON",
+          "confirmed_identity": null,
+          "genome_length_ratio": 0.9999585560943264,
+          "genus_threshold_percent": null,
+          "host_genus": "Enterobacteria",
+          "intergenomic_similarity_percent": 99.82717570214282,
+          "interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "matching_hashes": "958/1000",
+          "phage_family": "Straboviridae",
+          "phage_genus": "Tequatrovirus",
+          "phage_subfamily": "Tevenvirinae",
+          "query_aligned_percent": 99.99348738625127,
+          "reference_accessions": "KM607002",
+          "reference_aligned_percent": 99.99348711633195,
+          "reference_description": "Enterobacteria phage RB55",
+          "relationship": "NEAREST_NEIGHBOUR_SCREEN",
+          "sample_id": "NC_000866.4",
+          "sequence_confirmation": "NOT_RUN_MASH_DISTANCE_NONZERO",
+          "similarity_method": "PhageMine bidirectional BLASTN length-normalized similarity",
+          "species_threshold_percent": 95.0,
+          "taxonomic_interpretation": "ABOVE_95_PERCENT_WORKING_SPECIES_BOUNDARY_REQUIRES_ICTV_REVIEW",
+          "taxonomy_eligible": true,
+          "threshold_source": "no family-specific genus boundary configured"
+        }
+      ]
+    },
+    "output_directory": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/comparative",
+    "pmfdb": {
+      "annotation_interpretation": "INPHARED product labels are computational predictions unless independent experimental evidence is explicitly recorded.",
+      "command": [
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+          "createdb",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/q.faa",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/query_db"
+        ],
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+          "search",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/query_db",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/mmseqs/target_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/result_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/tmp",
+          "--max-seqs",
+          "100"
+        ],
+        [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+          "convertalis",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/query_db",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/mmseqs/target_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/result_db",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-external-iqsqj_tv/hits",
+          "--format-output",
+          "query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov"
+        ]
+      ],
+      "phagemine_version": "1.1.0",
+      "pmfdb_manifest_sha256": "91c53620a9f4dd5927c51b73d080d11cc59a17144f923441c63a7fe6c11bf081",
+      "pmfdb_schema_version": "1.0",
+      "pmfdb_version": "INPHARED-2026-04-07",
+      "prebuilt_target_database": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/mmseqs/target_db",
+      "prebuilt_target_manifest": {
+        "commands": [
+          [
+            "mmseqs",
+            "createdb",
+            "reference_phage_proteins.faa",
+            "mmseqs/target_db"
+          ],
+          [
+            "mmseqs",
+            "createindex",
+            "mmseqs/target_db",
+            "mmseqs/tmp",
+            "--threads",
+            "1"
+          ]
+        ],
+        "created_at": "2026-08-24T20:35:50.572589+00:00",
+        "index_status": "SUCCESS",
+        "pmfdb_reference_fasta_sha256": "90a17f397b2ac87200ed9175948eac0afe4cc19e0d3f3c3f5f4ff91774537606",
+        "pmfdb_version": "INPHARED-2026-04-07"
+      },
+      "reference": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pmfdb/2026-04-07/reference_phage_proteins.faa",
+      "reference_metadata_sha256": "312d1f96af88594644b78aa909862726f644546d4d3dd6b9d8b7ce2e6588f54e",
+      "reference_protein_sha256": "90a17f397b2ac87200ed9175948eac0afe4cc19e0d3f3c3f5f4ff91774537606",
+      "reference_qc_sha256": "83cee938a39d8b15331a6182df8ac1647215ee43058f1dbf0c1ba81631efccd3",
+      "reference_type": "PMFDB",
+      "validation_timestamp": "2026-09-16T02:29:24.516113+00:00"
+    }
+  },
+  "created_at": "2026-09-16T02:26:41.485137+00:00",
+  "discovery_ranking": {
+    "message": "Candidate prioritization was not performed because sufficient evidence was unavailable.",
+    "status": "INSUFFICIENT_EVIDENCE"
+  },
+  "evidence_adapters": [
+    {
+      "adapter": "PfamHMMAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "PfamHMMAdapter",
+        "adapter_version": "0.1.0",
+        "evidence_pack_id": null,
+        "hmmer_version": "3.4",
+        "hmmscan": "/usr/local/bin/hmmscan",
+        "pfam_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+        "pfam_version": "unknown",
+        "resource_origin": "explicit_cli",
+        "search_command": [
+          "/usr/local/bin/hmmscan",
+          "--cut_ga",
+          "--cpu",
+          "8",
+          "--domtblout",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-awmmj29h/hmmscan.domtblout",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-awmmj29h/proteins.faa"
+        ],
+        "search_parameters": {
+          "domtblout": true
+        },
+        "status": "REAL",
+        "threshold_mode": "GA",
+        "thresholds": {
+          "coverage": null,
+          "evalue": null,
+          "mode": "GA",
+          "trusted_cutoff": true
+        },
+        "trusted_cutoff": true
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "VOGHMMAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "VOGHMMAdapter",
+        "adapter_version": "0.1.0",
+        "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+        "hmmer_version": "3.4",
+        "hmmscan": "/usr/local/bin/hmmscan",
+        "resource_origin": "explicit_cli",
+        "search_command": [
+          "/usr/local/bin/hmmscan",
+          "--cpu",
+          "8",
+          "--domtblout",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-g1h4hxea/hmmscan.domtblout",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-g1h4hxea/proteins.faa"
+        ],
+        "search_parameters": {
+          "domtblout": true,
+          "threshold_mode": "MANUAL"
+        },
+        "status": "REAL",
+        "threshold_mode": "MANUAL",
+        "thresholds": {
+          "coverage": 0.5,
+          "evalue": 1e-05
+        },
+        "trusted_cutoff": false,
+        "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+        "vogdb_version": "unknown"
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "SwissProtEvidenceAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "SwissProtEvidenceAdapter",
+        "adapter_version": "0.1.0",
+        "diamond": "/opt/anaconda3/envs/phagemine_v12_dev/bin/diamond",
+        "diamond_version": "2.2.5",
+        "metadata_path": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/normalized/uniprot_sprot_benchmark_subset.dat",
+        "resource_origin": "explicit_cli",
+        "search_command": [
+          "/opt/anaconda3/envs/phagemine_v12_dev/bin/diamond",
+          "blastp",
+          "--db",
+          "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/swissprot/2026_02/uniprot_sprot.dmnd",
+          "--query",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-swissprot-890t0i4h/proteins.faa",
+          "--out",
+          "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-swissprot-890t0i4h/diamond.tsv",
+          "--outfmt",
+          "6",
+          "qseqid",
+          "sseqid",
+          "pident",
+          "length",
+          "qlen",
+          "slen",
+          "qstart",
+          "qend",
+          "sstart",
+          "send",
+          "evalue",
+          "bitscore",
+          "--threads",
+          "8"
+        ],
+        "search_parameters": {
+          "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+        },
+        "status": "REAL",
+        "swissprot_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/swissprot/2026_02/uniprot_sprot.dmnd",
+        "swissprot_version": "unknown",
+        "thresholds": {
+          "evalue": 1e-05,
+          "min_alignment_length": 30,
+          "moderate_coverage": 0.4,
+          "moderate_identity": 0.35,
+          "strong_coverage": 0.7,
+          "strong_identity": 0.7
+        }
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "PHROGSMMseqsAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "PHROGSMMseqsAdapter",
+        "adapter_version": "0.2.0",
+        "annotations_path": "/Users/emmanuelnnadi/pharokka_databases/phrog_annot_v4.tsv",
+        "mmseqs": "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+        "mmseqs_version": "18.8cc5c",
+        "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+        "phrogs_path": "/Users/emmanuelnnadi/pharokka_databases/phrogs_profile_db",
+        "phrogs_version": "unknown",
+        "resource_origin": "explicit_cli",
+        "search_commands": [
+          [
+            "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+            "createdb",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/proteins.faa",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/query"
+          ],
+          [
+            "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+            "search",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/query",
+            "/Users/emmanuelnnadi/pharokka_databases/phrogs_profile_db",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/result",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/tmp",
+            "--threads",
+            "8"
+          ],
+          [
+            "/opt/anaconda3/envs/phagemine_v12_dev/bin/mmseqs",
+            "convertalis",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/query",
+            "/Users/emmanuelnnadi/pharokka_databases/phrogs_profile_db",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/result",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-tv7_o0co/phrogs.tsv",
+            "--format-output",
+            "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+          ]
+        ],
+        "search_parameters": {
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "threshold_mode": "MANUAL"
+        },
+        "status": "REAL",
+        "threshold_mode": "MANUAL",
+        "thresholds": {
+          "alignment_length": null,
+          "evalue": 1e-05,
+          "identity": null,
+          "query_coverage": 0.5,
+          "score": null
+        }
+      },
+      "status": "REAL"
+    },
+    {
+      "adapter": "PHROGSPyHMMERAdapter",
+      "message": null,
+      "provenance": {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "adapter_version": "0.1.0",
+        "annotations_path": "/Users/emmanuelnnadi/pharokka_databases/phrog_annot_v4.tsv",
+        "phrogs_hmm_path": "/Users/emmanuelnnadi/pharokka_databases/all_phrogs.h3m",
+        "phrogs_version": "unknown",
+        "pyhmmer_version": "0.12.3",
+        "resource_origin": "explicit_cli",
+        "status": "REAL",
+        "threshold_mode": "MANUAL",
+        "thresholds": {
+          "evalue": 1e-05,
+          "query_coverage": 0.5,
+          "score": null
+        }
+      },
+      "status": "REAL"
+    }
+  ],
+  "figures": {
+    "created": [
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/figures/functional_classification_distribution.png",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/figures/functional_classification_distribution.svg",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/figures/evidence_source_summary.png",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/figures/evidence_source_summary.svg",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/figures/genome_functional_map.png",
+      "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/figures/genome_functional_map.svg"
+    ],
+    "failed": [],
+    "skipped": [],
+    "source_data": [
+      "functional_classification.tsv",
+      "evidence.json",
+      "genes.gff3",
+      "functional_classification.tsv",
+      "figure_data/functional_classification_distribution.tsv",
+      "figure_data/evidence_support_matrix.tsv"
+    ]
+  },
+  "gene_caller": {
+    "name": "PHANOTATE",
+    "parameters": {
+      "executable": "/opt/anaconda3/envs/phagemine_v12_dev/bin/phanotate.py",
+      "extra_args": []
+    },
+    "version": "1.6.7"
+  },
+  "genome_representation": {
+    "analysis_sequence_id": "NC_000866.4",
+    "coordinate_scope": "All PhageMine gene, protein, neighborhood, and annotation coordinates refer to analysis_sequence_id.",
+    "evidence": [],
+    "orientation": "ORIGINAL",
+    "original_sequence_id": "NC_000866.4",
+    "reference": null,
+    "rotation": "NONE",
+    "topology": "UNKNOWN",
+    "transform_history": []
+  },
+  "hallmark_summary": {
+    "dna_replication": "DETECTED",
+    "lysis": "DETECTED",
+    "major_capsid": "DETECTED",
+    "portal": "DETECTED",
+    "tail_structure": "DETECTED",
+    "tape_measure": "DETECTED",
+    "terminase": "DETECTED"
+  },
+  "input": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/inputs/NC_000866.4.fasta",
+  "input_sha256": "f6b1007e7b61656f630f5b392fa0b4118d7d9e02c8c1d981ececefc33a9e5b43",
+  "pipeline": "PhageMine",
+  "pipeline_version": "1.1.0",
+  "protein_detail_records": [
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000001.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000002.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000003.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000004.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000005.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000006.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000007.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000008.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000009.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000010.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000011.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000012.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000013.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000014.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000015.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000016.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000017.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000018.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000019.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000020.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000021.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000022.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000023.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000024.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000025.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000026.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000027.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000028.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000029.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000030.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000031.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000032.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000033.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000034.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000035.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000036.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000037.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000038.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000039.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000040.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000041.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000042.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000043.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000044.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000045.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000046.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000047.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000048.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000049.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000050.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000051.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000052.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000053.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000054.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000055.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000056.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000057.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000058.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000059.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000060.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000061.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000062.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000063.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000064.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000065.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000066.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000067.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000068.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000069.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000070.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000071.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000072.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000073.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000074.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000075.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000076.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000077.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000078.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000079.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000080.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000081.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000082.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000083.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000084.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000085.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000086.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000087.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000088.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000089.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000090.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000091.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000092.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000093.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000094.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000095.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000096.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000097.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000098.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000099.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000100.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000101.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000102.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000103.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000104.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000105.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000106.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000107.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000108.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000109.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000110.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000111.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000112.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000113.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000114.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000115.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000116.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000117.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000118.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000119.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000120.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000121.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000122.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000123.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000124.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000125.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000126.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000127.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000128.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000129.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000130.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000131.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000132.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000133.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000134.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000135.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000136.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000137.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000138.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000139.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000140.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000141.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000142.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000143.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000144.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000145.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000146.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000147.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000148.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000149.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000150.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000151.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000152.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000153.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000154.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000155.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000156.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000157.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000158.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000159.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000160.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000161.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000162.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000163.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000164.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000165.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000166.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000167.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000168.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000169.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000170.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000171.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000172.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000173.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000174.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000175.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000176.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000177.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000178.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000179.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000180.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000181.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000182.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000183.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000184.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000185.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000186.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000187.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000188.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000189.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000190.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000191.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000192.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000193.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000194.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000195.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000196.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000197.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000198.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000199.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000200.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000201.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000202.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000203.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000204.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000205.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000206.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000207.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000208.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000209.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000210.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000211.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000212.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000213.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000214.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000215.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000216.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000217.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000218.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000219.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000220.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000221.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000222.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000223.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000224.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000225.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000226.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000227.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000228.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000229.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000230.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000231.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000232.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000233.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000234.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000235.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000236.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000237.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000238.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000239.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000240.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000241.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000242.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000243.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000244.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000245.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000246.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000247.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000248.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000249.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000250.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000251.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000252.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000253.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000254.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000255.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000256.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000257.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000258.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000259.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000260.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000261.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000262.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000263.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000264.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000265.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000266.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000267.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000268.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000269.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000270.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000271.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000272.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000273.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000274.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000275.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000276.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000277.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000278.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000279.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000280.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000281.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000282.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000283.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000284.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000285.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000286.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000287.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000288.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000289.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000290.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000291.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000292.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000293.html",
+    "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine/NC_000866.4/protein_details/PM_000294.html"
+  ],
+  "quality_control": {
+    "coordinate_scope": "analysis_sequence",
+    "coordinate_system": "1-based-inclusive",
+    "errors": [],
+    "info": [
+      {
+        "code": "boundary_adjacent_cds",
+        "end": 168903,
+        "message": "CDS touches a sequence boundary; absence of a canonical start/stop at the truncated end is not treated as a gene-model error.",
+        "protein_id": "PM_000294",
+        "start": 167965,
+        "strand": "-"
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000011",
+          "PM_000012"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000018",
+          "PM_000019"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000031",
+          "PM_000032"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000042",
+          "PM_000043"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000114",
+          "PM_000115"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000127",
+          "PM_000128"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000156",
+          "PM_000157"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000159",
+          "PM_000160"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000170",
+          "PM_000171"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000171",
+          "PM_000172"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000182",
+          "PM_000183"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000183",
+          "PM_000184"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000184",
+          "PM_000185"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000199",
+          "PM_000200"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000201",
+          "PM_000202"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000207",
+          "PM_000208"
+        ],
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000215",
+          "PM_000216"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000219",
+          "PM_000220"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000229",
+          "PM_000230"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000235",
+          "PM_000236"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000249",
+          "PM_000250"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000276",
+          "PM_000277"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "shared_cds_boundary",
+        "message": "Adjacent CDS calls share one endpoint base in 1-based inclusive coordinates; retained as a gene-caller observation, not treated as a coordinate error.",
+        "overlap_bases": 1,
+        "proteins": [
+          "PM_000286",
+          "PM_000287"
+        ],
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      }
+    ],
+    "predicted_cds": 294,
+    "sequence_length": 168903,
+    "status": "review_required",
+    "warnings": [
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 17,
+        "proteins": [
+          "PM_000015",
+          "PM_000016"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000019",
+          "PM_000020"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000021",
+          "PM_000022"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000024",
+          "PM_000025"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000027",
+          "PM_000028"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000028",
+          "PM_000029"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000029",
+          "PM_000030"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 19,
+        "proteins": [
+          "PM_000033",
+          "PM_000034"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 11,
+        "proteins": [
+          "PM_000035",
+          "PM_000036"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 29,
+        "proteins": [
+          "PM_000038",
+          "PM_000039"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000039",
+          "PM_000040"
+        ],
+        "same_strand": false,
+        "strand_pair": [
+          "+",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000047",
+          "PM_000048"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 11,
+        "proteins": [
+          "PM_000050",
+          "PM_000051"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000053",
+          "PM_000054"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000055",
+          "PM_000056"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 29,
+        "proteins": [
+          "PM_000065",
+          "PM_000066"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000066",
+          "PM_000067"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000067",
+          "PM_000068"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 16,
+        "proteins": [
+          "PM_000071",
+          "PM_000072"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 32,
+        "proteins": [
+          "PM_000072",
+          "PM_000073"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 17,
+        "proteins": [
+          "PM_000074",
+          "PM_000075"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000080",
+          "PM_000081"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 23,
+        "proteins": [
+          "PM_000084",
+          "PM_000085"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 11,
+        "proteins": [
+          "PM_000085",
+          "PM_000086"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000086",
+          "PM_000087"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 38,
+        "proteins": [
+          "PM_000088",
+          "PM_000089"
+        ],
+        "same_strand": false,
+        "strand_pair": [
+          "-",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000090",
+          "PM_000091"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 17,
+        "proteins": [
+          "PM_000092",
+          "PM_000093"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 16,
+        "proteins": [
+          "PM_000093",
+          "PM_000094"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000094",
+          "PM_000095"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000095",
+          "PM_000096"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 14,
+        "proteins": [
+          "PM_000097",
+          "PM_000098"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000098",
+          "PM_000099"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000107",
+          "PM_000108"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 41,
+        "proteins": [
+          "PM_000108",
+          "PM_000109"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 11,
+        "proteins": [
+          "PM_000112",
+          "PM_000113"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000116",
+          "PM_000117"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000120",
+          "PM_000121"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 10,
+        "proteins": [
+          "PM_000121",
+          "PM_000122"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000122",
+          "PM_000123"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000123",
+          "PM_000124"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000124",
+          "PM_000125"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000128",
+          "PM_000129"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000131",
+          "PM_000132"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 19,
+        "proteins": [
+          "PM_000137",
+          "PM_000138"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 13,
+        "proteins": [
+          "PM_000139",
+          "PM_000140"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000140",
+          "PM_000141"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 19,
+        "proteins": [
+          "PM_000141",
+          "PM_000142"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 32,
+        "proteins": [
+          "PM_000142",
+          "PM_000143"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 37,
+        "proteins": [
+          "PM_000146",
+          "PM_000147"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000148",
+          "PM_000149"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000155",
+          "PM_000156"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 17,
+        "proteins": [
+          "PM_000161",
+          "PM_000162"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 26,
+        "proteins": [
+          "PM_000162",
+          "PM_000163"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 20,
+        "proteins": [
+          "PM_000163",
+          "PM_000164"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 13,
+        "proteins": [
+          "PM_000165",
+          "PM_000166"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000167",
+          "PM_000168"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000168",
+          "PM_000169"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000172",
+          "PM_000173"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000173",
+          "PM_000174"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 17,
+        "proteins": [
+          "PM_000178",
+          "PM_000179"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000189",
+          "PM_000190"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 14,
+        "proteins": [
+          "PM_000192",
+          "PM_000193"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 56,
+        "proteins": [
+          "PM_000204",
+          "PM_000205"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000205",
+          "PM_000206"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000210",
+          "PM_000211"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000213",
+          "PM_000214"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000214",
+          "PM_000215"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000216",
+          "PM_000217"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000217",
+          "PM_000218"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000218",
+          "PM_000219"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 10,
+        "proteins": [
+          "PM_000224",
+          "PM_000225"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000230",
+          "PM_000231"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000231",
+          "PM_000232"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000234",
+          "PM_000235"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000237",
+          "PM_000238"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000238",
+          "PM_000239"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 10,
+        "proteins": [
+          "PM_000239",
+          "PM_000240"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 11,
+        "proteins": [
+          "PM_000243",
+          "PM_000244"
+        ],
+        "same_strand": false,
+        "strand_pair": [
+          "-",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000245",
+          "PM_000246"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "+",
+          "+"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000247",
+          "PM_000248"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 10,
+        "proteins": [
+          "PM_000250",
+          "PM_000251"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 47,
+        "proteins": [
+          "PM_000251",
+          "PM_000252"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000255",
+          "PM_000256"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 23,
+        "proteins": [
+          "PM_000263",
+          "PM_000264"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000273",
+          "PM_000274"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000277",
+          "PM_000278"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 4,
+        "proteins": [
+          "PM_000280",
+          "PM_000281"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 8,
+        "proteins": [
+          "PM_000282",
+          "PM_000283"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 7,
+        "proteins": [
+          "PM_000287",
+          "PM_000288"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 14,
+        "proteins": [
+          "PM_000288",
+          "PM_000289"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      },
+      {
+        "code": "overlapping_cds",
+        "message": "partial overlap retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.",
+        "overlap_bases": 19,
+        "proteins": [
+          "PM_000291",
+          "PM_000292"
+        ],
+        "same_strand": true,
+        "strand_pair": [
+          "-",
+          "-"
+        ]
+      }
+    ]
+  },
+  "scientific_validation": {
+    "accuracy_claim_permitted_from_this_run": false,
+    "feature_scope": {
+      "CDS": "PREDICTED",
+      "intron": "NOT_CALLED",
+      "other_structured_RNA": "NOT_CALLED",
+      "programmed_frameshift": "NOT_CALLED",
+      "tRNA": "NOT_CALLED",
+      "tmRNA": "NOT_CALLED",
+      "translational_bypass": "NOT_CALLED"
+    },
+    "functional_strength_empirically_calibrated": false,
+    "hallmark_method": "ANNOTATION_TEXT_SCREEN",
+    "hallmark_profile_validated": false,
+    "interpretation": "This run produces computational hypotheses. Accuracy requires a separate expert-reviewed truth-set benchmark.",
+    "software_maturity": "BETA_RESEARCH_SOFTWARE",
+    "taxonomy_assignment_performed": false
+  },
+  "sequencing_provenance": {
+    "assembler": null,
+    "assembler_version": null,
+    "assembly_method": null,
+    "assembly_version": null,
+    "interpretation": "Sequencing provenance describes how an assembly was generated. It does not determine topology, orientation, rotation, or biological interpretation.",
+    "library_type": null,
+    "metadata_source": null,
+    "polishing_method": null,
+    "polishing_version": null,
+    "raw_reads_available": null,
+    "read_type": null,
+    "sequencing_platform": "UNKNOWN",
+    "source_information": {}
+  },
+  "stage_timings_seconds": {
+    "evidence_fusion": {
+      "end": 1789525594.99423,
+      "seconds": 1.3404369354248047,
+      "start": 1789525593.653793
+    },
+    "genbank": {
+      "end": 1789525839.112509,
+      "seconds": 0.6486301422119141,
+      "start": 1789525838.4638789
+    },
+    "genome_validation": {
+      "end": 1789524248.177598,
+      "seconds": 0.022185087203979492,
+      "start": 1789524248.155413
+    },
+    "inphared": {
+      "end": 1789525838.461007,
+      "seconds": 64.02983713150024,
+      "start": 1789525774.43117
+    },
+    "pfam": {
+      "end": 1789524557.130765,
+      "seconds": 223.45473194122314,
+      "start": 1789524333.676033
+    },
+    "phanotate": {
+      "end": 1789524289.196757,
+      "seconds": 41.019120931625366,
+      "start": 1789524248.1776361
+    },
+    "phrogs": {
+      "end": 1789525275.499825,
+      "seconds": 243.24526190757751,
+      "start": 1789525032.254563
+    },
+    "ranking_mining": {
+      "end": 1789525595.320748,
+      "seconds": 0.002025127410888672,
+      "start": 1789525595.318723
+    },
+    "reporting": {
+      "end": 1789525601.491585,
+      "seconds": 5.912796974182129,
+      "start": 1789525595.578788
+    },
+    "swissprot": {
+      "end": 1789525032.2543979,
+      "seconds": 54.08747887611389,
+      "start": 1789524978.166919
+    },
+    "vogdb": {
+      "end": 1789524978.166701,
+      "seconds": 421.03576493263245,
+      "start": 1789524557.1309361
+    }
+  }
+}

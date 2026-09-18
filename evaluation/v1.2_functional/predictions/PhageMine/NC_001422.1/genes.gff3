@@ -1,0 +1,9 @@
+##gff-version 3
+NC_001422.1	PhageMine	CDS	2	136	.	+	0	ID=PM_000001;Name=PM_000001;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=2;raw_end=136
+NC_001422.1	PhageMine	CDS	133	393	.	+	0	ID=PM_000002;Name=PM_000002;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=133;raw_end=393
+NC_001422.1	PhageMine	CDS	390	848	.	+	0	ID=PM_000003;Name=PM_000003;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=390;raw_end=848
+NC_001422.1	PhageMine	CDS	848	964	.	+	0	ID=PM_000004;Name=PM_000004;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=848;raw_end=964
+NC_001422.1	PhageMine	CDS	1001	2284	.	+	0	ID=PM_000005;Name=PM_000005;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=1001;raw_end=2284
+NC_001422.1	PhageMine	CDS	2395	2922	.	+	0	ID=PM_000006;Name=PM_000006;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=2395;raw_end=2922
+NC_001422.1	PhageMine	CDS	2931	3917	.	+	0	ID=PM_000007;Name=PM_000007;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=2931;raw_end=3917
+NC_001422.1	PhageMine	CDS	3981	5384	.	+	0	ID=PM_000008;Name=PM_000008;calling_source=PHANOTATE;coordinate_representation=NC_001422.1;coordinate_system=1-based-inclusive;raw_start=3981;raw_end=5384

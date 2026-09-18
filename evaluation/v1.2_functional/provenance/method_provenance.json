@@ -1,0 +1,18 @@
+{
+  "reference_panel": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/analysis/next_validation/REFERENCE_VALIDATION/REFERENCE_VALIDATION_PANEL.tsv",
+  "reference_source": "seven frozen inputs/*.gb files listed by the panel; no reference files modified",
+  "prediction_sources": {
+    "PhageMine": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/phagemine",
+    "Pharokka": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/raw_outputs/pharokka",
+    "Prokka": "/Users/emmanuelnnadi/Documents/PhageMine_v1.2_development/evaluation/v1.2_tool_comparison/correction_validation_20260916/outputs/prokka"
+  },
+  "thresholds": {
+    "strict": "same accession, start, end and strand",
+    "relaxed_primary": "same strand, >=50% of reference span and >=20% of prediction span",
+    "relaxed_sensitivity": "same strand, >=20% of reference span and >=20% reciprocal span",
+    "substantial_overlap": "same strand and reciprocal overlap >=0.5",
+    "partial_overlap": "same-strand overlap >0 below substantial threshold",
+    "small_orf": "predicted or reference length <100 aa",
+    "intergenic": "no overlap and nearest reference distance <=1000 nt"
+  }
+}
