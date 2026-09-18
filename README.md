@@ -181,7 +181,7 @@ is not required for ordinary analysis. Mash selects candidate references;
 BLASTN supplies PhageMine's bidirectional, length-normalized nucleotide
 comparison. It is not presented as VIRIDIC output and does not assign taxonomy.
 
-The repository's automated matrix covers Ubuntu Linux, Intel macOS (`macos-13`)
+The repository's automated matrix covers Ubuntu Linux, Intel macOS (`macos-15-intel`)
 and Apple-silicon macOS (`macos-14`) for the Python package and unit suite. The
 external-tool Conda workflow is exercised on Ubuntu. Local Conda solver and
 Bioconda availability can vary by architecture; if the environment solver
