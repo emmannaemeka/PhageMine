@@ -67,6 +67,7 @@ class PHANOTATEPredictor(GenePredictor):
         self.last_stdout = ""
         self.last_stderr = ""
         self.last_input_fasta: str | None = None
+        self._version_cache: str | None = None
 
     def available(self) -> bool:
         return bool(self.executable and Path(self.executable).exists())
@@ -74,12 +75,19 @@ class PHANOTATEPredictor(GenePredictor):
     def version(self) -> str:
         if not self.available():
             return "unavailable"
+        if self._version_cache is not None:
+            return self._version_cache
         for flag in ("--version", "-v"):
-            result = subprocess.run([str(self.executable), flag], capture_output=True, text=True, check=False)
+            try:
+                result = subprocess.run([str(self.executable), flag], capture_output=True, text=True, check=False, timeout=5)
+            except subprocess.TimeoutExpired:
+                continue
             text = (result.stdout or result.stderr).strip()
             if text:
-                return text.splitlines()[0]
-        return "reported by executable at run time"
+                self._version_cache = text.splitlines()[0]
+                return self._version_cache
+        self._version_cache = "reported by executable at run time"
+        return self._version_cache
 
     def parameters(self) -> dict:
         return {"executable": self.executable, "extra_args": self.extra_args}

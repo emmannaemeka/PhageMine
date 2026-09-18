@@ -171,7 +171,7 @@ def adjudicate_function(locus_id: str, product: str | None, evidence: Sequence[M
 
 def aggregate_module_evidence(loci: Sequence[Mapping[str, Any]], *, modules: Sequence[str] | None = None) -> list[dict[str, Any]]:
     """Aggregate qualified evidence without counting repeated database hits as votes."""
-    names = tuple(modules or ("DNA_PACKAGING", "HEAD_CAPSID", "PORTAL", "TAIL", "TAPE_MEASURE", "BASEPLATE", "HOST_RECOGNITION", "LYSIS", "DNA_REPLICATION"))
+    names = tuple(modules or ("DNA_PACKAGING", "HEAD_CAPSID", "PORTAL", "TAIL", "TAPE_MEASURE", "BASEPLATE", "HOST_RECOGNITION", "LYSIS", "DNA_REPLICATION", "REP_REPLICATION", "ZOT_EXTRUSION", "COAT_VIRION", "MEMBRANE_STRUCTURAL", "INTEGRATION", "REGULATION", "GENOME_ORGANIZATION"))
     rows=[]
     for module in names:
         candidates=[]; conflicts=[]
@@ -205,6 +205,9 @@ def assess_architecture(module_rows: Sequence[Mapping[str, Any]], *, context: Se
     if established.get("DNA_REPLICATION") and not established.get("PORTAL") and not established.get("TAIL"):
         scores["SMALL_SSDNA_PHAGE_LIKE"] += 1
     best = max(scores, key=scores.get); top = scores[best]
+    tailed_strong = any(str(x.get("module")) in {"TAIL", "PORTAL", "HEAD_CAPSID"} and str(x.get("status")) in {"ESTABLISHED", "STRONGLY_SUPPORTED"} for x in module_rows)
+    if tailed_strong and filamentous >= 2:
+        best = "MIXED_OR_CONFLICTING"
     if top == 0: best = "ARCHITECTURE_UNRESOLVED"
     elif list(scores.values()).count(top) > 1: best = "MIXED_OR_CONFLICTING"
     return {"architecture_hypothesis": best, "scores": scores, "declared_genome_type": declared_type or "UNKNOWN", "genome_strategy": "UNKNOWN", "taxonomy": "NOT_INFERRED", "reasoning": "Architecture is a hypothesis from coherent module/context evidence; taxonomy and genome strategy remain separate.", "context_evidence": [dict(x) for x in context]}
