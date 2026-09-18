@@ -1,0 +1,9 @@
+{
+  "method": "AUTOMATED_EVIDENCE_ADJUDICATION",
+  "blind_manifest_sha256": "4896c9c4ebd21cdf400411a27b9235e09fd3e765929d08bb7ada0ecff8c70a36",
+  "tool_key_first_access_utc": "2026-09-18T10:04:40.081397+00:00",
+  "key_path": "CONFIDENTIAL_PATH_NOT_REPRODUCED",
+  "frozen_utility_sha256": "21ec057aab5bb94f12e0ec692043e8657f79028b342896e99296f46783348dee",
+  "unblinded_output_sha256": "f5dae4251a77fa70c7ec1cd44dfd75af0061455833e7ae5231d3d2d61f2d08c6",
+  "limitation": "Automated descriptive analysis; not human expert adjudication."
+}

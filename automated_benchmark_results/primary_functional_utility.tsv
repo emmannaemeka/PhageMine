@@ -1,0 +1,3 @@
+tool	units	known_scored	missing_unresolvable	not_evaluable	utility_sum	utility_over_all_units	lower_bound	upper_bound
+PhageMine	588	93	297	198	42.000000	0.107692	0.107692	0.869231
+Pharokka	588	7	383	198	1.750000	0.004487	0.004487	0.986538

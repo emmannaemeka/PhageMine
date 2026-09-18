@@ -1,0 +1,2 @@
+endpoint	value	margin	criterion	source
+structural_exact_f1_difference	0.000000	-0.030000	lower_bound_gt_margin	frozen_structural_benchmark

@@ -1,0 +1,1177 @@
+genome	start	end	matching_mode	tool	category	confidence	reference_product
+NC_000866.4	12	2189	exact	PhageMine	UNRESOLVABLE	LOW	RIIA lysis inhibitor
+NC_000866.4	12	2189	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RIIA lysis inhibitor
+NC_000866.4	2200	2403	exact	PhageMine	NOT_EVALUABLE	HIGH	rIIA.1 hypothetical protein
+NC_000866.4	2200	2403	exact	Pharokka	NOT_EVALUABLE	HIGH	rIIA.1 hypothetical protein
+NC_000866.4	2971	3351	exact	PhageMine	NOT_EVALUABLE	HIGH	gp60.1 hypothetical protein
+NC_000866.4	2971	3351	exact	Pharokka	NOT_EVALUABLE	HIGH	gp60.1 hypothetical protein
+NC_000866.4	3654	3767	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	3654	3767	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	3778	5328	exact	PhageMine	TOO_GENERAL	HIGH	DNA topoisomerase II large subunit
+NC_000866.4	3778	5328	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA topoisomerase II large subunit
+NC_000866.4	5398	5595	exact	PhageMine	NOT_EVALUABLE	HIGH	gp39.1 hypothetical protein
+NC_000866.4	5398	5595	exact	Pharokka	NOT_EVALUABLE	HIGH	gp39.1 hypothetical protein
+NC_000866.4	5702	5839	exact	PhageMine	UNRESOLVABLE	LOW	FmdB-like transcriptional regulator
+NC_000866.4	5702	5839	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	FmdB-like transcriptional regulator
+NC_000866.4	5842	6267	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	5842	6267	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	6267	6482	exact	PhageMine	UNRESOLVABLE	LOW	cef modifier of supressor tRNAs
+NC_000866.4	6267	6482	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	cef modifier of supressor tRNAs
+NC_000866.4	6653	7141	exact	PhageMine	UNRESOLVABLE	LOW	MotB-like transcriptional regulator
+NC_000866.4	6653	7141	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	MotB-like transcriptional regulator
+NC_000866.4	7291	7650	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	7291	7650	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	7661	8161	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	7661	8161	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	8225	8908	exact	PhageMine	UNRESOLVABLE	LOW	exonuclease
+NC_000866.4	8225	8908	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_000866.4	8908	9150	exact	PhageMine	NOT_EVALUABLE	HIGH	DexA.1 hypothetical protein
+NC_000866.4	8908	9150	exact	Pharokka	NOT_EVALUABLE	HIGH	DexA.1 hypothetical protein
+NC_000866.4	9143	9388	exact	PhageMine	UNRESOLVABLE	LOW	dextranase
+NC_000866.4	9143	9388	exact	Pharokka	UNRESOLVABLE	LOW	dextranase
+NC_000866.4	9410	10729	exact	PhageMine	UNRESOLVABLE	LOW	Dda-like helicase
+NC_000866.4	9410	10729	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Dda-like helicase
+NC_000866.4	10726	11037	exact	PhageMine	NOT_EVALUABLE	HIGH	Dda.1 hypothetical protein
+NC_000866.4	10726	11037	exact	Pharokka	NOT_EVALUABLE	HIGH	Dda.1 hypothetical protein
+NC_000866.4	11039	11785	exact	PhageMine	UNRESOLVABLE	LOW	Srd anti-sigma factor
+NC_000866.4	11039	11785	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Srd anti-sigma factor
+NC_000866.4	11908	12510	exact	PhageMine	UNRESOLVABLE	LOW	RNA polymerase ADP-ribosylase
+NC_000866.4	11908	12510	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA polymerase ADP-ribosylase
+NC_000866.4	12507	13130	exact	PhageMine	UNRESOLVABLE	LOW	RNA polymerase ADP-ribosylase
+NC_000866.4	12507	13130	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA polymerase ADP-ribosylase
+NC_000866.4	13198	13380	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	13198	13380	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	13389	13859	exact	PhageMine	UNRESOLVABLE	LOW	Mrh transcription modulator under heat shock
+NC_000866.4	13389	13859	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Mrh transcription modulator under heat shock
+NC_000866.4	13852	14016	exact	PhageMine	NOT_EVALUABLE	HIGH	ModA.4 hypothetical protein
+NC_000866.4	13852	14016	exact	Pharokka	NOT_EVALUABLE	HIGH	ModA.4 hypothetical protein
+NC_000866.4	14191	14676	exact	PhageMine	UNRESOLVABLE	LOW	Mrh transcription modulator under heat shock
+NC_000866.4	14191	14676	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Mrh transcription modulator under heat shock
+NC_000866.4	14685	15026	exact	PhageMine	NOT_EVALUABLE	HIGH	Mrh.1 hypothetical protein
+NC_000866.4	14685	15026	exact	Pharokka	NOT_EVALUABLE	HIGH	Mrh.1 hypothetical protein
+NC_000866.4	15026	15232	exact	PhageMine	NOT_EVALUABLE	HIGH	Mrh.2 hypothetical protein
+NC_000866.4	15026	15232	exact	Pharokka	NOT_EVALUABLE	HIGH	Mrh.2 hypothetical protein
+NC_000866.4	15331	15573	exact	PhageMine	UNRESOLVABLE	LOW	virion structural protein
+NC_000866.4	15331	15573	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	virion structural protein
+NC_000866.4	15606	16280	exact	PhageMine	UNRESOLVABLE	LOW	SegF homing endonuclease
+NC_000866.4	15606	16280	exact	Pharokka	TOO_GENERAL	MODERATE	SegF homing endonuclease
+NC_000866.4	16270	16785	exact	PhageMine	UNRESOLVABLE	LOW	dUTPase
+NC_000866.4	16270	16785	exact	Pharokka	UNRESOLVABLE	LOW	dUTPase
+NC_000866.4	16846	17625	exact	PhageMine	UNRESOLVABLE	LOW	Dam family site-specific DNA-(adenine-N6)-methyltransferase
+NC_000866.4	16846	17625	exact	Pharokka	TOO_GENERAL	MODERATE	Dam family site-specific DNA-(adenine-N6)-methyltransferase
+NC_000866.4	17935	18963	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	DNA primase
+NC_000866.4	17935	18963	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA primase
+NC_000866.4	18966	19130	exact	PhageMine	NOT_EVALUABLE	HIGH	gp61.1 hypothetical protein
+NC_000866.4	18966	19130	exact	Pharokka	NOT_EVALUABLE	HIGH	gp61.1 hypothetical protein
+NC_000866.4	19132	19758	exact	PhageMine	NOT_EVALUABLE	HIGH	gp61.2 hypothetical protein
+NC_000866.4	19132	19758	exact	Pharokka	NOT_EVALUABLE	HIGH	gp61.2 hypothetical protein
+NC_000866.4	19758	20051	exact	PhageMine	UNRESOLVABLE	LOW	spackle periplasmic
+NC_000866.4	19758	20051	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	spackle periplasmic
+NC_000866.4	20112	20369	exact	PhageMine	NOT_EVALUABLE	HIGH	gp61.4 hypothetical protein
+NC_000866.4	20112	20369	exact	Pharokka	NOT_EVALUABLE	HIGH	gp61.4 hypothetical protein
+NC_000866.4	20371	20553	exact	PhageMine	UNRESOLVABLE	LOW	Dmd discriminator of mRNA degradation
+NC_000866.4	20371	20553	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Dmd discriminator of mRNA degradation
+NC_000866.4	20612	22039	exact	PhageMine	UNRESOLVABLE	LOW	AAA family ATPase
+NC_000866.4	20612	22039	exact	Pharokka	UNRESOLVABLE	LOW	AAA family ATPase
+NC_000866.4	22049	22393	exact	PhageMine	UNRESOLVABLE	LOW	head vertex assembly chaperone
+NC_000866.4	22049	22393	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head vertex assembly chaperone
+NC_000866.4	22386	23561	exact	PhageMine	UNRESOLVABLE	LOW	recombinase
+NC_000866.4	22386	23561	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	recombinase
+NC_000866.4	23570	24235	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	23570	24235	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	24400	25455	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	beta-glucosyltransferase
+NC_000866.4	24400	25455	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	beta-glucosyltransferase
+NC_000866.4	25479	26219	exact	PhageMine	UNRESOLVABLE	LOW	thymidylate synthase
+NC_000866.4	25479	26219	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	thymidylate synthase
+NC_000866.4	26373	26624	exact	PhageMine	UNRESOLVABLE	LOW	immunity to superinfection
+NC_000866.4	26373	26624	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	immunity to superinfection
+NC_000866.4	26636	27013	exact	PhageMine	UNRESOLVABLE	LOW	iduronate sulfatase
+NC_000866.4	26636	27013	exact	Pharokka	UNRESOLVABLE	LOW	iduronate sulfatase
+NC_000866.4	27197	29893	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	DNA polymerase
+NC_000866.4	27197	29893	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA polymerase
+NC_000866.4	29972	30340	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	translation repressor
+NC_000866.4	29972	30340	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	translation repressor
+NC_000866.4	30342	30905	exact	PhageMine	UNRESOLVABLE	LOW	clamp loader of DNA polymerase
+NC_000866.4	30342	30905	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	clamp loader of DNA polymerase
+NC_000866.4	30907	31866	exact	PhageMine	UNRESOLVABLE	LOW	clamp loader of DNA polymerase
+NC_000866.4	30907	31866	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	clamp loader of DNA polymerase
+NC_000866.4	31917	32603	exact	PhageMine	UNRESOLVABLE	LOW	DNA polymerase processivity factor
+NC_000866.4	31917	32603	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA polymerase processivity factor
+NC_000866.4	32659	33048	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	RNA polymerase binding
+NC_000866.4	32659	33048	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA polymerase binding
+NC_000866.4	33058	33246	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	protein GP45.2
+NC_000866.4	33058	33246	exact	Pharokka	UNRESOLVABLE	LOW	protein GP45.2
+NC_000866.4	35168	35431	exact	PhageMine	NOT_EVALUABLE	HIGH	gp46.2 hypothetical protein
+NC_000866.4	35168	35431	exact	Pharokka	NOT_EVALUABLE	HIGH	gp46.2 hypothetical protein
+NC_000866.4	35428	36447	exact	PhageMine	UNRESOLVABLE	LOW	SbcD-like subunit of palindrome specific endonuclease
+NC_000866.4	35428	36447	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	SbcD-like subunit of palindrome specific endonuclease
+NC_000866.4	36444	36584	exact	PhageMine	NOT_EVALUABLE	HIGH	gp47.1 hypothetical predicted membrane protein
+NC_000866.4	36444	36584	exact	Pharokka	NOT_EVALUABLE	HIGH	gp47.1 hypothetical predicted membrane protein
+NC_000866.4	36624	37826	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	alpha-glucosyltransferase
+NC_000866.4	36624	37826	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	alpha-glucosyltransferase
+NC_000866.4	37885	38679	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	37885	38679	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	38731	38922	exact	PhageMine	NOT_EVALUABLE	HIGH	a-gt.2 hypothetical protein
+NC_000866.4	38731	38922	exact	Pharokka	NOT_EVALUABLE	HIGH	a-gt.2 hypothetical protein
+NC_000866.4	38907	39110	exact	PhageMine	NOT_EVALUABLE	HIGH	a-gt.3 hypothetical protein
+NC_000866.4	38907	39110	exact	Pharokka	NOT_EVALUABLE	HIGH	a-gt.3 hypothetical protein
+NC_000866.4	39079	39396	exact	PhageMine	UNRESOLVABLE	LOW	a-gt.4 family protein
+NC_000866.4	39079	39396	exact	Pharokka	UNRESOLVABLE	LOW	a-gt.4 family protein
+NC_000866.4	39398	39616	exact	PhageMine	NOT_EVALUABLE	HIGH	a-gt.5 hypothetical protein
+NC_000866.4	39398	39616	exact	Pharokka	NOT_EVALUABLE	HIGH	a-gt.5 hypothetical protein
+NC_000866.4	39600	40157	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	RNA polymerase sigma factor
+NC_000866.4	39600	40157	exact	Pharokka	UNRESOLVABLE	LOW	RNA polymerase sigma factor
+NC_000866.4	40193	40456	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.1 hypothetical protein
+NC_000866.4	40193	40456	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.1 hypothetical protein
+NC_000866.4	40459	40785	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.2 hypothetical protein
+NC_000866.4	40459	40785	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.2 hypothetical protein
+NC_000866.4	40799	41038	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.3 hypothetical protein
+NC_000866.4	40799	41038	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.3 hypothetical protein
+NC_000866.4	41039	41170	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.4 conserved hypothetical protein
+NC_000866.4	41039	41170	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.4 conserved hypothetical protein
+NC_000866.4	41178	41471	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.5 conserved protein of unknown function
+NC_000866.4	41178	41471	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.5 conserved protein of unknown function
+NC_000866.4	41464	41646	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.6 conserved hypothetical protein
+NC_000866.4	41464	41646	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.6 conserved hypothetical protein
+NC_000866.4	41805	42113	exact	PhageMine	UNRESOLVABLE	LOW	NrdH glutaredoxin
+NC_000866.4	41805	42113	exact	Pharokka	UNRESOLVABLE	LOW	NrdH glutaredoxin
+NC_000866.4	42116	42328	exact	PhageMine	NOT_EVALUABLE	HIGH	gp55.8 conserved hypothetical predicted membrane protein
+NC_000866.4	42116	42328	exact	Pharokka	NOT_EVALUABLE	HIGH	gp55.8 conserved hypothetical predicted membrane protein
+NC_000866.4	42446	42916	exact	PhageMine	UNRESOLVABLE	LOW	anaerobic ribonucleotide reductase small subunit
+NC_000866.4	42446	42916	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	anaerobic ribonucleotide reductase small subunit
+NC_000866.4	42906	43538	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	42906	43538	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	44836	45612	exact	PhageMine	UNRESOLVABLE	LOW	I-TevII homing endonuclease
+NC_000866.4	44836	45612	exact	Pharokka	TOO_GENERAL	MODERATE	I-TevII homing endonuclease
+NC_000866.4	46382	46855	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	endonuclease VII
+NC_000866.4	46382	46855	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease VII
+NC_000866.4	46897	47382	exact	PhageMine	TOO_GENERAL	HIGH	inhibitor of host Lon protease
+NC_000866.4	46897	47382	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	inhibitor of host Lon protease
+NC_000866.4	47366	47521	exact	PhageMine	NOT_EVALUABLE	HIGH	gp49.1 conserved protein of unknown function
+NC_000866.4	47366	47521	exact	Pharokka	NOT_EVALUABLE	HIGH	gp49.1 conserved protein of unknown function
+NC_000866.4	47506	47826	exact	PhageMine	UNRESOLVABLE	LOW	ribonucleotide reductase
+NC_000866.4	47506	47826	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	ribonucleotide reductase
+NC_000866.4	47823	48131	exact	PhageMine	NOT_EVALUABLE	HIGH	gp49.3 hypothetical protein
+NC_000866.4	47823	48131	exact	Pharokka	NOT_EVALUABLE	HIGH	gp49.3 hypothetical protein
+NC_000866.4	48128	48391	exact	PhageMine	UNRESOLVABLE	LOW	NrdC thioredoxin
+NC_000866.4	48128	48391	exact	Pharokka	UNRESOLVABLE	LOW	NrdC thioredoxin
+NC_000866.4	48393	48635	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	48393	48635	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	48622	48936	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	48622	48936	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	48933	49859	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	48933	49859	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	49914	50915	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	49914	50915	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	50973	51995	exact	PhageMine	NOT_EVALUABLE	HIGH	NrdC.5 conserved hypothetical protein
+NC_000866.4	50973	51995	exact	Pharokka	NOT_EVALUABLE	HIGH	NrdC.5 conserved hypothetical protein
+NC_000866.4	52066	52893	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	52066	52893	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	52901	53302	exact	PhageMine	NOT_EVALUABLE	HIGH	NrdC.7 conserved hypothetical, predicted membrane protein
+NC_000866.4	52901	53302	exact	Pharokka	NOT_EVALUABLE	HIGH	NrdC.7 conserved hypothetical, predicted membrane protein
+NC_000866.4	53358	53885	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	53358	53885	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	53946	54248	exact	PhageMine	NOT_EVALUABLE	HIGH	NrdC.9 conserved hypothetical protein
+NC_000866.4	53946	54248	exact	Pharokka	NOT_EVALUABLE	HIGH	NrdC.9 conserved hypothetical protein
+NC_000866.4	54343	55320	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	54343	55320	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	56429	57208	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	56429	57208	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	57283	57828	exact	PhageMine	NOT_EVALUABLE	HIGH	MobD.1 conserved hypothetical protein
+NC_000866.4	57283	57828	exact	Pharokka	NOT_EVALUABLE	HIGH	MobD.1 conserved hypothetical protein
+NC_000866.4	58049	58165	exact	PhageMine	NOT_EVALUABLE	HIGH	MobD.2a hypothetical protein
+NC_000866.4	58049	58165	exact	Pharokka	NOT_EVALUABLE	HIGH	MobD.2a hypothetical protein
+NC_000866.4	58155	58349	exact	PhageMine	NOT_EVALUABLE	HIGH	MobD.3 hypothetical protein
+NC_000866.4	58155	58349	exact	Pharokka	NOT_EVALUABLE	HIGH	MobD.3 hypothetical protein
+NC_000866.4	58352	58534	exact	PhageMine	UNRESOLVABLE	LOW	molybdopterin-guanine dinucleotide biosynthesis protein MobD
+NC_000866.4	58352	58534	exact	Pharokka	UNRESOLVABLE	LOW	molybdopterin-guanine dinucleotide biosynthesis protein MobD
+NC_000866.4	58534	58722	exact	PhageMine	NOT_EVALUABLE	HIGH	MobD.5 hypothetical protein
+NC_000866.4	58534	58722	exact	Pharokka	NOT_EVALUABLE	HIGH	MobD.5 hypothetical protein
+NC_000866.4	58819	59205	exact	PhageMine	UNRESOLVABLE	LOW	starvation-inducible transcriptional regulator
+NC_000866.4	58819	59205	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	starvation-inducible transcriptional regulator
+NC_000866.4	59202	59495	exact	PhageMine	UNRESOLVABLE	LOW	lysis inhibition
+NC_000866.4	59202	59495	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	lysis inhibition
+NC_000866.4	59508	59720	exact	PhageMine	NOT_EVALUABLE	HIGH	rI.1 conserved hypothetical protein
+NC_000866.4	59508	59720	exact	Pharokka	NOT_EVALUABLE	HIGH	rI.1 conserved hypothetical protein
+NC_000866.4	59763	60344	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	thymidine kinase
+NC_000866.4	59763	60344	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	thymidine kinase
+NC_000866.4	60346	60534	exact	PhageMine	NOT_EVALUABLE	HIGH	Tk.1 conserved hypothetical protein
+NC_000866.4	60346	60534	exact	Pharokka	NOT_EVALUABLE	HIGH	Tk.1 conserved hypothetical protein
+NC_000866.4	60713	60925	exact	PhageMine	NOT_EVALUABLE	HIGH	Tk.2 conserved hypothetical protein
+NC_000866.4	60713	60925	exact	Pharokka	NOT_EVALUABLE	HIGH	Tk.2 conserved hypothetical protein
+NC_000866.4	60922	61389	exact	PhageMine	UNRESOLVABLE	LOW	phosphatase
+NC_000866.4	60922	61389	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	phosphatase
+NC_000866.4	61386	61733	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	valyl tRNA synthetase modifier
+NC_000866.4	61386	61733	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	valyl tRNA synthetase modifier
+NC_000866.4	61726	62271	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	61726	62271	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	62279	62740	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	endoribonuclease
+NC_000866.4	62279	62740	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endoribonuclease
+NC_000866.4	62800	63078	exact	PhageMine	NOT_EVALUABLE	HIGH	Vs.3 conserved hypothetical protein
+NC_000866.4	62800	63078	exact	Pharokka	NOT_EVALUABLE	HIGH	Vs.3 conserved hypothetical protein
+NC_000866.4	63078	63344	exact	PhageMine	NOT_EVALUABLE	HIGH	Vs.4 conserved hypothetical protein
+NC_000866.4	63078	63344	exact	Pharokka	NOT_EVALUABLE	HIGH	Vs.4 conserved hypothetical protein
+NC_000866.4	63557	63919	exact	PhageMine	TOO_GENERAL	HIGH	autonomous glycyl radical cofactor GrcA
+NC_000866.4	63557	63919	exact	Pharokka	UNRESOLVABLE	LOW	autonomous glycyl radical cofactor GrcA
+NC_000866.4	63927	64256	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	63927	64256	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	64253	64912	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	64253	64912	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	64939	65355	exact	PhageMine	TOO_GENERAL	HIGH	endonuclease V N-glycosylase UV repair enzyme
+NC_000866.4	64939	65355	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease V N-glycosylase UV repair enzyme
+NC_000866.4	65416	65718	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	internal virion protein
+NC_000866.4	65416	65718	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein
+NC_000866.4	65834	66415	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	internal virion protein
+NC_000866.4	65834	66415	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein
+NC_000866.4	66503	66997	exact	PhageMine	UNRESOLVABLE	LOW	glycoside hydrolase family protein
+NC_000866.4	66503	66997	exact	Pharokka	UNRESOLVABLE	LOW	glycoside hydrolase family protein
+NC_000866.4	67035	67490	exact	PhageMine	UNRESOLVABLE	LOW	nudix hydrolase
+NC_000866.4	67035	67490	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	nudix hydrolase
+NC_000866.4	67652	67960	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	67652	67960	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	67957	68319	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	67957	68319	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	68301	68693	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	68301	68693	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	68662	69270	exact	PhageMine	NOT_EVALUABLE	HIGH	e.5 conserved hypothetical protein
+NC_000866.4	68662	69270	exact	Pharokka	NOT_EVALUABLE	HIGH	e.5 conserved hypothetical protein
+NC_000866.4	69312	69905	exact	PhageMine	NOT_EVALUABLE	HIGH	e.6 conserved hypothetical protein
+NC_000866.4	69312	69905	exact	Pharokka	NOT_EVALUABLE	HIGH	e.6 conserved hypothetical protein
+NC_000866.4	69968	70303	exact	PhageMine	NOT_EVALUABLE	HIGH	e.7 hypothetical protein
+NC_000866.4	69968	70303	exact	Pharokka	NOT_EVALUABLE	HIGH	e.7 hypothetical protein
+NC_000866.4	70360	70623	exact	PhageMine	NOT_EVALUABLE	HIGH	e.8 conserved hypothetical protein
+NC_000866.4	70360	70623	exact	Pharokka	NOT_EVALUABLE	HIGH	e.8 conserved hypothetical protein
+NC_000866.4	71253	71918	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	71253	71918	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	72628	72915	exact	PhageMine	NOT_EVALUABLE	HIGH	Trna.2 conserved hypothetical protein
+NC_000866.4	72628	72915	exact	Pharokka	NOT_EVALUABLE	HIGH	Trna.2 conserved hypothetical protein
+NC_000866.4	72918	73328	exact	PhageMine	NOT_EVALUABLE	HIGH	Trna.3 conserved hypothetical protein
+NC_000866.4	72918	73328	exact	Pharokka	NOT_EVALUABLE	HIGH	Trna.3 conserved hypothetical protein
+NC_000866.4	73329	73514	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	73329	73514	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	73591	73878	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	internal virion protein
+NC_000866.4	73591	73878	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein
+NC_000866.4	73952	74410	exact	PhageMine	UNRESOLVABLE	LOW	RNA ligase
+NC_000866.4	73952	74410	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA ligase
+NC_000866.4	74407	74649	exact	PhageMine	UNRESOLVABLE	LOW	tail fiber chaperone
+NC_000866.4	74407	74649	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber chaperone
+NC_000866.4	74649	75374	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	deoxynucleoside monophosphate kinase
+NC_000866.4	74649	75374	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	deoxynucleoside monophosphate kinase
+NC_000866.4	75424	75954	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail protein
+NC_000866.4	75424	75954	exact	Pharokka	UNRESOLVABLE	LOW	tail protein
+NC_000866.4	76061	76885	exact	PhageMine	UNRESOLVABLE	LOW	DNA end protector
+NC_000866.4	76061	76885	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA end protector
+NC_000866.4	76885	77337	exact	PhageMine	UNRESOLVABLE	LOW	head closure
+NC_000866.4	76885	77337	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head closure
+NC_000866.4	77385	77975	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	77385	77975	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	77959	79686	exact	PhageMine	UNRESOLVABLE	LOW	baseplate hub subunit and tail lysozyme
+NC_000866.4	77959	79686	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate hub subunit and tail lysozyme
+NC_000866.4	80196	80618	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	80196	80618	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	80621	80791	exact	PhageMine	NOT_EVALUABLE	HIGH	gp5.3 conserved hypothetical protein
+NC_000866.4	80621	80791	exact	Pharokka	NOT_EVALUABLE	HIGH	gp5.3 conserved hypothetical protein
+NC_000866.4	80779	81072	exact	PhageMine	UNRESOLVABLE	LOW	PAAR motif of membran proteins
+NC_000866.4	80779	81072	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	PAAR motif of membran proteins
+NC_000866.4	81081	83063	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	81081	83063	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	83060	86158	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	83060	86158	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	86151	87155	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	86151	87155	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	87219	88085	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge tail fiber protein connector
+NC_000866.4	87219	88085	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge tail fiber protein connector
+NC_000866.4	88085	89893	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	88085	89893	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	89893	90552	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	89893	90552	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	90549	92132	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail collar fiber protein
+NC_000866.4	90549	92132	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail collar fiber protein
+NC_000866.4	92129	93592	exact	PhageMine	TOO_GENERAL	HIGH	fibritin neck whisker
+NC_000866.4	92129	93592	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	fibritin neck whisker
+NC_000866.4	93624	94553	exact	PhageMine	UNRESOLVABLE	LOW	head-tail adaptor Ad2
+NC_000866.4	93624	94553	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head-tail adaptor Ad2
+NC_000866.4	94555	95325	exact	PhageMine	UNRESOLVABLE	LOW	head closure Hc2
+NC_000866.4	94555	95325	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head closure Hc2
+NC_000866.4	95367	96185	exact	PhageMine	UNRESOLVABLE	LOW	tail sheath stabilizer
+NC_000866.4	95367	96185	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail sheath stabilizer
+NC_000866.4	96194	96688	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	terminase small subunit
+NC_000866.4	96194	96688	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase small subunit
+NC_000866.4	96672	98504	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_000866.4	96672	98504	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_000866.4	98536	100515	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail sheath
+NC_000866.4	98536	100515	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail sheath
+NC_000866.4	100632	101123	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail protein
+NC_000866.4	100632	101123	exact	Pharokka	UNRESOLVABLE	LOW	tail protein
+NC_000866.4	101207	102781	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_000866.4	101207	102781	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_000866.4	102781	103023	exact	PhageMine	UNRESOLVABLE	LOW	prohead
+NC_000866.4	102781	103023	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	prohead
+NC_000866.4	103023	103448	exact	PhageMine	UNRESOLVABLE	LOW	head scaffolding protein
+NC_000866.4	103023	103448	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head scaffolding protein
+NC_000866.4	103448	104086	exact	PhageMine	UNRESOLVABLE	LOW	head maturation protease
+NC_000866.4	103448	104086	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head maturation protease
+NC_000866.4	104117	104926	exact	PhageMine	UNRESOLVABLE	LOW	head scaffolding protein
+NC_000866.4	104117	104926	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head scaffolding protein
+NC_000866.4	104945	106510	exact	PhageMine	EQUIVALENT_FUNCTION	HIGH	major head protein
+NC_000866.4	104945	106510	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major head protein
+NC_000866.4	106561	107232	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	106561	107232	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	107323	108606	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	capsid vertex protein
+NC_000866.4	107323	108606	exact	Pharokka	UNRESOLVABLE	LOW	capsid vertex protein
+NC_000866.4	108636	109640	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	RNA ligase
+NC_000866.4	108636	109640	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA ligase
+NC_000866.4	109650	109928	exact	PhageMine	NOT_EVALUABLE	HIGH	gp24.2 conserved hypothetical protein
+NC_000866.4	109650	109928	exact	Pharokka	NOT_EVALUABLE	HIGH	gp24.2 conserved hypothetical protein
+NC_000866.4	110187	111317	exact	PhageMine	UNRESOLVABLE	LOW	Hoc-like head decoration
+NC_000866.4	110187	111317	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Hoc-like head decoration
+NC_000866.4	111327	112007	exact	PhageMine	UNRESOLVABLE	LOW	minor head protein inhibitor of protease
+NC_000866.4	111327	112007	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	minor head protein inhibitor of protease
+NC_000866.4	112057	112674	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	112057	112674	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	112677	114440	exact	PhageMine	UNRESOLVABLE	LOW	DNA helicase
+NC_000866.4	112677	114440	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA helicase
+NC_000866.4	114496	114663	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	114496	114663	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	114690	114914	exact	PhageMine	NOT_EVALUABLE	HIGH	UvsY.-1 conserved hypothetical protein
+NC_000866.4	114690	114914	exact	Pharokka	NOT_EVALUABLE	HIGH	UvsY.-1 conserved hypothetical protein
+NC_000866.4	114914	115327	exact	PhageMine	UNRESOLVABLE	LOW	UvsY-like recombination mediator
+NC_000866.4	114914	115327	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	UvsY-like recombination mediator
+NC_000866.4	115404	115802	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000866.4	115404	115802	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000866.4	115802	116428	exact	PhageMine	UNRESOLVABLE	LOW	baseplate hub
+NC_000866.4	115802	116428	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate hub
+NC_000866.4	116479	117228	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	baseplate hub assembly protein
+NC_000866.4	116479	117228	exact	Pharokka	TOO_GENERAL	MODERATE	baseplate hub assembly protein
+NC_000866.4	118348	118881	exact	PhageMine	UNRESOLVABLE	LOW	baseplate hub distal subunit
+NC_000866.4	118348	118881	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate hub distal subunit
+NC_000866.4	118878	120650	exact	PhageMine	UNRESOLVABLE	LOW	baseplate hub subunit and tail length
+NC_000866.4	118878	120650	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate hub subunit and tail length
+NC_000866.4	120659	121753	exact	PhageMine	UNRESOLVABLE	LOW	baseplate tail tube cap
+NC_000866.4	120659	121753	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate tail tube cap
+NC_000866.4	121753	122715	exact	PhageMine	UNRESOLVABLE	LOW	tail tube
+NC_000866.4	121753	122715	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail tube
+NC_000866.4	122742	123032	exact	PhageMine	NOT_EVALUABLE	HIGH	Alt.-3 conserved hypothetical protein
+NC_000866.4	122742	123032	exact	Pharokka	NOT_EVALUABLE	HIGH	Alt.-3 conserved hypothetical protein
+NC_000866.4	123065	123268	exact	PhageMine	NOT_EVALUABLE	HIGH	Alt.-2 hypothetical protein
+NC_000866.4	123065	123268	exact	Pharokka	NOT_EVALUABLE	HIGH	Alt.-2 hypothetical protein
+NC_000866.4	123265	123450	exact	PhageMine	NOT_EVALUABLE	HIGH	Alt.-1 hypothetical protein
+NC_000866.4	123265	123450	exact	Pharokka	NOT_EVALUABLE	HIGH	Alt.-1 hypothetical protein
+NC_000866.4	123454	125502	exact	PhageMine	UNRESOLVABLE	LOW	Alt-like RNA polymerase ADP-ribosyltransferase
+NC_000866.4	123454	125502	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Alt-like RNA polymerase ADP-ribosyltransferase
+NC_000866.4	125560	125748	exact	PhageMine	NOT_EVALUABLE	HIGH	Alt.1 conserved hypothetical protein
+NC_000866.4	125560	125748	exact	Pharokka	NOT_EVALUABLE	HIGH	Alt.1 conserved hypothetical protein
+NC_000866.4	125745	127208	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	DNA ligase
+NC_000866.4	125745	127208	exact	Pharokka	UNRESOLVABLE	LOW	DNA ligase
+NC_000866.4	127205	127474	exact	PhageMine	UNRESOLVABLE	LOW	DUF3045 domain-containing protein
+NC_000866.4	127205	127474	exact	Pharokka	UNRESOLVABLE	LOW	DUF3045 domain-containing protein
+NC_000866.4	127474	128310	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	127474	128310	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	128307	128765	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	128307	128765	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	128758	128964	exact	PhageMine	NOT_EVALUABLE	HIGH	gp30.4 conserved hypothetical protein
+NC_000866.4	128758	128964	exact	Pharokka	NOT_EVALUABLE	HIGH	gp30.4 conserved hypothetical protein
+NC_000866.4	128961	129158	exact	PhageMine	NOT_EVALUABLE	HIGH	gp30.5 hypothetical protein
+NC_000866.4	128961	129158	exact	Pharokka	NOT_EVALUABLE	HIGH	gp30.5 hypothetical protein
+NC_000866.4	129158	129445	exact	PhageMine	NOT_EVALUABLE	HIGH	gp30.6 conserved hypothetical protein
+NC_000866.4	129158	129445	exact	Pharokka	NOT_EVALUABLE	HIGH	gp30.6 conserved hypothetical protein
+NC_000866.4	129487	129852	exact	PhageMine	NOT_EVALUABLE	HIGH	gp30.7 conserved hypothetical protein
+NC_000866.4	129487	129852	exact	Pharokka	NOT_EVALUABLE	HIGH	gp30.7 conserved hypothetical protein
+NC_000866.4	129921	130253	exact	PhageMine	NOT_EVALUABLE	HIGH	gp30.8 conserved hypothetical protein
+NC_000866.4	129921	130253	exact	Pharokka	NOT_EVALUABLE	HIGH	gp30.8 conserved hypothetical protein
+NC_000866.4	130785	131033	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	lysis inhibition; accessory protein
+NC_000866.4	130785	131033	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	lysis inhibition; accessory protein
+NC_000866.4	131181	131516	exact	PhageMine	UNRESOLVABLE	LOW	head morphogenesis
+NC_000866.4	131181	131516	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head morphogenesis
+NC_000866.4	131573	131881	exact	PhageMine	UNRESOLVABLE	LOW	SH3 beta-barrel fold-containing protein
+NC_000866.4	131573	131881	exact	Pharokka	UNRESOLVABLE	LOW	SH3 beta-barrel fold-containing protein
+NC_000866.4	131882	132118	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	131882	132118	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	132118	132699	exact	PhageMine	UNRESOLVABLE	LOW	dCMP deaminase
+NC_000866.4	132118	132699	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	dCMP deaminase
+NC_000866.4	132696	133034	exact	PhageMine	NOT_EVALUABLE	HIGH	Cd.1 hypothetical protein
+NC_000866.4	132696	133034	exact	Pharokka	NOT_EVALUABLE	HIGH	Cd.1 hypothetical protein
+NC_000866.4	133031	133261	exact	PhageMine	NOT_EVALUABLE	HIGH	Cd.2 conserved hypothetical protein
+NC_000866.4	133031	133261	exact	Pharokka	NOT_EVALUABLE	HIGH	Cd.2 conserved hypothetical protein
+NC_000866.4	133334	133609	exact	PhageMine	NOT_EVALUABLE	HIGH	Cd.3 conserved hypothetical protein
+NC_000866.4	133334	133609	exact	Pharokka	NOT_EVALUABLE	HIGH	Cd.3 conserved hypothetical protein
+NC_000866.4	133612	133812	exact	PhageMine	NOT_EVALUABLE	HIGH	Cd.4 conserved hypothetical protein
+NC_000866.4	133612	133812	exact	Pharokka	NOT_EVALUABLE	HIGH	Cd.4 conserved hypothetical protein
+NC_000866.4	134002	134907	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	polynucleotide kinase
+NC_000866.4	134002	134907	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	polynucleotide kinase
+NC_000866.4	134908	135135	exact	PhageMine	NOT_EVALUABLE	HIGH	PseT.1 conserved hypothetical protein
+NC_000866.4	134908	135135	exact	Pharokka	NOT_EVALUABLE	HIGH	PseT.1 conserved hypothetical protein
+NC_000866.4	135132	135431	exact	PhageMine	UNRESOLVABLE	LOW	Rz-like spanin
+NC_000866.4	135132	135431	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_000866.4	135428	135781	exact	PhageMine	UNRESOLVABLE	LOW	Rz-like spanin
+NC_000866.4	135428	135781	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_000866.4	136340	137464	exact	PhageMine	UNRESOLVABLE	LOW	RNA ligase and tail fiber protein attachment catalyst
+NC_000866.4	136340	137464	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA ligase and tail fiber protein attachment catalyst
+NC_000866.4	139716	139967	exact	PhageMine	NOT_EVALUABLE	HIGH	Nrd.1 hypothetical protein
+NC_000866.4	139716	139967	exact	Pharokka	NOT_EVALUABLE	HIGH	Nrd.1 hypothetical protein
+NC_000866.4	139991	140416	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	139991	140416	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	140416	142680	exact	PhageMine	UNRESOLVABLE	LOW	NrdA-like aerobic NDP reductase large subunit
+NC_000866.4	140416	142680	exact	Pharokka	UNRESOLVABLE	LOW	NrdA-like aerobic NDP reductase large subunit
+NC_000866.4	142671	142997	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	142671	142997	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	142951	143214	exact	PhageMine	NOT_EVALUABLE	HIGH	NrdA.2 conserved hypothetical protein
+NC_000866.4	142951	143214	exact	Pharokka	NOT_EVALUABLE	HIGH	NrdA.2 conserved hypothetical protein
+NC_000866.4	143694	144431	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	143694	144431	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	145109	145690	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	dihydrofolate reductase
+NC_000866.4	145109	145690	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	dihydrofolate reductase
+NC_000866.4	145762	146004	exact	PhageMine	UNRESOLVABLE	LOW	DUF5417 domain-containing protein
+NC_000866.4	145762	146004	exact	Pharokka	UNRESOLVABLE	LOW	DUF5417 domain-containing protein
+NC_000866.4	146143	146529	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	146143	146529	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	146575	146802	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	146575	146802	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	146948	147853	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	single strand DNA binding protein
+NC_000866.4	146948	147853	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	single strand DNA binding protein
+NC_000866.4	147909	148541	exact	PhageMine	UNRESOLVABLE	LOW	homing endonuclease
+NC_000866.4	147909	148541	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	homing endonuclease
+NC_000866.4	149193	149531	exact	PhageMine	UNRESOLVABLE	LOW	late promoter transcriptional regulator
+NC_000866.4	149193	149531	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	late promoter transcriptional regulator
+NC_000866.4	149509	149778	exact	PhageMine	UNRESOLVABLE	LOW	transcriptional regulator
+NC_000866.4	149509	149778	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator
+NC_000866.4	149787	150704	exact	PhageMine	UNRESOLVABLE	LOW	RnaseH
+NC_000866.4	149787	150704	exact	Pharokka	UNRESOLVABLE	LOW	RnaseH
+NC_000866.4	150809	154678	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber protein proximal subunit
+NC_000866.4	150809	154678	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein proximal subunit
+NC_000866.4	154687	155805	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	long tail fiber protein proximal connector
+NC_000866.4	154687	155805	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	long tail fiber protein proximal connector
+NC_000866.4	155868	156533	exact	PhageMine	TOO_GENERAL	HIGH	hinge connector of long tail fiber protein distal connector
+NC_000866.4	155868	156533	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	hinge connector of long tail fiber protein distal connector
+NC_000866.4	156542	159622	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	long tail fiber protein distal subunit
+NC_000866.4	156542	159622	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	long tail fiber protein distal subunit
+NC_000866.4	159649	160200	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber assembly
+NC_000866.4	159649	160200	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber assembly
+NC_000866.4	160221	160877	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	holin
+NC_000866.4	160221	160877	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	holin
+NC_000866.4	160878	161150	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	anti-sigma factor
+NC_000866.4	160878	161150	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	anti-sigma factor
+NC_000866.4	161163	161315	exact	PhageMine	NOT_EVALUABLE	HIGH	AsiA.1 hypothetical protein
+NC_000866.4	161163	161315	exact	Pharokka	NOT_EVALUABLE	HIGH	AsiA.1 hypothetical protein
+NC_000866.4	161312	161590	exact	PhageMine	UNRESOLVABLE	LOW	inhibitor of MrcBC restriction
+NC_000866.4	161312	161590	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	inhibitor of MrcBC restriction
+NC_000866.4	161674	161805	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	161674	161805	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	161876	162172	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	161876	162172	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	162172	162630	exact	PhageMine	NOT_EVALUABLE	HIGH	Arn.3 conserved hypothetical protein
+NC_000866.4	162172	162630	exact	Pharokka	NOT_EVALUABLE	HIGH	Arn.3 conserved hypothetical protein
+NC_000866.4	162627	162833	exact	PhageMine	NOT_EVALUABLE	HIGH	Arn.4 conserved hypothetical protein
+NC_000866.4	162627	162833	exact	Pharokka	NOT_EVALUABLE	HIGH	Arn.4 conserved hypothetical protein
+NC_000866.4	162967	163602	exact	PhageMine	UNRESOLVABLE	LOW	MotA-like activator of middle period transcription
+NC_000866.4	162967	163602	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	MotA-like activator of middle period transcription
+NC_000866.4	163730	163879	exact	PhageMine	NOT_EVALUABLE	HIGH	MotA.1 hypothetical predicted periplasmic protein
+NC_000866.4	163730	163879	exact	Pharokka	NOT_EVALUABLE	HIGH	MotA.1 hypothetical predicted periplasmic protein
+NC_000866.4	163876	165204	exact	PhageMine	UNRESOLVABLE	LOW	DNA topoisomerase II
+NC_000866.4	163876	165204	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA topoisomerase II
+NC_000866.4	165209	165349	exact	PhageMine	NOT_EVALUABLE	HIGH	gp52.1 conserved hypothetical predicted membrane protein
+NC_000866.4	165209	165349	exact	Pharokka	NOT_EVALUABLE	HIGH	gp52.1 conserved hypothetical predicted membrane protein
+NC_000866.4	165342	165497	exact	PhageMine	UNRESOLVABLE	LOW	Ac acridine resistance protein
+NC_000866.4	165342	165497	exact	Pharokka	UNRESOLVABLE	LOW	Ac acridine resistance protein
+NC_000866.4	165585	166040	exact	PhageMine	TOO_GENERAL	HIGH	Ndd-like nucleoid disruption protein
+NC_000866.4	165585	166040	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Ndd-like nucleoid disruption protein
+NC_000866.4	166101	166316	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	166101	166316	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000866.4	166432	166554	exact	PhageMine	UNRESOLVABLE	LOW	periplasmic protein
+NC_000866.4	166432	166554	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	periplasmic protein
+NC_000866.4	166815	166913	exact	PhageMine	UNRESOLVABLE	LOW	outer membrane protein
+NC_000866.4	166815	166913	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	outer membrane protein
+NC_000866.4	167103	167660	exact	PhageMine	TOO_GENERAL	HIGH	DenB-like DNA endonuclease IV
+NC_000866.4	167103	167660	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DenB-like DNA endonuclease IV
+NC_000866.4	167743	167937	exact	PhageMine	NOT_EVALUABLE	HIGH	DenB.1 hypothetical protein
+NC_000866.4	167743	167937	exact	Pharokka	NOT_EVALUABLE	HIGH	DenB.1 hypothetical protein
+NC_000866.4	167965	168903	exact	PhageMine	UNRESOLVABLE	LOW	RIIB lysis inhibitor
+NC_000866.4	167965	168903	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RIIB lysis inhibitor
+NC_001416.1	191	736	exact	PhageMine	UNRESOLVABLE	LOW	terminase small subunit
+NC_001416.1	191	736	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase small subunit
+NC_001416.1	2633	2839	exact	PhageMine	UNRESOLVABLE	LOW	head-tail adaptor Ad1
+NC_001416.1	2633	2839	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head-tail adaptor Ad1
+NC_001416.1	2836	4437	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	portal protein
+NC_001416.1	2836	4437	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_001416.1	5747	6079	exact	PhageMine	UNRESOLVABLE	LOW	head decoration
+NC_001416.1	5747	6079	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head decoration
+NC_001416.1	6135	7160	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	major capsid protein
+NC_001416.1	6135	7160	exact	Pharokka	UNRESOLVABLE	LOW	major capsid protein
+NC_001416.1	7977	8555	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail protein
+NC_001416.1	7977	8555	exact	Pharokka	UNRESOLVABLE	LOW	tail protein
+NC_001416.1	8552	8947	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail terminator
+NC_001416.1	8552	8947	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail terminator
+NC_001416.1	8955	9695	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	major tail protein
+NC_001416.1	8955	9695	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major tail protein
+NC_001416.1	9711	10133	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	minor tail protein G
+NC_001416.1	9711	10133	exact	Pharokka	UNRESOLVABLE	LOW	minor tail protein G
+NC_001416.1	10542	13103	exact	PhageMine	TOO_GENERAL	HIGH	tail length tape measure protein
+NC_001416.1	10542	13103	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail length tape measure protein
+NC_001416.1	13100	13429	exact	PhageMine	UNRESOLVABLE	LOW	minor tail protein
+NC_001416.1	13100	13429	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	minor tail protein
+NC_001416.1	13429	14127	exact	PhageMine	UNRESOLVABLE	LOW	minor tail protein
+NC_001416.1	13429	14127	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	minor tail protein
+NC_001416.1	14276	14875	exact	PhageMine	UNRESOLVABLE	LOW	C40 family peptidase
+NC_001416.1	14276	14875	exact	Pharokka	UNRESOLVABLE	LOW	C40 family peptidase
+NC_001416.1	14773	15444	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail assembly protein
+NC_001416.1	14773	15444	exact	Pharokka	UNRESOLVABLE	LOW	tail assembly protein
+NC_001416.1	15505	18903	exact	PhageMine	UNRESOLVABLE	LOW	central tail fiber J
+NC_001416.1	15505	18903	exact	Pharokka	UNRESOLVABLE	LOW	central tail fiber J
+NC_001416.1	18965	19585	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	Lom outer membrane protein
+NC_001416.1	18965	19585	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Lom outer membrane protein
+NC_001416.1	19650	20855	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_001416.1	19650	20855	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_001416.1	21029	21973	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_001416.1	21029	21973	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_001416.1	21973	22557	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber assembly
+NC_001416.1	21973	22557	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber assembly
+NC_001416.1	22686	23918	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	ea47
+NC_001416.1	22686	23918	exact	Pharokka	UNRESOLVABLE	LOW	ea47
+NC_001416.1	24509	25399	exact	PhageMine	UNRESOLVABLE	LOW	HNH endonuclease
+NC_001416.1	24509	25399	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_001416.1	25396	26973	exact	PhageMine	UNRESOLVABLE	LOW	AAA family ATPase
+NC_001416.1	25396	26973	exact	Pharokka	UNRESOLVABLE	LOW	AAA family ATPase
+NC_001416.1	27812	28882	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	integrase
+NC_001416.1	27812	28882	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	integrase
+NC_001416.1	28860	29078	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	excisionase
+NC_001416.1	28860	29078	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	excisionase
+NC_001416.1	29118	29285	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001416.1	29118	29285	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001416.1	29374	29655	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	ea8.5
+NC_001416.1	29374	29655	exact	Pharokka	UNRESOLVABLE	LOW	ea8.5
+NC_001416.1	31005	31196	exact	PhageMine	UNRESOLVABLE	LOW	DUF1382 family protein
+NC_001416.1	31005	31196	exact	Pharokka	UNRESOLVABLE	LOW	DUF1382 family protein
+NC_001416.1	31169	31351	exact	PhageMine	UNRESOLVABLE	LOW	DUF1317 domain-containing protein
+NC_001416.1	31169	31351	exact	Pharokka	UNRESOLVABLE	LOW	DUF1317 domain-containing protein
+NC_001416.1	31348	32028	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_001416.1	31348	32028	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_001416.1	32025	32810	exact	PhageMine	UNRESOLVABLE	LOW	RecT-like ssDNA annealing protein
+NC_001416.1	32025	32810	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RecT-like ssDNA annealing protein
+NC_001416.1	32816	33232	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	gam-like host nuclease inhibitor
+NC_001416.1	32816	33232	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	gam-like host nuclease inhibitor
+NC_001416.1	33536	33904	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001416.1	33536	33904	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001416.1	34087	34287	exact	PhageMine	UNRESOLVABLE	LOW	restriction alleviation ral
+NC_001416.1	34087	34287	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	restriction alleviation ral
+NC_001416.1	35037	35438	exact	PhageMine	UNRESOLVABLE	LOW	anti-termination protein N-like
+NC_001416.1	35037	35438	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	anti-termination protein N-like
+NC_001416.1	35825	36259	exact	PhageMine	TOO_GENERAL	HIGH	RexB-like exclusion protein
+NC_001416.1	35825	36259	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RexB-like exclusion protein
+NC_001416.1	36275	37114	exact	PhageMine	TOO_GENERAL	HIGH	RexA-like exclusion protein
+NC_001416.1	36275	37114	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RexA-like exclusion protein
+NC_001416.1	37227	37940	exact	PhageMine	UNRESOLVABLE	LOW	LexA family transcriptional regulator
+NC_001416.1	37227	37940	exact	Pharokka	UNRESOLVABLE	LOW	LexA family transcriptional regulator
+NC_001416.1	38041	38241	exact	PhageMine	UNRESOLVABLE	LOW	Cro/CI family transcriptional regulator
+NC_001416.1	38041	38241	exact	Pharokka	UNRESOLVABLE	LOW	Cro/CI family transcriptional regulator
+NC_001416.1	38686	39585	exact	PhageMine	UNRESOLVABLE	LOW	replication initiation O-like
+NC_001416.1	38686	39585	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	replication initiation O-like
+NC_001416.1	39582	40283	exact	PhageMine	UNRESOLVABLE	LOW	DNA replication protein
+NC_001416.1	39582	40283	exact	Pharokka	UNRESOLVABLE	LOW	DNA replication protein
+NC_001416.1	40280	40570	exact	PhageMine	TOO_GENERAL	HIGH	Ren-like exclusion protein
+NC_001416.1	40280	40570	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Ren-like exclusion protein
+NC_001416.1	40644	41084	exact	PhageMine	UNRESOLVABLE	LOW	NinB/ Orf homologous recombination mediator
+NC_001416.1	40644	41084	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NinB/ Orf homologous recombination mediator
+NC_001416.1	42429	43043	exact	PhageMine	UNRESOLVABLE	LOW	NinG/ Rap DNA junction specific endonuclease
+NC_001416.1	42429	43043	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NinG/ Rap DNA junction specific endonuclease
+NC_001416.1	43886	44509	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	antitermination protein
+NC_001416.1	43886	44509	exact	Pharokka	UNRESOLVABLE	LOW	antitermination protein
+NC_001416.1	45186	45509	exact	PhageMine	UNRESOLVABLE	LOW	holin/anti-holin
+NC_001416.1	45186	45509	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	holin/anti-holin
+NC_001416.1	45493	45969	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	endolysin
+NC_001416.1	45493	45969	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endolysin
+NC_001416.1	45966	46427	exact	PhageMine	UNRESOLVABLE	LOW	Rz-like spanin
+NC_001416.1	45966	46427	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_001416.1	46459	46752	exact	PhageMine	UNRESOLVABLE	LOW	Bor-like outer membrane protein
+NC_001416.1	46459	46752	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Bor-like outer membrane protein
+NC_001416.1	47738	47944	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001416.1	47738	47944	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	925	1278	exact	PhageMine	UNRESOLVABLE	LOW	ocr-like anti-restriction
+NC_001604.1	925	1278	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	ocr-like anti-restriction
+NC_001604.1	1278	1433	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	1278	1433	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	2021	3100	exact	PhageMine	UNRESOLVABLE	LOW	serine-threonine kinase
+NC_001604.1	2021	3100	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	serine-threonine kinase
+NC_001604.1	3171	5822	exact	PhageMine	UNRESOLVABLE	LOW	RNA polymerase
+NC_001604.1	3171	5822	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RNA polymerase
+NC_001604.1	6007	6135	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	6007	6135	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	6137	6394	exact	PhageMine	UNRESOLVABLE	LOW	dGTPase inhibitor; target for F exclusion
+NC_001604.1	6137	6394	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	dGTPase inhibitor; target for F exclusion
+NC_001604.1	6475	7554	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	DNA ligase
+NC_001604.1	6475	7554	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA ligase
+NC_001604.1	7608	7763	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	7608	7763	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	7791	7880	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	7791	7880	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	7906	8166	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	7906	8166	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	8166	8756	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	nucleotide kinase
+NC_001604.1	8166	8756	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	nucleotide kinase
+NC_001604.1	8749	8895	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	8749	8895	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	9158	9856	exact	PhageMine	UNRESOLVABLE	LOW	Gp2.5-like ssDNA binding protein and ssDNA annealing protein
+NC_001604.1	9158	9856	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Gp2.5-like ssDNA binding protein and ssDNA annealing protein
+NC_001604.1	9857	10276	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	endonuclease
+NC_001604.1	9857	10276	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease
+NC_001604.1	10257	10706	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	endonuclease
+NC_001604.1	10257	10706	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease
+NC_001604.1	10706	11161	exact	PhageMine	UNRESOLVABLE	LOW	amidase
+NC_001604.1	10706	11161	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	amidase
+NC_001604.1	11225	11590	exact	PhageMine	UNRESOLVABLE	LOW	HNH endonuclease
+NC_001604.1	11225	11590	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_001604.1	11565	13265	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	DNA primase/helicase
+NC_001604.1	11565	13265	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA primase/helicase
+NC_001604.1	13352	13564	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	13352	13564	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	13584	13853	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	13584	13853	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	14353	16467	exact	PhageMine	UNRESOLVABLE	LOW	DNA polymerase I
+NC_001604.1	14353	16467	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA polymerase I
+NC_001604.1	16483	16839	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	16483	16839	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	16851	17150	exact	PhageMine	UNRESOLVABLE	LOW	DUF2675 domain-containing protein
+NC_001604.1	16851	17150	exact	Pharokka	UNRESOLVABLE	LOW	DUF2675 domain-containing protein
+NC_001604.1	17150	17359	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	17150	17359	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	17359	17517	exact	PhageMine	UNRESOLVABLE	LOW	Gp5.9-like inihibitor of recBCD nuclease
+NC_001604.1	17359	17517	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Gp5.9-like inihibitor of recBCD nuclease
+NC_001604.1	17504	18406	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_001604.1	17504	18406	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_001604.1	18394	18507	exact	PhageMine	UNRESOLVABLE	LOW	DUF5516 domain-containing protein
+NC_001604.1	18394	18507	exact	Pharokka	UNRESOLVABLE	LOW	DUF5516 domain-containing protein
+NC_001604.1	18605	18859	exact	PhageMine	UNRESOLVABLE	LOW	DUF2717 domain-containing protein
+NC_001604.1	18605	18859	exact	Pharokka	UNRESOLVABLE	LOW	DUF2717 domain-containing protein
+NC_001604.1	18864	19130	exact	PhageMine	UNRESOLVABLE	LOW	DUF5476 family protein
+NC_001604.1	18864	19130	exact	Pharokka	UNRESOLVABLE	LOW	DUF5476 family protein
+NC_001604.1	19130	19531	exact	PhageMine	UNRESOLVABLE	LOW	host range and adsorption protein
+NC_001604.1	19130	19531	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	host range and adsorption protein
+NC_001604.1	19535	19834	exact	PhageMine	UNRESOLVABLE	LOW	host range and adsorption protein
+NC_001604.1	19535	19834	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	host range and adsorption protein
+NC_001604.1	19848	20240	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_001604.1	19848	20240	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_001604.1	21950	22873	exact	PhageMine	UNRESOLVABLE	LOW	head assembly
+NC_001604.1	21950	22873	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head assembly
+NC_001604.1	22967	24004	exact	PhageMine	UNRESOLVABLE	LOW	major head protein
+NC_001604.1	22967	24004	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major head protein
+NC_001604.1	24228	24818	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail protein
+NC_001604.1	24228	24818	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail protein
+NC_001604.1	24842	27226	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail protein
+NC_001604.1	24842	27226	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail protein
+NC_001604.1	27307	27723	exact	PhageMine	UNRESOLVABLE	LOW	internal virion protein
+NC_001604.1	27307	27723	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein
+NC_001604.1	27728	28318	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	internal virion protein
+NC_001604.1	27728	28318	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein
+NC_001604.1	28325	30568	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	internal virion protein
+NC_001604.1	28325	30568	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein
+NC_001604.1	30595	34551	exact	PhageMine	UNRESOLVABLE	LOW	internal virion protein with endolysin domain
+NC_001604.1	30595	34551	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	internal virion protein with endolysin domain
+NC_001604.1	34624	36285	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_001604.1	34624	36285	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_001604.1	36344	36547	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	holin
+NC_001604.1	36344	36547	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	holin
+NC_001604.1	36553	36822	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	terminase small subunit
+NC_001604.1	36553	36822	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase small subunit
+NC_001604.1	36917	37348	exact	PhageMine	UNRESOLVABLE	LOW	Rz-like spanin
+NC_001604.1	36917	37348	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_001604.1	37370	39130	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_001604.1	37370	39130	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_001604.1	39389	39538	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_001604.1	39389	39538	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	124	858	exact	PhageMine	UNRESOLVABLE	LOW	deoxynucleoside-5'-monophosphatase
+NC_005859.1	124	858	exact	Pharokka	UNRESOLVABLE	LOW	deoxynucleoside-5'-monophosphatase
+NC_005859.1	939	1334	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	939	1334	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	1371	1649	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	1371	1649	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	1706	3376	exact	PhageMine	UNRESOLVABLE	LOW	DNA transfer protein
+NC_005859.1	1706	3376	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA transfer protein
+NC_005859.1	3473	3670	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	membrane protein
+NC_005859.1	3473	3670	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	membrane protein
+NC_005859.1	3727	4134	exact	PhageMine	UNRESOLVABLE	LOW	DNA binding protein
+NC_005859.1	3727	4134	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA binding protein
+NC_005859.1	4230	4481	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	4230	4481	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	4715	4918	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	4715	4918	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	5411	5929	exact	PhageMine	UNRESOLVABLE	LOW	putative H-N-H-endonuclease P-TflVII
+NC_005859.1	5411	5929	exact	Pharokka	UNRESOLVABLE	LOW	putative H-N-H-endonuclease P-TflVII
+NC_005859.1	6495	7505	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	6495	7505	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	7624	7854	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	7624	7854	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	7904	8083	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	7904	8083	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	8086	8298	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease nicking abasic sites generated by host uracil glycosylase Ung
+NC_005859.1	8086	8298	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease nicking abasic sites generated by host uracil glycosylase Ung
+NC_005859.1	8300	8644	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	8300	8644	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	8681	8938	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	8681	8938	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	8954	9157	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	8954	9157	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	10936	11820	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	10936	11820	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	11902	12510	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	11902	12510	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	12510	12695	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	12510	12695	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	12695	12928	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	12695	12928	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	12916	13206	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	12916	13206	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	13907	14278	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	13907	14278	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	14226	14687	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	14226	14687	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	14684	14884	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	14684	14884	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	14984	15310	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	14984	15310	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15300	15545	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15300	15545	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15542	15823	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15542	15823	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15823	15987	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15823	15987	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15987	16238	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	15987	16238	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	16317	16748	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	16317	16748	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	16916	17437	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	phosphoesterase
+NC_005859.1	16916	17437	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	phosphoesterase
+NC_005859.1	17437	18300	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	NinI-like serine-threonine phosphatase
+NC_005859.1	17437	18300	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NinI-like serine-threonine phosphatase
+NC_005859.1	18303	18548	exact	PhageMine	EQUIVALENT_FUNCTION	HIGH	major head protein
+NC_005859.1	18303	18548	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major head protein
+NC_005859.1	18646	18936	exact	PhageMine	UNRESOLVABLE	LOW	putative thioredoxin
+NC_005859.1	18646	18936	exact	Pharokka	UNRESOLVABLE	LOW	putative thioredoxin
+NC_005859.1	18929	19360	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	18929	19360	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	19436	19852	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	19436	19852	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	19931	20344	exact	PhageMine	UNRESOLVABLE	LOW	endolysin
+NC_005859.1	19931	20344	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endolysin
+NC_005859.1	21154	21753	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	ATP-dependent protease
+NC_005859.1	21154	21753	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	ATP-dependent protease
+NC_005859.1	21766	22518	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	deoxynucleoside monophosphate kinase
+NC_005859.1	21766	22518	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	deoxynucleoside monophosphate kinase
+NC_005859.1	22518	22871	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_005859.1	22518	22871	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_005859.1	22802	23245	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_005859.1	22802	23245	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_005859.1	23245	23742	exact	PhageMine	UNRESOLVABLE	LOW	H-N-H-endonuclease F-TflVI
+NC_005859.1	23245	23742	exact	Pharokka	UNRESOLVABLE	LOW	H-N-H-endonuclease F-TflVI
+NC_005859.1	23739	24437	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	23739	24437	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	24592	24936	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	24592	24936	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	25047	25331	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	25047	25331	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	25638	26150	exact	PhageMine	UNRESOLVABLE	LOW	H-N-H-endonuclease F-TflV
+NC_005859.1	25638	26150	exact	Pharokka	UNRESOLVABLE	LOW	H-N-H-endonuclease F-TflV
+NC_005859.1	26436	26717	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	26436	26717	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	26794	27141	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	26794	27141	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	27656	28024	exact	PhageMine	UNRESOLVABLE	LOW	putative acetyltransferase-related protein
+NC_005859.1	27656	28024	exact	Pharokka	UNRESOLVABLE	LOW	putative acetyltransferase-related protein
+NC_005859.1	28302	28592	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	28302	28592	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	28752	28916	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	28752	28916	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	28909	29160	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	28909	29160	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	29397	29978	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_005859.1	29397	29978	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_005859.1	29980	30180	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	29980	30180	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	30651	30824	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	30651	30824	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	31022	31606	exact	PhageMine	UNRESOLVABLE	LOW	HNH endonuclease
+NC_005859.1	31022	31606	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_005859.1	32240	32407	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	32240	32407	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	33664	33849	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	33664	33849	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	34006	34524	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	34006	34524	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	34627	34755	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	34627	34755	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	34806	35078	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	34806	35078	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	35617	35892	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	35617	35892	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	35983	36189	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	35983	36189	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	36182	36349	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	36182	36349	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	36379	37062	exact	PhageMine	UNRESOLVABLE	LOW	HNH endonuclease
+NC_005859.1	36379	37062	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_005859.1	38064	39029	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	38064	39029	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	39051	39467	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	39051	39467	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	39477	39671	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	39477	39671	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	39791	40738	exact	PhageMine	UNRESOLVABLE	LOW	lipoprotein
+NC_005859.1	39791	40738	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	lipoprotein
+NC_005859.1	42051	42221	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	42051	42221	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	42290	42739	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	endolysin
+NC_005859.1	42290	42739	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endolysin
+NC_005859.1	42745	43062	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	42745	43062	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	43505	44143	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_005859.1	43505	44143	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_005859.1	44196	44378	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	44196	44378	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	44449	45150	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_005859.1	44449	45150	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	exonuclease
+NC_005859.1	45179	45415	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	45179	45415	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	45458	45973	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	45458	45973	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	46057	46335	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	46057	46335	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	46412	46888	exact	PhageMine	UNRESOLVABLE	LOW	Rnase H
+NC_005859.1	46412	46888	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rnase H
+NC_005859.1	47022	47861	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	thymidylate synthase
+NC_005859.1	47022	47861	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	thymidylate synthase
+NC_005859.1	47861	48394	exact	PhageMine	TOO_GENERAL	HIGH	putative dihydrofolate reductase
+NC_005859.1	47861	48394	exact	Pharokka	TOO_GENERAL	MODERATE	putative dihydrofolate reductase
+NC_005859.1	48391	49536	exact	PhageMine	UNRESOLVABLE	LOW	putative aerobic ribonucleoside diphosphate reductase, small subunit
+NC_005859.1	48391	49536	exact	Pharokka	TOO_GENERAL	MODERATE	putative aerobic ribonucleoside diphosphate reductase, small subunit
+NC_005859.1	49536	50060	exact	PhageMine	UNRESOLVABLE	LOW	putative H-N-H-endonuclease P-TflVIII
+NC_005859.1	49536	50060	exact	Pharokka	UNRESOLVABLE	LOW	putative H-N-H-endonuclease P-TflVIII
+NC_005859.1	50163	52598	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	ribonucleoside-diphosphate reductase large subunit
+NC_005859.1	50163	52598	exact	Pharokka	UNRESOLVABLE	LOW	ribonucleoside-diphosphate reductase large subunit
+NC_005859.1	52678	52836	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail length tape measure protein
+NC_005859.1	52678	52836	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail length tape measure protein
+NC_005859.1	52838	53590	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	PhoH-like phosphate starvation-inducible
+NC_005859.1	52838	53590	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	PhoH-like phosphate starvation-inducible
+NC_005859.1	53961	55685	exact	PhageMine	UNRESOLVABLE	LOW	NrdD-like anaerobic ribonucleotide reductase large subunit
+NC_005859.1	53961	55685	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NrdD-like anaerobic ribonucleotide reductase large subunit
+NC_005859.1	55786	56166	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	55786	56166	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	56159	56392	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	56159	56392	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	56447	57265	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	Sir2 (NAD-dependent deacetylase)
+NC_005859.1	56447	57265	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Sir2 (NAD-dependent deacetylase)
+NC_005859.1	57243	57428	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	57243	57428	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	57419	57601	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	57419	57601	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	57588	58094	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	Sir2 (NAD-dependent deacetylase)
+NC_005859.1	57588	58094	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Sir2 (NAD-dependent deacetylase)
+NC_005859.1	58097	58525	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	58097	58525	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	58535	58927	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	58535	58927	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	59545	62331	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	replication origin binding
+NC_005859.1	59545	62331	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	replication origin binding
+NC_005859.1	62318	62836	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_005859.1	62318	62836	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	HNH endonuclease
+NC_005859.1	62820	63053	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	62820	63053	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	63122	63826	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	helicase
+NC_005859.1	63122	63826	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	helicase
+NC_005859.1	63819	64070	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator
+NC_005859.1	63819	64070	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator
+NC_005859.1	64174	64584	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	DNA binding protein
+NC_005859.1	64174	64584	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA binding protein
+NC_005859.1	64621	64917	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	64621	64917	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	64968	65276	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator
+NC_005859.1	64968	65276	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator
+NC_005859.1	65364	66335	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	NAD-dependent DNA ligase
+NC_005859.1	65364	66335	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NAD-dependent DNA ligase
+NC_005859.1	66538	67317	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	NAD-dependent DNA ligase
+NC_005859.1	66538	67317	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NAD-dependent DNA ligase
+NC_005859.1	67310	68077	exact	PhageMine	UNRESOLVABLE	LOW	D5 protein
+NC_005859.1	67310	68077	exact	Pharokka	UNRESOLVABLE	LOW	D5 protein
+NC_005859.1	68109	69617	exact	PhageMine	UNRESOLVABLE	LOW	D6 protein
+NC_005859.1	68109	69617	exact	Pharokka	UNRESOLVABLE	LOW	D6 protein
+NC_005859.1	69614	70147	exact	PhageMine	UNRESOLVABLE	LOW	putative H-N-H-endonuclease P-TflX
+NC_005859.1	69614	70147	exact	Pharokka	UNRESOLVABLE	LOW	putative H-N-H-endonuclease P-TflX
+NC_005859.1	70144	71034	exact	PhageMine	TOO_GENERAL	HIGH	putative DNA replication primase
+NC_005859.1	70144	71034	exact	Pharokka	TOO_GENERAL	MODERATE	putative DNA replication primase
+NC_005859.1	71097	73664	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	DNA polymerase
+NC_005859.1	71097	73664	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA polymerase
+NC_005859.1	73657	74154	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	73657	74154	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	74151	75503	exact	PhageMine	UNRESOLVABLE	LOW	putative ATP-dependent helicase
+NC_005859.1	74151	75503	exact	Pharokka	UNRESOLVABLE	LOW	putative ATP-dependent helicase
+NC_005859.1	75724	76008	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	75724	76008	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	76001	76774	exact	PhageMine	UNRESOLVABLE	LOW	single strand DNA binding protein
+NC_005859.1	76001	76774	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	single strand DNA binding protein
+NC_005859.1	76811	77788	exact	PhageMine	UNRESOLVABLE	LOW	putative recombination endonuclease, subunit D12
+NC_005859.1	76811	77788	exact	Pharokka	UNRESOLVABLE	LOW	putative recombination endonuclease, subunit D12
+NC_005859.1	77769	79607	exact	PhageMine	UNRESOLVABLE	LOW	putative recombination endonuclease, subunit D13
+NC_005859.1	77769	79607	exact	Pharokka	UNRESOLVABLE	LOW	putative recombination endonuclease, subunit D13
+NC_005859.1	79611	80093	exact	PhageMine	UNRESOLVABLE	LOW	RusA-like Holliday junction resolvase
+NC_005859.1	79611	80093	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	RusA-like Holliday junction resolvase
+NC_005859.1	80093	80968	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	flap endonuclease
+NC_005859.1	80093	80968	exact	Pharokka	UNRESOLVABLE	LOW	flap endonuclease
+NC_005859.1	80965	81411	exact	PhageMine	UNRESOLVABLE	LOW	dUTPase
+NC_005859.1	80965	81411	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	dUTPase
+NC_005859.1	81374	81637	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	81374	81637	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	81865	86055	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber protein
+NC_005859.1	81865	86055	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_005859.1	86055	86318	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	86055	86318	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	86294	86479	exact	PhageMine	UNRESOLVABLE	LOW	collar tail protein for L-shaped tail fibre attachment
+NC_005859.1	86294	86479	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	collar tail protein for L-shaped tail fibre attachment
+NC_005859.1	86484	88550	exact	PhageMine	UNRESOLVABLE	LOW	straight fibre tail protein
+NC_005859.1	86484	88550	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	straight fibre tail protein
+NC_005859.1	88551	91400	exact	PhageMine	UNRESOLVABLE	LOW	tail protein Pb3
+NC_005859.1	88551	91400	exact	Pharokka	UNRESOLVABLE	LOW	tail protein Pb3
+NC_005859.1	91397	92011	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	distal tail protein
+NC_005859.1	91397	92011	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	distal tail protein
+NC_005859.1	92121	95780	exact	PhageMine	UNRESOLVABLE	LOW	tail length tape measure protein
+NC_005859.1	92121	95780	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail length tape measure protein
+NC_005859.1	96624	96992	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail assembly chaperone
+NC_005859.1	96624	96992	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail assembly chaperone
+NC_005859.1	97054	97458	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	Tail assembly chaperone
+NC_005859.1	97054	97458	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Tail assembly chaperone
+NC_005859.1	97458	98354	exact	PhageMine	UNRESOLVABLE	LOW	base plate tail tube protein
+NC_005859.1	97458	98354	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	base plate tail tube protein
+NC_005859.1	98359	99753	exact	PhageMine	UNRESOLVABLE	LOW	major tail protein
+NC_005859.1	98359	99753	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major tail protein
+NC_005859.1	99780	100265	exact	PhageMine	UNRESOLVABLE	LOW	tail terminator
+NC_005859.1	99780	100265	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail terminator
+NC_005859.1	100269	101036	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail completion or Neck1 protein
+NC_005859.1	100269	101036	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail completion or Neck1 protein
+NC_005859.1	101036	101548	exact	PhageMine	UNRESOLVABLE	LOW	head-tail adaptor
+NC_005859.1	101036	101548	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head-tail adaptor
+NC_005859.1	101608	102984	exact	PhageMine	EQUIVALENT_FUNCTION	HIGH	major head protein
+NC_005859.1	101608	102984	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major head protein
+NC_005859.1	103002	103634	exact	PhageMine	UNRESOLVABLE	LOW	head maturation protease
+NC_005859.1	103002	103634	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head maturation protease
+NC_005859.1	103638	104132	exact	PhageMine	UNRESOLVABLE	LOW	Hoc-like head decoration
+NC_005859.1	103638	104132	exact	Pharokka	UNRESOLVABLE	LOW	Hoc-like head decoration
+NC_005859.1	104135	105346	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_005859.1	104135	105346	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_005859.1	105346	105783	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	105346	105783	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	105773	106606	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	endonuclease
+NC_005859.1	105773	106606	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	endonuclease
+NC_005859.1	106618	107934	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_005859.1	106618	107934	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_005859.1	107934	108416	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	terminase small subunit
+NC_005859.1	107934	108416	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase small subunit
+NC_005859.1	108427	110349	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	receptor binding tail protein
+NC_005859.1	108427	110349	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	receptor binding tail protein
+NC_005859.1	110429	110662	exact	PhageMine	UNRESOLVABLE	LOW	Cor superinfection exclusion protein
+NC_005859.1	110429	110662	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Cor superinfection exclusion protein
+NC_005859.1	110954	111061	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	110954	111061	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	111058	111252	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	111058	111252	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_005859.1	111245	111490	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	membrane protein
+NC_005859.1	111245	111490	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	membrane protein
+NC_001422.1	133	393	exact	PhageMine	UNRESOLVABLE	LOW	terminase
+NC_001422.1	133	393	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase
+NC_001422.1	390	848	exact	PhageMine	UNRESOLVABLE	LOW	head morphogenesis
+NC_001422.1	390	848	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head morphogenesis
+NC_001422.1	848	964	exact	PhageMine	UNRESOLVABLE	LOW	DNA condensation
+NC_001422.1	848	964	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA condensation
+NC_001422.1	1001	2284	exact	PhageMine	UNRESOLVABLE	LOW	major head protein
+NC_001422.1	1001	2284	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major head protein
+NC_001422.1	2395	2922	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	major spike protein
+NC_001422.1	2395	2922	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major spike protein
+NC_001422.1	2931	3917	exact	PhageMine	UNRESOLVABLE	LOW	pilot protein for DNA ejection
+NC_001422.1	2931	3917	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	pilot protein for DNA ejection
+NC_002371.2	203	1702	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	terminase large subunit
+NC_002371.2	203	1702	exact	Pharokka	UNRESOLVABLE	LOW	terminase large subunit
+NC_002371.2	1702	3879	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_002371.2	1702	3879	exact	Pharokka	UNRESOLVABLE	LOW	portal protein
+NC_002371.2	3893	4804	exact	PhageMine	TOO_GENERAL	HIGH	head scaffolding protein
+NC_002371.2	3893	4804	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head scaffolding protein
+NC_002371.2	4804	6096	exact	PhageMine	UNRESOLVABLE	LOW	head protein
+NC_002371.2	4804	6096	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head protein
+NC_002371.2	6135	6344	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	6135	6344	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	6328	6828	exact	PhageMine	UNRESOLVABLE	LOW	head-tail adaptor Ad3
+NC_002371.2	6328	6828	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head-tail adaptor Ad3
+NC_002371.2	6788	8206	exact	PhageMine	UNRESOLVABLE	LOW	head closure Hc3
+NC_002371.2	6788	8206	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head closure Hc3
+NC_002371.2	8210	8911	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail needle protein
+NC_002371.2	8210	8911	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail needle protein
+NC_002371.2	8911	9366	exact	PhageMine	UNRESOLVABLE	LOW	head morphogenesis
+NC_002371.2	8911	9366	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head morphogenesis
+NC_002371.2	9369	10058	exact	PhageMine	UNRESOLVABLE	LOW	DNA ejection
+NC_002371.2	9369	10058	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA ejection
+NC_002371.2	10069	11484	exact	PhageMine	UNRESOLVABLE	LOW	released from the phage upon host infection
+NC_002371.2	10069	11484	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	released from the phage upon host infection
+NC_002371.2	11484	13313	exact	PhageMine	UNRESOLVABLE	LOW	head morphogenesis
+NC_002371.2	11484	13313	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head morphogenesis
+NC_002371.2	14240	14419	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	14240	14419	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	15091	15993	exact	PhageMine	UNRESOLVABLE	LOW	Ant
+NC_002371.2	15091	15993	exact	Pharokka	UNRESOLVABLE	LOW	Ant
+NC_002371.2	16204	18207	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail spike protein
+NC_002371.2	16204	18207	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail spike protein
+NC_002371.2	20642	21004	exact	PhageMine	UNRESOLVABLE	LOW	GtrA-like O-antigen conversion
+NC_002371.2	20642	21004	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	GtrA-like O-antigen conversion
+NC_002371.2	21353	22516	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	integrase
+NC_002371.2	21353	22516	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	integrase
+NC_002371.2	22746	23381	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	EaC
+NC_002371.2	22746	23381	exact	Pharokka	UNRESOLVABLE	LOW	EaC
+NC_002371.2	23758	24711	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	EaA
+NC_002371.2	23758	24711	exact	Pharokka	UNRESOLVABLE	LOW	EaA
+NC_002371.2	25496	25855	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	EaF
+NC_002371.2	25496	25855	exact	Pharokka	UNRESOLVABLE	LOW	EaF
+NC_002371.2	25830	25967	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	25830	25967	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	25964	26461	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	EaE
+NC_002371.2	25964	26461	exact	Pharokka	UNRESOLVABLE	LOW	EaE
+NC_002371.2	26449	26619	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	26449	26619	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	26630	26923	exact	PhageMine	UNRESOLVABLE	LOW	abc2 anti-RecBCD
+NC_002371.2	26630	26923	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	abc2 anti-RecBCD
+NC_002371.2	26970	27254	exact	PhageMine	UNRESOLVABLE	LOW	Abc1
+NC_002371.2	26970	27254	exact	Pharokka	UNRESOLVABLE	LOW	Abc1
+NC_002371.2	27254	27871	exact	PhageMine	UNRESOLVABLE	LOW	Erf-like ssDNA annealing protein
+NC_002371.2	27254	27871	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Erf-like ssDNA annealing protein
+NC_002371.2	27868	28011	exact	PhageMine	UNRESOLVABLE	LOW	Erf recombination cofactor Arf
+NC_002371.2	27868	28011	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Erf recombination cofactor Arf
+NC_002371.2	28001	28189	exact	PhageMine	TOO_GENERAL	HIGH	Kil protein for bacterial septation inhibition
+NC_002371.2	28001	28189	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Kil protein for bacterial septation inhibition
+NC_002371.2	28170	28328	exact	PhageMine	UNRESOLVABLE	LOW	CIII anti-termination
+NC_002371.2	28170	28328	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	CIII anti-termination
+NC_002371.2	28414	28725	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	superinfection exclusion
+NC_002371.2	28414	28725	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	superinfection exclusion
+NC_002371.2	28873	29076	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	28873	29076	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	29076	29312	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	29076	29312	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	29349	29543	exact	PhageMine	UNRESOLVABLE	LOW	restriction alleviation ral
+NC_002371.2	29349	29543	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	restriction alleviation ral
+NC_002371.2	31013	31663	exact	PhageMine	UNRESOLVABLE	LOW	C2
+NC_002371.2	31013	31663	exact	Pharokka	UNRESOLVABLE	LOW	C2
+NC_002371.2	31744	31929	exact	PhageMine	UNRESOLVABLE	LOW	transcriptional regulator
+NC_002371.2	31744	31929	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator
+NC_002371.2	32036	32314	exact	PhageMine	UNRESOLVABLE	LOW	CII-like transcriptional activator
+NC_002371.2	32036	32314	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	CII-like transcriptional activator
+NC_002371.2	32349	32495	exact	PhageMine	UNRESOLVABLE	LOW	tail protein
+NC_002371.2	32349	32495	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail protein
+NC_002371.2	32488	33303	exact	PhageMine	UNRESOLVABLE	LOW	replication initiation O-like
+NC_002371.2	32488	33303	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	replication initiation O-like
+NC_002371.2	33300	34676	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	33300	34676	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_002371.2	34750	35187	exact	PhageMine	UNRESOLVABLE	LOW	NinB/ Orf homologous recombination mediator
+NC_002371.2	34750	35187	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NinB/ Orf homologous recombination mediator
+NC_002371.2	35184	35357	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	NinD
+NC_002371.2	35184	35357	exact	Pharokka	UNRESOLVABLE	LOW	NinD
+NC_002371.2	35324	35500	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	NinE
+NC_002371.2	35324	35500	exact	Pharokka	UNRESOLVABLE	LOW	NinE
+NC_002371.2	35497	35835	exact	PhageMine	UNRESOLVABLE	LOW	NinX
+NC_002371.2	35497	35835	exact	Pharokka	UNRESOLVABLE	LOW	NinX
+NC_002371.2	35828	36004	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	NinF
+NC_002371.2	35828	36004	exact	Pharokka	UNRESOLVABLE	LOW	NinF
+NC_002371.2	35997	36608	exact	PhageMine	UNRESOLVABLE	LOW	NinG/ Rap DNA junction specific endonuclease
+NC_002371.2	35997	36608	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	NinG/ Rap DNA junction specific endonuclease
+NC_002371.2	36605	36829	exact	PhageMine	UNRESOLVABLE	LOW	NinY
+NC_002371.2	36605	36829	exact	Pharokka	UNRESOLVABLE	LOW	NinY
+NC_002371.2	37010	37189	exact	PhageMine	UNRESOLVABLE	LOW	NinZ
+NC_002371.2	37010	37189	exact	Pharokka	UNRESOLVABLE	LOW	NinZ
+NC_002371.2	37186	37809	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	transcription antitermination protein
+NC_002371.2	37186	37809	exact	Pharokka	UNRESOLVABLE	LOW	transcription antitermination protein
+NC_002371.2	38244	38570	exact	PhageMine	UNRESOLVABLE	LOW	holin/anti-holin
+NC_002371.2	38244	38570	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	holin/anti-holin
+NC_002371.2	38988	39425	exact	PhageMine	UNRESOLVABLE	LOW	Rz-like spanin
+NC_002371.2	38988	39425	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Rz-like spanin
+NC_002371.2	41014	41256	exact	PhageMine	UNRESOLVABLE	LOW	Orf80
+NC_002371.2	41014	41256	exact	Pharokka	UNRESOLVABLE	LOW	Orf80
+NC_002371.2	41258	41437	exact	PhageMine	UNRESOLVABLE	LOW	Orf59c
+NC_002371.2	41258	41437	exact	Pharokka	UNRESOLVABLE	LOW	Orf59c
+NC_000929.1	339	863	exact	PhageMine	UNRESOLVABLE	LOW	transcriptional repressor
+NC_000929.1	339	863	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional repressor
+NC_000929.1	1099	1326	exact	PhageMine	UNRESOLVABLE	LOW	transcriptional repressor
+NC_000929.1	1099	1326	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional repressor
+NC_000929.1	1328	3319	exact	PhageMine	UNRESOLVABLE	LOW	Mu transposase C-terminal domain-containing protein
+NC_000929.1	1328	3319	exact	Pharokka	UNRESOLVABLE	LOW	Mu transposase C-terminal domain-containing protein
+NC_000929.1	3358	4296	exact	PhageMine	UNRESOLVABLE	LOW	DNA transposition protein
+NC_000929.1	3358	4296	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	DNA transposition protein
+NC_000929.1	4542	4772	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	4542	4772	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	4784	5047	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	4784	5047	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	5482	5781	exact	PhageMine	UNRESOLVABLE	LOW	transcriptional regulator, D5-like
+NC_000929.1	5482	5781	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	transcriptional regulator, D5-like
+NC_000929.1	5801	6325	exact	PhageMine	UNRESOLVABLE	LOW	host nuclease inhibitor
+NC_000929.1	5801	6325	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	host nuclease inhibitor
+NC_000929.1	6424	6954	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	6424	6954	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	6954	7484	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	6954	7484	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	7471	7653	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	7471	7653	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	7655	7957	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	7655	7957	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	7896	8162	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	7896	8162	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	8233	8784	exact	PhageMine	TOO_GENERAL	HIGH	regulatory protein GemA
+NC_000929.1	8233	8784	exact	Pharokka	UNRESOLVABLE	LOW	regulatory protein GemA
+NC_000929.1	8781	9170	exact	PhageMine	UNRESOLVABLE	LOW	late transcriptional activator
+NC_000929.1	8781	9170	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	late transcriptional activator
+NC_000929.1	9248	9466	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	9248	9466	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	9459	9821	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	9459	9821	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	9831	9950	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	9831	9950	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	9963	10385	exact	PhageMine	UNRESOLVABLE	LOW	late transcriptional activator
+NC_000929.1	9963	10385	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	late transcriptional activator
+NC_000929.1	11524	11718	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	11524	11718	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	11718	12017	exact	PhageMine	UNRESOLVABLE	LOW	DUF2730 family protein
+NC_000929.1	11718	12017	exact	Pharokka	UNRESOLVABLE	LOW	DUF2730 family protein
+NC_000929.1	12014	12304	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	12014	12304	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	12316	12891	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	terminase small subunit
+NC_000929.1	12316	12891	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	terminase small subunit
+NC_000929.1	14554	16092	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_000929.1	14554	16092	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_000929.1	16073	17392	exact	PhageMine	UNRESOLVABLE	LOW	minor head protein and DNA pilot
+NC_000929.1	16073	17392	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	minor head protein and DNA pilot
+NC_000929.1	18056	19141	exact	PhageMine	UNRESOLVABLE	LOW	head maturation protease
+NC_000929.1	18056	19141	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head maturation protease
+NC_000929.1	19138	20055	exact	PhageMine	EQUIVALENT_FUNCTION	HIGH	major head protein
+NC_000929.1	19138	20055	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	major head protein
+NC_000929.1	20122	20532	exact	PhageMine	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	20122	20532	exact	Pharokka	NOT_EVALUABLE	HIGH	hypothetical protein
+NC_000929.1	20529	20954	exact	PhageMine	UNRESOLVABLE	LOW	head-tail adaptor
+NC_000929.1	20529	20954	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	head-tail adaptor
+NC_000929.1	20954	21502	exact	PhageMine	UNRESOLVABLE	LOW	portal protein
+NC_000929.1	20954	21502	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	portal protein
+NC_000929.1	21689	23176	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail sheath
+NC_000929.1	21689	23176	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail sheath
+NC_000929.1	23186	23542	exact	PhageMine	EXACT_PRODUCT_AGREEMENT	HIGH	tail tube protein
+NC_000929.1	23186	23542	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail tube protein
+NC_000929.1	23552	23986	exact	PhageMine	UNRESOLVABLE	LOW	tail assembly chaperone
+NC_000929.1	23552	23986	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail assembly chaperone
+NC_000929.1	24131	26203	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail length tape measure protein
+NC_000929.1	24131	26203	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail length tape measure protein
+NC_000929.1	26208	27695	exact	PhageMine	TOO_GENERAL	HIGH	DNA circularization N-terminal domain-containing protein
+NC_000929.1	26208	27695	exact	Pharokka	UNRESOLVABLE	LOW	DNA circularization N-terminal domain-containing protein
+NC_000929.1	27688	28827	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	baseplate hub
+NC_000929.1	27688	28827	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate hub
+NC_000929.1	29405	29842	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000929.1	29405	29842	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000929.1	29843	30925	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	baseplate protein
+NC_000929.1	29843	30925	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate protein
+NC_000929.1	30916	31458	exact	PhageMine	UNRESOLVABLE	LOW	baseplate wedge subunit
+NC_000929.1	30916	31458	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	baseplate wedge subunit
+NC_000929.1	31458	32972	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber protein
+NC_000929.1	31458	32972	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber protein
+NC_000929.1	32975	33502	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber assembly protein
+NC_000929.1	32975	33502	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber assembly protein
+NC_000929.1	33531	34064	exact	PhageMine	PARTIALLY_CORRECT	MODERATE	tail fiber assembly protein
+NC_000929.1	33531	34064	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	tail fiber assembly protein
+NC_000929.1	35768	35956	exact	PhageMine	UNRESOLVABLE	LOW	gpCom control of modification
+NC_000929.1	35768	35956	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	gpCom control of modification
+NC_000929.1	35877	36602	exact	PhageMine	UNRESOLVABLE	LOW	Mom-like DNA modification protein
+NC_000929.1	35877	36602	exact	Pharokka	EXACT_PRODUCT_AGREEMENT	HIGH	Mom-like DNA modification protein

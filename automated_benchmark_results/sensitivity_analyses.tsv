@@ -1,0 +1,7 @@
+analysis	PhageMine	Pharokka	note
+HIGH_confidence_only	282	501	category-filtered descriptive count; confidence-only requires blind-row join
+HIGH_plus_MODERATE	357	508	category-filtered descriptive count; confidence-only requires blind-row join
+all_evaluable_automated	159	310	category-filtered descriptive count; confidence-only requires blind-row join
+excluding_TOO_GENERAL	141	303	category-filtered descriptive count; confidence-only requires blind-row join
+CORRECT_only	0	0	category-filtered descriptive count; confidence-only requires blind-row join
+CORRECT_plus_PARTIAL	75	0	category-filtered descriptive count; confidence-only requires blind-row join

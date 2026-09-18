@@ -1,0 +1,7 @@
+{
+  "method": "AUTOMATED_EVIDENCE_ADJUDICATION",
+  "utility": {"CORRECT": 1.0, "PARTIALLY_CORRECT": 0.5, "TOO_GENERAL": 0.25, "UNSUPPORTED/INCORRECT": 0.0, "UNRESOLVABLE": null, "NOT_EVALUABLE": null},
+  "margins": {"functional_utility": 0.05, "structural_non_inferiority": -0.03, "unsupported_specificity": 0.02},
+  "human_adjudication": false,
+  "new_annotation": false
+}

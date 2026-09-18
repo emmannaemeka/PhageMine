@@ -1,0 +1,11 @@
+tool	error_category	count	note
+PhageMine	EQUIVALENT_FUNCTION	4	automated category; not human error analysis
+PhageMine	EXACT_PRODUCT_AGREEMENT	62	automated category; not human error analysis
+PhageMine	NOT_EVALUABLE	198	automated category; not human error analysis
+PhageMine	PARTIALLY_CORRECT	75	automated category; not human error analysis
+PhageMine	TOO_GENERAL	18	automated category; not human error analysis
+PhageMine	UNRESOLVABLE	231	automated category; not human error analysis
+Pharokka	EXACT_PRODUCT_AGREEMENT	303	automated category; not human error analysis
+Pharokka	NOT_EVALUABLE	198	automated category; not human error analysis
+Pharokka	TOO_GENERAL	7	automated category; not human error analysis
+Pharokka	UNRESOLVABLE	80	automated category; not human error analysis
