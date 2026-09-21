@@ -1599,6 +1599,7 @@ class PhageMineTests(unittest.TestCase):
                 provenance={"threshold_mode": "GA", "trusted_cutoff": True},
             )
             with patch("phagemine.pipeline.PfamHMMAdapter") as adapter:
+                adapter.return_value.name = PfamHMMAdapter.name
                 adapter.return_value.analyze.return_value = result
                 run(ROOT / "examples/demo_phage.fasta", output,
                     predictor=DemoORFPredictor(), pfam_threshold_mode="GA")
@@ -1608,6 +1609,8 @@ class PhageMineTests(unittest.TestCase):
             self.assertEqual(persisted[0]["status"], "REAL")
             self.assertEqual(persisted[0]["provenance"]["threshold_mode"], "GA")
             self.assertTrue(persisted[0]["provenance"]["trusted_cutoff"])
+            manifest = json.loads((output / "checkpoints" / "evidence_complete" / "checkpoint_manifest.json").read_text())
+            self.assertEqual(manifest["evidence_adapters"][0]["adapter"], PfamHMMAdapter.name)
 
     def test_pfam_unavailable_has_no_fabricated_evidence(self):
         result = PfamHMMAdapter("/definitely/missing/Pfam-A.hmm", "/definitely/missing/hmmscan").analyze([])
