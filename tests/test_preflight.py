@@ -10,6 +10,13 @@ from phagemine.resources import EvidenceResourceManager, ResourceType
 
 
 class PreflightTests(unittest.TestCase):
+    def test_doctor_reports_automatic_pyrodigal_gv_capability(self):
+        payload = doctor()
+        modules = {item["name"]: item for item in payload["python_modules"]}
+        self.assertEqual(modules["pyrodigal"]["status"], "READY")
+        self.assertEqual(modules["pyrodigal_gv"]["status"], "READY")
+        self.assertEqual(payload["capabilities"]["PYRODIGAL_GV_OBSERVATION"], "READY")
+
     @patch("phagemine.preflight.subprocess.run")
     def test_deep_check_validates_mmseqs_database_format(self, run):
         run.return_value.returncode = 1

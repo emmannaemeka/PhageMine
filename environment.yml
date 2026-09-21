@@ -17,3 +17,7 @@ dependencies:
   - pyhmmer>=0.10,<0.13
   - pytest
   - python-build
+  - pip:
+      - pyrodigal==3.7.1
+      - pyrodigal-gv==0.3.2
+      - pyrodigal-rv==0.1.0

@@ -198,9 +198,11 @@ python -m pip install -e ".[test]"
 Do not use editable installation for a normal user installation.
 
 The native Pyrodigal, Prodigal-gv and Pyrodigal-rv Python providers are
-developer/test extras. They provide optional diagnostic and RNA-provider
-capabilities; they are not needed for the default PHANOTATE-based Core run.
-The developer command above installs their pinned versions for the test suite.
+installed by the ordinary package installation. Pyrodigal-gv is invoked
+automatically as the secondary observational caller for fresh PHANOTATE DNA
+analyses, while PHANOTATE remains the authoritative final CDS model.
+Pyrodigal-rv supports RNA workflows. The developer command above uses the
+same pinned provider versions.
 
 ### Troubleshooting installation
 
