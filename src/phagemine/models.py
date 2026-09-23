@@ -79,6 +79,9 @@ class Protein:
     gene_call_parameters: dict[str, Any] = field(default_factory=dict)
     start_codon: str | None = None
     stop_codon: str | None = None
+    partial_5prime: bool = False
+    partial_3prime: bool = False
+    codon_start: int = 1
     annotation: str = "Hypothetical protein"
     annotation_level: EvidenceLevel = EvidenceLevel.HYPOTHESIS
     evidence: list[Evidence] = field(default_factory=list)
