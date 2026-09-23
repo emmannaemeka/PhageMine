@@ -42,8 +42,8 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
             observed_cds = _reverse_complement(observed_cds)
         if observed_cds != protein.cds:
             errors.append({**prefix, "code": "cds_fasta_mismatch", "message": "CDS sequence does not match its stated coordinates in submitted FASTA."})
-        if len(protein.cds) % 3 != 0:
-            errors.append({**prefix, "code": "cds_length_not_multiple_of_three", "message": "CDS length is not divisible by three."})
+        if len(protein.cds) % 3 != 0 and not (protein.partial_5prime or protein.partial_3prime):
+            errors.append({**prefix, "code": "NCBI_CDS_FRAME", "severity": "ERROR", "message": "Complete CDS length is not divisible by three."})
         if not protein.sequence or "*" in protein.sequence:
             errors.append({**prefix, "code": "invalid_translation", "message": "Protein translation is empty or contains an internal stop."})
         expected_translation = __import__("phagemine.genome", fromlist=["translate"]).translate(protein.cds)
@@ -53,14 +53,21 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
             if protein.cds[:3] not in {"ATG", "GTG", "TTG"}:
                 warnings.append({**prefix, "code": "noncanonical_start_codon", "message": "CDS does not begin with a standard PHANOTATE start codon."})
             if protein.cds[-3:] not in {"TAA", "TAG", "TGA"}:
-                warnings.append({**prefix, "code": "missing_terminal_stop_codon", "message": "CDS does not end with a standard stop codon."})
+                diagnostic = {**prefix, "code": "NCBI_CDS_NOSTOP", "message": "CDS does not end with a valid terminal stop codon.", "evidence": {"terminal_codon": protein.cds[-3:], "strand": protein.strand}}
+                if protein.partial_3prime:
+                    warnings.append({**diagnostic, "severity": "WARNING", "recommended_action": "Confirm that 3-prime partialness is biologically justified."})
+                elif (protein.strand == "+" and protein.end == len(genome)) or (protein.strand == "-" and protein.start == 1):
+                    errors.append({**diagnostic, "severity": "ERROR", "recommended_action": "Boundary CDS is marked complete. Review terminal-repeat/origin context before marking partial or changing coordinates."})
+                    warnings.append({**prefix, "code": "POSSIBLE_ORIGIN_CROSSING_CDS", "severity": "REQUIRES_REVIEW", "message": "CDS touches a genome boundary; inspect DTR/circularization/origin context before changing the annotation."})
+                else:
+                    errors.append({**diagnostic, "severity": "ERROR", "recommended_action": "Correct the CDS coordinates/partial state; do not add a stop codon to the genome merely to satisfy validation."})
         if "mock" in protein.annotation.lower() or any(e.status == "mock" for e in protein.evidence):
             warnings.append({**prefix, "code": "mock_or_unsupported_function", "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein."})
         if protein.annotation_level.value in {"weak inference", "hypothesis requiring experimental validation"}:
             warnings.append({**prefix, "code": "uncharacterized_product", "message": "No supported functional product name is available; feature product will be hypothetical protein."})
     if provenance.get("input_sha256") is None:
         errors.append({"code": "missing_provenance", "message": "Input checksum is required for provenance linkage."})
-    return {"validator": "PhageMine pre-submission validator", "official_ncbi_validation": False, "genome_id": genome_id, "sequence_length": len(genome), "coordinate_system": "1-based-inclusive", "valid": not errors, "errors": errors, "warnings": warnings, "provenance": provenance}
+    return {"validator": "PhageMine NCBI pre-submission validator", "official_ncbi_validation": False, "genome_id": genome_id, "sequence_length": len(genome), "coordinate_system": "1-based-inclusive", "valid": not errors, "ncbi_submission_ready": not errors, "fatal_error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "provenance": provenance}
 
 
 def product_name(protein: Protein) -> str:
@@ -74,13 +81,17 @@ def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | Non
     lines = [f">Feature {genome_id}"]
     for protein in proteins:
         start, end = (protein.start, protein.end) if protein.strand == "+" else (protein.end, protein.start)
+        # NCBI 5-column feature tables use < and > on the biological 5-prime/3-prime ends.
+        if protein.partial_5prime:
+            start = f"<{start}" if protein.strand == "+" else f">{start}"
+        if protein.partial_3prime:
+            end = f">{end}" if protein.strand == "+" else f"<{end}"
         change = (overrides or {}).get(protein.protein_id, {})
         product = change.get("product") or product_name(protein)
         tag = f"{locus_tag_prefix}{protein.protein_id}" if locus_tag_prefix else protein.protein_id
         note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; functional claims withheld unless supported by non-mock curated/experimental evidence."
         lines.extend([f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", f"\t\t\tnote\t{_safe(note)}"])
-        if change.get("partial") is True:
-            lines.append("\t\t\tpartial")
+
     return "\n".join(lines) + "\n"
 
 
@@ -136,6 +147,20 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     state, missing = readiness(pre_validation, metadata, table2asn)
     validation = {"submission_readiness": state, "missing_required_metadata": missing, "phagemine_pre_submission_validation": pre_validation, "ncbi_table2asn_validation": table2asn, "final_ncbi_submission": {"performed": False, "message": "No submission to NCBI was attempted. Final NCBI review occurs only after a user submits through NCBI."}}
     (root / "validation.json").write_text(json.dumps(validation, indent=2, sort_keys=True))
+    report_lines = [
+        "PhageMine NCBI Pre-submission Validation",
+        "========================================",
+        f"Genome: {genome_id}",
+        f"Length: {len(genome):,} bp",
+        f"CDSs: {len(proteins)}",
+        "",
+        f"OVERALL: {'READY FOR NCBI SUBMISSION' if state == 'READY' else 'NOT READY FOR NCBI SUBMISSION'}",
+        f"Fatal errors: {len(pre_validation['errors'])}",
+        f"Warnings/review items: {len(pre_validation['warnings'])}",
+    ]
+    for item in pre_validation["errors"] + pre_validation["warnings"]:
+        report_lines.extend(["", f"{item.get('severity', 'ERROR' if item in pre_validation['errors'] else 'WARNING')} {item['code']}", f"{item.get('protein_id', '')} {item.get('message', '')}".strip()])
+    (root / "NCBI_VALIDATION_REPORT.txt").write_text("\n".join(report_lines) + "\n")
     (root / "provenance.json").write_text(json.dumps(provenance, indent=2, sort_keys=True))
     (root / "README.txt").write_text("This is a local PhageMine pre-submission package; it has not been submitted to NCBI. PhageMine QC, PhageMine pre-submission validation, table2asn validation, and final NCBI review are distinct stages. If table2asn is unavailable, install the official NCBI table2asn distribution, add it to PATH, and rerun this command. Never treat mock, weak, or hypothesis-level annotations as asserted product names.\n")
     return validation
