@@ -1369,7 +1369,12 @@ class PhageMineTests(unittest.TestCase):
         protein.sequence = translate(protein.cds)
         table = feature_table(genome_id, [protein])
         self.assertIn(f"{protein.end}\t{protein.start}\tCDS", table)
-        self.assertTrue(validate(genome_id, genome, [protein], {"input_sha256": "fixture"})["valid"])
+        validation = validate(genome_id, genome, [protein], {"input_sha256": "fixture"})
+        # Reversing an otherwise valid CDS changes its biological 3-prime end.
+        # Coordinate rendering remains correct, but a complete CDS without a
+        # terminal stop must now fail NCBI pre-submission validation.
+        self.assertFalse(validation["valid"])
+        self.assertTrue(any(item["code"] == "NCBI_CDS_NOSTOP" for item in validation["errors"]))
 
     def test_genbank_reports_fasta_and_claim_problems(self):
         genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
