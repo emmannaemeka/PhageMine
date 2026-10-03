@@ -62,8 +62,10 @@ def parse_gff(path: str | Path, source: str, version: str) -> list[dict]:
     return features
 
 
-def parse_trnascan(path: str | Path, version: str) -> tuple[list[dict], list[dict]]:
+def parse_trnascan(path: str | Path, version: str, *, confirmed_zero_hits: bool = False) -> tuple[list[dict], list[dict]]:
     features, rejected = [], []
+    if confirmed_zero_hits and not Path(path).read_text().strip():
+        return features, rejected
     header_seen = False
     for line in Path(path).read_text().splitlines():
         if "Sequence" in line and "tRNA" in line:
@@ -152,15 +154,20 @@ def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:
     if not version_lines: raise RuntimeError("tRNAscan-SE returned no version information")
     version = next((line.strip() for line in version_lines if line.strip().startswith("tRNAscan-SE")), version_lines[0])
     output = directory / "trnascan.tsv"
-    command = [program, "-B", "--thread", str(threads), "-o", str(output), str(root / "analysis_genome.fasta")]
+    stats = directory / "trnascan.stats"
+    command = [program, "-B", "-m", str(stats), "--thread", str(threads), "-o", str(output), str(root / "analysis_genome.fasta")]
     result = subprocess.run(command, capture_output=True, text=True, timeout=3600)
     (directory / "stdout.txt").write_text(result.stdout)
     (directory / "stderr.txt").write_text(result.stderr)
     if result.returncode != 0 or not output.is_file():
         raise RuntimeError(f"tRNAscan-SE failed with exit {result.returncode}: {result.stderr[-1000:]}")
-    features, rejected = parse_trnascan(output, version)
+    import re
+    stats_text = stats.read_text() if stats.is_file() else ""
+    confirmed_zero = bool(re.search(r"(?m)^Total tRNAs:\s+0\s*$", stats_text) and
+                          re.search(r"Sequences read:\s+[1-9][0-9]*", stats_text))
+    features, rejected = parse_trnascan(output, version, confirmed_zero_hits=confirmed_zero)
     return attach(root, features, {"provider": "tRNAscan-SE", "version": version, "command": command,
-                    "raw_table_sha256": checksum(output), "searched_types": ["tRNA"], "mode": "bacterial"}, rejected)
+                    "raw_table_sha256": checksum(output), "zero_hits_confirmed_by_statistics": confirmed_zero, "stats_sha256": checksum(stats) if stats.is_file() else None, "searched_types": ["tRNA"], "mode": "bacterial"}, rejected)
 
 
 def scan_run(run: str | Path, output: str | Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:

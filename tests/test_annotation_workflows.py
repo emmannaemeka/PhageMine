@@ -176,3 +176,22 @@ def test_rna_executable_zero_hit_workflow_and_empty_version(source_run, tmp_path
     executable.write_text('#!/usr/bin/env python3\n')
     with pytest.raises(RuntimeError, match='no version'): scan_run(source_run, tmp_path / 'failed', str(executable), 1)
     assert not (tmp_path / 'failed').exists()
+
+
+def test_trnascan_empty_table_requires_confirmed_statistics(tmp_path):
+    from phagemine.rna_features import parse_trnascan
+    output = tmp_path / "empty.tsv"; output.write_text("")
+    with pytest.raises(ValueError, match="format"): parse_trnascan(output, "test")
+    assert parse_trnascan(output, "test", confirmed_zero_hits=True) == ([], [])
+    output.write_text("malformed output")
+    with pytest.raises(ValueError, match="format"): parse_trnascan(output, "test", confirmed_zero_hits=True)
+
+
+def test_trnascan_executable_empty_zero_hit_table(source_run, tmp_path):
+    from phagemine.rna_features import scan_run
+    executable = tmp_path / "trnascan-zero"
+    executable.write_text('#!/usr/bin/env python3\nimport sys\nfrom pathlib import Path\nif "--help" in sys.argv: print("tRNAscan-SE test"); sys.exit(0)\nPath(sys.argv[sys.argv.index("-o")+1]).write_text("")\nPath(sys.argv[sys.argv.index("-m")+1]).write_text("Sequences read: 1\\nTotal tRNAs: 0\\n")\n')
+    executable.chmod(0o755)
+    result = scan_run(source_run, tmp_path / "zero-result", str(executable), 1)
+    assert result["feature_count"] == 0
+    assert result["provenance"]["zero_hits_confirmed_by_statistics"] is True

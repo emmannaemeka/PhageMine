@@ -239,3 +239,5 @@ datasets. See `docs/limitations.md` for interpretation and validation limits.
 - Opt-in checksum-validated persistent reuse for single-genome evidence searches.
 - Curator-provenance-bearing benchmark CLI with unresolved review queues and auditable adjudication.
 - Correct tRNAscan-SE help-banner probe and modern-Python container dependency cleanup.
+
+- Accept empty zero-hit tRNAscan-SE tables only with explicit successful-scan statistics.
