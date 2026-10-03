@@ -98,6 +98,14 @@ def test_launcher_binds_to_localhost(monkeypatch):
     cli = ModuleType("streamlit.web.cli")
     commands = []
     cli.main = lambda: commands.append(list(sys.argv)) or 0
+    streamlit = ModuleType("streamlit")
+    streamlit.__path__ = []
+    web = ModuleType("streamlit.web")
+    web.__path__ = []
+    web.cli = cli
+    streamlit.web = web
+    monkeypatch.setitem(sys.modules, "streamlit", streamlit)
+    monkeypatch.setitem(sys.modules, "streamlit.web", web)
     monkeypatch.setitem(sys.modules, "streamlit.web.cli", cli)
     monkeypatch.setattr(launcher.importlib.util, "find_spec", lambda name: True)
     monkeypatch.setattr(sys, "argv", ["phagemine-gui"])

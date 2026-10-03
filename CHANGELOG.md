@@ -223,3 +223,13 @@ file without rerunning biological analysis.
 
 The release does not bundle external evidence databases, PMFDB, or research
 datasets. See `docs/limitations.md` for interpretation and validation limits.
+
+## 1.3.0.dev0 annotation workflow development
+
+- Optional tRNAscan-SE and validated noncoding-RNA GFF3 imports with feature exports.
+- Sequence-validated external GenBank annotation proposals with source/database provenance.
+- Audited manual product, gene and note review in CLI and GUI with regenerated exports.
+- Streaming reproducibility bundles, artifact consistency checks and sampled runtime profiling.
+- Correct cross-genome, negative-strand and CDS-only benchmark imports.
+- Docker build workflow and local development Bioconda recipe.
+- Core-only GUI launcher test isolation.

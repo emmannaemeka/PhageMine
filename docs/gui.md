@@ -63,3 +63,7 @@ The GUI does not establish functional accuracy or experimental confirmation.
 
 The bundled input is synthetic and no evidence databases were installed in
 this check; unresolved functions are expected.
+
+## Development review pages
+
+Version 1.3.0.dev0 includes Review / Curation for evidence-backed annotation edits saved to a separate result directory, and RNA Features for feature tables and provider provenance. See [annotation workflows](annotation-workflows.md) for CLI equivalents and supported features.

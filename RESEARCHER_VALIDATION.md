@@ -54,3 +54,16 @@ Generated installation logs, distributions and run outputs are under the
 ignored `.validation/` directory. Development screenshots are in
 `docs/images/phagemine-gui/`. See [the readiness assessment](docs/researcher-readiness.md)
 and [release checklist](docs/release-checklist.md) for outstanding work.
+
+## Annotation workflow development (1.3.0.dev0)
+
+Checked on 2026-10-03 in Python 3.12:
+
+- Source tests: `PYTHONPATH=src .venv/bin/python -m pytest -q`: **349 passed, 2 skipped, 12 deselected**.
+- Built wheel and source distribution with `python -m build --no-isolation`.
+- Installed wheel synthetic smoke: five proteins, expected annotation/report/submission artifacts, executed outside checkout.
+- Installed CLI `validate-run` passed on the synthetic result; streaming export and verification passed for a 95-file bundle.
+- New tests cover curation/export consistency, RNA import and executable zero-hit behavior, external exact-sequence matching, artifact corruption, archive tampering and benchmark feature/record separation.
+- Earlier GitHub matrix failures were isolated to the launcher test mocking only a child Streamlit module. The test now mocks the complete parent import hierarchy so core-only environments remain supported.
+
+The wheel smoke environment initially lacked newly required Biopython because installation used `--no-deps`; this smoke does not establish dependency resolution. CI installs wheels with dependencies in fresh environments. The Docker recipe and real tRNAscan-SE stage remain pending container CI; no successful local container build is claimed. The Bioconda recipe is local development material, not a published package. No new cross-tool superiority measurements or laboratory validation are claimed.

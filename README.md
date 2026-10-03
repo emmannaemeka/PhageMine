@@ -564,3 +564,7 @@ The `genbank_submission/` package contains genome FASTA, CDS/protein outputs, fe
 Run the test suite with `PYTHONPATH=src pytest -q`. See
 `docs/release-checklist.md` before publishing an artifact, and see
 `CHANGELOG.md`, `CITATION.cff`, and `LICENSE` for release metadata and terms.
+
+## Development annotation workflows (1.3.0.dev0)
+
+The development branch adds optional tRNAscan-SE features, sequence-validated external annotation proposals, audited CLI/GUI curation, richer GFF3 products, result integrity checks, reproducibility bundles and runtime profiling. See the [annotation workflow guide](docs/annotation-workflows.md). These features are not part of the published 1.2 release. Cross-tool accuracy superiority has not been established.

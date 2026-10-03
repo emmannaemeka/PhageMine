@@ -540,9 +540,15 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE") -> int:
     progress = progress or ProgressReporter(quiet=True)
     shared_evidence_cache = shared_evidence_cache or _SegmentEvidenceCache()
+    if rna_annotation not in {"auto", "none", "trnascan"}:
+        raise ValueError("rna_annotation must be auto, none or trnascan")
+    if rna_annotation == "trnascan":
+        import shutil
+        if not shutil.which(trnascan_executable):
+            raise ValueError("Requested tRNAscan-SE executable is unavailable")
     molecule_type = str(molecule_type).lower()
     if molecule_type not in {"dna", "rna"}:
         raise ValueError("molecule_type must be dna or rna")
@@ -551,6 +557,8 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         raise ValueError("RNA mode uses the explicit Pyrodigal-rv RNA policy; DNA consensus is not applicable")
     if segmented and molecule_type != "rna":
         raise ValueError("--segmented is valid only with --molecule-type rna")
+    if segmented and rna_annotation == "trnascan":
+        raise ValueError("Use per-segment RNA feature annotation; tRNAscan-SE is not supported for aggregate segmented runs")
     if segmented:
         from .io import read_fasta_records
         if len(read_fasta_records(fasta)) > 1:
@@ -956,6 +964,19 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_package(output, representation.analysis_sequence_id, representation.analysis_sequence, proteins, manifest, metadata, table2asn_executable, sequencing_provenance)
     progress.finish("package generated")
     timed_end("genbank")
+    import shutil
+    rna_available = shutil.which(trnascan_executable)
+    if rna_annotation != "none" and rna_available:
+        from .rna_features import scan
+        progress.start("noncoding RNA annotation")
+        timed_start("rna_annotation")
+        rna_result = scan(Path(output), trnascan_executable, threads)
+        manifest.update({key: value for key, value in json.loads((Path(output) / "run_manifest.json").read_text()).items()
+                         if key in {"rna_annotation", "scientific_validation"}})
+        progress.finish(f"{rna_result['feature_count']} tRNA predictions")
+        timed_end("rna_annotation")
+    else:
+        manifest["rna_annotation"] = {"status": "SKIPPED", "reason": "Disabled" if rna_annotation == "none" else "tRNAscan-SE not installed"}
     manifest["stage_timings_seconds"] = timings
     (Path(output) / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     from .triage import write_triage_report

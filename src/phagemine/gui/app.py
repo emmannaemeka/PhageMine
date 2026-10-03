@@ -19,7 +19,7 @@ st.title("PhageMine GUI")
 st.caption(f"Local scientific interface · GUI v{GUI_VERSION} · Same PhageMine analysis engine")
 
 PAGES = ("Home / New Analysis", "Environment / Database Status", "Run Monitor",
-         "Annotation Results", "Discovery Results", "Figures", "Export / Downloads")
+         "Annotation Results", "Review / Curation", "RNA Features", "Discovery Results", "Figures", "Export / Downloads")
 page = st.sidebar.radio("Workspace", PAGES)
 result_dir = st.sidebar.text_input("Result directory", key="result_dir", value="results/gui_run")
 
@@ -92,7 +92,7 @@ elif page == "Environment / Database Status":
     deep = st.checkbox("Check operational database formats", value=False)
     try:
         rows = doctor_rows(doctor(deep=deep))
-        st.dataframe(rows, use_container_width=True, hide_index=True)
+        st.dataframe(rows, width="stretch", hide_index=True)
     except (OSError, ValueError, RuntimeError) as exc:
         st.error(f"Diagnostics failed: {exc}")
 
@@ -105,7 +105,7 @@ elif page == "Run Monitor":
     if status["completed_stages"]: st.write("Completed stages:", ", ".join(status["completed_stages"]))
     for warning in status["warnings"]: st.warning(warning)
     for error in status["errors"]: st.error(error)
-    if status.get("samples"): st.dataframe(status["samples"], use_container_width=True)
+    if status.get("samples"): st.dataframe(status["samples"], width="stretch")
     if status.get("resume_available"):
         st.caption("Resume is available from Home for batch runs and delegates to PhageMine's existing --resume-existing checkpoints.")
     st.button("Refresh status")
@@ -122,8 +122,8 @@ elif page == "Annotation Results":
             filtered = [r for r in records if (not classification or r.get("functional_state") in classification)
                         and (not confidence or (r.get("confidence") or r.get("functional_confidence")) in confidence)
                         and (not keyword or keyword in f"{r.get('protein_id','')} {r.get('proposed_function','')} {r.get('annotation','')}".lower())]
-            columns = ["protein_id", "sample", "start", "end", "strand", "functional_state", "proposed_function", "confidence", "functional_category", "pmf_id"]
-            st.dataframe([{k: r.get(k) for k in columns} for r in filtered], use_container_width=True, hide_index=True)
+            columns = ["protein_id", "sample", "start", "end", "strand", "product", "functional_state", "proposed_function", "confidence", "curation_state", "functional_category", "pmf_id"]
+            st.dataframe([{k: r.get(k) for k in columns} for r in filtered], width="stretch", hide_index=True)
             selected = st.selectbox("Protein detail", [r["record_id"] for r in filtered]) if filtered else None
             if selected:
                 record = next(r for r in filtered if r["record_id"] == selected)
@@ -131,6 +131,55 @@ elif page == "Annotation Results":
                 st.text_area("Amino-acid sequence", record.get("sequence") or "Not available", height=130)
                 st.text_area("CDS sequence", record.get("cds") or "Not available", height=130)
     except ValueError as exc: st.error(str(exc))
+
+elif page == "Review / Curation":
+    st.subheader("Review annotation")
+    st.caption("Save explicit product, gene and note edits to a new result directory. Original evidence and gene coordinates remain available.")
+    try:
+        records = annotation_records(result_dir)
+        if not records:
+            st.warning("No annotation records found.")
+        else:
+            selected = st.selectbox("Record to review", [record["record_id"] for record in records])
+            record = next(item for item in records if item["record_id"] == selected)
+            st.json({key: record.get(key) for key in ("product", "confidence", "functional_state", "evidence", "external_evidence", "genomic_context")})
+            with st.form("annotation_curation"):
+                product = st.text_input("Reviewed product", record.get("product") or record.get("proposed_function") or "hypothetical protein")
+                gene = st.text_input("Reviewed gene label", record.get("gene") or "")
+                note = st.text_input("Annotation note", record.get("curation_note") or "")
+                reviewer = st.text_input("Reviewer")
+                reason = st.text_input("Reason for change")
+                reference = st.text_input("Evidence reference (file, accession or review record)")
+                output = st.text_input("New reviewed result directory", str(Path(record["run_directory"]).with_name(Path(record["run_directory"]).name + "-reviewed")))
+                submitted = st.form_submit_button("Save reviewed annotation")
+            if submitted:
+                from phagemine.curation import apply, template
+                changes = template(record["run_directory"])
+                changes["reviewer"] = reviewer
+                edit = {"product": product, "gene": gene, "note": note, "reason": reason}
+                if reference.strip(): edit["evidence_reference"] = reference
+                changes["annotations"] = {record["protein_id"]: edit}
+                result = apply(record["run_directory"], changes, output)
+                st.success(f"Reviewed annotation saved to {result['output']}. Open this directory to continue review.")
+    except (OSError, ValueError, RuntimeError) as exc:
+        st.error(str(exc))
+
+elif page == "RNA Features":
+    st.subheader("Noncoding RNA annotations")
+    root = Path(result_dir).expanduser()
+    import json
+    paths = [root / "rna_features.json"] if (root / "rna_features.json").is_file() else sorted(root.rglob("rna_features.json"))
+    if not paths:
+        st.info("No RNA annotation is attached. Run phagemine rna scan or import RNA GFF3. Unassessed features are not biological absences.")
+    for path in paths:
+        try:
+            payload = json.loads(path.read_text())
+            st.caption(str(path.relative_to(root)))
+            st.dataframe(payload["features"], width="stretch", hide_index=True)
+            with st.expander("Provenance and rejected features"):
+                st.json({key: value for key, value in payload.items() if key != "features"})
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            st.error(f"Invalid RNA output: {exc}")
 
 elif page == "Discovery Results":
     st.subheader("Discovery results"); caution()
@@ -140,7 +189,7 @@ elif page == "Discovery Results":
         rows = tables[table_name]
         keyword = st.text_input("Filter rows")
         if keyword: rows = [r for r in rows if keyword.lower() in " ".join(map(str, r.values())).lower()]
-        st.dataframe(rows, use_container_width=True, hide_index=True)
+        st.dataframe(rows, width="stretch", hide_index=True)
     except ValueError as exc: st.error(str(exc))
 
 elif page == "Figures":
@@ -149,7 +198,7 @@ elif page == "Figures":
     if not found: st.warning("No generated figures were found.")
     for path in found:
         st.caption(str(path.relative_to(Path(result_dir))))
-        st.image(str(path), use_column_width=True)
+        st.image(str(path), width="stretch")
         data_dir = path.parent.parent / "figure_data"
         if data_dir.is_dir():
             st.write("Figure source data:", [p.name for p in sorted(data_dir.iterdir()) if p.is_file()])
@@ -160,7 +209,7 @@ else:
     if not root.is_dir(): st.warning("The result directory does not exist.")
     else:
         files = downloadable_files(root)
-        st.dataframe([{"file": str(p.relative_to(root)), "bytes": p.stat().st_size} for p in files], use_container_width=True, hide_index=True)
+        st.dataframe([{"file": str(p.relative_to(root)), "bytes": p.stat().st_size} for p in files], width="stretch", hide_index=True)
         if st.button("Prepare result ZIP"):
             buffer = io.BytesIO()
             resolved_root = root.resolve()

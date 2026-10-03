@@ -13,6 +13,8 @@ def _json(path: Path, default):
         data = json.loads(path.read_text())
         if isinstance(default, list) and (not isinstance(data, list) or any(not isinstance(row, dict) for row in data)):
             raise ValueError("Expected an array of records")
+        if isinstance(default, dict) and not isinstance(data, dict):
+            raise ValueError("Expected an object")
         return data
     except (OSError, ValueError, TypeError) as exc:
         raise ValueError(f"Invalid PhageMine output {path}: {exc}") from exc
@@ -40,11 +42,16 @@ def annotation_records(root: str | Path) -> list[dict]:
         classes = {r.get("protein_id"): r for r in _json(sample / "functional_classification.json", [])}
         evidence = {r.get("protein_id"): r for r in _json(sample / "evidence.json", [])}
         contexts = {r.get("protein_id"): r for r in _json(sample / "genomic_context.json", [])}
+        curated = {r.get("protein_id"): r for r in _json(sample / "curated_annotations.json", [])}
+        external = _json(sample / "external_evidence.json", {})
         for protein_id in sorted(set(base) | set(classes)):
             row = {**base.get(protein_id, {}), **classes.get(protein_id, {})}
+            row.update(curated.get(protein_id, {}))
             row["protein_id"] = protein_id
             row["sample"] = str(sample.relative_to(root)) if sample != root else sample.name
             row["record_id"] = f"{row['sample']} / {protein_id}"
+            row["run_directory"] = str(sample.resolve())
+            row["external_evidence"] = [record for record in external.get("records", []) if record.get("protein_id") == protein_id]
             row["evidence"] = evidence.get(protein_id, {}).get("evidence", [])
             row["sequence"] = evidence.get(protein_id, {}).get("sequence")
             row["cds"] = evidence.get(protein_id, {}).get("cds")
