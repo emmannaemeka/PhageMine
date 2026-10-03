@@ -169,7 +169,9 @@ def validate_resource(resource: dict[str, Any], *, check_checksum: bool = True) 
                     problems.append("PMFDB manifest schema_version is unsupported")
                 for name, expected in (manifest.get("checksums") or {}).items():
                     candidate = root / name
-                    if candidate.is_file() and _sha256(candidate) != expected:
+                    if not candidate.is_file():
+                        problems.append(f"Manifest file is missing: {name}")
+                    elif check_checksum and _sha256(candidate) != expected:
                         problems.append(f"PMFDB checksum mismatch: {name}")
             except (OSError, ValueError, TypeError):
                 problems.append("PMFDB reference_manifest.json is invalid")
@@ -190,7 +192,9 @@ def validate_resource(resource: dict[str, Any], *, check_checksum: bool = True) 
                     problems.append("INPHARED manifest schema_version is unsupported")
                 for name, expected in (manifest.get("checksums") or {}).items():
                     candidate = root / name
-                    if candidate.is_file() and _sha256(candidate) != expected:
+                    if not candidate.is_file():
+                        problems.append(f"Manifest file is missing: {name}")
+                    elif check_checksum and _sha256(candidate) != expected:
                         problems.append(f"INPHARED checksum mismatch: {name}")
             except (OSError, ValueError, TypeError):
                 problems.append("INPHARED genome_manifest.json is invalid")

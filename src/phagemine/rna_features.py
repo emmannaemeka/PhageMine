@@ -146,11 +146,11 @@ def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:
     program = shutil.which(executable)
     if not program: raise ValueError("tRNAscan-SE is unavailable; install trnascan-se or supply its executable path")
     directory = root / "rna_search"; directory.mkdir()
-    version_probe = subprocess.run([program, "--version"], capture_output=True, text=True, timeout=30)
+    version_probe = subprocess.run([program, "--help"], capture_output=True, text=True, timeout=30)
     if version_probe.returncode != 0: raise RuntimeError("tRNAscan-SE version probe failed")
-    version_lines = (version_probe.stdout or version_probe.stderr).strip().splitlines()
+    version_lines = (version_probe.stderr + "\n" + version_probe.stdout).strip().splitlines()
     if not version_lines: raise RuntimeError("tRNAscan-SE returned no version information")
-    version = version_lines[0]
+    version = next((line.strip() for line in version_lines if line.strip().startswith("tRNAscan-SE")), version_lines[0])
     output = directory / "trnascan.tsv"
     command = [program, "-B", "--thread", str(threads), "-o", str(output), str(root / "analysis_genome.fasta")]
     result = subprocess.run(command, capture_output=True, text=True, timeout=3600)

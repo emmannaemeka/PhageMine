@@ -67,3 +67,11 @@ Checked on 2026-10-03 in Python 3.12:
 - Earlier GitHub matrix failures were isolated to the launcher test mocking only a child Streamlit module. The test now mocks the complete parent import hierarchy so core-only environments remain supported.
 
 The wheel smoke environment initially lacked newly required Biopython because installation used `--no-deps`; this smoke does not establish dependency resolution. CI installs wheels with dependencies in fresh environments. The Docker recipe and real tRNAscan-SE stage remain pending container CI; no successful local container build is claimed. The Bioconda recipe is local development material, not a published package. No new cross-tool superiority measurements or laboratory validation are claimed.
+
+## Next-step operational improvements
+
+Python 3.12 source suite: **355 passed, 2 skipped, 12 deselected**. Added targeted tests for database version/freshness warnings, ambiguous registrations, cache invalidation and corrupt entries, zero-hit reuse, failed-search exclusion, exact-accession benchmark matching, provenance requirements, withheld scores and adjudication, and conflict reporting.
+
+The preceding commit passed all GitHub core CI jobs across the supported Linux/macOS/Python matrix. Its external integration revealed the unsupported tRNAscan-SE `--version` flag; the adapter now uses the documented `--help` banner. Container CI revealed obsolete Conda-installed textwrap3/backports.tempfile metadata failing `pip check`; the Docker build removes these Python-2 compatibility packages before checking its modern runtime. Verification of those two fixes remains pending CI for this commit.
+
+Database health is offline and does not claim to know the provider's latest release. Persistent cache hashes database/index/metadata/executable/code inputs and only retains successful real evidence. Curated benchmark tests use explicitly synthetic fixtures; no new biological accuracy results or superiority claims are made.

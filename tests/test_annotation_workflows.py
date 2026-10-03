@@ -169,7 +169,7 @@ def test_benchmark_does_not_double_count_genes_or_capture_rna_qualifiers(tmp_pat
 def test_rna_executable_zero_hit_workflow_and_empty_version(source_run, tmp_path):
     from phagemine.rna_features import scan_run
     executable = tmp_path / 'trnascan'
-    executable.write_text('#!/usr/bin/env python3\nimport sys\nfrom pathlib import Path\nif "--version" in sys.argv: print("tRNAscan-SE test"); sys.exit(0)\nPath(sys.argv[sys.argv.index("-o")+1]).write_text("Sequence tRNA Begin End Type Codon Intron Begin End Score\\n")\n')
+    executable.write_text('#!/usr/bin/env python3\nimport sys\nfrom pathlib import Path\nif "--help" in sys.argv: print("tRNAscan-SE test"); sys.exit(0)\nPath(sys.argv[sys.argv.index("-o")+1]).write_text("Sequence tRNA Begin End Type Codon Intron Begin End Score\\n")\n')
     executable.chmod(0o755)
     result = scan_run(source_run, tmp_path / 'scanned', str(executable), 1)
     assert result['feature_count'] == 0

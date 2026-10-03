@@ -4,10 +4,19 @@ import argparse
 import json
 from pathlib import Path
 
-COMMANDS = {"curate", "rna", "evidence-import", "bundle", "validate-run", "profile"}
+COMMANDS = {"curate", "rna", "evidence-import", "bundle", "validate-run", "profile", "database-health", "benchmark-curated"}
 
 
 def add_commands(subcommands) -> None:
+    health = subcommands.add_parser("database-health", help="Offline database readiness, version and freshness checks")
+    health.add_argument("--expected-versions", help="JSON mapping resource names/types to required versions")
+    health.add_argument("--max-age-days", type=int, default=365)
+    health.add_argument("--checksums", action="store_true")
+    health.add_argument("--output")
+    benchmark = subcommands.add_parser("benchmark-curated", help="Score TSV predictions against provenance-bearing curated references")
+    for name in ("predictions", "references", "output"):
+        benchmark.add_argument("--" + name, required=True)
+    benchmark.add_argument("--synonyms"); benchmark.add_argument("--adjudications")
     curate = subcommands.add_parser("curate", help="Apply audited product/gene/note edits")
     actions = curate.add_subparsers(dest="action", required=True)
     for action in ("template", "apply"):
@@ -38,7 +47,16 @@ def add_commands(subcommands) -> None:
 
 
 def dispatch(args) -> int:
-    if args.command == "curate":
+    if args.command == "database-health":
+        from .database_health import health
+        expected = json.loads(Path(args.expected_versions).read_text()) if args.expected_versions else None
+        result = health(expected_versions=expected, max_age_days=args.max_age_days, check_checksums=args.checksums)
+        if args.output: Path(args.output).write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+        print(json.dumps(result, indent=2, sort_keys=True)); return 1 if result["status"] == "NEEDS_ATTENTION" else 0
+    elif args.command == "benchmark-curated":
+        from .curated_benchmark import evaluate
+        result = evaluate(args.predictions, args.references, args.output, synonyms=args.synonyms, adjudications=args.adjudications)
+    elif args.command == "curate":
         from .curation import apply, template
         if args.action == "template":
             output = Path(args.output).expanduser()

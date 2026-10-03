@@ -22,6 +22,8 @@ def import_genbank(run: str | Path, genbank: str | Path, output: str | Path, *,
             raise ValueError(f"{field} must be a nonempty single-line string")
     genome_id, genome = read_fasta(root / "analysis_genome.fasta")
     proteins = read_json(root / "evidence.json", list)
+    with (root / "annotation.tsv").open(newline="") as handle:
+        current_annotations = {row["protein_id"]: row for row in csv.DictReader(handle, delimiter="\t")}
     by_model = {}
     for protein in proteins:
         key = (protein["start"], protein["end"], protein["strand"])
@@ -54,7 +56,7 @@ def import_genbank(run: str | Path, genbank: str | Path, output: str | Path, *,
             if product.lower() in UNKNOWN: continue
             if any(ord(char) < 32 for char in product):
                 raise ValueError("External product contains control characters")
-            current = protein.get("annotation") or "hypothetical protein"
+            current = current_annotations.get(protein["protein_id"], {}).get("product") or "hypothetical protein"
             from .benchmark import classify_product_relation
             relation = classify_product_relation(current, product)
             accepted.append({"protein_id": protein["protein_id"], "genome_id": genome_id,
@@ -80,5 +82,7 @@ def import_genbank(run: str | Path, genbank: str | Path, output: str | Path, *,
         with (destination / "annotation_proposals.tsv").open("w", newline="") as handle:
             writer = csv.DictWriter(handle, fieldnames=columns, delimiter="\t", extrasaction="ignore")
             writer.writeheader(); writer.writerows(accepted)
+        from .conflict_review import write_conflicts
+        write_conflicts(destination)
         record_sidecar(destination, "external_evidence", {key: value for key, value in payload.items() if key != "records"})
     return {"status": "IMPORTED_FOR_REVIEW", "proposal_count": len(accepted), "rejected_count": len(rejected), "output": str(output)}

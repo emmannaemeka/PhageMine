@@ -18,7 +18,8 @@ WORKDIR /opt/phagemine
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN --mount=type=secret,id=proxy_ca \
     if [ -f /run/secrets/proxy_ca ]; then export PIP_CERT=/run/secrets/proxy_ca; fi; \
-    python -m pip install --no-cache-dir . && python -m pip check
+    python -m pip install --no-cache-dir . && \
+    python -m pip uninstall --yes textwrap3 backports.tempfile && python -m pip check
 
 ENV PHAGEMINE_REGISTRY_PATH=/data/resources.json
 WORKDIR /data

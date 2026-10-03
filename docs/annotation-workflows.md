@@ -30,7 +30,7 @@ Import an existing Phold or other native GenBank annotation:
 phagemine evidence-import --run results --genbank external.gbk --source Phold --version TOOL_VERSION --database-version DB_VERSION --output results-proposals
 ```
 
-The nucleotide sequence must match the analyzed genome. Each proposed CDS must match an existing simple CDS in coordinates, strand and translation. Unmatched models are recorded as rejected proposals. Accepted proposals retain their source, tool/database versions and input checksum in `external_annotation/annotation_proposals.tsv` and `external_evidence.json`. They do not automatically replace products or change confidence. PhageMine does not run Phold or download its databases through this command.
+The nucleotide sequence must match the analyzed genome. Each proposed CDS must match an existing simple CDS in coordinates, strand and translation. Unmatched models are recorded as rejected proposals. Accepted proposals retain their source, tool/database versions and input checksum in `annotation_proposals.tsv` and `external_evidence.json`. They do not automatically replace products or change confidence. PhageMine does not run Phold or download its databases through this command.
 
 ## Apply audited review
 
@@ -73,3 +73,31 @@ docker run --rm -v "$PWD:/data" phagemine:dev run /data/genome.fasta --output /d
 ```
 
 The base-image tag and several external dependencies are not fully locked. Resource databases are configured separately. The local Bioconda recipe under `packaging/bioconda/recipe` is a development recipe; it has not been submitted to or published by Bioconda. Consult CI results before treating a container build as verified.
+
+## Database health and reusable searches
+
+```bash
+phagemine database-health --checksums --output database-health.json
+phagemine database-health --expected-versions expected-versions.json --max-age-days 180
+phagemine run genome.fasta --output first-run --evidence-cache /path/to/cache
+phagemine run genome.fasta --output updated-run --evidence-cache /path/to/cache
+```
+
+Expected versions are an explicit JSON map such as `{"PHROGS": "YOUR_INSTALLED_RELEASE"}`. Checks run offline: they detect missing resources, broken preparation/index files, version mismatches and ambiguous installations. Recorded release or installation dates support maintenance warnings; registration time and file modification time are not treated as database freshness. Missing optional resources allow core analysis with a limited-evidence status. Version expectations with no matching registration fail the health check. Every single-genome run saves `database_health.json` before prediction.
+
+Persistent reuse is opt-in for single-genome evidence searches. Only successful real searches and successful zero-hit results are stored. Sequence, database/index/annotation bytes, executable bytes, versions, adapter parameters and package implementation must match. Corrupt entries are recomputed; changed inputs trigger fresh searches. Reading and hashing large databases takes time. Gene prediction and RNA stages still run; manual edits use the existing curation command. Cache provenance labels old search commands as historical. Keep the cache separate from result directories when exporting bundles.
+
+## Evidence conflicts
+
+`annotation_conflicts.tsv` and `.json` expose conflicts already flagged by the fusion engine, plus differences between a current named product and an imported external proposal. A difference in wording does not prove incompatible function. The GUI can filter these records and display the underlying evidence during review. Saving an edit refreshes the conflict report without automatically raising confidence or resolving remaining alternative proposals.
+
+## Curated-reference benchmark
+
+```bash
+phagemine benchmark-curated --predictions predictions.tsv --references references.tsv --output benchmark-results
+phagemine benchmark-curated --predictions predictions.tsv --references references.tsv --adjudications reviewed-decisions.tsv --output benchmark-reviewed
+```
+
+Both tables require `accession`, `start`, `end`, `strand` and `product`. References also require a nonempty `curated_by` and `reference_evidence` on every row. Accessions and coordinates must refer to the same representation; matching is exact and does not silently pool different genomes. Missing exact models count as abstentions at informative reference loci, and unmatched predicted models are reported separately.
+
+Reports include model precision/recall, product precision, coverage, abstention counts and Wilson intervals. Exact normalized labels are scored automatically. Other named-label differences enter `review_queue.tsv`; precision/recall scores affected by unresolved decisions remain unset. Reviewers can fill category, reviewer and rationale and pass the completed queue as adjudications. Optional `--synonyms` accepts a TSV with `term_a`, `term_b`, `rule_id` and `rationale`. Decisions and source tables are checksummed. Provide independently curated references; the software cannot establish reference independence or quality from a curator name. This workflow does not itself establish superiority over another tool.

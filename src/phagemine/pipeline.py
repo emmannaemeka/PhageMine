@@ -294,6 +294,8 @@ def _run_segmented_rna(fasta, output, *, command, progress, **kwargs):
     with (root / "performance_profile.tsv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=["stage", "scope", "segment_id", "item_count", "wall_seconds", "status"], delimiter="\t")
         writer.writeheader(); writer.writerows(performance_rows)
+    from .conflict_review import write_conflicts
+    write_conflicts(output)
     from .triage import write_triage_report
     write_triage_report(root)
     return len(aggregate_proteins)
@@ -540,8 +542,15 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE") -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None) -> int:
     progress = progress or ProgressReporter(quiet=True)
+    if evidence_cache_dir and segmented:
+        raise ValueError("Persistent evidence reuse is currently supported for single-genome runs")
+    if evidence_cache_dir and shared_evidence_cache is not None:
+        raise ValueError("Supply either a persistent cache directory or a shared cache")
+    if evidence_cache_dir:
+        from .search_cache import PersistentEvidenceCache
+        shared_evidence_cache = PersistentEvidenceCache(evidence_cache_dir)
     shared_evidence_cache = shared_evidence_cache or _SegmentEvidenceCache()
     if rna_annotation not in {"auto", "none", "trnascan"}:
         raise ValueError("rna_annotation must be auto, none or trnascan")
@@ -605,6 +614,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         raise ValueError("GenomeRepresentation must be derived from the supplied authoritative input FASTA.")
     progress.finish(f"genome {genome_id}; {len(genome):,} bp")
     timed_end("genome_validation")
+    from .database_health import health
+    resource_health = health()
+    Path(output).mkdir(parents=True, exist_ok=True)
+    (Path(output) / "database_health.json").write_text(json.dumps(resource_health, indent=2, sort_keys=True) + "\n")
     predictor = predictor or create_predictor("phanotate")
     predictor_input = Path(fasta)
     if representation.analysis_sequence != genome or representation.analysis_sequence_id != genome_id:
@@ -917,6 +930,11 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     progress.finish(f"{len(candidates)} candidates; {ranking_status}")
     timed_end("ranking_mining")
     manifest = {"pipeline": "PhageMine", "pipeline_version": __version__, "command": command, "input": str(fasta), "input_sha256": checksum(fasta), "genome_representation": representation.manifest(), "sequencing_provenance": sequencing_provenance.manifest(), "gene_caller": {"name": predictor.name, "version": predictor.version(), "parameters": predictor.parameters()}, "evidence_adapters": evidence_adapters, "discovery_ranking": {"status": ranking_status, "message": "Candidate prioritization was not performed because sufficient evidence was unavailable." if ranking_status == "INSUFFICIENT_EVIDENCE" else "Candidates ranked by available evidence."}}
+    manifest["database_health"] = {"status": resource_health["status"], "path": "database_health.json",
+                                   "missing_annotation_resources": resource_health["missing_annotation_resources"]}
+    if evidence_cache_dir:
+        manifest["evidence_cache"] = {"enabled": True, "events": shared_evidence_cache.stats,
+                                      "validation": "SHA256_DATABASE_INDEX_EXECUTABLE_PARAMETERS_IMPLEMENTATION_SEQUENCE"}
     manifest["hallmark_summary"] = {row["hallmark"]: row["status"] for row in hallmarks}
     manifest["annotation_review"] = {"records": len(annotation_review), "high_priority": sum(row["priority"]=="HIGH" for row in annotation_review), "path": str(Path(output)/"annotation_review.tsv")}
     progress.start("QC/report generation")
@@ -979,6 +997,8 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         manifest["rna_annotation"] = {"status": "SKIPPED", "reason": "Disabled" if rna_annotation == "none" else "tRNAscan-SE not installed"}
     manifest["stage_timings_seconds"] = timings
     (Path(output) / "run_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    from .conflict_review import write_conflicts
+    write_conflicts(output)
     from .triage import write_triage_report
     write_triage_report(output)
     return len(proteins)

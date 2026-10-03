@@ -91,6 +91,13 @@ elif page == "Environment / Database Status":
     st.caption("States come from PhageMine doctor and resource validation; paths alone are not treated as readiness.")
     deep = st.checkbox("Check operational database formats", value=False)
     try:
+        from phagemine.database_health import health
+        database_health = health(check_checksums=deep)
+        if database_health['missing_annotation_resources']:
+            st.warning('Annotation databases not installed: ' + ', '.join(database_health['missing_annotation_resources']))
+        for resource in database_health['resources']:
+            for warning in resource['warnings']:
+                st.warning(resource['name'] + ': ' + warning)
         rows = doctor_rows(doctor(deep=deep))
         st.dataframe(rows, width="stretch", hide_index=True)
     except (OSError, ValueError, RuntimeError) as exc:
@@ -118,8 +125,9 @@ elif page == "Annotation Results":
         else:
             classification = st.multiselect("Functional classification", sorted({str(r.get("functional_state")) for r in records if r.get("functional_state")}))
             confidence = st.multiselect("Confidence", sorted({str(r.get("confidence") or r.get("functional_confidence")) for r in records if r.get("confidence") or r.get("functional_confidence")}))
+            conflicts_only = st.checkbox("Only records with evidence conflicts or label differences")
             keyword = st.text_input("Keyword (protein ID or proposed function)").lower()
-            filtered = [r for r in records if (not classification or r.get("functional_state") in classification)
+            filtered = [r for r in records if (not conflicts_only or r.get("conflict_review")) and (not classification or r.get("functional_state") in classification)
                         and (not confidence or (r.get("confidence") or r.get("functional_confidence")) in confidence)
                         and (not keyword or keyword in f"{r.get('protein_id','')} {r.get('proposed_function','')} {r.get('annotation','')}".lower())]
             columns = ["protein_id", "sample", "start", "end", "strand", "product", "functional_state", "proposed_function", "confidence", "curation_state", "functional_category", "pmf_id"]
@@ -142,7 +150,7 @@ elif page == "Review / Curation":
         else:
             selected = st.selectbox("Record to review", [record["record_id"] for record in records])
             record = next(item for item in records if item["record_id"] == selected)
-            st.json({key: record.get(key) for key in ("product", "confidence", "functional_state", "evidence", "external_evidence", "genomic_context")})
+            st.json({key: record.get(key) for key in ("product", "confidence", "functional_state", "evidence", "external_evidence", "conflict_review", "genomic_context")})
             with st.form("annotation_curation"):
                 product = st.text_input("Reviewed product", record.get("product") or record.get("proposed_function") or "hypothetical protein")
                 gene = st.text_input("Reviewed gene label", record.get("gene") or "")

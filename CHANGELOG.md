@@ -233,3 +233,9 @@ datasets. See `docs/limitations.md` for interpretation and validation limits.
 - Correct cross-genome, negative-strand and CDS-only benchmark imports.
 - Docker build workflow and local development Bioconda recipe.
 - Core-only GUI launcher test isolation.
+
+- Offline database health/version/freshness diagnostics and per-run health reports.
+- Explicit evidence-conflict and external-label review reports, including a GUI filter.
+- Opt-in checksum-validated persistent reuse for single-genome evidence searches.
+- Curator-provenance-bearing benchmark CLI with unresolved review queues and auditable adjudication.
+- Correct tRNAscan-SE help-banner probe and modern-Python container dependency cleanup.

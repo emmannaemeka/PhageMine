@@ -568,3 +568,5 @@ Run the test suite with `PYTHONPATH=src pytest -q`. See
 ## Development annotation workflows (1.3.0.dev0)
 
 The development branch adds optional tRNAscan-SE features, sequence-validated external annotation proposals, audited CLI/GUI curation, richer GFF3 products, result integrity checks, reproducibility bundles and runtime profiling. See the [annotation workflow guide](docs/annotation-workflows.md). These features are not part of the published 1.2 release. Cross-tool accuracy superiority has not been established.
+
+Next-step development features include `database-health`, `--evidence-cache`, evidence-conflict reports and `benchmark-curated`; commands and interpretation are documented in the [annotation workflow guide](docs/annotation-workflows.md).

@@ -151,6 +151,8 @@ def apply(run: str | Path, changes: dict | str | Path, output: str | Path) -> di
         (root / "annotated_proteins.faa").write_text("".join(
             f'>{row["protein_id"]} product="{row["product"].replace(chr(34), chr(39))}" curation={row.get("curation_state", "AUTOMATED")}\n{sequences[row["protein_id"]]}\n'
             for row in rows))
+        from .conflict_review import write_conflicts
+        write_conflicts(root)
         _submission(root, by_id)
         record_sidecar(root, "curation", {"status": "MANUALLY_REVIEWED", "events": len(audit),
                         "audit_sha256": previous, "reviewer": reviewer, "confidence_calibrated": False})

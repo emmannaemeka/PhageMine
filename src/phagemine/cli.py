@@ -166,6 +166,7 @@ Individual installers are also available:
         command.add_argument("--quiet", action="store_true", help="Suppress progress display")
         command.add_argument("--no-progress", action="store_true", help="Disable dynamic progress rendering")
         command.add_argument("--threads", type=int, default=1, help="Threads for evidence tools")
+        command.add_argument("--evidence-cache", help="Reuse successful sequence searches with full input checksum validation")
         command.add_argument("--rna-features", choices=("auto", "none", "trnascan"), default="auto", help="Run tRNAscan-SE when installed, disable it, or require it")
         command.add_argument("--trnascan", default="tRNAscan-SE", help="tRNAscan-SE executable path")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
@@ -261,8 +262,8 @@ Individual installers are also available:
         if args.multiphate_gff: methods["multiPhATE2"]=import_multiphate(args.multiphate_gff)
         if args.phold_genbank: methods["Phold"]=import_phold(args.phold_genbank)
         truth_records = None
-        if args.truth_gff: truth_records = import_pharokka(args.truth_gff, genome_id="reviewed_truth")
-        if args.truth_genbank: truth_records = import_phold(args.truth_genbank, genome_id="reviewed_truth")
+        if args.truth_gff: truth_records = import_pharokka(args.truth_gff, genome_id=None)
+        if args.truth_genbank: truth_records = import_phold(args.truth_genbank, genome_id=None)
         references = {name: truth_records for name in methods} if truth_records else None
         benchmark(methods,args.output,references=references)
         print(f"PhageMine benchmark complete. Outputs: {args.output}"); return 0
@@ -410,7 +411,7 @@ Individual installers are also available:
         # reconciliation layer.  ``run()`` still gates execution to genuine
         # PHANOTATE DNA analysis and keeps the flag as compatibility metadata.
         reconcile_orfs = args.reconcile_orfs or args.command in {"annotate", "mine", "run", "genbank"}
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress), gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented, rna_annotation=args.rna_features, trnascan_executable=args.trnascan)
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress), gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented, rna_annotation=args.rna_features, trnascan_executable=args.trnascan, evidence_cache_dir=args.evidence_cache)
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

@@ -44,6 +44,7 @@ def annotation_records(root: str | Path) -> list[dict]:
         contexts = {r.get("protein_id"): r for r in _json(sample / "genomic_context.json", [])}
         curated = {r.get("protein_id"): r for r in _json(sample / "curated_annotations.json", [])}
         external = _json(sample / "external_evidence.json", {})
+        conflicts = _json(sample / "annotation_conflicts.json", {})
         for protein_id in sorted(set(base) | set(classes)):
             row = {**base.get(protein_id, {}), **classes.get(protein_id, {})}
             row.update(curated.get(protein_id, {}))
@@ -52,6 +53,7 @@ def annotation_records(root: str | Path) -> list[dict]:
             row["record_id"] = f"{row['sample']} / {protein_id}"
             row["run_directory"] = str(sample.resolve())
             row["external_evidence"] = [record for record in external.get("records", []) if record.get("protein_id") == protein_id]
+            row["conflict_review"] = [record for record in conflicts.get("records", []) if record.get("protein_id") == protein_id]
             row["evidence"] = evidence.get(protein_id, {}).get("evidence", [])
             row["sequence"] = evidence.get(protein_id, {}).get("sequence")
             row["cds"] = evidence.get(protein_id, {}).get("cds")
