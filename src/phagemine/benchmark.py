@@ -22,12 +22,16 @@ def import_multiphate(path, genome_id=None): return import_gff(path, 'multiPhATE
 
 def import_genbank(path, tool, genome_id=None):
     """Import CDS coordinates and products from a GenBank flat file."""
-    path=Path(path); source_checksum=sha256(path.read_bytes()).hexdigest(); records=[]; current=None; qualifier=None; record_id=genome_id
+    path=Path(path); source_checksum=sha256(path.read_bytes()).hexdigest(); records=[]; current=None; qualifier=None; record_id=genome_id; locus_id=None
     for line in path.read_text().splitlines():
         locus = re.match(r"^LOCUS\s+(\S+)", line)
         if locus:
             if current: records.append(current)
-            current=None; qualifier=None; record_id=genome_id or locus.group(1)
+            current=None; qualifier=None; locus_id=locus.group(1); record_id=genome_id or locus_id
+        accession = re.match(r"^(VERSION|ACCESSION)\s+(\S+)", line)
+        if accession and genome_id is None:
+            if accession.group(1) == "VERSION" or record_id is None or record_id == locus_id:
+                record_id=accession.group(2)
         match=re.match(r"^\s{5}CDS\s+(complement\()?<?(\d+)\.\.>?(\d+)\)?", line)
         if match:
             if current: records.append(current)
@@ -44,7 +48,7 @@ def import_genbank(path, tool, genome_id=None):
         if q:
             qualifier=q.group(1); current['source_annotation'][qualifier]=q.group(2).rstrip('"')
         elif qualifier and re.match(r'^\s{21}\S', line):
-            current['source_annotation'][qualifier] += line.strip().rstrip('"')
+            current['source_annotation'][qualifier] += ('' if qualifier == 'translation' else ' ') + line.strip().rstrip('"')
         else: qualifier=None
     if current: records.append(current)
     for index, record in enumerate(records,1):

@@ -102,7 +102,8 @@ def test_curated_benchmark_preserves_unresolved_and_accounts_for_missing_models(
     assert result['summary']['ABSTENTION'] == 1
     assert result['summary']['exact_model_recall'] == .5
     review = tmp_path / 'review.tsv'
-    review.write_text('accession\tstart\tend\tstrand\tcategory\treviewer\trationale\nsynthetic\t1\t9\t+\tEQUIVALENT_FUNCTION\tR\tSynthetic synonyms\n')
+    from phagemine.artifact_ops import checksum
+    review.write_text('accession\tstart\tend\tstrand\tcategory\treviewer\trationale\tpredictions_sha256\treferences_sha256\tsynonyms_sha256\n' + f'synthetic\t1\t9\t+\tEQUIVALENT_FUNCTION\tR\tSynthetic synonyms\t{checksum(predictions)}\t{checksum(references)}\t\n')
     final = evaluate(predictions, references, tmp_path / 'scored', adjudications=review)
     assert final['summary']['strict_functional_precision'] == 1
     assert final['summary']['functional_recall'] == .5

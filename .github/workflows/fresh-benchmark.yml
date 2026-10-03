@@ -1,0 +1,44 @@
+name: Fresh annotation comparison
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/fresh-benchmark.yml'
+      - 'evaluation/v1.3_validation/scripts/run_fresh.py'
+      - 'src/phagemine/fusion.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fresh-annotation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+      - name: Install current PhageMine and released comparators
+        shell: micromamba-shell {0}
+        run: |
+          python -m pip install .
+          micromamba create -y -n comparators -c conda-forge -c bioconda python=3.12 pharokka=1.10.1 prokka=1.14.6 phanotate=1.6.7 'setuptools<81'
+      - name: Install frozen shared PHROGs distribution
+        shell: micromamba-shell {0}
+        run: micromamba run -n comparators pharokka install -o "${{ runner.temp }}/pharokka-db"
+      - name: Generate and evaluate fresh annotations
+        shell: micromamba-shell {0}
+        run: python evaluation/v1.3_validation/scripts/run_fresh.py --database "${{ runner.temp }}/pharokka-db" --output fresh-results --threads 2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fresh-annotation-comparison
+          path: fresh-results/
+          retention-days: 30

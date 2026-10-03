@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.8"
+FUSION_RULES_VERSION = "1.9"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -36,7 +36,7 @@ UNKNOWN_LABELS = {
     "", "hypothetical", "hypothetical protein", "unknown protein", "unknown function",
     "protein of unknown function", "uncharacterized protein", "uncharacterised protein",
     "conserved hypothetical protein", "conserved protein of unknown function",
-    "putative uncharacterized protein", "no annotation", "none", "null",
+    "putative uncharacterized protein", "no annotation", "none", "null", "na", "n/a", "nan", "-",
 }
 
 # These descriptions can be legitimate database similarities, but they are not
@@ -151,6 +151,11 @@ def normalize_function(description: str | None) -> str | None:
     # identify a database record, not a transferable biological function.
     value = re.sub(r"^[a-z0-9]+_[a-z0-9]+\s+", "", value)
     value = re.sub(r"\s*\{eco:[^}]+\}\s*$", "", value, flags=re.IGNORECASE).strip()
+    # Unknown families identify conservation, not an established function.
+    # Preserve the original description in evidence rather than exporting it
+    # as a named product. Do not discard informative 'conserved' descriptions.
+    if re.search(r"\b(?:duf\d+|upf\d+)\b|\b(?:domain|protein|family) of unknown function\b", value):
+        return None
     canonical = {
         "major head protein": "major capsid protein",
         "hoc-like head decoration": "hoc-like head decoration protein",
@@ -373,11 +378,21 @@ def _diagnostic_product(accepted: list[Evidence]) -> tuple[str | None, Evidence 
     return None, None, None
 
 
-def _gene_and_ec(accepted: list[Evidence]) -> tuple[str | None, str | None]:
-    """Transfer identifiers only from strong, accepted, explicit records."""
+def _gene_and_ec(accepted: list[Evidence], selected_product: str | None) -> tuple[str | None, str | None]:
+    """Transfer explicit identifiers only with the selected whole-protein name.
+
+    A domain hit, rejected function, or family-level rewrite cannot lend its
+    member-specific gene/EC qualifiers to another product.
+    """
     genes: list[str] = []; ecs: list[str] = []
+    if not selected_product:
+        return None, None
     for evidence in accepted:
         if evidence.evidence_strength not in {"STRONG", "EXPERIMENTAL"}:
+            continue
+        if evidence.source == "Pfam" or evidence.modality == "domain":
+            continue
+        if normalize_function(evidence.description) != selected_product:
             continue
         gene = evidence.metrics.get("gene") or evidence.metrics.get("gene_name")
         ec = evidence.metrics.get("ec_number") or evidence.metrics.get("ec")
@@ -437,7 +452,6 @@ def _conservation(evidence: list[Evidence]) -> str:
 
 def classify_protein(protein: Protein) -> dict[str, Any]:
     accepted = [e for e in protein.evidence if e.supports]
-    gene, ec_number = _gene_and_ec(accepted)
     conservative_flags: list[str] = []
     conservative_rewrites: list[str] = []
     informative = []
@@ -493,6 +507,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     if len(rewrite_labels) == 1:
         selected_product = rewrite_labels[0]
         selected_evidence = next((e for _, e, label in informative if label == selected_product), selected_evidence)
+    gene, ec_number = _gene_and_ec(accepted, selected_product)
     domain_summary = _domain_summary(accepted)
     conservation = _conservation(protein.evidence)
     # A detected domain is reported separately and never becomes a product
