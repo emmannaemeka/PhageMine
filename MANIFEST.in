@@ -1,0 +1,5 @@
+include environment.yml CITATION.cff CHANGELOG.md RELEASE_VALIDATION.md
+recursive-include examples *.fasta *.json
+recursive-include docs *.md *.png *.svg *.pdf *.tsv *.py
+include RESEARCHER_VALIDATION.md
+include tools/smoke_installed.py

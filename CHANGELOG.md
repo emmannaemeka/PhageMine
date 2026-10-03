@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Return a failing exit status for failed batch samples, reject empty inputs,
+  and stop Both before discovery when its annotation cohort is incomplete.
+
+- Correct GUI completion checks, Both result loading and sample protein
+  selection; expose operational Doctor checks and provider readiness.
+- Validate input types, reject duplicate uploads, support home paths, bind
+  the launcher to localhost and prepare symlink-free exports on demand.
+- Add built-wheel execution, application-level GUI and real-caller Core
+  smoke checks to CI; include installation resources in source distributions.
+- Retain the PHANOTATE pkg_resources compatibility dependency and document
+  Core-first onboarding and outstanding independent-validation gates.
+
 ## 1.2.0 (finalization)
 
 - Fixed IUPAC ambiguity-code handling and provider-specific sequence

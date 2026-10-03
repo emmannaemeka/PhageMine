@@ -89,3 +89,94 @@ def test_optional_dependency_message(monkeypatch, capsys):
     monkeypatch.setattr(launcher.importlib.util, "find_spec", lambda name: None)
     assert launcher.main() == 2
     assert 'pip install "phagemine[gui]"' in capsys.readouterr().err
+
+
+def test_launcher_binds_to_localhost(monkeypatch):
+    from phagemine.gui import launcher
+    import sys
+    from types import ModuleType
+    cli = ModuleType("streamlit.web.cli")
+    commands = []
+    cli.main = lambda: commands.append(list(sys.argv)) or 0
+    monkeypatch.setitem(sys.modules, "streamlit.web.cli", cli)
+    monkeypatch.setattr(launcher.importlib.util, "find_spec", lambda name: True)
+    monkeypatch.setattr(sys, "argv", ["phagemine-gui"])
+    assert launcher.main([]) == 0
+    assert "--server.address=127.0.0.1" in commands[0]
+
+
+def test_batch_status_requires_end_and_respects_failures(tmp_path):
+    from phagemine.gui.services.status import read_run_status
+    path = tmp_path / "batch_manifest.json"
+    path.write_text(json.dumps({"ended_at": None, "failures": []}))
+    assert read_run_status(tmp_path)["state"] == "RUNNING"
+    path.write_text(json.dumps({"ended_at": "2026-10-03", "failures": [{"sample_id": "a"}]}))
+    assert read_run_status(tmp_path)["state"] == "FAILED"
+    path.write_text("not json")
+    status = read_run_status(tmp_path)
+    assert status["state"] == "INCOMPLETE"
+    assert status["warnings"]
+
+
+def test_failed_sample_without_error_message_is_failed(tmp_path):
+    from phagemine.gui.services.status import read_run_status
+    (tmp_path / "sample_status.json").write_text(json.dumps({"status": "FAILED"}))
+    assert read_run_status(tmp_path)["state"] == "FAILED"
+
+
+def test_both_layout_does_not_duplicate_annotations(tmp_path):
+    from phagemine.gui.services.results import annotation_records, discovery_tables
+    from phagemine.gui.services.status import read_run_status
+    annotation = tmp_path / "annotation"
+    discovery = tmp_path / "discovery"
+    annotation.mkdir(); discovery.mkdir()
+    (annotation / "batch_manifest.json").write_text(json.dumps({"ended_at": "2026-10-03"}))
+    for sample in (annotation / "a", annotation / "b", discovery / "a", discovery / "b"):
+        sample.mkdir()
+        (sample / "annotation.tsv").write_text("protein_id\tproduct\nP1\thypothetical protein\n")
+    assert read_run_status(tmp_path)["state"] == "INCOMPLETE"
+    (discovery / "pmf_families.tsv").write_text("pmf_id\nPMF1\n")
+    (discovery / "pooled_manifest.json").write_text(json.dumps({"pmf_count": 1}))
+    (discovery / "discovery_report.html").write_text("<html></html>")
+    assert read_run_status(tmp_path)["state"] == "COMPLETE"
+    records = annotation_records(tmp_path)
+    assert len(records) == 2
+    assert {row["record_id"] for row in records} == {"a / P1", "b / P1"}
+    assert discovery_tables(tmp_path)["families"][0]["pmf_id"] == "PMF1"
+
+
+def test_exports_include_submission_fasta_and_exclude_symlinks(tmp_path):
+    from phagemine.gui.services.results import downloadable_files, export_files
+    root = tmp_path / "run"; root.mkdir()
+    (root / "genome.fsa").write_text(">g\nATG\n")
+    private = tmp_path / "outside.txt"; private.write_text("outside")
+    (root / "linked.txt").symlink_to(private)
+    assert [p.name for p in export_files(root)] == ["genome.fsa"]
+    assert [p.name for p in downloadable_files(root)] == ["genome.fsa"]
+
+
+def test_upload_collision_does_not_overwrite_input(tmp_path):
+    from phagemine.gui.services.execution import save_uploads
+    from types import SimpleNamespace
+    uploads = [SimpleNamespace(name="genome.fasta", getvalue=lambda: b">g\nATG\n") for _ in range(2)]
+    with pytest.raises(ValueError, match="unique"):
+        save_uploads(uploads, tmp_path)
+    assert not list(tmp_path.iterdir())
+
+
+def test_input_validation_rejects_wrong_type_and_empty_directory(tmp_path):
+    from phagemine.gui.services.execution import validate_input, build_cli_args
+    with pytest.raises(ValueError, match="FASTA file"):
+        validate_input(tmp_path, cohort=False)
+    with pytest.raises(ValueError, match="no FASTA"):
+        validate_input(tmp_path, cohort=True)
+    with pytest.raises(ValueError, match="empty"):
+        build_cli_args("", tmp_path)
+
+
+def test_malformed_record_schema_is_actionable(tmp_path):
+    from phagemine.gui.services.results import annotation_records
+    (tmp_path / "annotation.tsv").write_text("protein_id\nP1\n")
+    (tmp_path / "evidence.json").write_text('{"unexpected": true}')
+    with pytest.raises(ValueError, match="Expected an array"):
+        annotation_records(tmp_path)

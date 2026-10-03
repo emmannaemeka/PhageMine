@@ -276,8 +276,12 @@ Individual installers are also available:
         print(f"PhageMine comparison complete. Outputs: {args.output}")
         return 0
     if args.command == "batch":
-        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode, gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented)
+        try: rows = batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode, gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented)
         except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
+        failures = [row for row in rows if row.get("status") == "FAILED"]
+        if failures:
+            print(f"PhageMine batch finished with {len(failures)} failed sample(s). Inspect batch_summary.tsv and sample logs in {args.output}", file=sys.stderr)
+            return 1
         print(f"PhageMine batch complete. Outputs: {args.output}"); return 0
     if args.command == "extract":
         if args.extract_command != "protein":

@@ -31,5 +31,27 @@ jobs:
           PHAGEMINE_REGISTRY_PATH: ${{ runner.temp }}/phagemine-test-registry.json
       - run: python -m compileall -q src
       - run: python -m build
-      - run: python -m pip install dist/*.whl --force-reinstall
-      - run: phagemine --version
+      - name: Install built wheel into a fresh environment
+        run: |
+          python -m venv "${{ runner.temp }}/phagemine-wheel"
+          "${{ runner.temp }}/phagemine-wheel/bin/python" -m pip install dist/*.whl
+          "${{ runner.temp }}/phagemine-wheel/bin/python" -m pip check
+      - name: Execute installed package outside checkout
+        run: |
+          "${{ runner.temp }}/phagemine-wheel/bin/python" tools/smoke_installed.py --input examples/demo_phage.fasta --output "${{ runner.temp }}/installed-smoke"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: installed-smoke-${{ matrix.os }}-${{ matrix.python }}
+          path: ${{ runner.temp }}/installed-smoke/installed_smoke_check.json
+
+  gui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install ".[test,gui]"
+      - run: python -m pytest -q tests/test_gui.py tests/test_gui_app.py

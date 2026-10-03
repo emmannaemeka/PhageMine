@@ -1,5 +1,8 @@
 # PhageMine v1.2 release validation
 
+This is the historical 2026-09-16 record. Current development-branch checks
+are recorded separately in [RESEARCHER_VALIDATION.md](RESEARCHER_VALIDATION.md).
+
 Validation date: 2026-09-16. A clean temporary clone was created outside the
 repository; no benchmark evidence was copied into or changed by the validation
 clone.

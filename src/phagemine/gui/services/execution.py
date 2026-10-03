@@ -19,7 +19,9 @@ EVIDENCE_LEVELS = ("core", "standard", "full")
 def build_cli_args(input_path: str | Path, output: str | Path, *, mode: str = "annotate",
                    evidence: str = "core", threads: int = 1, cohort: bool | None = None,
                    resume: bool = False) -> list[str]:
-    source, destination = Path(input_path), Path(output)
+    if not str(input_path).strip() or not str(output).strip():
+        raise ValueError("Input and output paths must not be empty")
+    source, destination = Path(input_path).expanduser(), Path(output).expanduser()
     if mode not in MODES:
         raise ValueError(f"unsupported mode: {mode}")
     if evidence not in EVIDENCE_LEVELS:
@@ -39,6 +41,34 @@ def build_cli_args(input_path: str | Path, output: str | Path, *, mode: str = "a
     if resume:
         args.append("--resume-existing")
     return args
+
+
+def validate_input(input_path: str | Path, *, cohort: bool) -> Path:
+    """Check the selected input type before invoking the CLI."""
+    if not str(input_path).strip():
+        raise ValueError("Choose an input path")
+    source = Path(input_path).expanduser()
+    if cohort:
+        if not source.is_dir():
+            raise ValueError("Choose a directory containing FASTA genomes")
+        from phagemine.batch import discover_inputs
+        if not discover_inputs(source):
+            raise ValueError("The input directory contains no FASTA genomes")
+    elif not source.is_file():
+        raise ValueError("Choose a FASTA file")
+    return source
+
+
+def save_uploads(uploads, destination: Path) -> Path:
+    """Reject colliding names before saving any uploaded files."""
+    names = [Path(upload.name).name for upload in uploads]
+    if not names or any(name in {"", ".", ".."} for name in names):
+        raise ValueError("Upload at least one named FASTA file")
+    if len(set(names)) != len(names):
+        raise ValueError("Uploaded FASTA filenames must be unique; rename duplicate files")
+    for name, upload in zip(names, uploads):
+        (destination / name).write_bytes(upload.getvalue())
+    return destination
 
 
 def display_command(args: Sequence[str]) -> str:

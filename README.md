@@ -14,12 +14,18 @@ and compact benchmark summaries suitable for public reproducibility. Large
 evidence databases and local benchmark evidence are intentionally kept out of
 the public source tree.
 
+**Research readiness:** PhageMine supports exploratory annotation with manual
+review. Independent functional accuracy and broad superiority have not been
+established. See the [readiness assessment](docs/researcher-readiness.md) for
+software checks, outstanding validation, and adoption criteria.
+
 ## Local graphical interface (GUI v0.1)
 
-Install the optional GUI dependencies and launch the interface:
+After cloning the repository and activating the environment described below,
+install the optional GUI dependencies from the PhageMine directory:
 
 ```bash
-pip install "phagemine[gui]"
+python -m pip install ".[gui]"
 phagemine-gui
 ```
 
@@ -28,9 +34,8 @@ not upload analysis files to an external server, and calls the same PhageMine
 analysis engine used by the CLI. The CLI remains fully supported and its core
 installation does not depend on Streamlit.
 
-GUI documentation assets, including a future real screenshot, belong in
-`docs/images/phagemine-gui/`. No screenshot is included until one has been
-captured from a validated release build.
+See the [GUI guide](docs/gui.md) for input selection, result browsing and export.
+The default server binds to `127.0.0.1`; open it on the same computer.
 
 PhageMine is beta research software for evidence-based bacteriophage genome annotation and discovery mining. It annotates what can be supported by evidence and organizes what remains unknown across a cohort. Unknown does not mean novel, and its rule-based evidence-strength labels are not calibrated probabilities.
 
@@ -99,6 +104,11 @@ performance was not evaluated by this structural benchmark.
 *Strict and relaxed reference-relative structural F1. See the full benchmark
 page for per-genome results and definitions.*
 
+The separate automated functional adjudication left **476 of 689 units
+(69.0856%) unresolved** and does not establish functional superiority.
+Its [limitations](benchmark/final/PHAGEMINE_V1_2_BENCHMARK_LIMITATIONS.md)
+also explain database overlap and the absence of independent human review.
+
 ![Named-product yield comparison](docs/benchmark_v1.2/figures/functional_yield.png)
 
 *Named-product yield is an output metric and is not functional accuracy. The
@@ -161,14 +171,32 @@ python -m pip install .
 
 phagemine --help
 phagemine doctor
+```
 
-phagemine databases install --all
+First check that `CORE_ANALYSIS` and `PYRODIGAL_GV_OBSERVATION` are `READY`.
+Missing databases are expected at this point. Try a Core annotation of the
+bundled synthetic example before spending time on database downloads:
+
+```bash
+phagemine run examples/demo_phage.fasta --output results/first-core-run
+```
+
+This checks software execution with the real caller; the synthetic example is
+not a scientific accuracy benchmark. Open `results/first-core-run/report.html`
+and inspect `annotation.tsv` and `scientific_validation_status.json`.
+
+For full functional evidence, install the four annotation resources:
+
+```bash
+phagemine databases install pfam
+phagemine databases install vogdb
+phagemine databases install swissprot
+phagemine databases install phrogs
 phagemine doctor --deep
 ```
 
-The first two Doctor commands check the executable environment before database
-downloads. The final command checks both executable availability and the
-operational database formats. The complete database download is approximately
+Add `pmfdb` and `inphared` for comparative workflows, or use
+`phagemine databases install --all` for all six resources. The complete download is approximately
 3.4 GiB compressed; preparation and temporary files require additional space,
 so keep at least 15–20 GiB free. Database installation is a separate step: it
 does not install missing executables.
@@ -289,10 +317,10 @@ phagemine doctor --json
 
 `READY` means the registered path and required sidecars/tools are available. An unavailable resource is reported conservatively and its evidence is not fabricated.
 
-## Quick start
+## Run your first research genome
 
-Install the pinned INPHARED comparative resource, check the environment, and
-run one genome:
+After the installation checks above, run one genome. INPHARED is optional;
+install it first when nearest-reference context is required:
 
 ```bash
 phagemine databases install inphared
@@ -454,6 +482,10 @@ detection but does not prove biological truth. Named-product yield is not
 functional accuracy. Runtime ranking is unsupported by the available timing
 provenance. The historical T4 PHANOTATE 294-versus-297 discrepancy remains
 unresolved. Independent validation on broader panels is appropriate.
+
+Boundary disagreements need reviewed evidence; changing coordinates to improve
+this benchmark's score would not establish correctness. Adding more product
+names is also not a substitute for validating assertion precision and abstention.
 
 ## Reproducibility and citation
 

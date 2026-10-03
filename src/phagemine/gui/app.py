@@ -9,8 +9,8 @@ from pathlib import Path
 import streamlit as st
 
 from phagemine.gui import GUI_VERSION
-from phagemine.gui.services.execution import build_cli_args, display_command, execute
-from phagemine.gui.services.results import annotation_records, discovery_tables, downloadable_files, figures
+from phagemine.gui.services.execution import build_cli_args, display_command, execute, save_uploads, validate_input
+from phagemine.gui.services.results import annotation_records, discovery_tables, downloadable_files, export_files, figures
 from phagemine.gui.services.status import doctor_rows, read_run_status
 from phagemine.preflight import doctor
 
@@ -21,8 +21,7 @@ st.caption(f"Local scientific interface · GUI v{GUI_VERSION} · Same PhageMine 
 PAGES = ("Home / New Analysis", "Environment / Database Status", "Run Monitor",
          "Annotation Results", "Discovery Results", "Figures", "Export / Downloads")
 page = st.sidebar.radio("Workspace", PAGES)
-result_dir = st.sidebar.text_input("Result directory", st.session_state.get("result_dir", "results/gui_run"))
-st.session_state.result_dir = result_dir
+result_dir = st.sidebar.text_input("Result directory", key="result_dir", value="results/gui_run")
 
 
 def caution() -> None:
@@ -45,6 +44,8 @@ if page == "Home / New Analysis":
     cohort = source_kind != "Single FASTA path"
     evidence_choices = ("core", "standard", "full") if cohort else ("core",)
     evidence = col2.selectbox("Evidence level", evidence_choices)
+    if not cohort:
+        st.caption("The single-genome CLI uses the available registered evidence resources. Explicit standard/full profiles are available for cohort inputs.")
     threads = col3.number_input("Threads", 1, 256, min(4, 256), 1)
     output = st.text_input("Output directory", result_dir)
     resume = st.checkbox("Resume existing batch checkpoints", disabled=not cohort)
@@ -61,17 +62,13 @@ if page == "Home / New Analysis":
             st.error("Choose a valid output directory.")
         elif source_kind == "Upload FASTA files" and not uploads:
             st.error("Upload at least one FASTA file.")
-        elif source_kind != "Upload FASTA files" and not Path(source).expanduser().exists():
-            st.error("The selected input does not exist.")
         else:
             try:
                 with tempfile.TemporaryDirectory(prefix="phagemine-gui-") as temporary:
                     actual_source = source
                     if uploads:
-                        upload_dir = Path(temporary)
-                        for upload in uploads:
-                            (upload_dir / Path(upload.name).name).write_bytes(upload.getvalue())
-                        actual_source = str(upload_dir)
+                        actual_source = str(save_uploads(uploads, Path(temporary)))
+                    actual_source = str(validate_input(actual_source, cohort=cohort))
                     actual = build_cli_args(actual_source, output, mode=mode, evidence=evidence,
                                             threads=int(threads), cohort=cohort, resume=resume)
                     with st.status("PhageMine analysis running", expanded=True) as box:
@@ -84,15 +81,17 @@ if page == "Home / New Analysis":
                             st.error(f"PhageMine exited with code {result.exit_code}. See diagnostic output above.")
                         else:
                             box.update(label="Analysis complete", state="complete")
-                            st.session_state.result_dir = output
+                            # A widget's state cannot be changed after it was rendered.
+                            st.success(f"Results saved to {Path(output).expanduser()}. Open this path in the sidebar to review them.")
             except (OSError, ValueError) as exc:
                 st.error(f"Could not start analysis: {exc}")
 
 elif page == "Environment / Database Status":
     st.subheader("Environment and database status")
     st.caption("States come from PhageMine doctor and resource validation; paths alone are not treated as readiness.")
+    deep = st.checkbox("Check operational database formats", value=False)
     try:
-        rows = doctor_rows(doctor())
+        rows = doctor_rows(doctor(deep=deep))
         st.dataframe(rows, use_container_width=True, hide_index=True)
     except (OSError, ValueError, RuntimeError) as exc:
         st.error(f"Diagnostics failed: {exc}")
@@ -125,9 +124,9 @@ elif page == "Annotation Results":
                         and (not keyword or keyword in f"{r.get('protein_id','')} {r.get('proposed_function','')} {r.get('annotation','')}".lower())]
             columns = ["protein_id", "sample", "start", "end", "strand", "functional_state", "proposed_function", "confidence", "functional_category", "pmf_id"]
             st.dataframe([{k: r.get(k) for k in columns} for r in filtered], use_container_width=True, hide_index=True)
-            selected = st.selectbox("Protein detail", [r["protein_id"] for r in filtered]) if filtered else None
+            selected = st.selectbox("Protein detail", [r["record_id"] for r in filtered]) if filtered else None
             if selected:
-                record = next(r for r in filtered if r["protein_id"] == selected)
+                record = next(r for r in filtered if r["record_id"] == selected)
                 st.json({k: v for k, v in record.items() if k not in {"sequence", "cds"}})
                 st.text_area("Amino-acid sequence", record.get("sequence") or "Not available", height=130)
                 st.text_area("CDS sequence", record.get("cds") or "Not available", height=130)
@@ -157,12 +156,14 @@ elif page == "Figures":
 
 else:
     st.subheader("Export and downloads")
-    root = Path(result_dir)
+    root = Path(result_dir).expanduser()
     if not root.is_dir(): st.warning("The result directory does not exist.")
     else:
         files = downloadable_files(root)
         st.dataframe([{"file": str(p.relative_to(root)), "bytes": p.stat().st_size} for p in files], use_container_width=True, hide_index=True)
-        buffer = io.BytesIO()
-        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
-            for path in sorted(p for p in root.rglob("*") if p.is_file()): archive.write(path, path.relative_to(root))
-        st.download_button("Download completed result directory as ZIP", buffer.getvalue(), file_name=f"{root.name}.zip", mime="application/zip")
+        if st.button("Prepare result ZIP"):
+            buffer = io.BytesIO()
+            resolved_root = root.resolve()
+            with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+                for path in export_files(root): archive.write(path, path.relative_to(resolved_root))
+            st.download_button("Download result directory as ZIP", buffer.getvalue(), file_name=f"{root.name}.zip", mime="application/zip")
