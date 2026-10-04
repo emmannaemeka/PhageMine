@@ -37,6 +37,38 @@ def test_functional_roles_with_identifiers_are_preserved():
     assert normalize_function('putative DNA polymerase') == 'putative dna polymerase'
 
 
+@pytest.mark.parametrize('description', [
+    'Uncharacterized 7.3 kDa protein in mobB-gp55 intergenic region',
+    'Uncharacterised protein dexA.1', 'Conserved hypothetical protein gp7',
+])
+def test_extended_unknown_descriptions_cannot_override_supported_function(description):
+    unknown = hit(description, source='Swiss-Prot', reviewed=True,
+                  organism='Bacteriophage T4', percent_identity=1.0,
+                  query_coverage=1.0, subject_coverage=1.0, gene='y03F')
+    assert classify(unknown)['proposed_function'] is None
+    assert classify(unknown)['gene'] is None
+    result = classify(unknown, hit('head decoration protein'))
+    assert result['proposed_function'] == 'head decoration protein'
+    assert result['gene'] is None
+    assert unknown.description == description
+
+
+def test_record_gene_symbol_alone_cannot_override_functional_description():
+    identifier = hit('Protein rIIA', source='Swiss-Prot', gene_name='rIIA',
+                     reviewed=True, percent_identity=100, query_coverage=1,
+                     subject_coverage=1, organism='Bacteriophage T4')
+    result = classify(identifier, hit('rIIA lysis inhibitor'))
+    assert result['proposed_function'] == 'riia lysis inhibitor'
+    assert result['gene'] is None
+    assert classify(identifier)['proposed_function'] is None
+
+
+def test_record_gene_symbol_does_not_remove_informative_role():
+    result = classify(hit('Tail tip assembly protein I', source='Swiss-Prot',
+                          gene_name='I'))
+    assert result['proposed_function'] == 'tail tip assembly protein i'
+
+
 def test_conflict_clears_gene_and_ec():
     result = classify(hit('integrase', gene='int', ec='1.2.3.4'),
                       hit('major capsid protein', source='Swiss-Prot'))

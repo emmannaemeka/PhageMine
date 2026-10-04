@@ -1,0 +1,979 @@
+accession	protein_id	start	end	strand	product	automatic_product	curation_state	automatic_functional_state	automatic_review_flag	gene	ec_number	best_automatic_evidence	ambiguity_flags
+NC_000866.4	PM_000001	12	2189	-	riia lysis inhibitor	riia lysis inhibitor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_612 — RIIA lysis inhibitor	
+NC_000866.4	PM_000002	2200	2403	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1683	
+NC_000866.4	PM_000003	2458	2751	-	dna topoisomerase ii	dna topoisomerase ii	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7229 — DNA topoisomerase II	
+NC_000866.4	PM_000004	2850	2954	-	dna topoisomerase ii	dna topoisomerase ii	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_19082 — DNA topoisomerase II	
+NC_000866.4	PM_000005	2971	3351	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000006	3457	3549	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000007	3654	3767	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_655 — homing endonuclease	
+NC_000866.4	PM_000008	3778	5328	-	dna topoisomerase ii large subunit	dna topoisomerase ii large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_543 — DNA topoisomerase II large subunit	
+NC_000866.4	PM_000009	5398	5595	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_902	
+NC_000866.4	PM_000010	5702	5839	-	fmdb-like transcriptional regulator	fmdb-like transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1076 — FmdB-like transcriptional regulator	
+NC_000866.4	PM_000011	5842	6267	-	gof mrna metabolism modulator	gof mrna metabolism modulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2980 — goF mRNA metabolism modulator	
+NC_000866.4	PM_000012	6267	6482	-	cef modifier of supressor trnas	cef modifier of supressor trnas	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1354 — cef modifier of supressor tRNAs	
+NC_000866.4	PM_000013	6500	6589	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000014	6653	7141	-	motb-like transcriptional regulator	motb-like transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1671 — MotB-like transcriptional regulator	
+NC_000866.4	PM_000015	7218	7307	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1671 — MotB-like transcriptional regulator	
+NC_000866.4	PM_000016	7291	7650	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2333	
+NC_000866.4	PM_000017	7661	8161	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1106	
+NC_000866.4	PM_000018	8225	8908	-	exonuclease	exonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_255 — exonuclease	
+NC_000866.4	PM_000019	8908	9150	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1700	
+NC_000866.4	PM_000020	9143	9388	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1700	
+NC_000866.4	PM_000021	9410	10729	-	dda-like helicase	dda-like helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_325 — Dda-like helicase	
+NC_000866.4	PM_000022	10726	11037	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1079	
+NC_000866.4	PM_000023	11039	11785	-	srd anti-sigma factor	srd anti-sigma factor	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_1400 — Srd anti-sigma factor	
+NC_000866.4	PM_000024	11908	12510	-	rna polymerase adp-ribosylase	rna polymerase adp-ribosylase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_832 — RNA polymerase ADP-ribosylase	
+NC_000866.4	PM_000025	12507	13130	-	rna polymerase adp-ribosylase	rna polymerase adp-ribosylase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_832 — RNA polymerase ADP-ribosylase	
+NC_000866.4	PM_000026	13198	13380	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1647	
+NC_000866.4	PM_000027	13389	13859	-	mrh transcription modulator under heat shock	mrh transcription modulator under heat shock	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1234 — Mrh transcription modulator under heat shock	
+NC_000866.4	PM_000028	13852	14016	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2681	
+NC_000866.4	PM_000029	14013	14198	-	decoy of host sigma32	decoy of host sigma32	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2441 — decoy of host sigma32	
+NC_000866.4	PM_000030	14191	14676	-	mrh transcription modulator under heat shock	mrh transcription modulator under heat shock	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1234 — Mrh transcription modulator under heat shock	
+NC_000866.4	PM_000031	14685	15026	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2031	
+NC_000866.4	PM_000032	15026	15232	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1873	
+NC_000866.4	PM_000033	15260	15349	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000034	15331	15573	-	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1715 — virion structural protein	
+NC_000866.4	PM_000035	15606	16280	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000036	16270	16785	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_173 — nucleoside triphosphate pyrophosphohydrolase	
+NC_000866.4	PM_000037	16846	17625	-	dna methyltransferase	dna methyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_56 — DNA methyltransferase	
+NC_000866.4	PM_000038	17653	17766	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000039	17738	17938	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2024	
+NC_000866.4	PM_000040	17935	18963	-	dna primase	dna primase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_47 — DNA primase	
+NC_000866.4	PM_000041	18966	19130	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1823	
+NC_000866.4	PM_000042	19132	19758	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3781	
+NC_000866.4	PM_000043	19758	20051	-	spackle periplasmic	spackle periplasmic	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1586 — spackle periplasmic	
+NC_000866.4	PM_000044	20112	20369	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_12748	
+NC_000866.4	PM_000045	20371	20553	-	dmd discriminator of mrna degradation	dmd discriminator of mrna degradation	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2102 — Dmd discriminator of mRNA degradation	
+NC_000866.4	PM_000046	20612	22039	-	dnab-like replicative helicase	dnab-like replicative helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_19 — DnaB-like replicative helicase	
+NC_000866.4	PM_000047	22049	22393	-	head vertex assembly chaperone	head vertex assembly chaperone	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_999 — head vertex assembly chaperone	
+NC_000866.4	PM_000048	22386	23561	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_8337 — DNA repair protein	
+NC_000866.4	PM_000049	23570	24235	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000050	24279	24410	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000051	24400	25455	-	beta-glucosyltransferase	beta-glucosyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7922 — beta-glucosyltransferase	
+NC_000866.4	PM_000052	25479	26219	-	thymidylate synthase	thymidylate synthase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_160 — thymidylate synthase	
+NC_000866.4	PM_000053	26227	26376	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3610	
+NC_000866.4	PM_000054	26373	26624	-	immunity to superinfection	immunity to superinfection	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1039 — immunity to superinfection	
+NC_000866.4	PM_000055	26636	27013	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1754	
+NC_000866.4	PM_000056	27010	27126	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000057	27197	29893	-	dna polymerase	dna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_262 — DNA polymerase	
+NC_000866.4	PM_000058	29972	30340	-	translation repressor	translation repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_242 — translation repressor	
+NC_000866.4	PM_000059	30342	30905	-	clamp loader of dna polymerase	clamp loader of dna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_225 — clamp loader of DNA polymerase	
+NC_000866.4	PM_000060	30907	31866	-	clamp loader of dna polymerase	clamp loader of dna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_168 — clamp loader of DNA polymerase	
+NC_000866.4	PM_000061	31917	32603	-	dna polymerase processivity factor	dna polymerase processivity factor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_223 — DNA polymerase processivity factor	
+NC_000866.4	PM_000062	32659	33048	-	rna polymerase binding	rna polymerase binding	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1285 — RNA polymerase binding	
+NC_000866.4	PM_000063	33058	33246	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1045	
+NC_000866.4	PM_000064	33302	34942	-	sbcc-like subunit of palindrome specific endonuclease	sbcc-like subunit of palindrome specific endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_77 — SbcC-like subunit of palindrome specific endonuclease	
+NC_000866.4	PM_000065	34981	35196	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2327	
+NC_000866.4	PM_000066	35168	35431	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2192	
+NC_000866.4	PM_000067	35428	36447	-	sbcd-like subunit of palindrome specific endonuclease	sbcd-like subunit of palindrome specific endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_100 — SbcD-like subunit of palindrome specific endonuclease	
+NC_000866.4	PM_000068	36444	36584	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6693	
+NC_000866.4	PM_000069	36624	37826	-	alpha-glucosyltransferase	alpha-glucosyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2888 — alpha-glucosyltransferase	
+NC_000866.4	PM_000070	37885	38679	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_655 — homing endonuclease	
+NC_000866.4	PM_000071	38731	38922	-	capsid maturation protease	capsid maturation protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_17354 — head maturation protease	
+NC_000866.4	PM_000072	38907	39110	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1648	
+NC_000866.4	PM_000073	39079	39396	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_951	
+NC_000866.4	PM_000074	39398	39616	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1169	
+NC_000866.4	PM_000075	39600	40157	-	rna polymerase sigma factor	rna polymerase sigma factor	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_34068 — RNA polymerase sigma factor	
+NC_000866.4	PM_000076	40193	40456	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1662	
+NC_000866.4	PM_000077	40459	40785	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11230	
+NC_000866.4	PM_000078	40799	41038	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2084	
+NC_000866.4	PM_000079	41039	41170	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1871	
+NC_000866.4	PM_000080	41178	41471	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1774	
+NC_000866.4	PM_000081	41464	41646	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2283	
+NC_000866.4	PM_000082	41805	42113	-	thioredoxin domain	thioredoxin domain	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_22 — thioredoxin domain	
+NC_000866.4	PM_000083	42116	42328	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1930	
+NC_000866.4	PM_000084	42370	42468	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3350	
+NC_000866.4	PM_000085	42446	42916	-	anaerobic ribonucleotide reductase small subunit	anaerobic ribonucleotide reductase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_626 — anaerobic ribonucleotide reductase small subunit	
+NC_000866.4	PM_000086	42906	43538	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_655 — homing endonuclease	
+NC_000866.4	PM_000087	43535	44728	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_26446 — anaerobic ribonucleoside reductase large subunit	
+NC_000866.4	PM_000088	44836	45612	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000089	45575	45694	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000090	45840	46385	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_487 — NrdD-like anaerobic ribonucleotide reductase large subunit	
+NC_000866.4	PM_000091	46382	46855	-	endonuclease vii	endonuclease vii	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_24351 — endonuclease VII	
+NC_000866.4	PM_000092	46897	47382	-	inhibitor of host lon protease	inhibitor of host lon protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2167 — inhibitor of host Lon protease	
+NC_000866.4	PM_000093	47366	47521	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2382	
+NC_000866.4	PM_000094	47506	47826	-	ribonucleotide reductase	ribonucleotide reductase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2294 — ribonucleotide reductase	
+NC_000866.4	PM_000095	47823	48131	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4203	
+NC_000866.4	PM_000096	48128	48391	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_22 — thioredoxin domain	
+NC_000866.4	PM_000097	48393	48635	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2052	
+NC_000866.4	PM_000098	48622	48936	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1474	
+NC_000866.4	PM_000099	48933	49859	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1435	
+NC_000866.4	PM_000100	49914	50915	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1435	
+NC_000866.4	PM_000101	50973	51995	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2351	
+NC_000866.4	PM_000102	52066	52893	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2257	
+NC_000866.4	PM_000103	52901	53302	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2547	
+NC_000866.4	PM_000104	53358	53885	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2274	
+NC_000866.4	PM_000105	53946	54248	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1931	
+NC_000866.4	PM_000106	54343	55320	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1250	
+NC_000866.4	PM_000107	55340	55438	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000108	55435	56469	-	nucleotidyltransferase	nucleotidyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_388 — nucleotidyltransferase	
+NC_000866.4	PM_000109	56429	57208	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_655 — homing endonuclease	
+NC_000866.4	PM_000110	57283	57828	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1502	
+NC_000866.4	PM_000111	57892	57993	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000112	58049	58165	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2758	
+NC_000866.4	PM_000113	58155	58349	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_653	
+NC_000866.4	PM_000114	58352	58534	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_653	
+NC_000866.4	PM_000115	58534	58722	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3024	
+NC_000866.4	PM_000116	58819	59205	-	starvation-inducible transcriptional regulator	starvation-inducible transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_858 — starvation-inducible transcriptional regulator	
+NC_000866.4	PM_000117	59202	59495	-	lysis inhibition	lysis inhibition	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1246 — lysis inhibition	
+NC_000866.4	PM_000118	59508	59720	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1826	
+NC_000866.4	PM_000119	59763	60344	-	thymidine kinase	thymidine kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_592 — thymidine kinase	
+NC_000866.4	PM_000120	60346	60534	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_653	
+NC_000866.4	PM_000121	60531	60722	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_653	
+NC_000866.4	PM_000122	60713	60925	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2008	
+NC_000866.4	PM_000123	60922	61389	-	phosphatase	phosphatase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_335 — phosphatase	
+NC_000866.4	PM_000124	61386	61733	-	valyl trna synthetase modifier	valyl trna synthetase modifier	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1256 — valyl tRNA synthetase modifier	
+NC_000866.4	PM_000125	61726	62271	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_2013 — lytic tail protein	
+NC_000866.4	PM_000126	62279	62740	-	endoribonuclease	endoribonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1323 — endoribonuclease	
+NC_000866.4	PM_000127	62800	63078	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2037	
+NC_000866.4	PM_000128	63078	63344	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_26803	
+NC_000866.4	PM_000129	63337	63459	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1986	
+NC_000866.4	PM_000130	63557	63919	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1209	
+NC_000866.4	PM_000131	63927	64256	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2049	
+NC_000866.4	PM_000132	64253	64912	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1488	
+NC_000866.4	PM_000133	64939	65355	-	endonuclease v n-glycosylase uv repair enzyme	endonuclease v n-glycosylase uv repair enzyme	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1183 — endonuclease V N-glycosylase UV repair enzyme	
+NC_000866.4	PM_000134	65416	65718	-	internal virion protein	internal virion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7857 — internal virion protein	
+NC_000866.4	PM_000135	65834	66415	-	internal virion protein	internal virion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5341 — internal virion protein	
+NC_000866.4	PM_000136	66503	66997	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_13211 — baseplate hub subunit and tail lysozyme	
+NC_000866.4	PM_000137	67035	67490	-	nudix hydrolase	nudix hydrolase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1185 — nudix hydrolase	
+NC_000866.4	PM_000138	67472	67570	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_2203 — membrane protein	
+NC_000866.4	PM_000139	67572	67664	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000140	67652	67960	-	membrane protein	membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2203 — membrane protein	
+NC_000866.4	PM_000141	67957	68319	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2330	
+NC_000866.4	PM_000142	68301	68693	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2604	
+NC_000866.4	PM_000143	68662	69270	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2607	
+NC_000866.4	PM_000144	69312	69905	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1203	
+NC_000866.4	PM_000145	69968	70303	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_7266	
+NC_000866.4	PM_000146	70360	70623	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2678	
+NC_000866.4	PM_000147	70587	70676	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000148	70821	70982	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_28391	
+NC_000866.4	PM_000149	70979	71098	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_24262	
+NC_000866.4	PM_000150	71253	71918	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_15209 — endonuclease	
+NC_000866.4	PM_000151	72628	72915	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2023	
+NC_000866.4	PM_000152	72918	73328	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1411	
+NC_000866.4	PM_000153	73329	73514	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1692	
+NC_000866.4	PM_000154	73591	73878	-	internal virion protein	internal virion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4363 — internal virion protein	
+NC_000866.4	PM_000155	73952	74410	-	rna ligase	rna ligase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_755 — RNA ligase	
+NC_000866.4	PM_000156	74407	74649	-	tail fiber chaperone	tail fiber chaperone	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1002 — tail fiber chaperone	
+NC_000866.4	PM_000157	74649	75374	-	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_139 — deoxynucleoside monophosphate kinase	
+NC_000866.4	PM_000158	75424	75954	-	tail tube	tail tube	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_45 — tail tube	
+NC_000866.4	PM_000159	76061	76885	-	dna end protector	dna end protector	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_429 — DNA end protector	
+NC_000866.4	PM_000160	76885	77337	-	head closure	head closure	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_14892 — head closure	
+NC_000866.4	PM_000161	77385	77975	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_232 — baseplate wedge subunit	
+NC_000866.4	PM_000162	77959	79686	+	baseplate hub subunit and tail lysozyme	baseplate hub subunit and tail lysozyme	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_430 — baseplate hub subunit and tail lysozyme	
+NC_000866.4	PM_000163	79661	80215	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1168	
+NC_000866.4	PM_000164	80196	80618	+	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000165	80621	80791	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000166	80779	81072	+	paar motif of membran proteins	paar motif of membran proteins	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_281 — PAAR motif of membran proteins	
+NC_000866.4	PM_000167	81081	83063	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_219 — baseplate wedge subunit	
+NC_000866.4	PM_000168	83060	86158	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_964 — baseplate wedge subunit	
+NC_000866.4	PM_000169	86151	87155	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_977 — baseplate wedge subunit	
+NC_000866.4	PM_000170	87219	88085	+	baseplate wedge tail fiber protein connector	baseplate wedge tail fiber protein connector	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_967 — baseplate wedge tail fiber protein connector	
+NC_000866.4	PM_000171	88085	89893	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_958 — baseplate wedge subunit	
+NC_000866.4	PM_000172	89893	90552	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_963 — baseplate wedge subunit	
+NC_000866.4	PM_000173	90549	92132	+	tail collar fiber protein	tail collar fiber protein	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_910 — tail collar fiber protein	
+NC_000866.4	PM_000174	92129	93592	+	fibritin neck whisker	fibritin neck whisker	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1056 — fibritin neck whisker	
+NC_000866.4	PM_000175	93624	94553	+	head-tail adaptor ad2	head-tail adaptor ad2	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_211 — head-tail adaptor Ad2	
+NC_000866.4	PM_000176	94555	95325	+	head closure hc2	head closure hc2	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_679 — head closure Hc2	
+NC_000866.4	PM_000177	95367	96185	+	tail sheath stabilizer	tail sheath stabilizer	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_227 — tail sheath stabilizer	
+NC_000866.4	PM_000178	96194	96688	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_735 — terminase small subunit	
+NC_000866.4	PM_000179	96672	98504	+	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5989 — terminase large subunit	
+NC_000866.4	PM_000180	98536	100515	+	tail sheath	tail sheath	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_23 — tail sheath	
+NC_000866.4	PM_000181	100632	101123	+	tail tube protein	tail tube protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4542 — tail tube protein	
+NC_000866.4	PM_000182	101207	102781	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_213 — portal protein	
+NC_000866.4	PM_000183	102781	103023	+	prohead	prohead	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1064 — prohead	
+NC_000866.4	PM_000184	103023	103448	+	head scaffolding protein	head scaffolding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1049 — head scaffolding protein	
+NC_000866.4	PM_000185	103448	104086	+	capsid maturation protease	capsid maturation protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_207 — head maturation protease	
+NC_000866.4	PM_000186	104117	104926	+	head scaffolding protein	head scaffolding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_237 — head scaffolding protein	
+NC_000866.4	PM_000187	104945	106510	+	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_138 — major head protein	
+NC_000866.4	PM_000188	106561	107232	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000189	107241	107330	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000190	107323	108606	+	capsid vertex protein	major capsid protein	MANUALLY_REVIEWED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_138 — major head protein	
+NC_000866.4	PM_000191	108636	109640	-	rna ligase	rna ligase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_548 — RNA ligase	
+NC_000866.4	PM_000192	109650	109928	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2416	
+NC_000866.4	PM_000193	109915	110097	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1566	
+NC_000866.4	PM_000194	110187	111317	-	hoc-like head decoration protein	hoc-like head decoration protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1149 — Hoc-like head decoration	
+NC_000866.4	PM_000195	111327	112007	-	minor head protein inhibitor of protease	minor head protein inhibitor of protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1051 — minor head protein inhibitor of protease	
+NC_000866.4	PM_000196	112057	112674	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10820 — HNH endonuclease	
+NC_000866.4	PM_000197	112677	114440	+	dna helicase	dna helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_9690 — DNA helicase	
+NC_000866.4	PM_000198	114496	114663	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1043	
+NC_000866.4	PM_000199	114690	114914	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1541	
+NC_000866.4	PM_000200	114914	115327	-	uvsy-like recombination mediator	uvsy-like recombination mediator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_231 — UvsY-like recombination mediator	
+NC_000866.4	PM_000201	115404	115802	-	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_261 — baseplate wedge subunit	
+NC_000866.4	PM_000202	115802	116428	-	baseplate hub	baseplate hub	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_150 — baseplate hub	
+NC_000866.4	PM_000203	116479	117228	+	baseplate hub	baseplate hub	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_150 — baseplate hub	
+NC_000866.4	PM_000204	117234	118403	+	baseplate hub	baseplate hub	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1135 — baseplate hub	
+NC_000866.4	PM_000205	118348	118881	+	baseplate hub distal subunit	baseplate hub distal subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1140 — baseplate hub distal subunit	
+NC_000866.4	PM_000206	118878	120650	+	baseplate hub subunit and tail length	baseplate hub subunit and tail length	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1283 — baseplate hub subunit and tail length	
+NC_000866.4	PM_000207	120659	121753	+	baseplate tail tube cap	baseplate tail tube cap	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_230 — baseplate tail tube cap	
+NC_000866.4	PM_000208	121753	122715	+	tail tube	tail tube	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_45 — tail tube	
+NC_000866.4	PM_000209	122742	123032	-	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1739	
+NC_000866.4	PM_000210	123065	123268	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_15247	
+NC_000866.4	PM_000211	123265	123450	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_23015	
+NC_000866.4	PM_000212	123454	125502	-	alt-like rna polymerase adp-ribosyltransferase	alt-like rna polymerase adp-ribosyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_802 — Alt-like RNA polymerase ADP-ribosyltransferase	
+NC_000866.4	PM_000213	125560	125748	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1976	
+NC_000866.4	PM_000214	125745	127208	-	atp-dependent dna ligase	atp-dependent dna ligase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_114 — ATP-dependent DNA ligase	
+NC_000866.4	PM_000215	127205	127474	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2054	
+NC_000866.4	PM_000216	127474	128310	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_420	
+NC_000866.4	PM_000217	128307	128765	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_652	
+NC_000866.4	PM_000218	128758	128964	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2042	
+NC_000866.4	PM_000219	128961	129158	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1690	
+NC_000866.4	PM_000220	129158	129445	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2153	
+NC_000866.4	PM_000221	129487	129852	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1582	
+NC_000866.4	PM_000222	129921	130253	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1507	
+NC_000866.4	PM_000223	130255	130362	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000224	130364	130582	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1427	
+NC_000866.4	PM_000225	130573	130677	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000226	130785	131033	-	lysis inhibition accessory protein	lysis inhibition accessory protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1457 — lysis inhibition accessory protein	
+NC_000866.4	PM_000227	131181	131516	-	head morphogenesis protein	head morphogenesis protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_931 — head morphogenesis	
+NC_000866.4	PM_000228	131573	131881	-	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10657 — tail fiber protein	
+NC_000866.4	PM_000229	131882	132118	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2010	
+NC_000866.4	PM_000230	132118	132699	-	dcmp deaminase	dcmp deaminase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_174 — dCMP deaminase	
+NC_000866.4	PM_000231	132696	133034	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11960	
+NC_000866.4	PM_000232	133031	133261	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1504	
+NC_000866.4	PM_000233	133334	133609	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1695	
+NC_000866.4	PM_000234	133612	133812	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2360	
+NC_000866.4	PM_000235	133805	134002	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2430	
+NC_000866.4	PM_000236	134002	134907	-	polynucleotide kinase	polynucleotide kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_505 — polynucleotide kinase	
+NC_000866.4	PM_000237	134908	135135	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2347	
+NC_000866.4	PM_000238	135132	135431	-	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_812 — Rz-like spanin	
+NC_000866.4	PM_000239	135428	135781	-	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_739 — Rz-like spanin	
+NC_000866.4	PM_000240	135772	136278	-	inhibitor of host transcription	inhibitor of host transcription	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1253 — inhibitor of host transcription	
+NC_000866.4	PM_000241	136340	137464	-	rna ligase and tail fiber protein attachment catalyst	rna ligase and tail fiber protein attachment catalyst	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_562 — RNA ligase and tail fiber protein attachment catalyst	
+NC_000866.4	PM_000242	137517	137927	-	endonuclease	endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1111 — endonuclease	
+NC_000866.4	PM_000243	137955	138434	-	aerobic ndp reductase small subunit	aerobic ndp reductase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_8368 — aerobic NDP reductase small subunit	
+NC_000866.4	PM_000244	138424	138603	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000245	138640	138777	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000246	138774	138935	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000247	139054	139719	-	ribonucleotide reductase class ia beta subunit	ribonucleotide reductase class ia beta subunit	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_10582 — ribonucleotide reductase class Ia beta subunit	
+NC_000866.4	PM_000248	139716	139967	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000249	139991	140416	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_655 — homing endonuclease	
+NC_000866.4	PM_000250	140416	142680	-	ribonucleotide reductase large subunit	ribonucleotide reductase large subunit	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_3987 — ribonucleotide reductase large subunit	
+NC_000866.4	PM_000251	142671	142997	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_24867 — ribonucleotide reductase NrdA-like	
+NC_000866.4	PM_000252	142951	143214	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2458	
+NC_000866.4	PM_000253	143235	143549	-	thymidylate synthase	thymidylate synthase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5682 — thymidylate synthase	
+NC_000866.4	PM_000254	143694	144431	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_314 — homing endonuclease	
+NC_000866.4	PM_000255	144561	145112	-	thymidylate synthase	thymidylate synthase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_160 — thymidylate synthase	
+NC_000866.4	PM_000256	145109	145690	-	dihydrofolate reductase	dihydrofolate reductase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_316 — dihydrofolate reductase	
+NC_000866.4	PM_000257	145762	146004	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1254	
+NC_000866.4	PM_000258	146143	146529	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_622	
+NC_000866.4	PM_000259	146575	146802	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1764	
+NC_000866.4	PM_000260	146948	147853	-	single strand dna binding protein	single strand dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_224 — single strand DNA binding protein	
+NC_000866.4	PM_000261	147909	148541	-	homing endonuclease	homing endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7504 — homing endonuclease	
+NC_000866.4	PM_000262	148543	149181	-	dna helicase loader	dna helicase loader	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_269 — DNA helicase loader	
+NC_000866.4	PM_000263	149193	149531	-	late promoter transcriptional regulator	late promoter transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_254 — late promoter transcriptional regulator	
+NC_000866.4	PM_000264	149509	149778	-	transcriptional regulator	transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_639 — transcriptional regulator	
+NC_000866.4	PM_000265	149787	150704	-	exonuclease	exonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_107 — exonuclease	
+NC_000866.4	PM_000266	150809	154678	+	tail fiber protein proximal subunit	tail fiber protein proximal subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_972 — tail fiber protein proximal subunit	
+NC_000866.4	PM_000267	154687	155805	+	long tail fiber protein proximal connector	long tail fiber protein proximal connector	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1154 — long tail fiber protein proximal connector	
+NC_000866.4	PM_000268	155868	156533	+	hinge connector of long tail fiber protein distal connector	hinge connector of long tail fiber protein distal connector	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1425 — hinge connector of long tail fiber protein distal connector	
+NC_000866.4	PM_000269	156542	159622	+	long tail fiber protein distal subunit	long tail fiber protein distal subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1699 — long tail fiber protein distal subunit	
+NC_000866.4	PM_000270	159649	160200	+	tail fiber assembly	tail fiber assembly	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_105 — tail fiber assembly	
+NC_000866.4	PM_000271	160221	160877	+	holin	holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_860 — holin	
+NC_000866.4	PM_000272	160878	161150	-	anti-sigma factor	anti-sigma factor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1166 — anti-sigma factor	
+NC_000866.4	PM_000273	161163	161315	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3762	
+NC_000866.4	PM_000274	161312	161590	-	inhibitor of mrcbc restriction	inhibitor of mrcbc restriction	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3151 — inhibitor of MrcBC restriction	
+NC_000866.4	PM_000275	161674	161805	-	anti-restriction nuclease	anti-restriction nuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4452 — anti-restriction nuclease	
+NC_000866.4	PM_000276	161876	162172	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1844	
+NC_000866.4	PM_000277	162172	162630	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_839	
+NC_000866.4	PM_000278	162627	162833	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1594	
+NC_000866.4	PM_000279	162967	163602	-	mota-like activator of middle period transcription	mota-like activator of middle period transcription	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1345 — MotA-like activator of middle period transcription	
+NC_000866.4	PM_000280	163730	163879	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3487	
+NC_000866.4	PM_000281	163876	165204	-	dna topoisomerase ii	dna topoisomerase ii	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_551 — DNA topoisomerase II	
+NC_000866.4	PM_000282	165209	165349	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3595	
+NC_000866.4	PM_000283	165342	165497	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2501	
+NC_000866.4	PM_000284	165585	166040	-	ndd-like nucleoid disruption protein	ndd-like nucleoid disruption protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1102 — Ndd-like nucleoid disruption protein	
+NC_000866.4	PM_000285	166101	166316	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2183	
+NC_000866.4	PM_000286	166325	166432	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4135	
+NC_000866.4	PM_000287	166432	166554	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_2401 — periplasmic protein	
+NC_000866.4	PM_000288	166548	166649	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000289	166636	166749	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_28140	
+NC_000866.4	PM_000290	166815	166913	-	outer membrane protein	outer membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5011 — outer membrane protein	
+NC_000866.4	PM_000291	166993	167121	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000866.4	PM_000292	167103	167660	-	denb-like dna endonuclease iv	denb-like dna endonuclease iv	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1360 — DenB-like DNA endonuclease IV	
+NC_000866.4	PM_000293	167743	167937	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_15270	
+NC_000866.4	PM_000294	167965	168903	-	riib lysis inhibitor	riib lysis inhibitor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_609 — RIIB lysis inhibitor	
+NC_000929.1	PM_000001	3	101	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000929.1	PM_000002	339	863	-	transcriptional repressor	transcriptional repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7148 — transcriptional repressor	
+NC_000929.1	PM_000003	1015	1131	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000929.1	PM_000004	1099	1326	+	transcriptional repressor	transcriptional repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_769 — transcriptional repressor	
+NC_000929.1	PM_000005	1328	3319	+	transposase	transposase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_310 — transposase	
+NC_000929.1	PM_000006	3358	4296	+	dna transposition protein	dna transposition protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_296 — DNA transposition protein	
+NC_000929.1	PM_000007	4312	4539	+	kil protein for bacterial septation inhibition	kil protein for bacterial septation inhibition	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2743 — Kil protein for bacterial septation inhibition	
+NC_000929.1	PM_000008	4542	4772	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3786	
+NC_000929.1	PM_000009	4784	5047	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10252	
+NC_000929.1	PM_000010	5038	5481	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3690	
+NC_000929.1	PM_000011	5482	5781	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_323 — transcriptional regulator, D5-like	
+NC_000929.1	PM_000012	5801	6325	+	host nuclease inhibitor	host nuclease inhibitor	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_18351 — host nuclease inhibitor	
+NC_000929.1	PM_000013	6424	6954	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1949	
+NC_000929.1	PM_000014	6954	7484	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2314	
+NC_000929.1	PM_000015	7471	7653	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5584	
+NC_000929.1	PM_000016	7655	7957	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6075	
+NC_000929.1	PM_000017	7896	8162	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8747	
+NC_000929.1	PM_000018	8233	8784	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_286	
+NC_000929.1	PM_000019	8781	9170	+	late transcriptional activator	late transcriptional activator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_532 — late transcriptional activator	
+NC_000929.1	PM_000020	9248	9466	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2121	
+NC_000929.1	PM_000021	9459	9821	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4975	
+NC_000929.1	PM_000022	9831	9950	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_19823	
+NC_000929.1	PM_000023	9963	10385	+	late transcriptional activator	late transcriptional activator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_532 — late transcriptional activator	
+NC_000929.1	PM_000024	10477	10995	+	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7 — endolysin	
+NC_000929.1	PM_000025	11211	11567	+	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3001 — Rz-like spanin	
+NC_000929.1	PM_000026	11524	11718	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3260	
+NC_000929.1	PM_000027	11718	12017	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_736	
+NC_000929.1	PM_000028	12014	12304	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_436	
+NC_000929.1	PM_000029	12316	12891	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_426 — terminase small subunit	
+NC_000929.1	PM_000030	12707	14554	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_2 — terminase large subunit	
+NC_000929.1	PM_000031	14554	16092	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_113 — portal protein	
+NC_000929.1	PM_000032	16073	17392	+	minor head protein and dna pilot	minor head protein and dna pilot	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_220 — minor head protein and DNA pilot	
+NC_000929.1	PM_000033	17401	17859	+	tail completion or neck1 protein	tail completion or neck1 protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_26 — tail completion or Neck1 protein	
+NC_000929.1	PM_000034	18056	19141	+	capsid maturation protease	capsid maturation protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_328 — head maturation protease	
+NC_000929.1	PM_000035	19138	20055	+	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_371 — major head protein	
+NC_000929.1	PM_000036	20122	20532	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2498	
+NC_000929.1	PM_000037	20529	20954	+	head-tail adaptor	head-tail adaptor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_195 — head-tail adaptor	
+NC_000929.1	PM_000038	20954	21502	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_490 — portal protein	
+NC_000929.1	PM_000039	21486	21692	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_208	
+NC_000929.1	PM_000040	21689	23176	+	tail sheath	tail sheath	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_165 — tail sheath	
+NC_000929.1	PM_000041	23186	23542	+	tail tube protein	tail tube protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_185 — tail tube protein	
+NC_000929.1	PM_000042	23552	23986	+	tail assembly chaperone	tail assembly chaperone	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_508 — tail assembly chaperone	
+NC_000929.1	PM_000043	24028	24168	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000929.1	PM_000044	24131	26203	+	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_973 — tail length tape measure protein	
+NC_000929.1	PM_000045	26208	27695	+	baseplate hub	baseplate hub	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_184 — baseplate hub	
+NC_000929.1	PM_000046	27688	28827	+	baseplate hub	baseplate hub	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_177 — baseplate hub	
+NC_000929.1	PM_000047	28863	29408	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_000929.1	PM_000048	29405	29842	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_180 — baseplate wedge subunit	
+NC_000929.1	PM_000049	29843	30925	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_1608 — tail protein	
+NC_000929.1	PM_000050	30916	31458	+	baseplate wedge subunit	baseplate wedge subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_203 — baseplate wedge subunit	
+NC_000929.1	PM_000051	31458	32972	+	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_6859 — tail fiber protein	
+NC_000929.1	PM_000052	32975	33502	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_11571 — tail fiber protein	
+NC_000929.1	PM_000053	33531	34064	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_11571 — tail fiber protein	
+NC_000929.1	PM_000054	34067	35263	-	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_454 — tail fiber protein	
+NC_000929.1	PM_000055	35299	35673	+	dna binding protein	dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_664 — DNA binding protein	
+NC_000929.1	PM_000056	35768	35956	+	gpcom control of modification	gpcom control of modification	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_13819 — gpCom control of modification	
+NC_000929.1	PM_000057	35877	36602	+	mom-like dna modification protein	mom-like dna modification protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1384 — Mom-like DNA modification protein	
+NC_001416.1	PM_000001	191	736	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1790 — terminase small subunit	
+NC_001416.1	PM_000002	751	894	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000003	891	2636	+	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_15 — terminase large subunit	
+NC_001416.1	PM_000004	2633	2839	+	head-tail adaptor ad1	head-tail adaptor ad1	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_75 — head-tail adaptor Ad1	
+NC_001416.1	PM_000005	2836	4437	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_21 — portal protein	
+NC_001416.1	PM_000006	4319	5737	+	capsid maturation protease	capsid maturation protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_53 — head maturation protease	
+NC_001416.1	PM_000007	5747	6079	+	head decoration	head decoration	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_49 — head decoration	
+NC_001416.1	PM_000008	6135	7160	+	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_6020 — major head protein	
+NC_001416.1	PM_000009	7163	7600	+	dna packaging chaperone fi	dna packaging chaperone fi	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_92 — DNA packaging chaperone FI	
+NC_001416.1	PM_000010	7678	7965	+	head closure protein hc1	head closure protein hc1	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_82 — head closure Hc1	
+NC_001416.1	PM_000011	7977	8555	+	tail completion or neck1 protein	tail completion or neck1 protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_27 — tail completion or Neck1 protein	
+NC_001416.1	PM_000012	8552	8947	+	tail terminator	tail terminator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_37 — tail terminator	
+NC_001416.1	PM_000013	8955	9695	+	major tail protein	major tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_158 — major tail protein	
+NC_001416.1	PM_000014	9711	10133	+	minor tail protein	minor tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_42 — minor tail protein	
+NC_001416.1	PM_000015	10160	10549	+	tail assembly protein	tail assembly protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_39 — tail assembly protein	
+NC_001416.1	PM_000016	10542	13103	+	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_24 — tail length tape measure protein	
+NC_001416.1	PM_000017	13100	13429	+	minor tail protein	minor tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_14 — minor tail protein	
+NC_001416.1	PM_000018	13429	14127	+	minor tail protein	minor tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_18 — minor tail protein	
+NC_001416.1	PM_000019	14090	14257	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000020	14276	14875	+	minor tail protein	minor tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_30 — minor tail protein	
+NC_001416.1	PM_000021	14773	15444	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_28576	
+NC_001416.1	PM_000022	15505	18903	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_10903	
+NC_001416.1	PM_000023	18965	19585	+	lom outer membrane protein	lom outer membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_108 — Lom outer membrane protein	
+NC_001416.1	PM_000024	19650	20855	+	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_8713 — tail fiber protein	
+NC_001416.1	PM_000025	20815	20964	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000026	21029	21973	+	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_2097 — tail fiber protein	
+NC_001416.1	PM_000027	21973	22557	+	tail fiber assembly	tail fiber assembly	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_105 — tail fiber assembly	
+NC_001416.1	PM_000028	22686	23918	-	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_19262	
+NC_001416.1	PM_000029	23947	24045	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000030	24108	24317	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000031	24509	25399	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10378 — HNH endonuclease	
+NC_001416.1	PM_000032	25396	26973	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8066	
+NC_001416.1	PM_000033	27009	27164	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000034	27157	27351	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000035	27335	27604	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000036	27766	27855	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000037	27812	28882	-	integrase	integrase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7244 — integrase	
+NC_001416.1	PM_000038	28860	29078	-	excisionase	excisionase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_629 — excisionase	
+NC_001416.1	PM_000039	29118	29285	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_676	
+NC_001416.1	PM_000040	29374	29655	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6325	
+NC_001416.1	PM_000041	29847	30347	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11761	
+NC_001416.1	PM_000042	30392	30613	-	dksa-like zinc-finger protein	dksa-like zinc-finger protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_54 — DksA-like zinc-finger protein	
+NC_001416.1	PM_000043	30620	30709	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000044	30712	30894	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_303	
+NC_001416.1	PM_000045	31005	31196	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_292	
+NC_001416.1	PM_000046	31169	31351	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1998	
+NC_001416.1	PM_000047	31348	32028	-	exonuclease	exonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_149 — exonuclease	
+NC_001416.1	PM_000048	32025	32810	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_10056 — RecT-like ssDNA annealing protein	
+NC_001416.1	PM_000049	32816	33232	-	gam-like host nuclease inhibitor	gam-like host nuclease inhibitor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_259 — gam-like host nuclease inhibitor	
+NC_001416.1	PM_000050	33187	33456	-	kil protein for bacterial septation inhibition	kil protein for bacterial septation inhibition	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2461 — Kil protein for bacterial septation inhibition	
+NC_001416.1	PM_000051	33536	33904	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_646	
+NC_001416.1	PM_000052	33917	34006	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_20113	
+NC_001416.1	PM_000053	34087	34287	-	restriction alleviation ral	restriction alleviation ral	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1055 — restriction alleviation ral	
+NC_001416.1	PM_000054	34261	34386	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000055	34485	35036	+	sieb superinfection exclusion	sieb superinfection exclusion	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_6399 — SieB superinfection exclusion	
+NC_001416.1	PM_000056	35037	35438	-	anti-termination protein n-like	anti-termination protein n-like	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_271 — anti-termination protein N-like	
+NC_001416.1	PM_000057	35471	35581	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000058	35583	35672	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000059	35669	35854	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_22865	
+NC_001416.1	PM_000060	35825	36259	-	rexb-like exclusion protein	rexb-like exclusion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_14878 — RexB-like exclusion protein	
+NC_001416.1	PM_000061	36275	37114	-	rexa-like exclusion protein	rexa-like exclusion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_12654 — RexA-like exclusion protein	
+NC_001416.1	PM_000062	37227	37940	-	transcriptional repressor	transcriptional repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4 — transcriptional repressor	
+NC_001416.1	PM_000063	37919	38056	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000064	38041	38241	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_35 — transcriptional repressor	
+NC_001416.1	PM_000065	38300	38653	+	cii-like transcriptional activator	cii-like transcriptional activator	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_3638 — CII-like transcriptional activator	
+NC_001416.1	PM_000066	38686	39585	+	replication initiation o-like	replication initiation o-like	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_277 — replication initiation O-like	
+NC_001416.1	PM_000067	39582	40283	+	p-like helicase loader	p-like helicase loader	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_109 — P-like helicase loader	
+NC_001416.1	PM_000068	40280	40570	+	ren-like exclusion protein	ren-like exclusion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_142 — Ren-like exclusion protein	
+NC_001416.1	PM_000069	40644	41084	+	ninb/ orf homologous recombination mediator	ninb/ orf homologous recombination mediator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_72 — NinB/ Orf homologous recombination mediator	
+NC_001416.1	PM_000070	41063	41953	+	phosphoadenosine phosphosulfate reductase	phosphoadenosine phosphosulfate reductase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_33262 — phosphoadenosine phosphosulfate reductase	
+NC_001416.1	PM_000071	41972	42169	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000072	42227	42439	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_672	
+NC_001416.1	PM_000073	42429	43043	+	ning/ rap dna junction specific endonuclease	ning/ rap dna junction specific endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_171 — NinG/ Rap DNA junction specific endonuclease	
+NC_001416.1	PM_000074	43152	43889	+	nini-like serine-threonine phosphatase	nini-like serine-threonine phosphatase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_246 — NinI-like serine-threonine phosphatase	
+NC_001416.1	PM_000075	43886	44509	+	anti-termination protein q-like	anti-termination protein q-like	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_127 — anti-termination protein Q-like	
+NC_001416.1	PM_000076	44538	44690	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000077	44654	44938	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000078	45147	45242	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000079	45186	45509	+	holin/anti-holin	holin/anti-holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_126 — holin/anti-holin	
+NC_001416.1	PM_000080	45493	45969	+	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_90 — endolysin	
+NC_001416.1	PM_000081	45966	46427	+	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_13 — Rz-like spanin	
+NC_001416.1	PM_000082	46459	46752	-	bor-like outer membrane protein	bor-like outer membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_260 — Bor-like outer membrane protein	
+NC_001416.1	PM_000083	46896	46994	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000084	47042	47494	-	head protein	head protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_413 — head protein	
+NC_001416.1	PM_000085	47572	47736	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001416.1	PM_000086	47738	47944	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_657	
+NC_001416.1	PM_000087	48109	48303	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_949	
+NC_001416.1	PM_000088	48319	48432	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_9395	
+NC_001422.1	PM_000001	2	136	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_713 — DNA replication initiation	
+NC_001422.1	PM_000002	133	393	+	terminase protein	terminase protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1465 — terminase	
+NC_001422.1	PM_000003	390	848	+	head morphogenesis protein	head morphogenesis protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1386 — head morphogenesis	
+NC_001422.1	PM_000004	848	964	+	dna condensation	dna condensation	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2354 — DNA condensation	
+NC_001422.1	PM_000005	1001	2284	+	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_514 — major head protein	
+NC_001422.1	PM_000006	2395	2922	+	major spike protein	major spike protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1483 — major spike protein	
+NC_001422.1	PM_000007	2931	3917	+	pilot protein for dna ejection	pilot protein for dna ejection	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1471 — pilot protein for DNA ejection	
+NC_001422.1	PM_000008	3981	5384	+	dna replication initiation	dna replication initiation	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_713 — DNA replication initiation	
+NC_001604.1	PM_000001	3	98	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000002	474	608	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000003	627	749	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000004	766	921	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000005	925	1278	+	ocr-like anti-restriction	ocr-like anti-restriction	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2568 — ocr-like anti-restriction	
+NC_001604.1	PM_000006	1278	1433	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_25044	
+NC_001604.1	PM_000007	1430	1639	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_16572	
+NC_001604.1	PM_000008	1639	1797	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_29241	
+NC_001604.1	PM_000009	1781	1972	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8393	
+NC_001604.1	PM_000010	2021	3100	+	serine-threonine kinase	serine-threonine kinase	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_2828 — serine-threonine kinase	
+NC_001604.1	PM_000011	3171	5822	+	rna polymerase	rna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_414 — RNA polymerase	
+NC_001604.1	PM_000012	6007	6135	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2490	
+NC_001604.1	PM_000013	6137	6394	+	dgtpase inhibitor target for f exclusion	dgtpase inhibitor target for f exclusion	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2949 — dGTPase inhibitor target for F exclusion	
+NC_001604.1	PM_000014	6475	7554	+	atp-dependent dna ligase	atp-dependent dna ligase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_114 — ATP-dependent DNA ligase	
+NC_001604.1	PM_000015	7608	7763	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_17655	
+NC_001604.1	PM_000016	7791	7880	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_12128	
+NC_001604.1	PM_000017	7906	8166	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1777	
+NC_001604.1	PM_000018	8166	8756	+	nucleotide kinase	nucleotide kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2585 — nucleotide kinase	
+NC_001604.1	PM_000019	8749	8895	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1312	
+NC_001604.1	PM_000020	8892	9092	+	rna polymerase inhibitor	rna polymerase inhibitor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1307 — RNA polymerase inhibitor	
+NC_001604.1	PM_000021	9158	9856	+	gp2.5-like ssdna binding protein and ssdna annealing protein	gp2.5-like ssdna binding protein and ssdna annealing protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_112 — Gp2.5-like ssDNA binding protein and ssDNA annealing protein	
+NC_001604.1	PM_000022	9857	10276	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_59 — HNH endonuclease	
+NC_001604.1	PM_000023	10257	10706	+	endonuclease	endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_945 — endonuclease	
+NC_001604.1	PM_000024	10706	11161	+	amidase	amidase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_822 — amidase	
+NC_001604.1	PM_000025	11225	11590	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4578 — HNH endonuclease	
+NC_001604.1	PM_000026	11565	13265	+	dna primase/helicase	dna primase/helicase	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_239 — DNA primase/helicase	
+NC_001604.1	PM_000027	13352	13564	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1950	
+NC_001604.1	PM_000028	13584	13853	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2254	
+NC_001604.1	PM_000029	13798	14334	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4023	
+NC_001604.1	PM_000030	14353	16467	+	dna polymerase i	dna polymerase i	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_15971 — DNA polymerase I	
+NC_001604.1	PM_000031	16483	16839	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5018	
+NC_001604.1	PM_000032	16851	17150	+	gp5.5-like host hns inhibition	gp5.5-like host hns inhibition	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1452 — Gp5.5-like host HNS inhibition	
+NC_001604.1	PM_000033	17150	17359	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1334	
+NC_001604.1	PM_000034	17359	17517	+	gp5.9-like inihibitor of recbcd nuclease	gp5.9-like inihibitor of recbcd nuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_9014 — Gp5.9-like inihibitor of recBCD nuclease	
+NC_001604.1	PM_000035	17504	18406	+	exonuclease	exonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_107 — exonuclease	
+NC_001604.1	PM_000036	18394	18507	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11345	
+NC_001604.1	PM_000037	18605	18859	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1447	
+NC_001604.1	PM_000038	18864	19130	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1391	
+NC_001604.1	PM_000039	19130	19531	+	host range and adsorption protein	host range and adsorption protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2746 — host range and adsorption protein	
+NC_001604.1	PM_000040	19535	19834	+	host range and adsorption protein	host range and adsorption protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1320 — host range and adsorption protein	
+NC_001604.1	PM_000041	19848	20240	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_59 — HNH endonuclease	
+NC_001604.1	PM_000042	20225	21850	+	head-tail adaptor	head-tail adaptor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_449 — head-tail adaptor	
+NC_001604.1	PM_000043	21950	22873	+	head assembly	head assembly	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1052 — head assembly	
+NC_001604.1	PM_000044	22967	24004	+	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_267 — major head protein	
+NC_001604.1	PM_000045	24004	24162	+	head protein	head protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_12582 — head protein	
+NC_001604.1	PM_000046	24228	24818	+	tail protein	tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_446 — tail protein	
+NC_001604.1	PM_000047	24842	27226	+	tail protein	tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_457 — tail protein	
+NC_001604.1	PM_000048	27307	27723	+	internal virion protein	internal virion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_308 — internal virion protein	
+NC_001604.1	PM_000049	27728	28318	+	internal virion protein	internal virion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_805 — internal virion protein	
+NC_001604.1	PM_000050	28325	30568	+	internal virion protein	internal virion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1339 — internal virion protein	
+NC_001604.1	PM_000051	30595	34551	+	internal virion protein with endolysin domain	internal virion protein with endolysin domain	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_342 — internal virion protein with endolysin domain	
+NC_001604.1	PM_000052	34624	36285	+	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4242 — tail fiber protein	
+NC_001604.1	PM_000053	36344	36547	+	holin	holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_920 — holin	
+NC_001604.1	PM_000054	36553	36822	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1351 — terminase small subunit	
+NC_001604.1	PM_000055	36797	36898	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000056	36917	37348	+	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1327 — Rz-like spanin	
+NC_001604.1	PM_000057	37370	39130	+	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_17672 — terminase large subunit	
+NC_001604.1	PM_000058	39389	39538	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2193	
+NC_001604.1	PM_000059	39494	39604	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000060	39713	39847	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001604.1	PM_000061	39834	39935	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001706.1	PM_000001	85	216	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001706.1	PM_000002	253	402	-	transcriptional regulator	transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_12561 — transcriptional regulator	
+NC_001706.1	PM_000003	426	800	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10769	
+NC_001706.1	PM_000004	823	1125	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10148	
+NC_001706.1	PM_000005	1118	1441	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10525	
+NC_001706.1	PM_000006	1442	1942	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1317	
+NC_001706.1	PM_000007	1939	2103	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1295	
+NC_001706.1	PM_000008	2116	2460	-	single strand dna binding protein	single strand dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1278 — single strand DNA binding protein	
+NC_001706.1	PM_000009	2526	3065	-	erf-like ssdna annealing protein	erf-like ssdna annealing protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_155 — Erf-like ssDNA annealing protein	
+NC_001706.1	PM_000010	3065	3217	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10559	
+NC_001706.1	PM_000011	3211	3462	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1632	
+NC_001706.1	PM_000012	3434	3613	-	transcriptional regulator	transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10808 — transcriptional regulator	
+NC_001706.1	PM_000013	3594	3962	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1225	
+NC_001706.1	PM_000014	4034	4207	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_9988	
+NC_001706.1	PM_000015	4265	4654	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10596	
+NC_001706.1	PM_000016	4654	5034	-	dna polymerase	dna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10577 — DNA polymerase	
+NC_001706.1	PM_000017	5024	5218	-	dna polymerase	dna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_21006 — DNA polymerase	
+NC_001706.1	PM_000018	5288	6187	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1284	
+NC_001706.1	PM_000019	6189	6389	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10138	
+NC_001706.1	PM_000020	6386	6493	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001706.1	PM_000021	6494	6634	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11709	
+NC_001706.1	PM_000022	6624	6719	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001706.1	PM_000023	6833	6937	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001706.1	PM_000024	6930	7061	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001706.1	PM_000025	7246	7395	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10074	
+NC_001706.1	PM_000026	7406	7891	+	holliday junction resolvase	holliday junction resolvase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_827 — Holliday junction resolvase	
+NC_001706.1	PM_000027	8024	8617	+	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7 — endolysin	
+NC_001706.1	PM_000028	8628	9467	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10159 — virion structural protein	
+NC_001706.1	PM_000029	9418	10860	+	capsid maturation protease	capsid maturation protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3270 — head maturation protease	
+NC_001706.1	PM_000030	10880	11596	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10227	
+NC_001706.1	PM_000031	11603	12220	+	major tail protein	major tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2634 — major tail protein	
+NC_001706.1	PM_000032	12290	12544	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10561	
+NC_001706.1	PM_000033	12586	12762	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_12461	
+NC_001706.1	PM_000034	12732	13136	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10523	
+NC_001706.1	PM_000035	13129	15249	+	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_9145 — tail length tape measure protein	
+NC_001706.1	PM_000036	15246	15533	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_119 — HNH endonuclease	
+NC_001706.1	PM_000037	15546	17102	+	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_9 — terminase large subunit	
+NC_001706.1	PM_000038	17102	17401	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10033	
+NC_001706.1	PM_000039	17398	19314	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10648	
+NC_001706.1	PM_000040	19311	20456	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_10067 — virion structural protein	
+NC_001706.1	PM_000041	20449	21696	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10326 — virion structural protein	
+NC_001706.1	PM_000042	21719	22009	+	holin	holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_9407 — holin	
+NC_001706.1	PM_000043	22081	22170	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000001	85	180	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000002	263	787	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1437 — terminase small subunit	
+NC_001835.1	PM_000003	788	2410	+	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_9 — terminase large subunit	
+NC_001835.1	PM_000004	2400	2684	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_119 — HNH endonuclease	
+NC_001835.1	PM_000005	2715	3833	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_12 — portal protein	
+NC_001835.1	PM_000006	3814	4350	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_11321	
+NC_001835.1	PM_000007	4343	5524	+	minor head protein	minor head protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1393 — minor head protein	
+NC_001835.1	PM_000008	5545	5808	+	head-tail connector protein	head-tail connector protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1428 — head-tail connector protein	
+NC_001835.1	PM_000009	5808	6122	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1429 — virion structural protein	
+NC_001835.1	PM_000010	6112	6282	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1484 — virion structural protein	
+NC_001835.1	PM_000011	6361	6450	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1484 — virion structural protein	
+NC_001835.1	PM_000012	6447	6806	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1440 — virion structural protein	
+NC_001835.1	PM_000013	6819	7724	+	major tail protein	major tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3791 — major tail protein	
+NC_001835.1	PM_000014	7775	8050	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1420 — virion structural protein	
+NC_001835.1	PM_000015	8070	8582	+	virion structural protein	virion structural protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1421 — virion structural protein	
+NC_001835.1	PM_000016	8582	11581	+	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_58 — tail length tape measure protein	
+NC_001835.1	PM_000017	11581	12477	+	tail protein	tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1424 — tail protein	
+NC_001835.1	PM_000018	12477	13604	+	tail associated lysin	tail associated lysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1432 — tail associated lysin	
+NC_001835.1	PM_000019	13594	13887	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1434	
+NC_001835.1	PM_000020	13961	14671	+	receptor binding tail protein	receptor binding tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1630 — receptor binding tail protein	
+NC_001835.1	PM_000021	14693	15046	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1379	
+NC_001835.1	PM_000022	15043	15783	+	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_670 — endolysin	
+NC_001835.1	PM_000023	15827	15934	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000024	15994	16185	-	transglycosylase	transglycosylase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3775 — transglycosylase	
+NC_001835.1	PM_000025	16246	16512	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1430	
+NC_001835.1	PM_000026	16509	16610	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3389	
+NC_001835.1	PM_000027	16685	17032	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1415	
+NC_001835.1	PM_000028	17032	17229	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1441	
+NC_001835.1	PM_000029	17219	17476	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1509	
+NC_001835.1	PM_000030	17540	17926	-	nucleotide kinase	nucleotide kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4472 — nucleotide kinase	
+NC_001835.1	PM_000031	17926	18045	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1508	
+NC_001835.1	PM_000032	18042	18227	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3002	
+NC_001835.1	PM_000033	18238	18561	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1083	
+NC_001835.1	PM_000034	18617	18859	-	dna methyltransferase	dna methyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1825 — DNA methyltransferase	
+NC_001835.1	PM_000035	18860	18970	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4546	
+NC_001835.1	PM_000036	19005	19322	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1919	
+NC_001835.1	PM_000037	19406	19792	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1317	
+NC_001835.1	PM_000038	19912	20127	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1295	
+NC_001835.1	PM_000039	20143	20502	-	single strand dna binding protein	single strand dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1278 — single strand DNA binding protein	
+NC_001835.1	PM_000040	20507	21142	-	sak-like ssdna annealing protein	sak-like ssdna annealing protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_659 — Sak-like ssDNA annealing protein	
+NC_001835.1	PM_000041	21139	21450	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5462	
+NC_001835.1	PM_000042	21508	21738	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6484	
+NC_001835.1	PM_000043	21735	21995	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1449	
+NC_001835.1	PM_000044	21952	22239	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1632	
+NC_001835.1	PM_000045	22236	22622	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2228	
+NC_001835.1	PM_000046	22679	22936	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1405	
+NC_001835.1	PM_000047	22908	23090	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3604	
+NC_001835.1	PM_000048	23083	23895	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1284	
+NC_001835.1	PM_000049	23892	24032	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1284	
+NC_001835.1	PM_000050	24025	24297	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_33906	
+NC_001835.1	PM_000051	24358	24561	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4505	
+NC_001835.1	PM_000052	24706	25398	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_7915	
+NC_001835.1	PM_000053	25381	25482	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000054	25586	25759	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000055	25836	26015	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_24018	
+NC_001835.1	PM_000056	26020	26154	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_37398	
+NC_001835.1	PM_000057	26154	26342	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1656	
+NC_001835.1	PM_000058	26473	26601	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1952	
+NC_001835.1	PM_000059	26606	26737	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1436	
+NC_001835.1	PM_000060	26734	27216	+	holliday junction resolvase	holliday junction resolvase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_827 — Holliday junction resolvase	
+NC_001835.1	PM_000061	27213	27380	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1652	
+NC_001835.1	PM_000062	27591	27689	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000063	27755	27850	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000064	28031	28129	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_001835.1	PM_000065	28212	28334	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000001	1	225	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_606 — terminase small subunit	
+NC_002371.2	PM_000002	203	1702	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_2 — terminase large subunit	
+NC_002371.2	PM_000003	1702	3879	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_156 — portal protein	
+NC_002371.2	PM_000004	3893	4804	+	head scaffolding protein	head scaffolding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_648 — head scaffolding protein	
+NC_002371.2	PM_000005	4804	6096	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_22632 — head protein	
+NC_002371.2	PM_000006	6135	6344	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1175	
+NC_002371.2	PM_000007	6328	6828	+	head-tail adaptor ad3	head-tail adaptor ad3	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_637 — head-tail adaptor Ad3	
+NC_002371.2	PM_000008	6788	8206	+	head closure hc3	head closure hc3	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_578 — head closure Hc3	
+NC_002371.2	PM_000009	8210	8911	+	tail needle protein	tail needle protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1219 — tail needle protein	
+NC_002371.2	PM_000010	8911	9366	+	head morphogenesis protein	head morphogenesis protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_651 — head morphogenesis	
+NC_002371.2	PM_000011	9369	10058	+	dna ejection	dna ejection	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_598 — DNA ejection	
+NC_002371.2	PM_000012	10069	11484	+	released from the phage upon host infection	released from the phage upon host infection	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_917 — released from the phage upon host infection	
+NC_002371.2	PM_000013	11484	13313	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_29117 — head morphogenesis	
+NC_002371.2	PM_000014	13336	14046	-	superinfection exclusion siea-like	superinfection exclusion siea-like	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7745 — superinfection exclusion SieA-like	
+NC_002371.2	PM_000015	14020	14226	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1365	
+NC_002371.2	PM_000016	14240	14419	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3202	
+NC_002371.2	PM_000017	14519	15106	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000018	15091	15993	+	anti-repressor ant	anti-repressor ant	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_524 — anti-repressor Ant	
+NC_002371.2	PM_000019	16204	18207	+	tail spike protein	tail spike protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1819 — tail spike protein	
+NC_002371.2	PM_000020	18266	19498	-	gtrc-like o-antigen conversion translocase	gtrc-like o-antigen conversion translocase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4829 — GtrC-like O-antigen conversion translocase	
+NC_002371.2	PM_000021	19519	19623	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000022	19713	20690	-	gtrb-like o-antigen conversion	gtrb-like o-antigen conversion	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_841 — GtrB-like O-antigen conversion	
+NC_002371.2	PM_000023	20642	21004	-	gtra-like o-antigen conversion	gtra-like o-antigen conversion	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2224 — GtrA-like O-antigen conversion	
+NC_002371.2	PM_000024	21155	21244	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000025	21353	22516	-	integrase	integrase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10426 — integrase	
+NC_002371.2	PM_000026	22548	22718	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000027	22746	23381	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_22326	
+NC_002371.2	PM_000028	23463	23702	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2945	
+NC_002371.2	PM_000029	23758	24711	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_60	
+NC_002371.2	PM_000030	24715	24903	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8222	
+NC_002371.2	PM_000031	24906	25616	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1138	
+NC_002371.2	PM_000032	25496	25855	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6018	
+NC_002371.2	PM_000033	25830	25967	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_25957	
+NC_002371.2	PM_000034	25964	26461	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10746	
+NC_002371.2	PM_000035	26449	26619	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1117	
+NC_002371.2	PM_000036	26630	26923	-	abc2 anti-recbcd	abc2 anti-recbcd	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_656 — abc2 anti-RecBCD	
+NC_002371.2	PM_000037	26970	27254	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_323 — transcriptional regulator, D5-like	
+NC_002371.2	PM_000038	27254	27871	-	erf-like ssdna annealing protein	erf-like ssdna annealing protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_155 — Erf-like ssDNA annealing protein	
+NC_002371.2	PM_000039	27868	28011	-	erf recombination cofactor arf	erf recombination cofactor arf	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2445 — Erf recombination cofactor Arf	
+NC_002371.2	PM_000040	28001	28189	-	kil protein for bacterial septation inhibition	kil protein for bacterial septation inhibition	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2394 — Kil protein for bacterial septation inhibition	
+NC_002371.2	PM_000041	28170	28328	-	ciii anti-termination	ciii anti-termination	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_550 — CIII anti-termination	
+NC_002371.2	PM_000042	28414	28725	-	superinfection exclusion	superinfection exclusion	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1510 — superinfection exclusion	
+NC_002371.2	PM_000043	28873	29076	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_60	
+NC_002371.2	PM_000044	29076	29312	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1273	
+NC_002371.2	PM_000045	29349	29543	-	restriction alleviation ral	restriction alleviation ral	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1055 — restriction alleviation ral	
+NC_002371.2	PM_000046	29581	30336	+	superinfection exclusion inhibits sieb	superinfection exclusion inhibits sieb	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1301 — superinfection exclusion inhibits SieB	
+NC_002371.2	PM_000047	30387	30545	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000048	30679	30891	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000049	31013	31663	-	transcriptional repressor	transcriptional repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4 — transcriptional repressor	
+NC_002371.2	PM_000050	31744	31929	+	transcriptional regulator	transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_409 — transcriptional regulator	
+NC_002371.2	PM_000051	32036	32314	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_191 — CII-like transcriptional activator	
+NC_002371.2	PM_000052	32349	32495	+	tail protein	tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1913 — tail protein	
+NC_002371.2	PM_000053	32488	33303	+	replication initiation o-like	replication initiation o-like	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_277 — replication initiation O-like	
+NC_002371.2	PM_000054	33300	34676	+	dnab-like replicative helicase	dnab-like replicative helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_19 — DnaB-like replicative helicase	
+NC_002371.2	PM_000055	34750	35187	+	ninb/ orf homologous recombination mediator	ninb/ orf homologous recombination mediator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_72 — NinB/ Orf homologous recombination mediator	
+NC_002371.2	PM_000056	35184	35357	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8091	
+NC_002371.2	PM_000057	35324	35500	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_288	
+NC_002371.2	PM_000058	35497	35835	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_444	
+NC_002371.2	PM_000059	35828	36004	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_672	
+NC_002371.2	PM_000060	35997	36608	+	ning/ rap dna junction specific endonuclease	ning/ rap dna junction specific endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_171 — NinG/ Rap DNA junction specific endonuclease	
+NC_002371.2	PM_000061	36605	36829	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3496	
+NC_002371.2	PM_000062	36856	37029	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_268	
+NC_002371.2	PM_000063	37010	37189	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1402	
+NC_002371.2	PM_000064	37186	37809	+	anti-termination protein q-like	anti-termination protein q-like	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_127 — anti-termination protein Q-like	
+NC_002371.2	PM_000065	37899	38108	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_20959	
+NC_002371.2	PM_000066	38131	38235	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000067	38244	38570	+	holin/anti-holin	holin/anti-holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_126 — holin/anti-holin	
+NC_002371.2	PM_000068	38554	38991	+	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10457 — endolysin	
+NC_002371.2	PM_000069	38988	39425	+	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_13 — Rz-like spanin	
+NC_002371.2	PM_000070	39466	39651	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000071	39644	40180	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_18886	
+NC_002371.2	PM_000072	40173	40325	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000073	40310	40474	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000074	40446	40706	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_16546	
+NC_002371.2	PM_000075	40768	40932	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000076	40947	41039	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002371.2	PM_000077	41014	41256	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_571	
+NC_002371.2	PM_000078	41258	41437	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3546	
+NC_002371.2	PM_000079	41455	41724	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_606 — terminase small subunit	
+NC_002703.1	PM_000001	94	1218	-	integrase	integrase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1 — integrase	
+NC_002703.1	PM_000002	1339	1860	-	superinfection exclusion sie-like	superinfection exclusion sie-like	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_8545 — superinfection exclusion Sie-like	
+NC_002703.1	PM_000003	1921	2781	-	transcriptional repressor	transcriptional repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4 — transcriptional repressor	
+NC_002703.1	PM_000004	3023	3253	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_3 — transcriptional repressor	
+NC_002703.1	PM_000005	3267	3983	+	anti-repressor	anti-repressor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_8448 — anti-repressor	
+NC_002703.1	PM_000006	3996	4331	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_823	
+NC_002703.1	PM_000007	4328	4456	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5998	
+NC_002703.1	PM_000008	4469	4663	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_7263	
+NC_002703.1	PM_000009	4660	4935	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6258	
+NC_002703.1	PM_000010	4925	5020	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000011	5038	5253	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5450	
+NC_002703.1	PM_000012	5255	5353	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_15532	
+NC_002703.1	PM_000013	5369	5887	+	mu gam-like end protection	mu gam-like end protection	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2205 — Mu Gam-like end protection	
+NC_002703.1	PM_000014	5896	6519	+	sak-like ssdna annealing protein	sak-like ssdna annealing protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_659 — Sak-like ssDNA annealing protein	
+NC_002703.1	PM_000015	6519	6971	+	single strand dna binding protein	single strand dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_44 — single strand DNA binding protein	
+NC_002703.1	PM_000016	7111	7878	+	dnad-like helicase loader	dnad-like helicase loader	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5708 — DnaD-like helicase loader	
+NC_002703.1	PM_000017	7878	8603	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000018	8600	9358	+	dna methyltransferase	dna methyltransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_67 — DNA methyltransferase	
+NC_002703.1	PM_000019	9375	9737	+	rusa-like holliday junction resolvase	rusa-like holliday junction resolvase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_140 — RusA-like Holliday junction resolvase	
+NC_002703.1	PM_000020	9741	9980	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3109	
+NC_002703.1	PM_000021	10092	10271	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4314	
+NC_002703.1	PM_000022	10261	10830	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_16590	
+NC_002703.1	PM_000023	10841	11236	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_24347	
+NC_002703.1	PM_000024	11229	11774	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_10155	
+NC_002703.1	PM_000025	11771	12190	+	dutpase	dutpase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_135 — dUTPase	
+NC_002703.1	PM_000026	12193	12444	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4000	
+NC_002703.1	PM_000027	12434	12619	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000028	12722	13144	+	alt-like transcription activator	alt-like transcription activator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2198 — Alt-like transcription activator	
+NC_002703.1	PM_000029	13187	13333	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000030	13344	13472	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000031	13546	14376	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11520	
+NC_002703.1	PM_000032	14449	14910	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_309 — terminase small subunit	
+NC_002703.1	PM_000033	14953	15075	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000034	15070	15264	+	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_8148 — terminase small subunit	
+NC_002703.1	PM_000035	15340	16473	+	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_38 — terminase large subunit	
+NC_002703.1	PM_000036	16510	17847	+	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_64 — portal protein	
+NC_002703.1	PM_000037	17844	18884	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_115 — minor head protein	
+NC_002703.1	PM_000038	18930	19262	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3675	
+NC_002703.1	PM_000039	19388	20050	+	head scaffolding protein	head scaffolding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2932 — head scaffolding protein	
+NC_002703.1	PM_000040	20052	20219	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_30620	
+NC_002703.1	PM_000041	20265	20372	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000042	20390	21322	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_559 — HNH endonuclease	
+NC_002703.1	PM_000043	21358	21642	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000044	21645	21740	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000045	21737	22183	+	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_544 — major head protein	
+NC_002703.1	PM_000046	22183	22383	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1539 — Arc-like repressor	
+NC_002703.1	PM_000047	22367	22699	+	head-tail adaptor	head-tail adaptor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_132 — head-tail adaptor	
+NC_002703.1	PM_000048	22696	23004	+	minor head protein	minor head protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_348 — minor head protein	
+NC_002703.1	PM_000049	23004	23330	+	tail completion or neck1 protein	tail completion or neck1 protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5 — tail completion or Neck1 protein	
+NC_002703.1	PM_000050	23327	23716	+	tail terminator	tail terminator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_176 — tail terminator	
+NC_002703.1	PM_000051	23727	24224	+	major tail protein	major tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_238 — major tail protein	
+NC_002703.1	PM_000052	24340	24675	+	tail chaperone protein	tail chaperone protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_183 — tail chaperone protein	
+NC_002703.1	PM_000053	24714	25034	+	tail assembly chaperone	tail assembly chaperone	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_441 — tail assembly chaperone	
+NC_002703.1	PM_000054	25049	28126	+	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_5493 — tail length tape measure protein	
+NC_002703.1	PM_000055	28136	28897	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_202 — distal tail protein Dit	
+NC_002703.1	PM_000056	28924	31617	+	minor head protein	minor head protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1067 — minor head protein	
+NC_002703.1	PM_000057	31630	32598	+	minor head protein	minor head protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_8913 — minor head protein	
+NC_002703.1	PM_000058	32600	33460	+	tail protein	tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5983 — tail protein	
+NC_002703.1	PM_000059	33479	34000	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1220 — head protein	
+NC_002703.1	PM_000060	34013	34237	+	holin	holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_689 — holin	
+NC_002703.1	PM_000061	34250	36280	+	neck passage structure	neck passage structure	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2370 — neck passage structure	
+NC_002703.1	PM_000062	36305	36571	+	holin	holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_10091 — holin	
+NC_002703.1	PM_000063	36568	37854	+	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_291 — endolysin	
+NC_002703.1	PM_000064	37857	37955	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_002703.1	PM_000065	38035	38220	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11039	
+NC_002703.1	PM_000066	38243	38347	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_15116	
+NC_005859.1	PM_000001	124	858	-	polynucleotide kinase	polynucleotide kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_415 — polynucleotide kinase	
+NC_005859.1	PM_000002	939	1334	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4576	
+NC_005859.1	PM_000003	1371	1649	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_23906	
+NC_005859.1	PM_000004	1706	3376	-	dna transfer protein	dna transfer protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1745 — DNA transfer protein	
+NC_005859.1	PM_000005	3473	3670	-	membrane protein	membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4820 — membrane protein	
+NC_005859.1	PM_000006	3727	4134	-	dna binding protein	dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1725 — DNA binding protein	
+NC_005859.1	PM_000007	4230	4481	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3747	
+NC_005859.1	PM_000008	4538	4639	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000009	4715	4918	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4718	
+NC_005859.1	PM_000010	4915	5118	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000011	5206	5319	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000012	5411	5929	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000013	6205	6294	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000014	6495	7505	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4263	
+NC_005859.1	PM_000015	7624	7854	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5145	
+NC_005859.1	PM_000016	7904	8083	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5607	
+NC_005859.1	PM_000017	8086	8298	+	endonuclease nicking abasic sites generated by host uracil glycosylase ung	endonuclease nicking abasic sites generated by host uracil glycosylase ung	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4227 — endonuclease nicking abasic sites generated by host uracil glycosylase Ung	
+NC_005859.1	PM_000018	8300	8644	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4379	
+NC_005859.1	PM_000019	8681	8938	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000020	8954	9157	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6973	
+NC_005859.1	PM_000021	9171	9398	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000022	9653	9883	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000023	9870	10022	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000024	10030	10128	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000025	10194	10331	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000026	10368	10460	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000027	10580	10675	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000028	10680	10775	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000029	10936	11820	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8583	
+NC_005859.1	PM_000030	11902	12510	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5271	
+NC_005859.1	PM_000031	12510	12695	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5799	
+NC_005859.1	PM_000032	12695	12928	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6021	
+NC_005859.1	PM_000033	12916	13206	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_9887	
+NC_005859.1	PM_000034	13199	13747	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4605	
+NC_005859.1	PM_000035	13816	13926	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000036	13907	14278	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4905	
+NC_005859.1	PM_000037	14226	14687	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4215	
+NC_005859.1	PM_000038	14684	14884	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5967	
+NC_005859.1	PM_000039	14841	14987	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000040	14984	15310	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4731	
+NC_005859.1	PM_000041	15300	15545	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4804	
+NC_005859.1	PM_000042	15542	15823	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4984	
+NC_005859.1	PM_000043	15823	15987	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_23542	
+NC_005859.1	PM_000044	15987	16238	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3880	
+NC_005859.1	PM_000045	16317	16748	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4979	
+NC_005859.1	PM_000046	16801	16923	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_21849	
+NC_005859.1	PM_000047	16916	17437	-	phosphoesterase	phosphoesterase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_547 — phosphoesterase	
+NC_005859.1	PM_000048	17437	18300	-	nini-like serine-threonine phosphatase	nini-like serine-threonine phosphatase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_246 — NinI-like serine-threonine phosphatase	
+NC_005859.1	PM_000049	18303	18548	-	major capsid protein	major capsid protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_7354 — major head protein	
+NC_005859.1	PM_000050	18646	18936	-	thioredoxin domain	thioredoxin domain	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_22 — thioredoxin domain	
+NC_005859.1	PM_000051	18929	19360	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_4328	
+NC_005859.1	PM_000052	19436	19852	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5944	
+NC_005859.1	PM_000053	19931	20344	-	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1768 — endolysin	
+NC_005859.1	PM_000054	20341	21024	-	holin	holin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_860 — holin	
+NC_005859.1	PM_000055	21154	21753	-	atp-dependent protease	atp-dependent protease	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_1827 — ATP-dependent protease	
+NC_005859.1	PM_000056	21766	22518	-	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_139 — deoxynucleoside monophosphate kinase	
+NC_005859.1	PM_000057	22518	22871	-	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_812 — Rz-like spanin	
+NC_005859.1	PM_000058	22802	23245	-	rz-like spanin	rz-like spanin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_739 — Rz-like spanin	
+NC_005859.1	PM_000059	23245	23742	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000060	23739	24437	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4243	
+NC_005859.1	PM_000061	24592	24936	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5468	
+NC_005859.1	PM_000062	25047	25331	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5265	
+NC_005859.1	PM_000063	25328	25657	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5792	
+NC_005859.1	PM_000064	25638	26150	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000065	26147	26446	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_30402	
+NC_005859.1	PM_000066	26436	26717	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2855	
+NC_005859.1	PM_000067	26794	27141	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5021	
+NC_005859.1	PM_000068	27263	27439	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4499	
+NC_005859.1	PM_000069	27495	27656	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_31464	
+NC_005859.1	PM_000070	27656	28024	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1209	
+NC_005859.1	PM_000071	28302	28592	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_13551	
+NC_005859.1	PM_000072	28752	28916	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5919	
+NC_005859.1	PM_000073	28909	29160	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5598	
+NC_005859.1	PM_000074	29397	29978	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_59 — HNH endonuclease	
+NC_005859.1	PM_000075	29980	30180	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2210	
+NC_005859.1	PM_000076	30434	30550	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000077	30566	30673	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000078	30651	30824	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_16298	
+NC_005859.1	PM_000079	31022	31606	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_59 — HNH endonuclease	
+NC_005859.1	PM_000080	32048	32140	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000081	32240	32407	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6221	
+NC_005859.1	PM_000082	32612	32755	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000083	32733	32942	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000084	32995	33087	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000085	33115	33213	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000086	33205	33633	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3972	
+NC_005859.1	PM_000087	33664	33849	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5473	
+NC_005859.1	PM_000088	33860	33988	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000089	34006	34524	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5032	
+NC_005859.1	PM_000090	34627	34755	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_34563	
+NC_005859.1	PM_000091	34806	35078	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5876	
+NC_005859.1	PM_000092	35617	35892	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4551	
+NC_005859.1	PM_000093	35983	36189	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5153	
+NC_005859.1	PM_000094	36182	36349	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_7716	
+NC_005859.1	PM_000095	36379	37062	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_14736 — HNH endonuclease	
+NC_005859.1	PM_000096	37279	37848	-	dna primase	dna primase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_849 — DNA primase	
+NC_005859.1	PM_000097	37849	38034	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000098	38064	39029	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8119	
+NC_005859.1	PM_000099	39051	39467	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_7894	
+NC_005859.1	PM_000100	39477	39671	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000101	39791	40738	-	lipoprotein	lipoprotein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_200 — lipoprotein	
+NC_005859.1	PM_000102	40917	41030	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000103	41127	41216	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000104	41229	41318	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000105	41617	42045	-	trna amidotransferase	trna amidotransferase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1460 — tRNA amidotransferase	
+NC_005859.1	PM_000106	42051	42221	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5077	
+NC_005859.1	PM_000107	42290	42739	-	endolysin	endolysin	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_938 — endolysin	
+NC_005859.1	PM_000108	42745	43062	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_1479	
+NC_005859.1	PM_000109	43078	43182	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000110	43505	44143	-	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1491 — tail fiber protein	
+NC_005859.1	PM_000111	44196	44378	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5252	
+NC_005859.1	PM_000112	44449	45150	-	exonuclease	exonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_255 — exonuclease	
+NC_005859.1	PM_000113	45179	45415	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_255 — exonuclease	
+NC_005859.1	PM_000114	45458	45973	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4516	
+NC_005859.1	PM_000115	46057	46335	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4593	
+NC_005859.1	PM_000116	46412	46888	-	rnase h	rnase h	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_531 — Rnase H	
+NC_005859.1	PM_000117	47022	47861	-	thymidylate synthase	thymidylate synthase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_160 — thymidylate synthase	
+NC_005859.1	PM_000118	47861	48394	-	dihydrofolate reductase	dihydrofolate reductase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_316 — dihydrofolate reductase	
+NC_005859.1	PM_000119	48391	49536	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_10582 — ribonucleotide reductase class Ia beta subunit	
+NC_005859.1	PM_000120	49536	50060	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000121	50072	50179	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000122	50163	52598	-	ribonucleotide reductase large subunit	ribonucleotide reductase large subunit	AUTOMATED	PROBABLE_FUNCTION	REVIEW_REQUIRED			PHROGs:phrog_3987 — ribonucleotide reductase large subunit	
+NC_005859.1	PM_000123	52678	52836	-	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5357 — tail length tape measure protein	
+NC_005859.1	PM_000124	52838	53590	-	phoh-like phosphate starvation-inducible	phoh-like phosphate starvation-inducible	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_170 — PhoH-like phosphate starvation-inducible	
+NC_005859.1	PM_000125	53607	53708	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000126	53961	55685	+	nrdd-like anaerobic ribonucleotide reductase large subunit	nrdd-like anaerobic ribonucleotide reductase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_487 — NrdD-like anaerobic ribonucleotide reductase large subunit	
+NC_005859.1	PM_000127	55786	56166	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_11748	
+NC_005859.1	PM_000128	56159	56392	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5236	
+NC_005859.1	PM_000129	56447	57265	+	sir2 (nad-dependent deacetylase)	sir2 (nad-dependent deacetylase)	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2162 — Sir2 (NAD-dependent deacetylase)	
+NC_005859.1	PM_000130	57243	57428	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5116	
+NC_005859.1	PM_000131	57419	57601	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_28040	
+NC_005859.1	PM_000132	57588	58094	+	sir2 (nad-dependent deacetylase)	sir2 (nad-dependent deacetylase)	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_18062 — Sir2 (NAD-dependent deacetylase)	
+NC_005859.1	PM_000133	58097	58525	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2502	
+NC_005859.1	PM_000134	58535	58927	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_2502	
+NC_005859.1	PM_000135	58962	59063	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000136	59204	59320	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000137	59339	59455	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000138	59545	62331	+	replication origin binding	replication origin binding	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3712 — replication origin binding	
+NC_005859.1	PM_000139	62318	62836	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000140	62820	63053	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5291	
+NC_005859.1	PM_000141	63122	63826	+	helicase	helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3611 — helicase	
+NC_005859.1	PM_000142	63819	64070	+	transcriptional regulator	transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_643 — transcriptional regulator	
+NC_005859.1	PM_000143	64174	64584	+	dna binding protein	dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1725 — DNA binding protein	
+NC_005859.1	PM_000144	64621	64917	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3696	
+NC_005859.1	PM_000145	64968	65276	+	transcriptional regulator	transcriptional regulator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4053 — transcriptional regulator	
+NC_005859.1	PM_000146	65364	66335	+	nad-dependent dna ligase	nad-dependent dna ligase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3359 — NAD-dependent DNA ligase	
+NC_005859.1	PM_000147	66308	66430	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000148	66538	67317	+	nad-dependent dna ligase	nad-dependent dna ligase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3498 — NAD-dependent DNA ligase	
+NC_005859.1	PM_000149	67310	68077	+	transcriptional regulator, d5-like	transcriptional regulator, d5-like	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_323 — transcriptional regulator, D5-like	
+NC_005859.1	PM_000150	68109	69617	+	dnab-like replicative helicase	dnab-like replicative helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_19 — DnaB-like replicative helicase	
+NC_005859.1	PM_000151	69614	70147	+	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000152	70144	71034	+	dna primase	dna primase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_47 — DNA primase	
+NC_005859.1	PM_000153	71097	73664	+	dna polymerase	dna polymerase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_17 — DNA polymerase	
+NC_005859.1	PM_000154	73657	74154	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_19628	
+NC_005859.1	PM_000155	74151	75503	+	dna helicase	dna helicase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_16 — DNA helicase	
+NC_005859.1	PM_000156	75724	76008	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4258	
+NC_005859.1	PM_000157	76001	76774	+	single strand dna binding protein	single strand dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1607 — single strand DNA binding protein	
+NC_005859.1	PM_000158	76811	77788	+	sbcd-like subunit of palindrome specific endonuclease	sbcd-like subunit of palindrome specific endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_100 — SbcD-like subunit of palindrome specific endonuclease	
+NC_005859.1	PM_000159	77769	79607	+	sbcc-like subunit of palindrome specific endonuclease	sbcc-like subunit of palindrome specific endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_77 — SbcC-like subunit of palindrome specific endonuclease	
+NC_005859.1	PM_000160	79611	80093	+	rusa-like holliday junction resolvase	rusa-like holliday junction resolvase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_244 — RusA-like Holliday junction resolvase	
+NC_005859.1	PM_000161	80093	80968	+	exonuclease	exonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_107 — exonuclease	
+NC_005859.1	PM_000162	80965	81411	+	dutpase	dutpase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_135 — dUTPase	
+NC_005859.1	PM_000163	81374	81637	+	putative tail-associated protein	putative tail-associated protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_5592	
+NC_005859.1	PM_000164	81865	86055	-	tail fiber protein	tail fiber protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_24369 — tail fiber protein	
+NC_005859.1	PM_000165	86055	86318	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_1084	
+NC_005859.1	PM_000166	86294	86479	-	collar tail protein for l-shaped tail fibre attachment	collar tail protein for l-shaped tail fibre attachment	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_34807 — collar tail protein for L-shaped tail fibre attachment	
+NC_005859.1	PM_000167	86484	88550	-	straight fibre tail protein	straight fibre tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3890 — straight fibre tail protein	
+NC_005859.1	PM_000168	88551	91400	-	central tail fiber j	central tail fiber j	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_31 — central tail fiber J	
+NC_005859.1	PM_000169	91397	92011	-	distal tail protein	distal tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1302 — distal tail protein	
+NC_005859.1	PM_000170	92014	92103	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000171	92121	95780	-	tail length tape measure protein	tail length tape measure protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3779 — tail length tape measure protein	
+NC_005859.1	PM_000172	95777	96574	-	endonuclease	endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_681 — endonuclease	
+NC_005859.1	PM_000173	96624	96992	-	tail assembly chaperone	tail assembly chaperone	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3914 — tail assembly chaperone	
+NC_005859.1	PM_000174	97054	97458	-	tail assembly chaperone	tail assembly chaperone	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_313 — Tail assembly chaperone	
+NC_005859.1	PM_000175	97458	98354	-	base plate tail tube protein	base plate tail tube protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3889 — base plate tail tube protein	
+NC_005859.1	PM_000176	98359	99753	-	major tail protein	major tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3575 — major tail protein	
+NC_005859.1	PM_000177	99780	100265	-	tail terminator	tail terminator	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3907 — tail terminator	
+NC_005859.1	PM_000178	100269	101036	-	tail completion or neck1 protein	tail completion or neck1 protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3725 — tail completion or Neck1 protein	
+NC_005859.1	PM_000179	101036	101548	-	head-tail adaptor	head-tail adaptor	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_442 — head-tail adaptor	
+NC_005859.1	PM_000180	101608	102984	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	REVIEW_REQUIRED			PHROGs:phrog_10 — major head protein	
+NC_005859.1	PM_000181	103002	103634	-	capsid maturation protease	capsid maturation protease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_80 — head maturation protease	
+NC_005859.1	PM_000182	103638	104132	-	hoc-like head decoration protein	hoc-like head decoration protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2973 — Hoc-like head decoration	
+NC_005859.1	PM_000183	104135	105346	-	portal protein	portal protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_12 — portal protein	
+NC_005859.1	PM_000184	105346	105783	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	FUNCTIONAL_CLASS_ONLY	NONE			PHROGs:phrog_3497	
+NC_005859.1	PM_000185	105773	106606	-	endonuclease	endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_681 — endonuclease	
+NC_005859.1	PM_000186	106618	107934	-	terminase large subunit	terminase large subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_2 — terminase large subunit	
+NC_005859.1	PM_000187	107934	108416	-	terminase small subunit	terminase small subunit	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_3802 — terminase small subunit	
+NC_005859.1	PM_000188	108427	110349	-	receptor binding tail protein	receptor binding tail protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4815 — receptor binding tail protein	
+NC_005859.1	PM_000189	110429	110662	+	cor superinfection exclusion protein	cor superinfection exclusion protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1119 — Cor superinfection exclusion protein	
+NC_005859.1	PM_000190	110781	110954	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_8596	
+NC_005859.1	PM_000191	110954	111061	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6369	
+NC_005859.1	PM_000192	111058	111252	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5851	
+NC_005859.1	PM_000193	111245	111490	+	membrane protein	membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_6447 — membrane protein	
+NC_005859.1	PM_000194	111523	111651	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000195	111655	112389	-	polynucleotide kinase	polynucleotide kinase	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_415 — polynucleotide kinase	
+NC_005859.1	PM_000196	112470	112865	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4576	
+NC_005859.1	PM_000197	112902	113180	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_23906	
+NC_005859.1	PM_000198	113237	114907	-	dna transfer protein	dna transfer protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1745 — DNA transfer protein	
+NC_005859.1	PM_000199	115004	115201	-	membrane protein	membrane protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4820 — membrane protein	
+NC_005859.1	PM_000200	115258	115665	-	dna binding protein	dna binding protein	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_1725 — DNA binding protein	
+NC_005859.1	PM_000201	115761	116012	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_3747	
+NC_005859.1	PM_000202	116069	116170	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000203	116246	116449	-	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4718	
+NC_005859.1	PM_000204	116446	116649	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000205	116737	116850	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000206	116942	117460	-	hnh endonuclease	hnh endonuclease	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_99 — HNH endonuclease	
+NC_005859.1	PM_000207	117736	117825	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000208	118026	119036	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4263	
+NC_005859.1	PM_000209	119155	119385	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5145	
+NC_005859.1	PM_000210	119435	119614	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_5607	
+NC_005859.1	PM_000211	119617	119829	+	endonuclease nicking abasic sites generated by host uracil glycosylase ung	endonuclease nicking abasic sites generated by host uracil glycosylase ung	AUTOMATED	PROBABLE_FUNCTION	NONE			PHROGs:phrog_4227 — endonuclease nicking abasic sites generated by host uracil glycosylase Ung	
+NC_005859.1	PM_000212	119831	120175	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_4379	
+NC_005859.1	PM_000213	120212	120469	+	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000214	120485	120688	+	conserved phage protein of unknown function	conserved phage protein of unknown function	AUTOMATED	CONSERVED_UNKNOWN	NONE			PHROGs:phrog_6973	
+NC_005859.1	PM_000215	120702	120929	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000216	121184	121414	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	
+NC_005859.1	PM_000217	121455	121748	-	hypothetical protein	hypothetical protein	AUTOMATED	UNRESOLVED	REVIEW_REQUIRED			No accepted evidence	

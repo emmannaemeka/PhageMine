@@ -1,0 +1,95 @@
+{
+  "scope": "All six PhageMine resources; fresh full-system runs; no manual product overrides",
+  "started_at": "2026-10-04T07:51:33.840868+00:00",
+  "completed_at": "2026-10-04T08:36:46.785650+00:00",
+  "source_commit": "0fdb3789c7dc62b9b72053bdaf1e6813e6956780",
+  "fresh_annotation_run": true,
+  "required_resources": [
+    "INPHARED_GENOMES",
+    "PFAM",
+    "PHROGS",
+    "PMFDB",
+    "SWISSPROT",
+    "VOGDB"
+  ],
+  "genomes": [
+    {
+      "accession": "NC_000866.4",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_000866.4.fasta",
+      "fasta_sha256": "43e147ed766f12bdb3e8102642cb39a9ed1503696834741bba93fa5f80695680",
+      "reference_sha256": "24acc08a8ecaa62d6a7a58b9f59e15b3935a9f787012ea5f24ed7191df552764",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_000929.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_000929.1.fasta",
+      "fasta_sha256": "dbb0abf7a35bdda344a42176d2d4b9e414c40ae7255ff7556cde8e161a5653b9",
+      "reference_sha256": "be402002be4f98a7cd407525b620b4d9072bd45730d424af20c4a31c8da60c55",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_001416.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_001416.1.fasta",
+      "fasta_sha256": "dfe1fbbb945aab5a8bccd99bc95c28209b1414a7421edb33ba06972fedcd4dc1",
+      "reference_sha256": "3c624302adeeb3c00649f549903ab781b9e75bab16069ae655833d536407367f",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_001422.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_001422.1.fasta",
+      "fasta_sha256": "a2bfb508cd6fcb36cb2960f01b7763d9de5928d2ad5befd854b2eacf8dabc799",
+      "reference_sha256": "0a8099e207633f8c3ba998bfe2a198518e1de356c7956691101b2512324b807c",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_001604.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_001604.1.fasta",
+      "fasta_sha256": "b52a291b02fb2e2624476da9092ae87ef64b0afa080ef024f46c56c2ccef3e79",
+      "reference_sha256": "96d4200c2410f4ac0195dfd43f7daf78456ed61e72600b223cace24123f37273",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_002371.2",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_002371.2.fasta",
+      "fasta_sha256": "a6820c53d462165a5d746fbea6debd8f22d9b4ab0e0d00f53dec1330778a557b",
+      "reference_sha256": "40a4527ce3a1d9f48c6f2ce37cf9e0f1193ba7491429effbd204191c92e88a5b",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_005859.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_005859.1.fasta",
+      "fasta_sha256": "87c6a49f007a4cc5e29c104a226f4d42331c2b2b814c59910c0e99d994ce1730",
+      "reference_sha256": "da3fb8a690a2c15ac465a36c1909be6716fdbed8d7233a83696253e3a4fca7ae",
+      "panel": "original"
+    },
+    {
+      "accession": "NC_001706.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/external/inputs/NC_001706.1.fasta",
+      "fasta_sha256": "2ed77737f3b94c47406a091ebba9f9203df523fb5d50e709e663aa770a5b536b",
+      "reference_sha256": "38eb82498784384273050d6689de365b94fcbe7eb801f0f161e54df05657581d",
+      "panel": "external"
+    },
+    {
+      "accession": "NC_001835.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/external/inputs/NC_001835.1.fasta",
+      "fasta_sha256": "f8ae1ae1849c1b5b04f628e6e41cf1874ab2bd3d55a71f691a693a194cb4ed61",
+      "reference_sha256": "379eb92839e1cfad26f1770f0ce319a2c748f62ee087fd9b5641d2d0e30e1ad8",
+      "panel": "external"
+    },
+    {
+      "accession": "NC_002703.1",
+      "fasta": "/home/runner/work/PhageMine/PhageMine/full-results/external/inputs/NC_002703.1.fasta",
+      "fasta_sha256": "9f12206f4ede57ca463d885c7ddc117098c53f05c2e851391dba8b6eedc0c5db",
+      "reference_sha256": "df863b136c0d0d0ed99ceac0a56507a2273154d73f50351234179d887d1a555a",
+      "panel": "external"
+    }
+  ],
+  "excluded_compound_reference_cds": 11,
+  "accuracy_superiority_established": false,
+  "independence_established": false,
+  "limitations": [
+    "Database overlap with reference genomes is not excluded",
+    "Reference-name concordance is not independent functional accuracy",
+    "PMFDB and INPHARED provide comparative context; their labels are not automatically transferred as functions"
+  ]
+}

@@ -38,3 +38,16 @@ def test_no_exact_match_cannot_be_scored_as_supported():
                 'reviewer': 'Synthetic fixture', 'rationale': 'Fixture only'}
     with pytest.raises(ValueError, match='exact reviewed sequence'):
         module.validate_decision(case, decision, 'MABC', {})
+
+
+def test_naming_equivalences_preserve_family_members_and_uncertainty():
+    from phagemine.annotation_labels import classify
+    from phagemine.functional_benchmark import load_synonyms, PENDING
+    path = Path(__file__).resolve().parents[1] / 'evaluation/v1.3_validation/naming_equivalences.tsv'
+    rules = load_synonyms(path)
+    assert classify('major head protein', 'major capsid protein', rules) == 'EQUIVALENT_FUNCTION'
+    for a, b in [('capsid vertex protein', 'major capsid protein'),
+                 ('putative major head protein', 'major capsid protein'),
+                 ('terminase large subunit', 'terminase protein'),
+                 ('ATP-dependent DNA ligase', 'DNA ligase')]:
+        assert classify(a, b, rules) == PENDING

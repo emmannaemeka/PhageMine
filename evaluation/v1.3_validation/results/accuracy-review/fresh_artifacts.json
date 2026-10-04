@@ -1,145 +1,205 @@
 {
-  "workflow_run": 37182016577,
-  "head_commit": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63",
+  "workflow_run": 37183614867,
+  "head_commit": "b72d14b4a703ff5b240649dded687379cb0ae3a9",
   "artifacts": [
     {
-      "id": 11296010738,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjAxMDczOA==",
-      "name": "fresh-annotation-comparison-NC_001604.1",
-      "size_in_bytes": 2049220,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296010738",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296010738/zip",
-      "expired": false,
-      "digest": "sha256:2ddc87ef167e3bf852a324ec224623eb567fcfdcf31365c3bbea925809cd3884",
-      "created_at": "2026-10-04T06:24:00Z",
-      "updated_at": "2026-10-04T06:24:00Z",
-      "expires_at": "2026-11-03T06:23:59Z",
-      "workflow_run": {
-        "id": 37182016577,
-        "repository_id": 1338812985,
-        "head_repository_id": 1338812985,
-        "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
-      }
-    },
-    {
-      "id": 11296001412,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjAwMTQxMg==",
-      "name": "fresh-annotation-comparison-NC_000866.4",
-      "size_in_bytes": 18257629,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296001412",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296001412/zip",
-      "expired": false,
-      "digest": "sha256:3775c427b189ccfeedec090be2686dea38b7fa8f82ba0b3bf8c5e34614a3af74",
-      "created_at": "2026-10-04T06:23:47Z",
-      "updated_at": "2026-10-04T06:23:47Z",
-      "expires_at": "2026-11-03T06:23:40Z",
-      "workflow_run": {
-        "id": 37182016577,
-        "repository_id": 1338812985,
-        "head_repository_id": 1338812985,
-        "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
-      }
-    },
-    {
-      "id": 11295702564,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTcwMjU2NA==",
-      "name": "fresh-annotation-comparison-NC_001416.1",
-      "size_in_bytes": 2914983,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295702564",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295702564/zip",
-      "expired": false,
-      "digest": "sha256:05d8bced6728a6e8bec1a360e1e3ed43a03d0fb0f6ab8e490389132d97a55c47",
-      "created_at": "2026-10-04T06:25:33Z",
-      "updated_at": "2026-10-04T06:25:33Z",
-      "expires_at": "2026-11-03T06:25:31Z",
-      "workflow_run": {
-        "id": 37182016577,
-        "repository_id": 1338812985,
-        "head_repository_id": 1338812985,
-        "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
-      }
-    },
-    {
-      "id": 11295687574,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTY4NzU3NA==",
-      "name": "fresh-annotation-comparison-NC_001422.1",
-      "size_in_bytes": 469073,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295687574",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295687574/zip",
-      "expired": false,
-      "digest": "sha256:0c92afe850a5b3569a1d643b871c3ebb7b977800a1ef1dbfc0199005e9ab08a6",
-      "created_at": "2026-10-04T06:25:32Z",
-      "updated_at": "2026-10-04T06:25:32Z",
-      "expires_at": "2026-11-03T06:25:31Z",
-      "workflow_run": {
-        "id": 37182016577,
-        "repository_id": 1338812985,
-        "head_repository_id": 1338812985,
-        "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
-      }
-    },
-    {
-      "id": 11295393351,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTM5MzM1MQ==",
-      "name": "fresh-annotation-comparison-NC_005859.1",
-      "size_in_bytes": 9283760,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295393351",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295393351/zip",
-      "expired": false,
-      "digest": "sha256:a37a22c1f486a0b68615d57ab7af20b2414e7d185b68af0ecf36217581fa3507",
-      "created_at": "2026-10-04T06:27:35Z",
-      "updated_at": "2026-10-04T06:27:35Z",
-      "expires_at": "2026-11-03T06:27:29Z",
-      "workflow_run": {
-        "id": 37182016577,
-        "repository_id": 1338812985,
-        "head_repository_id": 1338812985,
-        "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
-      }
-    },
-    {
-      "id": 11295119679,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTExOTY3OQ==",
-      "name": "fresh-annotation-comparison-NC_000929.1",
-      "size_in_bytes": 2094457,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295119679",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295119679/zip",
-      "expired": false,
-      "digest": "sha256:677d1a6f5ca0e42c358b7152541db6b77ef1a354849ad5785ffce378d2309067",
-      "created_at": "2026-10-04T06:23:27Z",
-      "updated_at": "2026-10-04T06:23:27Z",
-      "expires_at": "2026-11-03T06:23:26Z",
-      "workflow_run": {
-        "id": 37182016577,
-        "repository_id": 1338812985,
-        "head_repository_id": 1338812985,
-        "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
-      }
-    },
-    {
-      "id": 11295114709,
-      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTExNDcwOQ==",
+      "id": 11296635635,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjYzNTYzNQ==",
       "name": "fresh-annotation-comparison-NC_002371.2",
-      "size_in_bytes": 2548283,
-      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295114709",
-      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295114709/zip",
+      "size_in_bytes": 2548242,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296635635",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296635635/zip",
       "expired": false,
-      "digest": "sha256:cd1d9522476cfc90ba8a6ce2006d8c69a3963bce1c5e1f512f73802cb4fd6247",
-      "created_at": "2026-10-04T06:22:59Z",
-      "updated_at": "2026-10-04T06:22:59Z",
-      "expires_at": "2026-11-03T06:22:57Z",
+      "digest": "sha256:3b9153bfb220c54bcabc5482b338185010fa9d6077cc5be569249cd2d007da71",
+      "created_at": "2026-10-04T06:54:58Z",
+      "updated_at": "2026-10-04T06:54:58Z",
+      "expires_at": "2026-11-03T06:54:56Z",
       "workflow_run": {
-        "id": 37182016577,
+        "id": 37183614867,
         "repository_id": 1338812985,
         "head_repository_id": 1338812985,
         "head_branch": "improve-researcher-readiness",
-        "head_sha": "d7d824e0a3568584ab94c9b86f0f02097b0b3a63"
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11296302019,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjMwMjAxOQ==",
+      "name": "fresh-annotation-comparison-NC_005859.1",
+      "size_in_bytes": 9283829,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296302019",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296302019/zip",
+      "expired": false,
+      "digest": "sha256:e64cb1989f49bebeb52c32f7179f5291ea3370576ccdf44864c7b5a7fa18cc46",
+      "created_at": "2026-10-04T06:57:50Z",
+      "updated_at": "2026-10-04T06:57:50Z",
+      "expires_at": "2026-11-03T06:57:45Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11296142388,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjE0MjM4OA==",
+      "name": "fresh-annotation-comparison-NC_001416.1",
+      "size_in_bytes": 2915022,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296142388",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296142388/zip",
+      "expired": false,
+      "digest": "sha256:b5aa1d18f82df89ad8a7a9af1c9fc48853d87eaad3b4f3834406537dc2375682",
+      "created_at": "2026-10-04T06:57:12Z",
+      "updated_at": "2026-10-04T06:57:12Z",
+      "expires_at": "2026-11-03T06:57:10Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11296127331,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjEyNzMzMQ==",
+      "name": "fresh-annotation-comparison-NC_002703.1",
+      "size_in_bytes": 2274957,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296127331",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296127331/zip",
+      "expired": false,
+      "digest": "sha256:48ee8164e03197b3e7b84268ea4c67f62ce50e2257d052282f14a93b84a12e48",
+      "created_at": "2026-10-04T06:57:08Z",
+      "updated_at": "2026-10-04T06:57:08Z",
+      "expires_at": "2026-11-03T06:57:07Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11296097689,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjA5NzY4OQ==",
+      "name": "fresh-annotation-comparison-NC_001706.1",
+      "size_in_bytes": 1028022,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296097689",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296097689/zip",
+      "expired": false,
+      "digest": "sha256:76726145ce4ed3e4efb074bba35fa72e8e4148c3db2e99ea72d6b786453cbdb3",
+      "created_at": "2026-10-04T06:59:50Z",
+      "updated_at": "2026-10-04T06:59:50Z",
+      "expires_at": "2026-11-03T06:59:49Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11296092495,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NjA5MjQ5NQ==",
+      "name": "fresh-annotation-comparison-NC_000866.4",
+      "size_in_bytes": 18257682,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296092495",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11296092495/zip",
+      "expired": false,
+      "digest": "sha256:9d78695e029481247a5268efbb166adeb5cd6bc9dcdbe8fa7f3e391393380244",
+      "created_at": "2026-10-04T06:57:25Z",
+      "updated_at": "2026-10-04T06:57:25Z",
+      "expires_at": "2026-11-03T06:57:16Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11295944282,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTk0NDI4Mg==",
+      "name": "fresh-annotation-comparison-NC_001422.1",
+      "size_in_bytes": 469081,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295944282",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295944282/zip",
+      "expired": false,
+      "digest": "sha256:dcdfe60c6bd58321408020c0d916a2131c6686be28e139888feb99473343de0f",
+      "created_at": "2026-10-04T06:55:46Z",
+      "updated_at": "2026-10-04T06:55:46Z",
+      "expires_at": "2026-11-03T06:55:46Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11295944279,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTk0NDI3OQ==",
+      "name": "fresh-annotation-comparison-NC_000929.1",
+      "size_in_bytes": 2094390,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295944279",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295944279/zip",
+      "expired": false,
+      "digest": "sha256:6be987c8fa4558e0d4f05c7d6cea25264731bdc3e9f73f92ccc3bf40ff0c9fc4",
+      "created_at": "2026-10-04T06:55:44Z",
+      "updated_at": "2026-10-04T06:55:44Z",
+      "expires_at": "2026-11-03T06:55:43Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11295854492,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTg1NDQ5Mg==",
+      "name": "fresh-annotation-comparison-NC_001604.1",
+      "size_in_bytes": 2049203,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295854492",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295854492/zip",
+      "expired": false,
+      "digest": "sha256:af87ac33ef65e1847ee57c618a3edd0e26c7012698f1bed8457d9490f2030b30",
+      "created_at": "2026-10-04T06:55:14Z",
+      "updated_at": "2026-10-04T06:55:14Z",
+      "expires_at": "2026-11-03T06:55:13Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
+      }
+    },
+    {
+      "id": 11295649940,
+      "node_id": "MDg6QXJ0aWZhY3QxMTI5NTY0OTk0MA==",
+      "name": "fresh-annotation-comparison-NC_001835.1",
+      "size_in_bytes": 1767439,
+      "url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295649940",
+      "archive_download_url": "https://api.github.com/repos/emmannaemeka/PhageMine/actions/artifacts/11295649940/zip",
+      "expired": false,
+      "digest": "sha256:ffbd0c596dc8d8f910ef84d73fd755f57147cc3ceb6f3a9db5d893da37736181",
+      "created_at": "2026-10-04T06:56:20Z",
+      "updated_at": "2026-10-04T06:56:20Z",
+      "expires_at": "2026-11-03T06:56:19Z",
+      "workflow_run": {
+        "id": 37183614867,
+        "repository_id": 1338812985,
+        "head_repository_id": 1338812985,
+        "head_branch": "improve-researcher-readiness",
+        "head_sha": "b72d14b4a703ff5b240649dded687379cb0ae3a9"
       }
     }
   ]

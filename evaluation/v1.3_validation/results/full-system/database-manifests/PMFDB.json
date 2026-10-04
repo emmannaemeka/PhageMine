@@ -1,0 +1,50 @@
+{
+  "format_version": "1",
+  "installed_at": "2026-10-04T07:49:27.611536+00:00",
+  "preparation_commands": [
+    [
+      "mmseqs",
+      "createdb",
+      "reference_phage_proteins.faa",
+      "mmseqs/target_db"
+    ],
+    [
+      "mmseqs",
+      "createindex",
+      "mmseqs/target_db",
+      "mmseqs/tmp",
+      "--threads",
+      "2"
+    ]
+  ],
+  "primary_path": ".",
+  "provenance": {
+    "metadata_path": "reference_metadata.tsv",
+    "mmseqs_target_path": "mmseqs/target_db",
+    "pmfdb_version": "INPHARED-2026-04-07",
+    "provider": "INPHARED",
+    "qc_path": "reference_qc.tsv",
+    "reference_manifest_path": "reference_manifest.json",
+    "release": "2026-04-07"
+  },
+  "resource": "pmfdb",
+  "resource_type": "PMFDB",
+  "source_artifacts": [
+    {
+      "bytes": 329085310,
+      "md5": "e1551f1ffde752da8fc8d48d6ca7330c",
+      "url": "https://s3.climb.ac.uk/millardlab-inphared/2026/7Apr2026_vConTACT2_proteins.faa.gz"
+    },
+    {
+      "bytes": 5984549,
+      "md5": "32ab9c366d2c7e9580ae8fffc322fc70",
+      "url": "https://s3.climb.ac.uk/millardlab-inphared/2026/7Apr2026_vConTACT2_gene_to_genome.csv.gz"
+    },
+    {
+      "bytes": 681798,
+      "md5": "7ca76b6d60f077a07d75e4c6ea635ea4",
+      "url": "https://s3.climb.ac.uk/millardlab-inphared/2026/7Apr2026_millardlab_website_table.txt.gz"
+    }
+  ],
+  "version": "2026-04-07"
+}

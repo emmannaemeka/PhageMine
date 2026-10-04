@@ -1,0 +1,2419 @@
+[
+  {
+    "accession": "NC_000866.4",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-uskgclun/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-uskgclun/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-mktf3vzw/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-mktf3vzw/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-ahrnqzr7/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-ahrnqzr7/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-956qj0v_/proteins.faa",
+              "/tmp/phagemine-phrogs-956qj0v_/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-956qj0v_/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-956qj0v_/result",
+              "/tmp/phagemine-phrogs-956qj0v_/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-956qj0v_/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-956qj0v_/result",
+              "/tmp/phagemine-phrogs-956qj0v_/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 294,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 1252,
+      "VOGDB": 417,
+      "Swiss-Prot": 437,
+      "PHROGs": 417
+    },
+    "functional_states": {
+      "PROBABLE_FUNCTION": 235,
+      "FUNCTIONAL_CLASS_ONLY": 17,
+      "KNOWN_FUNCTION": 21,
+      "UNRESOLVED": 8,
+      "CONSERVED_UNKNOWN": 11,
+      "CONFLICTING_EVIDENCE": 2
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 251,
+      "VOGDB": 217,
+      "PHROGs": 15
+    },
+    "curated_anchor_selections": 244,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_000929.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-8ky5wccu/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-8ky5wccu/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-whfvxg6o/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-whfvxg6o/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-i191eofa/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-i191eofa/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-i8j7rj80/proteins.faa",
+              "/tmp/phagemine-phrogs-i8j7rj80/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-i8j7rj80/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-i8j7rj80/result",
+              "/tmp/phagemine-phrogs-i8j7rj80/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-i8j7rj80/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-i8j7rj80/result",
+              "/tmp/phagemine-phrogs-i8j7rj80/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 57,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 323,
+      "VOGDB": 84,
+      "Swiss-Prot": 96,
+      "PHROGs": 91
+    },
+    "functional_states": {
+      "UNRESOLVED": 3,
+      "PROBABLE_FUNCTION": 45,
+      "KNOWN_FUNCTION": 6,
+      "CONFLICTING_EVIDENCE": 2,
+      "FUNCTIONAL_CLASS_ONLY": 1
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 50,
+      "VOGDB": 36,
+      "PHROGs": 4
+    },
+    "curated_anchor_selections": 49,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_001416.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-pga2qb8w/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-pga2qb8w/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-zerhl14q/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-zerhl14q/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-r89pkkc4/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-r89pkkc4/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-6pxejgpz/proteins.faa",
+              "/tmp/phagemine-phrogs-6pxejgpz/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-6pxejgpz/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-6pxejgpz/result",
+              "/tmp/phagemine-phrogs-6pxejgpz/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-6pxejgpz/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-6pxejgpz/result",
+              "/tmp/phagemine-phrogs-6pxejgpz/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 88,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 342,
+      "VOGDB": 97,
+      "Swiss-Prot": 139,
+      "PHROGs": 170
+    },
+    "functional_states": {
+      "CONFLICTING_EVIDENCE": 6,
+      "CONSERVED_UNKNOWN": 7,
+      "PROBABLE_FUNCTION": 51,
+      "UNRESOLVED": 14,
+      "FUNCTIONAL_CLASS_ONLY": 10
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 47,
+      "VOGDB": 35,
+      "PHROGs": 11
+    },
+    "curated_anchor_selections": 41,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_001422.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-w2medxpd/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-w2medxpd/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-hd04orwe/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-hd04orwe/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-xh7yg_wn/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-xh7yg_wn/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-jyqvjzf2/proteins.faa",
+              "/tmp/phagemine-phrogs-jyqvjzf2/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-jyqvjzf2/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-jyqvjzf2/result",
+              "/tmp/phagemine-phrogs-jyqvjzf2/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-jyqvjzf2/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-jyqvjzf2/result",
+              "/tmp/phagemine-phrogs-jyqvjzf2/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 8,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "VOGDB": 10,
+      "PHROGs": 8,
+      "Pfam": 13,
+      "Swiss-Prot": 29
+    },
+    "functional_states": {
+      "FUNCTIONAL_CLASS_ONLY": 1,
+      "PROBABLE_FUNCTION": 5,
+      "CONFLICTING_EVIDENCE": 2
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 5,
+      "VOGDB": 5
+    },
+    "curated_anchor_selections": 5,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_001604.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-viq1jjpn/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-viq1jjpn/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-_ras5mce/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-_ras5mce/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-csrfy_ut/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-csrfy_ut/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-pc0dztif/proteins.faa",
+              "/tmp/phagemine-phrogs-pc0dztif/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-pc0dztif/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-pc0dztif/result",
+              "/tmp/phagemine-phrogs-pc0dztif/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-pc0dztif/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-pc0dztif/result",
+              "/tmp/phagemine-phrogs-pc0dztif/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 61,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "VOGDB": 86,
+      "Pfam": 150,
+      "Swiss-Prot": 88,
+      "PHROGs": 90
+    },
+    "functional_states": {
+      "UNRESOLVED": 6,
+      "CONSERVED_UNKNOWN": 1,
+      "PROBABLE_FUNCTION": 36,
+      "FUNCTIONAL_CLASS_ONLY": 9,
+      "CONFLICTING_EVIDENCE": 8,
+      "KNOWN_FUNCTION": 1
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 30,
+      "VOGDB": 25,
+      "PHROGs": 8
+    },
+    "curated_anchor_selections": 27,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_002371.2",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-wowegyzx/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-wowegyzx/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-18_3mec1/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-18_3mec1/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-mo9djgsv/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-mo9djgsv/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-zkxtoo8c/proteins.faa",
+              "/tmp/phagemine-phrogs-zkxtoo8c/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-zkxtoo8c/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-zkxtoo8c/result",
+              "/tmp/phagemine-phrogs-zkxtoo8c/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-zkxtoo8c/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-zkxtoo8c/result",
+              "/tmp/phagemine-phrogs-zkxtoo8c/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 79,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 368,
+      "VOGDB": 94,
+      "Swiss-Prot": 129,
+      "PHROGs": 130
+    },
+    "functional_states": {
+      "PROBABLE_FUNCTION": 53,
+      "KNOWN_FUNCTION": 4,
+      "CONFLICTING_EVIDENCE": 2,
+      "FUNCTIONAL_CLASS_ONLY": 9,
+      "UNRESOLVED": 9,
+      "CONSERVED_UNKNOWN": 2
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 56,
+      "VOGDB": 40,
+      "PHROGs": 6
+    },
+    "curated_anchor_selections": 53,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_005859.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-qjxjb395/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-qjxjb395/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-9f891j4y/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-9f891j4y/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-bnmif3ig/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-bnmif3ig/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-hg5s2218/proteins.faa",
+              "/tmp/phagemine-phrogs-hg5s2218/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-hg5s2218/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-hg5s2218/result",
+              "/tmp/phagemine-phrogs-hg5s2218/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-hg5s2218/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-hg5s2218/result",
+              "/tmp/phagemine-phrogs-hg5s2218/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 217,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 721,
+      "VOGDB": 266,
+      "Swiss-Prot": 179,
+      "PHROGs": 262
+    },
+    "functional_states": {
+      "PROBABLE_FUNCTION": 92,
+      "FUNCTIONAL_CLASS_ONLY": 69,
+      "CONSERVED_UNKNOWN": 38,
+      "UNRESOLVED": 15,
+      "CONFLICTING_EVIDENCE": 3
+    },
+    "selected_products_by_supporting_source": {
+      "Swiss-Prot": 44,
+      "VOGDB": 52,
+      "PHROGs": 50
+    },
+    "curated_anchor_selections": 43,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_001706.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-yhqm0vv1/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-yhqm0vv1/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-jol3bme_/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-jol3bme_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-mheva8ab/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-mheva8ab/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-znrj33ap/proteins.faa",
+              "/tmp/phagemine-phrogs-znrj33ap/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-znrj33ap/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-znrj33ap/result",
+              "/tmp/phagemine-phrogs-znrj33ap/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-znrj33ap/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-znrj33ap/result",
+              "/tmp/phagemine-phrogs-znrj33ap/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 43,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 145,
+      "VOGDB": 64,
+      "PHROGs": 54,
+      "Swiss-Prot": 7
+    },
+    "functional_states": {
+      "FUNCTIONAL_CLASS_ONLY": 15,
+      "PROBABLE_FUNCTION": 17,
+      "CONSERVED_UNKNOWN": 7,
+      "UNRESOLVED": 4
+    },
+    "selected_products_by_supporting_source": {
+      "PHROGs": 13,
+      "VOGDB": 11,
+      "Swiss-Prot": 4
+    },
+    "curated_anchor_selections": 4,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_001835.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-qydw_p9h/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-qydw_p9h/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-w3moe712/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-w3moe712/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-cu2l38b8/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-cu2l38b8/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-u59kxwt1/proteins.faa",
+              "/tmp/phagemine-phrogs-u59kxwt1/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-u59kxwt1/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-u59kxwt1/result",
+              "/tmp/phagemine-phrogs-u59kxwt1/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-u59kxwt1/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-u59kxwt1/result",
+              "/tmp/phagemine-phrogs-u59kxwt1/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 65,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "VOGDB": 86,
+      "Pfam": 267,
+      "Swiss-Prot": 37,
+      "PHROGs": 115
+    },
+    "functional_states": {
+      "CONSERVED_UNKNOWN": 5,
+      "PROBABLE_FUNCTION": 27,
+      "FUNCTIONAL_CLASS_ONLY": 27,
+      "UNRESOLVED": 6
+    },
+    "selected_products_by_supporting_source": {
+      "PHROGs": 8,
+      "Swiss-Prot": 18,
+      "VOGDB": 17
+    },
+    "curated_anchor_selections": 17,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  },
+  {
+    "accession": "NC_002703.1",
+    "adapters": [
+      {
+        "adapter": "PfamHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "evidence_pack_id": null,
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "pfam_path": "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+          "pfam_version": "unknown",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-pfam-y8qehoa0/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/pfam/38.2/Pfam-A.hmm",
+            "/tmp/phagemine-pfam-y8qehoa0/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "status": "REAL",
+          "threshold_mode": "NONE",
+          "thresholds": {
+            "coverage": null,
+            "evalue": null,
+            "mode": "NONE",
+            "trusted_cutoff": false
+          },
+          "trusted_cutoff": false
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "VOGHMMAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/vogdb/235/vog.annotations.tsv.gz",
+          "hmmer_version": "3.4",
+          "hmmscan": "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/hmmscan",
+            "--cpu",
+            "2",
+            "--domtblout",
+            "/tmp/phagemine-vog-i63n2yyc/hmmscan.domtblout",
+            "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+            "/tmp/phagemine-vog-i63n2yyc/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "coverage": 0.5,
+            "evalue": 1e-05
+          },
+          "trusted_cutoff": false,
+          "vog_path": "/home/runner/work/_temp/full-databases/vogdb/235/VOGDB.hmm",
+          "vogdb_version": "235"
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "SwissProtEvidenceAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "SwissProtEvidenceAdapter",
+          "adapter_version": "0.1.0",
+          "diamond": "/home/runner/micromamba/envs/phagemine/bin/diamond",
+          "diamond_version": "2.2.8",
+          "metadata_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dat.gz",
+          "resource_origin": "registered_resource",
+          "search_command": [
+            "/home/runner/micromamba/envs/phagemine/bin/diamond",
+            "blastp",
+            "--db",
+            "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+            "--query",
+            "/tmp/phagemine-swissprot-2a8ynj6q/proteins.faa",
+            "--out",
+            "/tmp/phagemine-swissprot-2a8ynj6q/diamond.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "--threads",
+            "2"
+          ],
+          "search_parameters": {
+            "outfmt": "qseqid sseqid pident length qlen slen qstart qend sstart send evalue bitscore"
+          },
+          "status": "REAL",
+          "swissprot_path": "/home/runner/work/_temp/full-databases/swissprot/2026_03/uniprot_sprot.dmnd",
+          "swissprot_version": "2026_03",
+          "thresholds": {
+            "evalue": 1e-05,
+            "min_alignment_length": 30,
+            "moderate_coverage": 0.4,
+            "moderate_identity": 0.35,
+            "strong_coverage": 0.7,
+            "strong_identity": 0.7
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSMMseqsAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "mmseqs": "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "phrogs_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "resource_origin": "registered_resource",
+          "search_commands": [
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/tmp/phagemine-phrogs-6zv6610o/proteins.faa",
+              "/tmp/phagemine-phrogs-6zv6610o/query"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "search",
+              "/tmp/phagemine-phrogs-6zv6610o/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-6zv6610o/result",
+              "/tmp/phagemine-phrogs-6zv6610o/tmp",
+              "--threads",
+              "2"
+            ],
+            [
+              "/home/runner/micromamba/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/tmp/phagemine-phrogs-6zv6610o/query",
+              "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/tmp/phagemine-phrogs-6zv6610o/result",
+              "/tmp/phagemine-phrogs-6zv6610o/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+            "threshold_mode": "MANUAL"
+          },
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "alignment_length": null,
+            "evalue": 1e-05,
+            "identity": null,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      },
+      {
+        "adapter": "PHROGSPyHMMERAdapter",
+        "message": null,
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "annotations_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_hmm_path": "/home/runner/work/_temp/full-databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "phrogs_version": "v4-pharokka-1.11.0",
+          "pyhmmer_version": "0.12.3",
+          "resource_origin": "registered_resource",
+          "status": "REAL",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          }
+        },
+        "status": "REAL"
+      }
+    ],
+    "artifact_integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 66,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    },
+    "accepted_evidence_by_source": {
+      "Pfam": 351,
+      "VOGDB": 96,
+      "PHROGs": 131,
+      "Swiss-Prot": 35
+    },
+    "functional_states": {
+      "PROBABLE_FUNCTION": 39,
+      "FUNCTIONAL_CLASS_ONLY": 17,
+      "UNRESOLVED": 6,
+      "CONSERVED_UNKNOWN": 4
+    },
+    "selected_products_by_supporting_source": {
+      "PHROGs": 32,
+      "VOGDB": 24,
+      "Swiss-Prot": 3
+    },
+    "curated_anchor_selections": 1,
+    "fusion_rules_versions": [
+      "1.12"
+    ],
+    "comparative_status": {
+      "INPHARED": "COMPLETE",
+      "PMFDB_reference_type": "PMFDB",
+      "PMFDB_executed": true
+    }
+  }
+]

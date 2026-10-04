@@ -20,7 +20,9 @@ Fusion rules 1.12 implement these naming safeguards:
 
 1. Missing descriptions (`NA`, `N/A`, `nan`, `-`) and unknown-function families
    (`DUF`, `UPF`) cannot establish a named function. Raw descriptions remain in
-   evidence; conservation may still be reported.
+   evidence; conservation may still be reported. Extended descriptions such as
+   “uncharacterized 7.3 kDa protein in an intergenic region” also remain
+   unknown, even when the database entry is reviewed.
 2. Gene and EC qualifiers require a strong or experimental accepted record
    with the same normalized function as the selected product. Domain-only
    records, rejected products, conflicts with no selected product, and
@@ -44,7 +46,9 @@ Fusion rules 1.12 implement these naming safeguards:
 8. Identifier-only descriptions such as `Protein C`, `gp12 protein` and `Orf80`
    cannot establish a function. Functional roles containing an identifier,
    such as `capsid protein gp7`, remain informative. Original labels are retained
-   in evidence; symbols are not invented from product names.
+   in evidence; symbols are not invented from product names. A description
+   consisting only of `protein` and the record’s explicit gene symbol also
+   cannot override an informative role.
 
 Use the most informative role supported by the selected evidence. Broader family
 labels cannot establish a specific family member, and unknown proteins must not
@@ -52,9 +56,9 @@ be named by copying a neighbouring gene or a comparator's assertion. Explicit
 curation preserves the original automatic result and records its evidence.
 
 The reviewed T4 sequence matching UniProt P19896 supports **capsid vertex
-protein**, rather than major capsid protein. This user-approved correction is
-retained in an audited curation file and reported separately from automatic
-benchmark performance. It is not a locus-specific rule in the annotation engine.
+protein**, rather than major capsid protein. The fresh full-system run selects this name automatically from reviewed
+Swiss-Prot evidence. The earlier user-approved manual correction is retained
+in a separate audit and excluded from automatic benchmark performance. It is not a locus-specific rule in the annotation engine.
 
 Fresh T4 evidence exposed two specific failures of the preceding rules:
 61/67-aa proteins were assigned a whole enzyme name from matches covering only

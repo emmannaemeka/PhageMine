@@ -10,7 +10,7 @@ from typing import Any
 from .models import Evidence, Protein
 from .annotation_labels import identifier_only_product
 
-FUSION_RULES_VERSION = "1.12"
+FUSION_RULES_VERSION = "1.13"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -83,6 +83,9 @@ def _product_candidate(evidence: Evidence, label: str | None, accepted: list[Evi
     """
     if not label:
         return None, None
+    gene_symbol = str(evidence.metrics.get("gene_name") or "").strip().lower()
+    if gene_symbol and label in {f"protein {gene_symbol}", f"{gene_symbol} protein"}:
+        return None, "gene-symbol-only description retained as evidence, not transferred as a protein function"
     if evidence.source == "Pfam" or evidence.modality == "domain":
         return None, "domain-only evidence retained as a note, not transferred as a protein product"
     if evidence.source in {"PHROGs", "VOGDB"}:
@@ -159,6 +162,10 @@ def normalize_function(description: str | None) -> str | None:
     # identify a database record, not a transferable biological function.
     value = re.sub(r"^[a-z0-9]+_[a-z0-9]+\s+", "", value)
     value = re.sub(r"\s*\{eco:[^}]+\}\s*$", "", value, flags=re.IGNORECASE).strip()
+    # A reviewed entry can still have no established function. Molecular
+    # weight, locus and neighbourhood text do not change that status.
+    if re.search(r"\b(?:hypothetical|uncharacterized|uncharacterised)\b", value):
+        return None
     # Unknown families identify conservation, not an established function.
     # Preserve the original description in evidence rather than exporting it
     # as a named product. Do not discard informative 'conserved' descriptions.

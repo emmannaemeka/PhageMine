@@ -1,0 +1,35 @@
+{
+  "format_version": "1",
+  "installed_at": "2026-10-04T07:43:13.674034+00:00",
+  "preparation_commands": [
+    [
+      "concatenate",
+      "*.hmm",
+      "VOGDB.hmm"
+    ],
+    [
+      "hmmpress",
+      "-f",
+      "VOGDB.hmm"
+    ]
+  ],
+  "primary_path": "VOGDB.hmm",
+  "provenance": {
+    "annotations_path": "vog.annotations.tsv.gz",
+    "provider": "VOGDB",
+    "release": "235"
+  },
+  "resource": "vogdb",
+  "resource_type": "VOGDB",
+  "source_artifacts": [
+    {
+      "md5": "ef92a4c880126ea3b86e52fdf902ba06",
+      "url": "https://fileshare.csb.univie.ac.at/vog/vog235/vog.hmm.tar.gz"
+    },
+    {
+      "md5": "1f6481d5b4fa82ec716caa142a638190",
+      "url": "https://fileshare.csb.univie.ac.at/vog/vog235/vog.annotations.tsv.gz"
+    }
+  ],
+  "version": "235"
+}

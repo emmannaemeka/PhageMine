@@ -1,0 +1,14 @@
+{
+  "predicted_proteins": 978,
+  "nonempty_products": 978,
+  "automatic_state_counts": {
+    "PROBABLE_FUNCTION": 472,
+    "CONSERVED_UNKNOWN": 319,
+    "UNRESOLVED": 134,
+    "FUNCTIONAL_CLASS_ONLY": 53
+  },
+  "empty_gene_symbols": 978,
+  "export_validation": "ALL_TEN_ARTIFACTS_CONSISTENT",
+  "reviewed_overrides": 1,
+  "automatic_benchmark_overrides_included": false
+}
