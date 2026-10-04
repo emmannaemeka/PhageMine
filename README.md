@@ -570,3 +570,9 @@ Run the test suite with `PYTHONPATH=src pytest -q`. See
 The development branch adds optional tRNAscan-SE features, sequence-validated external annotation proposals, audited CLI/GUI curation, richer GFF3 products, result integrity checks, reproducibility bundles and runtime profiling. See the [annotation workflow guide](docs/annotation-workflows.md). These features are not part of the published 1.2 release. Cross-tool accuracy superiority has not been established.
 
 Next-step development features include `database-health`, `--evidence-cache`, evidence-conflict reports and `benchmark-curated`; commands and interpretation are documented in the [annotation workflow guide](docs/annotation-workflows.md).
+
+Fresh PhageMine, Pharokka and Prokka runs on seven genomes, naming-rule fixes,
+and an auditable comparison of original and corrected decisions are documented
+in the [fresh annotation validation report](evaluation/v1.3_validation/README.md).
+See the [naming policy](docs/annotation-naming.md) for gene-symbol/product
+transfer rules. These diagnostic results do not establish overall accuracy superiority.

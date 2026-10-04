@@ -62,3 +62,35 @@ def test_family_rewrite_does_not_inherit_member_identifiers():
 def test_informative_conserved_names_and_uncertainty_are_preserved():
     assert normalize_function('Conserved DNA helicase') == 'conserved dna helicase'
     assert normalize_function('Putative DNA helicase') == 'putative dna helicase'
+
+
+def test_partial_profile_cannot_name_a_whole_protein():
+    evidence = hit('DNA polymerase', query_coverage=0.95, profile_coverage=0.08,
+                   bit_score=120, gene='polA', ec='2.7.7.7')
+    result = classify(evidence)
+    assert result['proposed_function'] is None
+    assert result['gene'] is None and result['ec_number'] is None
+    assert evidence.supports  # The similarity remains evidence of conservation.
+    assert any('partial reference-profile' in flag for flag in result['ambiguity_flags'])
+
+
+def test_partial_profile_does_not_lend_qualifiers_to_full_match():
+    result = classify(hit('DNA polymerase', query_coverage=0.95, profile_coverage=0.08, gene='otherA'),
+                      hit('DNA polymerase', query_coverage=0.95, profile_coverage=0.95, gene='polA'))
+    assert result['gene'] == 'polA'
+
+
+def test_repeated_profiles_do_not_outvote_a_stronger_distinct_function():
+    broad = [hit('structural protein', query_coverage=0.9, profile_coverage=0.9,
+                 percent_identity=0.25, bit_score=55, evalue=1e-9) for _ in range(8)]
+    specific = hit('head decoration protein', query_coverage=1.0, profile_coverage=1.0,
+                   percent_identity=0.85, bit_score=350, evalue=1e-70)
+    assert classify(specific, *broad)['proposed_function'] == 'head decoration protein'
+
+
+def test_duplicate_supporting_records_do_not_shrink_the_hypothesis_margin():
+    best = [hit('head decoration protein', query_coverage=1.0, profile_coverage=1.0,
+                percent_identity=0.85, bit_score=350, evalue=1e-70) for _ in range(2)]
+    other = hit('structural protein', query_coverage=0.9, profile_coverage=0.9,
+                percent_identity=0.25, bit_score=55, evalue=1e-9)
+    assert classify(*best, other)['proposed_function'] == 'head decoration protein'

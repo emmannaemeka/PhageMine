@@ -16,7 +16,7 @@ established. Pharokka's internal `gene` column also identifies query proteins;
 it is not automatically a biological gene symbol. Neither tool's output is
 treated as ground truth merely because the tools disagree.
 
-Fusion rules 1.9 implement these naming safeguards:
+Fusion rules 1.10 implement these naming safeguards:
 
 1. Missing descriptions (`NA`, `N/A`, `nan`, `-`) and unknown-function families
    (`DUF`, `UPF`) cannot establish a named function. Raw descriptions remain in
@@ -30,6 +30,21 @@ Fusion rules 1.9 implement these naming safeguards:
 4. Informative descriptions containing `conserved` are preserved. Uncertainty
    words such as `putative` are preserved. Prokka's broad cleanup rules are not
    copied wholesale because they can discard useful phage-specific detail.
+5. A PHROGs/VOGDB match covering less than half of the reference profile cannot
+   supply a whole-protein product name. Its raw alignment and conservation
+   evidence remain available. This is a conservative rule, not an empirically
+   calibrated probability, and may withhold names from genuine fragments.
+6. Multiple profiles from one database count as one source for consensus.
+   Repeating a profile cannot outvote a stronger distinct function. Score
+   margins compare different product hypotheses, not duplicate records of the
+   winning hypothesis. Different sources are not assumed statistically independent.
+
+Fresh T4 evidence exposed two specific failures of the preceding rules:
+61/67-aa proteins were assigned a whole enzyme name from matches covering only
+7.1/8.7% of its profile; and three partial tail-fiber profiles outvoted a stronger
+full-length connector profile. Rules 1.10 withhold the former names and select
+the supported connector description. This diagnoses decision-rule failures;
+it does not establish general annotation accuracy.
 
 ## Fresh comparison
 
@@ -54,3 +69,19 @@ being scored as missing functions.
 The seven familiar genomes are a diagnostic panel, not a held-out validation
 set. Fresh predictions do not make reference annotations independent or prove
 accuracy superiority. Unresolved naming differences need evidence-backed review.
+
+To audit updated decision rules without repeating identical searches, extract
+the per-genome fresh artifacts and run:
+
+```bash
+python evaluation/v1.3_validation/scripts/evaluate_fresh_results.py \
+  --results /path/to/extracted/genome1 /path/to/extracted/genome2 \
+  --output fresh-decision-audit
+```
+
+This verifies completed fresh-run status, input/artifact checksums, matching
+database hashes and source commits. It regenerates PhageMine products using
+current rules, validates exports, preserves raw evidence and coordinates, and
+compares the original fresh decisions, corrected decisions, Pharokka and Prokka.
+`decision_changes.tsv` records changes for review. Corrected decisions are
+explicitly labeled as reclassification of fresh evidence, not another search run.

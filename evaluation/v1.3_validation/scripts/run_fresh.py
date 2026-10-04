@@ -165,7 +165,7 @@ def main(argv=None):
                                       'This familiar panel is not a held-out accuracy benchmark']}
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     write(output / 'SHA256SUMS.tsv', [{'path': str(p.relative_to(output)), 'sha256': checksum(p)}
-                                   for p in sorted(output.rglob('*')) if p.is_file()], ['path', 'sha256'])
+                                   for p in sorted(output.rglob('*')) if p.is_file() and '.matplotlib' not in p.parts], ['path', 'sha256'])
 
 
 if __name__ == '__main__': main()

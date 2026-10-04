@@ -1,0 +1,127 @@
+{
+  "analysis_type": "FRESH_EVIDENCE_DECISION_AUDIT",
+  "raw_searches_generated_fresh": true,
+  "source_commit": "8fb6900da5d69abf2e8cbe5195665fc8b122d36e",
+  "current_fusion_rules_version": "1.10",
+  "current_fusion_sha256": "a3cdd032d9489ed76e93c8d45de1b32a9c1409fd5724e506e56d07df334fad47",
+  "runner_sha256": "ac853028beb181ef1675eee16a4e3ef6ed3838894fa1911c7ef23a519bd1d1c6",
+  "genomes": [
+    {
+      "accession": "NC_000866.4",
+      "fresh_manifest_sha256": "0720f0c5a5ee3e76ca06a15d752e4edcbde59107c74f932b17af16e2a6800d46",
+      "fresh_input_sha256": "43e147ed766f12bdb3e8102642cb39a9ed1503696834741bba93fa5f80695680",
+      "raw_evidence_sha256": "ce203197fdf794aa08f2d2a10f1e02fb30e21c066bbbb1c07b6c7d1c8dcbd7f2",
+      "corrected_evidence_sha256": "ce203197fdf794aa08f2d2a10f1e02fb30e21c066bbbb1c07b6c7d1c8dcbd7f2"
+    },
+    {
+      "accession": "NC_000929.1",
+      "fresh_manifest_sha256": "cedee0073346e19943051bbe199afe8d2346381084d8743f9d69d6249ca7e0e8",
+      "fresh_input_sha256": "dbb0abf7a35bdda344a42176d2d4b9e414c40ae7255ff7556cde8e161a5653b9",
+      "raw_evidence_sha256": "fb98bf2c99fc1312b7683eb17ecf4385e151fc3d1478fd4650b75530937a5f43",
+      "corrected_evidence_sha256": "fb98bf2c99fc1312b7683eb17ecf4385e151fc3d1478fd4650b75530937a5f43"
+    },
+    {
+      "accession": "NC_001416.1",
+      "fresh_manifest_sha256": "5e576e2691161a9a24835ca1afeb224374b6223a81e7781b9d00e590240b9900",
+      "fresh_input_sha256": "dfe1fbbb945aab5a8bccd99bc95c28209b1414a7421edb33ba06972fedcd4dc1",
+      "raw_evidence_sha256": "45cf4caabbc0d1a8146f855aa6e46c81765cb82c496eb4cd3bd6d3eab764b515",
+      "corrected_evidence_sha256": "45cf4caabbc0d1a8146f855aa6e46c81765cb82c496eb4cd3bd6d3eab764b515"
+    },
+    {
+      "accession": "NC_001422.1",
+      "fresh_manifest_sha256": "37621ea947460ad3b76bc0a400e81d3b95f2899f242a7e0be79fdd78eae19733",
+      "fresh_input_sha256": "a2bfb508cd6fcb36cb2960f01b7763d9de5928d2ad5befd854b2eacf8dabc799",
+      "raw_evidence_sha256": "5b8f2643538223bc7d0bbbe453d4441ca03918ead9a969ab5bb49285e053f414",
+      "corrected_evidence_sha256": "5b8f2643538223bc7d0bbbe453d4441ca03918ead9a969ab5bb49285e053f414"
+    },
+    {
+      "accession": "NC_001604.1",
+      "fresh_manifest_sha256": "128a9455cc829efeae58f16380bf213b624a9d5b76f5da4cb92c69422b486bbb",
+      "fresh_input_sha256": "b52a291b02fb2e2624476da9092ae87ef64b0afa080ef024f46c56c2ccef3e79",
+      "raw_evidence_sha256": "95145c86cd889b3fe0562767ad1284db60ad657dc67b293b6eeaf236a5665740",
+      "corrected_evidence_sha256": "95145c86cd889b3fe0562767ad1284db60ad657dc67b293b6eeaf236a5665740"
+    },
+    {
+      "accession": "NC_002371.2",
+      "fresh_manifest_sha256": "e2d2cfa90d0a24012d0978df1c29921f582b01ed935875be635ecdb30847dc07",
+      "fresh_input_sha256": "a6820c53d462165a5d746fbea6debd8f22d9b4ab0e0d00f53dec1330778a557b",
+      "raw_evidence_sha256": "168fe32274f295b11c1bb3ee7a5b3537002a07d8ddf05ce47326a60583b14b3e",
+      "corrected_evidence_sha256": "168fe32274f295b11c1bb3ee7a5b3537002a07d8ddf05ce47326a60583b14b3e"
+    },
+    {
+      "accession": "NC_005859.1",
+      "fresh_manifest_sha256": "556cc81382d93474b8b3874f6fb23cb09a09d9d2a6bfafbb08030f8b6733e273",
+      "fresh_input_sha256": "87c6a49f007a4cc5e29c104a226f4d42331c2b2b814c59910c0e99d994ce1730",
+      "raw_evidence_sha256": "ed32278b8d6d3fa9003cf11c65e46222a12c48dc7d8b2ed0354021d8f1db8793",
+      "corrected_evidence_sha256": "ed32278b8d6d3fa9003cf11c65e46222a12c48dc7d8b2ed0354021d8f1db8793"
+    }
+  ],
+  "database_checksums_table_sha256": "8e0ca7ce669eb04b714afdee3b77a394371c651aa5a7b6e909eb64d8daf4ca83",
+  "omitted_non_scientific_rendering_caches": [
+    "runs/PhageMine/NC_000866.4/figures/.matplotlib/fontlist-v3.11.0.json",
+    "runs/PhageMine/NC_000929.1/figures/.matplotlib/fontlist-v3.11.0.json",
+    "runs/PhageMine/NC_001416.1/figures/.matplotlib/fontlist-v3.11.0.json",
+    "runs/PhageMine/NC_001422.1/figures/.matplotlib/fontlist-v3.11.0.json",
+    "runs/PhageMine/NC_001604.1/figures/.matplotlib/fontlist-v3.11.0.json",
+    "runs/PhageMine/NC_002371.2/figures/.matplotlib/fontlist-v3.11.0.json",
+    "runs/PhageMine/NC_005859.1/figures/.matplotlib/fontlist-v3.11.0.json"
+  ],
+  "reclassification_method": "Current rules applied to newly generated raw evidence; no repeat searches",
+  "changed_assignments": 41,
+  "held_out": false,
+  "independence_established": false,
+  "accuracy_superiority_established": false,
+  "scope": "PHROGs-only PhageMine vs standard Pharokka vs viral Prokka; CDS comparison",
+  "limitations": [
+    "Search thresholds differ; commands and adapter manifests retain them",
+    "Prokka uses its packaged databases; PHROGs is shared by PhageMine and Pharokka",
+    "Reference gene symbols are locus-specific; differences are not proven errors",
+    "This familiar panel is not a held-out accuracy benchmark",
+    "Decision changes require independent review; partial-profile filtering can increase abstention"
+  ],
+  "github_run_url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543",
+  "source_artifacts": [
+    {
+      "id": 11289365642,
+      "name": "fresh-annotation-comparison-NC_000929.1",
+      "digest": "sha256:d9efacc1fa3eab270fe0d9ec879f6a3df7341e26860f7dae06b195e7a603eabb",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11289365642"
+    },
+    {
+      "id": 11289195926,
+      "name": "fresh-annotation-comparison-NC_000866.4",
+      "digest": "sha256:3d47399a023aa8167c1795af816dd26eace2cc49d68975c4e47cb3a2f088c95d",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11289195926"
+    },
+    {
+      "id": 11289011616,
+      "name": "fresh-annotation-comparison-NC_001604.1",
+      "digest": "sha256:7c1396ece3183b4077302bf57cd343ea596a4c4d85eb8a6469c8682972f048dc",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11289011616"
+    },
+    {
+      "id": 11288791967,
+      "name": "fresh-annotation-comparison-NC_002371.2",
+      "digest": "sha256:34017a53cf08547b383d62c97e72c21abcb52f11a9c2eb5f7500db5d5a8c27d4",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11288791967"
+    },
+    {
+      "id": 11288767015,
+      "name": "fresh-annotation-comparison-NC_001422.1",
+      "digest": "sha256:242179bb526fe13af6c18f553f0b5c71c58096d28172102feda763afff6f9ced",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11288767015"
+    },
+    {
+      "id": 11288657868,
+      "name": "fresh-annotation-comparison-NC_005859.1",
+      "digest": "sha256:1e8f218e9082d4ebe9a57f2ba776b277fa92e021dfd3d94afd6f01b0413868fe",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11288657868"
+    },
+    {
+      "id": 11288374911,
+      "name": "fresh-annotation-comparison-NC_001416.1",
+      "digest": "sha256:0333771287db5f19ff7b00ba84210043b71b1e12d336a54dd9b1bb17615d8472",
+      "url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543/artifacts/11288374911"
+    }
+  ]
+}

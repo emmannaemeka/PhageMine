@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.9"
+FUSION_RULES_VERSION = "1.10"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -84,6 +84,13 @@ def _product_candidate(evidence: Evidence, label: str | None, accepted: list[Evi
         return None, None
     if evidence.source == "Pfam" or evidence.modality == "domain":
         return None, "domain-only evidence retained as a note, not transferred as a protein product"
+    if evidence.source in {"PHROGs", "VOGDB"}:
+        coverage = _numeric_metric(evidence, "profile_coverage", "target_coverage", "subject_coverage")
+        if coverage is not None:
+            if coverage > 1:
+                coverage /= 100.0
+            if coverage < 0.5:
+                return None, "partial reference-profile match retained as evidence, not transferred as a whole-protein product"
     conservative, flag = _conservative_label(label, accepted)
     # A supported family-level rewrite (for example AAA-family ATPase) is
     # useful even when the matched database member had an unsafe organelle-
@@ -294,18 +301,21 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
         _, winner, label, _ = chosen
         return label, winner, alternatives
 
-    # Profile libraries often contain several related PHROG models carrying
-    # the same curated product.  Score that agreement as a consensus before
-    # allowing a single ancillary label to force abstention.  Unannotated
-    # profiles never enter ``informative`` and therefore cannot veto a named
-    # product.  Requiring two strong profiles and at least one near-complete
-    # query match keeps this promotion deliberately conservative.
+    # Repeated profiles from one library are correlated observations, not
+    # independent votes. Each source contributes at most one representative;
+    # a consensus override requires more than one source. This does not claim
+    # that different databases are statistically independent.
     consensus: dict[str, list[tuple[int, Evidence, str, float]]] = {}
     for item in ranked:
         if item[1].evidence_strength == "STRONG":
             consensus.setdefault(item[2], []).append(item)
     eligible = []
     for consensus_label, items in consensus.items():
+        by_source = {}
+        for item in items:
+            if item[1].source not in by_source or item[3] > by_source[item[1].source][3]:
+                by_source[item[1].source] = item
+        items = list(by_source.values())
         coverages = [_numeric_metric(item[1], "query_coverage", "qcov") for item in items]
         coverages = [value / 100.0 if value is not None and value > 1 else value
                      for value in coverages if value is not None]
@@ -333,7 +343,7 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
         chosen = next(item for item in ranked if item[2] == preferred)
         _, winner, label, winner_score = chosen
         return label, winner, alternatives
-    runner_score = ranked[1][3] if len(ranked) > 1 else float("-inf")
+    runner_score = next((item[3] for item in ranked[1:] if item[2] != label), float("-inf"))
     overlapping = all(label == item[2] or label in item[2] or item[2] in label for item in ranked[1:])
     quantified = any(_numeric_metric(winner, name) is not None for name in (
         "percent_identity", "sequence_identity", "identity", "query_coverage",
@@ -507,7 +517,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     if len(rewrite_labels) == 1:
         selected_product = rewrite_labels[0]
         selected_evidence = next((e for _, e, label in informative if label == selected_product), selected_evidence)
-    gene, ec_number = _gene_and_ec(accepted, selected_product)
+    gene, ec_number = _gene_and_ec([e for _, e, label in informative if label == selected_product], selected_product)
     domain_summary = _domain_summary(accepted)
     conservation = _conservation(protein.evidence)
     # A detected domain is reported separately and never becomes a product

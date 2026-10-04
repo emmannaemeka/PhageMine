@@ -1,0 +1,19 @@
+protein_id	start	end	strand	before_product	after_product	review_status
+PM_000007	3654	3767	-	homing endonuclease	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000015	7218	7307	-	motb-like transcriptional regulator	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000088	44836	45612	-	homing endonuclease	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000090	45840	46385	-	nrdd-like anaerobic ribonucleotide reductase large subunit	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000096	48128	48391	-	thioredoxin domain	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000125	61726	62271	-	lytic tail protein	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000136	66503	66997	-	baseplate hub subunit and tail lysozyme	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000138	67472	67570	-	membrane protein	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000150	71253	71918	-	homing endonuclease	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000181	100632	101123	+	tail tube	tail tube protein	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000196	112057	112674	+	homing endonuclease	hnh endonuclease	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000210	123065	123268	-	alt-like rna polymerase adp-ribosyltransferase	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000211	123265	123450	-	alt-like rna polymerase adp-ribosyltransferase	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000248	139716	139967	-	homing endonuclease	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000249	139991	140416	-	homing endonuclease	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000251	142671	142997	-	ribonucleotide reductase nrda-like	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000268	155868	156533	+	tail fiber protein	hinge connector of long tail fiber protein distal connector	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+PM_000287	166432	166554	-	periplasmic protein	conserved phage protein of unknown function	DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
