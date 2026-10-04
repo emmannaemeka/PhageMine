@@ -1,0 +1,8 @@
+{
+  "policy": "EXPLICIT_WHOLE_TERM_EQUIVALENCE_ONLY",
+  "rules_sha256": "7bbf837f59f30438ae5d4b152e04f77082b3b5b8181abdff6bcb2dcc4e990fd2",
+  "scope": "REFERENCE_CONCORDANCE_NOT_BIOLOGICAL_ACCURACY",
+  "source_evidence": "Original-panel naming review; reviewed record snapshot in results/accuracy-review/reviewed_records.json",
+  "external_panel_results_used_for_rule_selection": false,
+  "preserves_uncertainty_and_family_member_specificity": true
+}

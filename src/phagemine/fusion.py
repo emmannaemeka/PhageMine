@@ -8,8 +8,9 @@ from pathlib import Path
 from typing import Any
 
 from .models import Evidence, Protein
+from .annotation_labels import identifier_only_product
 
-FUSION_RULES_VERSION = "1.11"
+FUSION_RULES_VERSION = "1.12"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -162,6 +163,8 @@ def normalize_function(description: str | None) -> str | None:
     # Preserve the original description in evidence rather than exporting it
     # as a named product. Do not discard informative 'conserved' descriptions.
     if re.search(r"\b(?:duf\d+|upf\d+)\b|\b(?:domain|protein|family) of unknown function\b", value):
+        return None
+    if identifier_only_product(value):
         return None
     canonical = {
         "major head protein": "major capsid protein",

@@ -16,7 +16,7 @@ established. Pharokka's internal `gene` column also identifies query proteins;
 it is not automatically a biological gene symbol. Neither tool's output is
 treated as ground truth merely because the tools disagree.
 
-Fusion rules 1.11 implement these naming safeguards:
+Fusion rules 1.12 implement these naming safeguards:
 
 1. Missing descriptions (`NA`, `N/A`, `nan`, `-`) and unknown-function families
    (`DUF`, `UPF`) cannot establish a named function. Raw descriptions remain in
@@ -41,6 +41,10 @@ Fusion rules 1.11 implement these naming safeguards:
 7. A reviewed whole-protein name keeps its specificity and uncertainty when
    a generic domain rule is also present. Domain rules cannot choose between
    contradictory reviewed whole-protein records; those cases remain unresolved.
+8. Identifier-only descriptions such as `Protein C`, `gp12 protein` and `Orf80`
+   cannot establish a function. Functional roles containing an identifier,
+   such as `capsid protein gp7`, remain informative. Original labels are retained
+   in evidence; symbols are not invented from product names.
 
 Use the most informative role supported by the selected evidence. Broader family
 labels cannot establish a specific family member, and unknown proteins must not

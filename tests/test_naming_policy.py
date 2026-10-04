@@ -23,6 +23,20 @@ def test_unknown_labels_cannot_become_functions(description):
     assert result['gene'] is None and result['ec_number'] is None
 
 
+@pytest.mark.parametrize('description', ['Protein C', 'Protein GP45.2', 'Orf80',
+                                       'gene product 31', 'putative protein ea47', 'gp12 protein'])
+def test_identifiers_alone_cannot_name_protein_functions(description):
+    result = classify(hit(description, gene='fixtureA'))
+    assert result['proposed_function'] is None
+    assert result['gene'] is None
+
+
+def test_functional_roles_with_identifiers_are_preserved():
+    assert normalize_function('capsid protein gp7') == 'capsid protein gp7'
+    assert normalize_function('protein kinase') == 'protein kinase'
+    assert normalize_function('putative DNA polymerase') == 'putative dna polymerase'
+
+
 def test_conflict_clears_gene_and_ec():
     result = classify(hit('integrase', gene='int', ec='1.2.3.4'),
                       hit('major capsid protein', source='Swiss-Prot'))
