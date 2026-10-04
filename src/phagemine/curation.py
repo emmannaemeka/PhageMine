@@ -165,13 +165,13 @@ def apply(run: str | Path, changes: dict | str | Path, output: str | Path) -> di
         def markdown_cell(value):
             return str(value).replace("|", "\\|").replace("\n", " ")
         (root / "report.md").write_text(
-            "# Reviewed annotation\n\nHuman-reviewed computational annotations. Coordinates and raw evidence are unchanged.\n\n"
+            "# Reviewed annotation\n\nReviewed computational annotations. Coordinates and raw evidence are unchanged.\n\n"
             "[Original analysis](automated_report.html) · [Annotation table](annotation.tsv) · [Audit trail](curation_audit.jsonl)\n\n"
             "| Protein | Product | Review |\n| --- | --- | --- |\n" + "".join(
                 f"| {markdown_cell(row['protein_id'])} | {markdown_cell(row['product'])} | {markdown_cell(row.get('curation_state', 'AUTOMATED'))} |\n"
                 for row in rows))
         table = "".join(f"<tr><td>{html.escape(row['protein_id'])}</td><td>{html.escape(row['product'])}</td><td>{html.escape(row.get('curation_state', 'AUTOMATED'))}</td></tr>" for row in rows)
-        (root / "report.html").write_text("<!doctype html><html><meta charset='utf-8'><title>Curated PhageMine annotation</title><body><h1>Reviewed annotation</h1><p>Human-reviewed computational annotations; confidence is not empirically calibrated. Gene coordinates and raw evidence are unchanged.</p><p><a href='automated_report.html'>Original analysis</a> · <a href='annotation.tsv'>Current annotation table</a> · <a href='curation_audit.jsonl'>Audit trail</a></p><table><tr><th>Protein</th><th>Product</th><th>Review</th></tr>" + table + "</table></body></html>")
+        (root / "report.html").write_text("<!doctype html><html><meta charset='utf-8'><title>Curated PhageMine annotation</title><body><h1>Reviewed annotation</h1><p>Reviewed computational annotations; confidence is not empirically calibrated. Gene coordinates and raw evidence are unchanged.</p><p><a href='automated_report.html'>Original analysis</a> · <a href='annotation.tsv'>Current annotation table</a> · <a href='curation_audit.jsonl'>Audit trail</a></p><table><tr><th>Protein</th><th>Product</th><th>Review</th></tr>" + table + "</table></body></html>")
     return {"status": "CURATED", "edited_proteins": len(edits), "audit_events": len(audit), "output": str(output)}
 
 

@@ -1,5 +1,9 @@
 # Fresh annotation validation
 
+The [completed benchmark and accuracy review](BENCHMARK_REVIEW.md) contains
+the latest fresh comparison and evidence review. The earlier decision audit
+below is retained for reproducibility.
+
 [Fresh seven-genome workflow](https://github.com/emmannaemeka/PhageMine/actions/runs/37163696543)
 completed all seven jobs successfully. PhageMine, Pharokka 1.10.1 and Prokka
 1.14.6 each generated new annotations from the same nucleotide-only inputs.

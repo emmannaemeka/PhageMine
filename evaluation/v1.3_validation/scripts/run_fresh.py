@@ -82,12 +82,15 @@ def main(argv=None):
     parser.add_argument('--comparator-environment', default='comparators')
     parser.add_argument('--threads', type=int, default=2)
     parser.add_argument('--accession', help='Run one panel genome for parallel evaluation')
+    parser.add_argument('--reference-directory', type=Path,
+                        default=ROOT / 'evaluation/v1.2_functional/reference',
+                        help='GenBank reference panel; annotation receives nucleotide-only FASTA')
     args = parser.parse_args(argv)
     output = Path(args.output).resolve()
     if output.exists(): parser.error('Output must be a new directory')
     output.mkdir(parents=True)
     started = datetime.now(timezone.utc).isoformat()
-    genomes, references, excluded = prepare(ROOT / 'evaluation/v1.2_functional/reference', output, args.accession)
+    genomes, references, excluded = prepare(args.reference_directory.resolve(), output, args.accession)
     database = Path(args.database).resolve()
     db_files = sorted(p for p in database.rglob('*') if p.is_file())
     if not db_files or not (database / 'VERSION_1_8_0').is_file():

@@ -1,0 +1,41 @@
+{
+  "accuracy_superiority_established": false,
+  "analysis_type": "CURATED_RECORD_REVIEW_OF_SELECTED_DISAGREEMENTS",
+  "exact_reviewed_sequence_matches": 58,
+  "functional_accuracy": null,
+  "held_out": false,
+  "independent_expert_adjudication": false,
+  "limitations": [
+    "Selected disagreements are not an unbiased accuracy sample.",
+    "Reviewed records can contain inferred or uncertain functions.",
+    "A missing function in a reviewed record does not prove a prediction false.",
+    "Database/reference overlap is not excluded.",
+    "Review is by Codex, not an independent domain expert."
+  ],
+  "reviewed_cases": 81,
+  "sources": {
+    "decisions": "25bf11a96ba0decfa69bde204ee2fe5a5f21d7dfa585937db797f3ae4ca996fe",
+    "paired": "97b51df1e0ad0f4470de797019cb676e3116783ee11862b150e218a98a2187a5",
+    "snapshot": "3ff77818832ee82caa1e7ed6a79207dc8cf5f006a6c8db6e3249ac2fe98d5b21"
+  },
+  "verdicts": {
+    "PhageMine": {
+      "ABSTENTION": 20,
+      "COMPATIBLE_BROAD_ROLE": 4,
+      "CONFLICTS_WITH_RECORD": 1,
+      "CONSISTENT_WITH_RECORD": 20,
+      "NOT_ESTABLISHED_BY_RECORD": 7,
+      "SPECIFICITY_NOT_ESTABLISHED": 6,
+      "UNRESOLVED_NO_EXACT_MATCH": 23
+    },
+    "Pharokka": {
+      "ABSTENTION": 21,
+      "COMPATIBLE_BROAD_ROLE": 7,
+      "CONFLICTS_WITH_RECORD": 3,
+      "CONSISTENT_WITH_RECORD": 18,
+      "NOT_ESTABLISHED_BY_RECORD": 4,
+      "SPECIFICITY_NOT_ESTABLISHED": 5,
+      "UNRESOLVED_NO_EXACT_MATCH": 23
+    }
+  }
+}

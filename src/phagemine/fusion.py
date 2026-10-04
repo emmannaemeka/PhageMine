@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import Evidence, Protein
 
-FUSION_RULES_VERSION = "1.10"
+FUSION_RULES_VERSION = "1.11"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -296,6 +296,8 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
     # Multiple disagreeing curated anchors do not force a winner here.
     curated = [item for item in ranked if _curated_phage_anchor(item[1])]
     curated_labels = {item[2] for item in curated}
+    if len(curated_labels) > 1:
+        return None, None, alternatives
     if len(curated_labels) == 1:
         chosen = max(curated, key=lambda item: item[3])
         _, winner, label, _ = chosen
@@ -507,6 +509,19 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     # member name and therefore takes precedence over ancillary domain labels.
     selected_product, selected_evidence, product_alternatives = _select_product(informative)
     diagnostic_product, diagnostic_evidence, diagnostic_reason = _diagnostic_product(accepted)
+    curated_records = [(i, e, label) for i, e, label in informative if _curated_phage_anchor(e)]
+    curated_disagreement = len({label for _, _, label in curated_records}) > 1
+    anchored_product = bool(selected_evidence and _curated_phage_anchor(selected_evidence))
+    # A generic domain rule cannot replace a reviewed whole-protein name or
+    # manufacture agreement between contradictory reviewed product records.
+    if anchored_product or curated_disagreement:
+        diagnostic_product, diagnostic_evidence, diagnostic_reason = None, None, None
+    if curated_disagreement:
+        conflicting = curated_records
+        conflict_ids = [f"{e.source}:{e.identifier or e.family_name or i}" for i, e, _ in conflicting]
+        conflict_sources = sorted({e.source for _, e, _ in conflicting})
+        conflict_descriptions = [e.description for _, e, _ in conflicting if e.description]
+        ambiguity.append("reviewed whole-protein records disagree; product specificity remains unresolved")
     conflict_resolved = bool(conflicting and diagnostic_product)
     if diagnostic_product:
         selected_product, selected_evidence = diagnostic_product, diagnostic_evidence
@@ -514,7 +529,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
             ambiguity.append(diagnostic_reason)
     elif conflicting:
         selected_product, selected_evidence = None, None
-    if len(rewrite_labels) == 1:
+    if len(rewrite_labels) == 1 and not anchored_product and not curated_disagreement:
         selected_product = rewrite_labels[0]
         selected_evidence = next((e for _, e, label in informative if label == selected_product), selected_evidence)
     gene, ec_number = _gene_and_ec([e for _, e, label in informative if label == selected_product], selected_product)

@@ -94,3 +94,27 @@ def test_duplicate_supporting_records_do_not_shrink_the_hypothesis_margin():
     other = hit('structural protein', query_coverage=0.9, profile_coverage=0.9,
                 percent_identity=0.25, bit_score=55, evalue=1e-9)
     assert classify(*best, other)['proposed_function'] == 'head decoration protein'
+
+
+def reviewed(description, **metrics):
+    return hit(description, source='Swiss-Prot', reviewed=True,
+               organism='Synthetic bacteriophage fixture', percent_identity=1.0,
+               query_coverage=1.0, subject_coverage=1.0, evalue=1e-100, **metrics)
+
+
+def test_domain_rule_cannot_replace_reviewed_whole_protein_name():
+    result = classify(reviewed('putative DNA polymerase', gene='fixtureA'),
+                      hit('DNA polymerase family A', source='Pfam'))
+    assert result['proposed_function'] == 'putative dna polymerase'
+    assert result['gene'] == 'fixtureA'
+    assert result['selected_by_curated_phage_anchor']
+
+
+def test_conflicting_reviewed_records_do_not_gain_a_domain_rule_winner():
+    result = classify(reviewed('DNA polymerase', gene='fixtureA'),
+                      reviewed('DNA primase', gene='fixtureB'),
+                      hit('DNA polymerase family A', source='Pfam'))
+    assert result['proposed_function'] is None
+    assert result['functional_state'] == 'CONFLICTING_EVIDENCE'
+    assert result['gene'] is None
+    assert result['review_flag'] == 'REVIEW_REQUIRED'

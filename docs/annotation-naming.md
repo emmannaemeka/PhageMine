@@ -16,7 +16,7 @@ established. Pharokka's internal `gene` column also identifies query proteins;
 it is not automatically a biological gene symbol. Neither tool's output is
 treated as ground truth merely because the tools disagree.
 
-Fusion rules 1.10 implement these naming safeguards:
+Fusion rules 1.11 implement these naming safeguards:
 
 1. Missing descriptions (`NA`, `N/A`, `nan`, `-`) and unknown-function families
    (`DUF`, `UPF`) cannot establish a named function. Raw descriptions remain in
@@ -38,6 +38,19 @@ Fusion rules 1.10 implement these naming safeguards:
    Repeating a profile cannot outvote a stronger distinct function. Score
    margins compare different product hypotheses, not duplicate records of the
    winning hypothesis. Different sources are not assumed statistically independent.
+7. A reviewed whole-protein name keeps its specificity and uncertainty when
+   a generic domain rule is also present. Domain rules cannot choose between
+   contradictory reviewed whole-protein records; those cases remain unresolved.
+
+Use the most informative role supported by the selected evidence. Broader family
+labels cannot establish a specific family member, and unknown proteins must not
+be named by copying a neighbouring gene or a comparator's assertion. Explicit
+curation preserves the original automatic result and records its evidence.
+
+The reviewed T4 sequence matching UniProt P19896 supports **capsid vertex
+protein**, rather than major capsid protein. This user-approved correction is
+retained in an audited curation file and reported separately from automatic
+benchmark performance. It is not a locus-specific rule in the annotation engine.
 
 Fresh T4 evidence exposed two specific failures of the preceding rules:
 61/67-aa proteins were assigned a whole enzyme name from matches covering only

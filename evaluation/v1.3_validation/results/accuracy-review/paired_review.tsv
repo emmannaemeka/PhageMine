@@ -1,0 +1,917 @@
+accession	start	end	strand	product_a	product_b	reference_product	reference_model_present	category	review_status	independent_evidence	reviewer	conclusion	rationale
+NC_000866.4	12	2189	-	riia lysis inhibitor	RIIA lysis inhibitor	RIIA lysis inhibitor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	2200	2403	-	conserved phage protein of unknown function	hypothetical protein	rIIA.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	2458	2751	-	dna topoisomerase ii	DNA topoisomerase II		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	2850	2954	-	dna topoisomerase ii	DNA topoisomerase II		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	2971	3351	-	hypothetical protein	hypothetical protein	gp60.1 hypothetical protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	3457	3549	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	3654	3767	-	conserved phage protein of unknown function	homing endonuclease	homing endonuclease	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	3778	5328	-	dna topoisomerase ii large subunit	DNA topoisomerase II large subunit	DNA topoisomerase II large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	5398	5595	-	conserved phage protein of unknown function	hypothetical protein	gp39.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	5702	5839	-	fmdb-like transcriptional regulator	FmdB-like transcriptional regulator	FmdB-like transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	5842	6267	-	gof mrna metabolism modulator	unknown function	hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	6267	6482	-	cef modifier of supressor trnas	cef modifier of supressor tRNAs	cef modifier of supressor tRNAs	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	6500	6589	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	6653	7141	-	motb-like transcriptional regulator	MotB-like transcriptional regulator	MotB-like transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	7218	7307	-	conserved phage protein of unknown function	unknown function		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	7291	7650	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	7661	8161	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	8225	8908	-	exonuclease	exonuclease	exonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	8908	9150	-	conserved phage protein of unknown function	hypothetical protein	DexA.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	9143	9388	-	conserved phage protein of unknown function	hypothetical protein	dextranase	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	9410	10729	-	dda-like helicase	Dda-like helicase	Dda-like helicase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	10726	11037	-	conserved phage protein of unknown function	hypothetical protein	Dda.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	11039	11785	-	srd anti-sigma factor	Srd anti-sigma factor	Srd anti-sigma factor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	11908	12510	-	rna polymerase adp-ribosylase	RNA polymerase ADP-ribosylase	RNA polymerase ADP-ribosylase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	12507	13130	-	rna polymerase adp-ribosylase	RNA polymerase ADP-ribosylase	RNA polymerase ADP-ribosylase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	13198	13380	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	13389	13859	-	mrh transcription modulator under heat shock	Mrh transcription modulator under heat shock	Mrh transcription modulator under heat shock	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	13852	14016	-	conserved phage protein of unknown function	hypothetical protein	ModA.4 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	14013	14198	-	decoy of host sigma32	decoy of host sigma32		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	14013	14216	-			decoy of host sigma32	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	14191	14676	-	mrh transcription modulator under heat shock	Mrh transcription modulator under heat shock	Mrh transcription modulator under heat shock	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	14685	15026	-	conserved phage protein of unknown function	hypothetical protein	Mrh.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	15026	15232	-	conserved phage protein of unknown function	hypothetical protein	Mrh.2 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	15260	15349	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	15331	15573	-	virion structural protein	virion structural protein	virion structural protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	15606	16280	-	homing endonuclease	homing endonuclease	SegF homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	16270	16785	-	conserved phage protein of unknown function	nucleoside triphosphate pyrophosphohydrolase	dUTPase	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	16846	17625	-	dna methyltransferase	DNA methyltransferase	Dam family site-specific DNA-(adenine-N6)-methyltransferase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	17653	17766	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	17738	17938	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	17935	18963	-	dna primase	DNA primase	DNA primase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	18966	19130	-	conserved phage protein of unknown function	hypothetical protein	gp61.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	19132	19758	-	conserved phage protein of unknown function	hypothetical protein	gp61.2 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	19758	20051	-	spackle periplasmic	spackle periplasmic	spackle periplasmic	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	20112	20369	-	conserved phage protein of unknown function	hypothetical protein	gp61.4 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	20371	20553	-	dmd discriminator of mrna degradation	Dmd discriminator of mRNA degradation	Dmd discriminator of mRNA degradation	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	20612	22039	-	dnab-like replicative helicase	DnaB-like replicative helicase	AAA family ATPase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	22049	22393	-	head vertex assembly chaperone	head vertex assembly chaperone	head vertex assembly chaperone	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	22386	23561	-	conserved phage protein of unknown function	recombinase	recombinase	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	23570	24235	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	24279	24410	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	24400	25455	-	beta-glucosyltransferase	beta-glucosyltransferase	beta-glucosyltransferase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	25479	26219	-	thymidylate synthase	thymidylate synthase	thymidylate synthase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	26227	26376	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	26373	26624	-	immunity to superinfection	immunity to superinfection	immunity to superinfection	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	26636	27013	-	conserved phage protein of unknown function	hypothetical protein	iduronate sulfatase	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	27010	27126	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	27197	29893	-	dna polymerase	DNA polymerase	DNA polymerase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	29972	30340	-	translation repressor	translation repressor	translation repressor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	30342	30905	-	clamp loader of dna polymerase	clamp loader of DNA polymerase	clamp loader of DNA polymerase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	30907	31866	-	clamp loader of dna polymerase	clamp loader of DNA polymerase	clamp loader of DNA polymerase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	31917	32603	-	dna polymerase processivity factor	DNA polymerase processivity factor	DNA polymerase processivity factor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	32659	33048	-	rna polymerase binding	RNA polymerase binding	RNA polymerase binding	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	33058	33246	-	conserved phage protein of unknown function	hypothetical protein	protein GP45.2	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	33302	34942	-	sbcc-like subunit of palindrome specific endonuclease	SbcC-like subunit of palindrome specific endonuclease		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	33302	34984	-			SbcC-like subunit of palindrome specific endonuclease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	34981	35187	-			DUF5487 family protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	34981	35196	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	35168	35431	-	conserved phage protein of unknown function	hypothetical protein	gp46.2 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	35428	36447	-	sbcd-like subunit of palindrome specific endonuclease	SbcD-like subunit of palindrome specific endonuclease	SbcD-like subunit of palindrome specific endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	36444	36584	-	conserved phage protein of unknown function	hypothetical protein	gp47.1 hypothetical predicted membrane protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	36624	37826	-	alpha-glucosyltransferase	alpha-glucosyltransferase	alpha-glucosyltransferase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	37885	38679	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	38731	38922	-	capsid maturation protease	hypothetical protein	a-gt.2 hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	38907	39110	-	conserved phage protein of unknown function	hypothetical protein	a-gt.3 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	39079	39396	-	conserved phage protein of unknown function	hypothetical protein	a-gt.4 family protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	39398	39616	-	conserved phage protein of unknown function	hypothetical protein	a-gt.5 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	39600	40157	-	rna polymerase sigma factor	late sigma transcription factor	RNA polymerase sigma factor	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	40193	40456	-	conserved phage protein of unknown function	hypothetical protein	gp55.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	40459	40785	-	conserved phage protein of unknown function	hypothetical protein	gp55.2 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	40799	41038	-	conserved phage protein of unknown function	hypothetical protein	gp55.3 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	41039	41170	-	conserved phage protein of unknown function	hypothetical protein	gp55.4 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	41178	41471	-	conserved phage protein of unknown function	hypothetical protein	gp55.5 conserved protein of unknown function	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	41464	41646	-	conserved phage protein of unknown function	hypothetical protein	gp55.6 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	41805	42113	-	thioredoxin domain	thioredoxin domain	NrdH glutaredoxin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	42116	42328	-	conserved phage protein of unknown function	hypothetical protein	gp55.8 conserved hypothetical predicted membrane protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	42370	42468	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	42446	42916	-	anaerobic ribonucleotide reductase small subunit	anaerobic ribonucleotide reductase small subunit	anaerobic ribonucleotide reductase small subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	42906	43538	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	43535	44728	-	conserved phage protein of unknown function	anaerobic ribonucleoside reductase large subunit		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	44836	45612	-	conserved phage protein of unknown function	homing endonuclease	I-TevII homing endonuclease	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	45575	45694	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	45840	46385	-	conserved phage protein of unknown function	NrdD-like anaerobic ribonucleotide reductase large subunit		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	46382	46699	-			endonuclease VII	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	46382	46855	-	endonuclease vii	endonuclease VII	endonuclease VII	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	46897	47382	-	inhibitor of host lon protease	inhibitor of host Lon protease	inhibitor of host Lon protease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	47366	47521	-	conserved phage protein of unknown function	hypothetical protein	gp49.1 conserved protein of unknown function	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	47506	47826	-	ribonucleotide reductase	ribonucleotide reductase	ribonucleotide reductase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	47823	48131	-	conserved phage protein of unknown function	hypothetical protein	gp49.3 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	48128	48391	-	conserved phage protein of unknown function	thioredoxin domain	NrdC thioredoxin	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	48393	48635	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	48622	48936	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	48933	49859	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	49914	50915	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	50973	51995	-	conserved phage protein of unknown function	hypothetical protein	NrdC.5 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	52066	52893	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	52901	53302	-	conserved phage protein of unknown function	hypothetical protein	NrdC.7 conserved hypothetical, predicted membrane protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	53358	53885	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	53946	54248	-	conserved phage protein of unknown function	hypothetical protein	NrdC.9 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	54343	55320	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	55340	55438	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	55435	56445	-			nucleotidyltransferase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	55435	56469	-	nucleotidyltransferase	nucleotidyltransferase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	56429	57208	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	57283	57828	-	conserved phage protein of unknown function	hypothetical protein	MobD.1 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	57828	57932	-			MobD.2 conserved hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	57892	57993	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	58049	58165	-	conserved phage protein of unknown function	hypothetical protein	MobD.2a hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	58155	58349	-	conserved phage protein of unknown function	hypothetical protein	MobD.3 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	58352	58534	-	conserved phage protein of unknown function	hypothetical protein	molybdopterin-guanine dinucleotide biosynthesis protein MobD	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	58534	58722	-	conserved phage protein of unknown function	hypothetical protein	MobD.5 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	58819	59205	-	starvation-inducible transcriptional regulator	starvation-inducible transcriptional regulator	starvation-inducible transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	59202	59495	-	lysis inhibition	lysis inhibition	lysis inhibition	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	59508	59720	-	conserved phage protein of unknown function	hypothetical protein	rI.1 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	59763	60344	-	thymidine kinase	thymidine kinase	thymidine kinase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	60346	60534	-	conserved phage protein of unknown function	hypothetical protein	Tk.1 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	60531	60716	-			Tk.2 conserved hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	60531	60722	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	60713	60925	-	conserved phage protein of unknown function	hypothetical protein	Tk.2 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	60922	61389	-	phosphatase	phosphatase	phosphatase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	61386	61733	-	valyl trna synthetase modifier	valyl tRNA synthetase modifier	valyl tRNA synthetase modifier	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	61726	62271	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	62279	62740	-	endoribonuclease	endoribonuclease	endoribonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	62800	63078	-	conserved phage protein of unknown function	hypothetical protein	Vs.3 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	63078	63344	-	conserved phage protein of unknown function	hypothetical protein	Vs.4 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	63337	63459	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	63381	63557	-			Vs.5 conserved hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	63557	63919	-	conserved phage protein of unknown function	hypothetical protein	autonomous glycyl radical cofactor GrcA	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	63927	64256	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	64253	64912	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	64939	65355	-	endonuclease v n-glycosylase uv repair enzyme	endonuclease V N-glycosylase UV repair enzyme	endonuclease V N-glycosylase UV repair enzyme	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	65416	65718	-	internal virion protein	internal virion protein	internal virion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	65834	66415	-	internal virion protein	internal virion protein	internal virion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	66503	66997	-	conserved phage protein of unknown function	hypothetical protein	glycoside hydrolase family protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	67035	67490	-	nudix hydrolase	nudix hydrolase	nudix hydrolase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	67472	67570	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	67572	67664	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	67652	67960	-	membrane protein	unknown function	hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	67957	68319	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	68301	68693	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	68662	69270	-	conserved phage protein of unknown function	hypothetical protein	e.5 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	69312	69905	-	conserved phage protein of unknown function	hypothetical protein	e.6 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	69968	70303	-	conserved phage protein of unknown function	hypothetical protein	e.7 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	70360	70623	-	conserved phage protein of unknown function	hypothetical protein	e.8 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	70587	70676	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	70821	70982	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	70979	71098	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	71253	71918	-	conserved phage protein of unknown function	homing endonuclease	homing endonuclease	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	72628	72915	-	conserved phage protein of unknown function	hypothetical protein	Trna.2 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	72918	73328	-	conserved phage protein of unknown function	hypothetical protein	Trna.3 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	73329	73514	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	73591	73878	-	internal virion protein	internal virion protein	internal virion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	73952	74410	-	rna ligase	RNA ligase	RNA ligase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	74407	74649	-	tail fiber chaperone	tail fiber chaperone	tail fiber chaperone	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	74649	75374	-	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	75424	75954	-	tail tube	tail tube	tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	76061	76885	-	dna end protector	DNA end protector	DNA end protector	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	76885	77337	-	head closure	head closure	head closure	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	77385	77975	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	77959	79686	+	baseplate hub subunit and tail lysozyme	baseplate hub subunit and tail lysozyme	baseplate hub subunit and tail lysozyme	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	77981	78118	-			replication initiation protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	79085	79237	-			replication initiation protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	79661	80215	+	putative tail-associated protein	hypothetical protein		False	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	79721	80215	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	80196	80618	+	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	80621	80791	+	hypothetical protein	hypothetical protein	gp5.3 conserved hypothetical protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	80779	81072	+	paar motif of membran proteins	PAAR motif of membran proteins	PAAR motif of membran proteins	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	81081	83063	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	83060	86158	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	86151	87155	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	87219	88085	+	baseplate wedge tail fiber protein connector	baseplate wedge tail fiber protein connector	baseplate wedge tail fiber protein connector	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	88085	89893	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	89893	90552	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	90549	92132	+	tail collar fiber protein	tail collar fiber protein	tail collar fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	92129	93592	+	fibritin neck whisker	fibritin neck whisker	fibritin neck whisker	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	93624	94553	+	head-tail adaptor ad2	head-tail adaptor Ad2	head-tail adaptor Ad2	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	94555	95325	+	head closure hc2	head closure Hc2	head closure Hc2	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	95367	96185	+	tail sheath stabilizer	tail sheath stabilizer	tail sheath stabilizer	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	96194	96688	+	terminase small subunit	terminase small subunit	terminase small subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	96672	98504	+	terminase large subunit	terminase large subunit	terminase large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	96933	98504	+			terminase large subunit	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	96987	98504	+			terminase large subunit	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	97254	98504	+			large terminase protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	98536	100515	+	tail sheath	tail sheath	tail sheath	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	100632	101123	+	tail tube protein	tail tube	tail protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	101207	102781	+	portal protein	portal protein	portal protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	102781	103023	+	prohead	prohead	prohead	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	103023	103448	+	head scaffolding protein	head scaffolding protein	head scaffolding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	103448	104086	+	capsid maturation protease	head maturation protease	head maturation protease	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	103514	104086	+			head maturation protease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	104117	104926	+	head scaffolding protein	head scaffolding protein	head scaffolding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	104945	106510	+	major capsid protein	major head protein	major head protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	106561	107232	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	107241	107330	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	107323	108606	+	major capsid protein	major head protein	capsid vertex protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	108636	109640	-	rna ligase	RNA ligase	RNA ligase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	109650	109928	-	conserved phage protein of unknown function	hypothetical protein	gp24.2 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	109915	110085	-			gp24.3 conserved hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	109915	110097	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	110187	111317	-	hoc-like head decoration protein	Hoc-like head decoration	Hoc-like head decoration	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	111327	112007	-	minor head protein inhibitor of protease	minor head protein inhibitor of protease	minor head protein inhibitor of protease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	112057	112674	+	hnh endonuclease	homing endonuclease	homing endonuclease	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	112677	114440	+	dna helicase	DNA helicase	DNA helicase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	114496	114663	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	114690	114914	-	conserved phage protein of unknown function	hypothetical protein	UvsY.-1 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	114914	115327	-	uvsy-like recombination mediator	UvsY-like recombination mediator	UvsY-like recombination mediator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	115404	115802	-	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	115802	116089	-			baseplate hub	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	115802	116428	-	baseplate hub	baseplate hub	baseplate hub	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	116479	117228	+	baseplate hub	baseplate hub	baseplate hub assembly protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	117228	118403	+			baseplate hub	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	117234	118403	+	baseplate hub	baseplate hub		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	118348	118881	+	baseplate hub distal subunit	baseplate hub distal subunit	baseplate hub distal subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	118878	120650	+	baseplate hub subunit and tail length	baseplate hub subunit and tail length	baseplate hub subunit and tail length	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	120659	121753	+	baseplate tail tube cap	baseplate tail tube cap	baseplate tail tube cap	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	121753	122715	+	tail tube	tail tube	tail tube	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	122742	123032	-	putative tail-associated protein	hypothetical protein	Alt.-3 conserved hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	123065	123268	-	conserved phage protein of unknown function	hypothetical protein	Alt.-2 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	123265	123450	-	conserved phage protein of unknown function	hypothetical protein	Alt.-1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	123454	125502	-	alt-like rna polymerase adp-ribosyltransferase	Alt-like RNA polymerase ADP-ribosyltransferase	Alt-like RNA polymerase ADP-ribosyltransferase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	125560	125748	-	conserved phage protein of unknown function	hypothetical protein	Alt.1 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	125745	127208	-	atp-dependent dna ligase	ATP-dependent DNA ligase	DNA ligase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	127205	127474	-	conserved phage protein of unknown function	hypothetical protein	DUF3045 domain-containing protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	127474	128310	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	128307	128765	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	128402	128629	-			gp30.3' hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	128758	128964	-	conserved phage protein of unknown function	hypothetical protein	gp30.4 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	128961	129158	-	conserved phage protein of unknown function	hypothetical protein	gp30.5 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	129158	129445	-	conserved phage protein of unknown function	hypothetical protein	gp30.6 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	129487	129852	-	conserved phage protein of unknown function	hypothetical protein	gp30.7 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	129921	130253	-	conserved phage protein of unknown function	hypothetical protein	gp30.8 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	130255	130362	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	130364	130540	-			gp30.9 conserved hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	130364	130582	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	130573	130677	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	130785	131033	-	lysis inhibition accessory protein	lysis inhibition accessory protein	lysis inhibition; accessory protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	131181	131516	-	head morphogenesis protein	head morphogenesis	head morphogenesis	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000866.4	131573	131881	-	tail fiber protein	hypothetical protein	SH3 beta-barrel fold-containing protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	131882	132118	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	132118	132699	-	dcmp deaminase	dCMP deaminase	dCMP deaminase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	132696	133034	-	conserved phage protein of unknown function	hypothetical protein	Cd.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	133031	133261	-	conserved phage protein of unknown function	hypothetical protein	Cd.2 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	133334	133609	-	conserved phage protein of unknown function	hypothetical protein	Cd.3 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	133612	133812	-	conserved phage protein of unknown function	hypothetical protein	Cd.4 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	133805	134002	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	133805	134032	-			Cd.5 hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	134002	134907	-	polynucleotide kinase	polynucleotide kinase	polynucleotide kinase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	134908	135135	-	conserved phage protein of unknown function	hypothetical protein	PseT.1 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	135132	135431	-	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	135428	135781	-	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	135772	136275	-			inhibitor of host transcription	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	135772	136278	-	inhibitor of host transcription	inhibitor of host transcription		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	136340	137464	-	rna ligase and tail fiber protein attachment catalyst	RNA ligase and tail fiber protein attachment catalyst	RNA ligase and tail fiber protein attachment catalyst	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	137517	137927	-	endonuclease	endonuclease		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	137517	137951	-			endonuclease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	137955	138434	-	aerobic ndp reductase small subunit	aerobic NDP reductase small subunit		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	138424	138603	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	138593	138886	-			endonuclease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	138640	138777	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	138774	138935	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	139054	139719	-	ribonucleotide reductase class ia beta subunit	ribonucleotide reductase class Ia beta subunit		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	139716	139967	-	conserved phage protein of unknown function	homing endonuclease	Nrd.1 hypothetical protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	139991	140416	-	conserved phage protein of unknown function	homing endonuclease	homing endonuclease	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	140416	142680	-	ribonucleotide reductase large subunit	ribonucleotide reductase large subunit	NrdA-like aerobic NDP reductase large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	142671	142997	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	142951	143214	-	conserved phage protein of unknown function	hypothetical protein	NrdA.2 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	143235	143549	-	thymidylate synthase	thymidylate synthase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	143694	144431	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	144561	145112	-	thymidylate synthase	thymidylate synthase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	145109	145690	-	dihydrofolate reductase	dihydrofolate reductase	dihydrofolate reductase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	145762	146004	-	conserved phage protein of unknown function	hypothetical protein	DUF5417 domain-containing protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	146143	146529	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	146575	146802	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	146948	147853	-	single strand dna binding protein	single strand DNA binding protein	single strand DNA binding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	147909	148541	-	homing endonuclease	homing endonuclease	homing endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	148543	149181	-	dna helicase loader	DNA helicase loader		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	148543	149196	-			DNA helicase loader	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	149193	149531	-	late promoter transcriptional regulator	late promoter transcriptional regulator	late promoter transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	149509	149778	-	transcriptional regulator	transcriptional regulator	transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	149787	150704	-	exonuclease	exonuclease	RnaseH	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	150809	154678	+	tail fiber protein proximal subunit	tail fiber protein proximal subunit	tail fiber protein proximal subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	154687	155805	+	long tail fiber protein proximal connector	long tail fiber protein proximal connector	long tail fiber protein proximal connector	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	155868	156533	+	hinge connector of long tail fiber protein distal connector	hinge connector of long tail fiber protein distal connector	hinge connector of long tail fiber protein distal connector	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	156542	159622	+	long tail fiber protein distal subunit	long tail fiber protein distal subunit	long tail fiber protein distal subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	159649	160200	+	tail fiber assembly	tail fiber assembly	tail fiber assembly	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	160221	160877	+	holin	holin	holin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	160878	161150	-	anti-sigma factor	anti-sigma factor	anti-sigma factor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	161163	161315	-	conserved phage protein of unknown function	hypothetical protein	AsiA.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	161312	161590	-	inhibitor of mrcbc restriction	inhibitor of MrcBC restriction	inhibitor of MrcBC restriction	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	161674	161805	-	anti-restriction nuclease	unknown function	hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	161876	162172	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	162172	162630	-	conserved phage protein of unknown function	hypothetical protein	Arn.3 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	162627	162833	-	conserved phage protein of unknown function	hypothetical protein	Arn.4 conserved hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	162967	163602	-	mota-like activator of middle period transcription	MotA-like activator of middle period transcription	MotA-like activator of middle period transcription	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	163730	163879	-	conserved phage protein of unknown function	hypothetical protein	MotA.1 hypothetical predicted periplasmic protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	163876	165204	-	dna topoisomerase ii	DNA topoisomerase II	DNA topoisomerase II	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	165209	165349	-	conserved phage protein of unknown function	hypothetical protein	gp52.1 conserved hypothetical predicted membrane protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	165342	165497	-	conserved phage protein of unknown function	hypothetical protein	Ac acridine resistance protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	165505	165585	-			activator of host PrrC lysyl-tRNA endonuclease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	165585	166040	-	ndd-like nucleoid disruption protein	Ndd-like nucleoid disruption protein	Ndd-like nucleoid disruption protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	166101	166316	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	166325	166432	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	166325	166435	-			Ndd.2 hypothetical predicted outer membrane protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	166432	166554	-	conserved phage protein of unknown function	periplasmic protein	periplasmic protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000866.4	166548	166628	-			Ndd.3 hypothetical predicted inner membrane protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	166548	166649	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	166636	166749	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	166636	166764	-			Ndd.4 hypothetical predicted inner membrane	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	166815	166913	-	outer membrane protein	outer membrane protein	outer membrane protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	166910	166996	-			outer membrane protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000866.4	166993	167121	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	167103	167660	-	denb-like dna endonuclease iv	DenB-like DNA endonuclease IV	DenB-like DNA endonuclease IV	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000866.4	167743	167937	-	conserved phage protein of unknown function	hypothetical protein	DenB.1 hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000866.4	167965	168903	-	riib lysis inhibitor	RIIB lysis inhibitor	RIIB lysis inhibitor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	3	101	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	339	863	-	transcriptional repressor	transcriptional repressor	transcriptional repressor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	1015	1131	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	1099	1326	+	transcriptional repressor	transcriptional repressor	transcriptional repressor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	1328	3319	+	transposase	hypothetical protein	Mu transposase C-terminal domain-containing protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	3358	4296	+	dna transposition protein	DNA transposition protein	DNA transposition protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	4312	4539	+	kil protein for bacterial septation inhibition	Kil protein for bacterial septation inhibition		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	4315	4539	+			Kil protein for bacterial septation inhibition	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	4542	4772	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	4784	5047	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	5038	5481	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	5062	5481	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	5482	5781	+	conserved phage protein of unknown function	transcriptional regulator, D5-like	transcriptional regulator, D5-like	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000929.1	5801	6325	+	host nuclease inhibitor	host nuclease inhibitor	host nuclease inhibitor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	6424	6954	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	6954	7484	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	7471	7653	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	7655	7957	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	7896	8162	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	8233	8784	+	conserved phage protein of unknown function	hypothetical protein	regulatory protein GemA	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	8781	9170	+	late transcriptional activator	late transcriptional activator	late transcriptional activator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	9248	9466	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	9459	9821	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	9831	9950	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	9963	10385	+	late transcriptional activator	late transcriptional activator	late transcriptional activator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	10477	10995	+	endolysin	endolysin		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	10480	10995	+			endolysin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	10979	11365	+			Rz-like spanin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	11211	11567	+	rz-like spanin	Rz-like spanin		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	11524	11718	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	11718	12017	+	conserved phage protein of unknown function	hypothetical protein	DUF2730 family protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	12014	12304	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	12316	12891	+	terminase small subunit	terminase small subunit	terminase small subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	12707	14554	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	12899	14554	+			putative portal protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	14554	16092	+	portal protein	portal protein	portal protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	16073	17392	+	minor head protein and dna pilot	minor head protein and DNA pilot	minor head protein and DNA pilot	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	17389	17859	+			tail completion or Neck1 protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	17401	17859	+	tail completion or neck1 protein	tail completion or Neck1 protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	18056	19141	+	capsid maturation protease	head maturation protease	head maturation protease	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000929.1	18590	19141	+			head maturation protease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	19138	20055	+	major capsid protein	major head protein	major head protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000929.1	20122	20532	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	20529	20954	+	head-tail adaptor	head-tail adaptor	head-tail adaptor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	20954	21502	+	portal protein	portal protein	portal protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	21486	21692	+	putative tail-associated protein	hypothetical protein		False	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	21489	21692	+			DUF2635 domain-containing protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	21689	23176	+	tail sheath	tail sheath	tail sheath	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	23186	23542	+	tail tube protein	tail tube protein	tail tube protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	23552	23986	+	tail assembly chaperone	tail assembly chaperone	tail assembly chaperone	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	24028	24168	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	24131	26203	+	tail length tape measure protein	tail length tape measure protein	tail length tape measure protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	26208	27695	+	baseplate hub	hypothetical protein	DNA circularization N-terminal domain-containing protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_000929.1	27688	28827	+	baseplate hub	baseplate hub	baseplate hub	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	28815	29408	+			baseplate assembly protein V	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	28863	29408	+	hypothetical protein	baseplate spike		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000929.1	29405	29842	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	29843	30925	+	conserved phage protein of unknown function	baseplate protein	baseplate protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000929.1	30916	31458	+	baseplate wedge subunit	baseplate wedge subunit	baseplate wedge subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	31458	32972	+	tail fiber protein	tail fiber protein	tail fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	32975	33502	+	conserved phage protein of unknown function	tail fiber assembly protein	tail fiber assembly protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000929.1	33531	34064	-	conserved phage protein of unknown function	tail fiber assembly protein	tail fiber assembly protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_000929.1	34067	35053	-			tail fiber protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	34067	35263	-	tail fiber protein	tail fiber protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	35092	35673	+			DNA invertase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_000929.1	35299	35673	+	dna binding protein	DNA invertase		False	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_000929.1	35768	35956	+	gpcom control of modification	gpCom control of modification	gpCom control of modification	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_000929.1	35877	36602	+	mom-like dna modification protein	Mom-like DNA modification protein	Mom-like DNA modification protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	191	736	+	terminase small subunit	terminase small subunit	terminase small subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	711	2636	+			terminase large subunit	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	751	894	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	891	2636	+	terminase large subunit	terminase large subunit		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	2633	2839	+	head-tail adaptor ad1	head-tail adaptor Ad1	head-tail adaptor Ad1	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	2836	4437	+	portal protein	portal protein	portal protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	4319	5737	+	capsid maturation protease	capsid assembly protein		False	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001416.1	4418	5737	+			S49 family peptidase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	5132	5737	+			capsid assembly protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	5747	6079	+	head decoration	head decoration	head decoration	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	6135	7160	+	major capsid protein	hypothetical protein	major capsid protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	7163	7600	+	dna packaging chaperone fi	DNA packaging chaperone FI		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	7202	7600	+			DNA packaging chaperone FI	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	7612	7965	+			head closure Hc1	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	7678	7965	+	head closure protein hc1	head closure Hc1		False	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001416.1	7977	8555	+	tail completion or neck1 protein	hypothetical protein	tail protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	8552	8947	+	tail terminator	tail terminator	tail terminator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	8955	9695	+	major tail protein	major tail protein	major tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	9711	10133	+	minor tail protein	hypothetical protein	minor tail protein G	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	10115	10549	+			minor tail protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	10160	10549	+	tail assembly protein	minor tail protein		False	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001416.1	10542	13103	+	tail length tape measure protein	tail length tape measure protein	tail length tape measure protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	13100	13429	+	minor tail protein	minor tail protein	minor tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	13429	14127	+	minor tail protein	minor tail protein	minor tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	14090	14257	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	14276	14875	+	minor tail protein	hypothetical protein	C40 family peptidase	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	14773	15444	+	conserved phage protein of unknown function	hypothetical protein	tail assembly protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	15505	18903	+	conserved phage protein of unknown function	tail fiber protein	central tail fiber J	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_001416.1	18965	19585	+	lom outer membrane protein	Lom outer membrane protein	Lom outer membrane protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	19650	20855	+	tail fiber protein	tail fiber protein	tail fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	20147	20767	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	20815	20964	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	21029	21973	+	tail fiber protein	tail fiber protein	tail fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	21973	22557	+	tail fiber assembly	tail fiber assembly	tail fiber assembly	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	22686	23918	-	putative tail-associated protein	hypothetical protein	ea47	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	23947	24045	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	24108	24317	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	24509	25399	-	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	25396	26973	-	conserved phage protein of unknown function	hypothetical protein	AAA family ATPase	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	27009	27164	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	27157	27351	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	27335	27604	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	27766	27855	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	27812	28882	-	integrase	integrase	integrase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	28860	29078	-	excisionase	excisionase	excisionase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	29118	29285	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	29374	29655	-	conserved phage protein of unknown function	hypothetical protein	ea8.5	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	29847	30347	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	29847	30395	-			ead/Ea22-like family protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	30392	30613	-	dksa-like zinc-finger protein	DksA-like zinc-finger protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	30620	30709	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	30712	30894	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	30839	31024	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	31005	31196	-	conserved phage protein of unknown function	hypothetical protein	DUF1382 family protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	31169	31351	-	conserved phage protein of unknown function	hypothetical protein	DUF1317 domain-containing protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	31348	32028	-	exonuclease	exonuclease	exonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	32025	32810	-	conserved phage protein of unknown function	RecT-like ssDNA annealing protein	RecT-like ssDNA annealing protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_001416.1	32816	33232	-	gam-like host nuclease inhibitor	gam-like host nuclease inhibitor	gam-like host nuclease inhibitor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	33187	33330	-			Kil protein for bacterial septation inhibition	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	33187	33456	-	kil protein for bacterial septation inhibition	Kil protein for bacterial septation inhibition		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	33299	33463	-			CIII anti-termination	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	33536	33904	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	33917	34006	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	34087	34287	-	restriction alleviation ral	restriction alleviation ral	restriction alleviation ral	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	34261	34386	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	34271	34357	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	34482	35036	+			SieB superinfection exclusion	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	34485	35036	+	sieb superinfection exclusion	SieB superinfection exclusion		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	35037	35438	-	anti-termination protein n-like	anti-termination protein N-like	anti-termination protein N-like	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	35471	35581	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	35583	35672	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	35669	35854	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	35825	36259	-	rexb-like exclusion protein	RexB-like exclusion protein	RexB-like exclusion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	36275	37114	-	rexa-like exclusion protein	RexA-like exclusion protein	RexA-like exclusion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	37227	37940	-	transcriptional repressor	hypothetical protein	LexA family transcriptional regulator	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	37919	38056	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	38041	38241	+	conserved phage protein of unknown function	transcriptional repressor	Cro/CI family transcriptional regulator	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_001416.1	38300	38653	+	cii-like transcriptional activator	CII-like transcriptional activator		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	38360	38653	+			CII-like transcriptional activator	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	38686	39585	+	replication initiation o-like	replication initiation O-like	replication initiation O-like	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	39582	40283	+	p-like helicase loader	hypothetical protein	DNA replication protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	40280	40570	+	ren-like exclusion protein	Ren-like exclusion protein	Ren-like exclusion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	40644	41084	+	ninb/ orf homologous recombination mediator	NinB/ Orf homologous recombination mediator	NinB/ Orf homologous recombination mediator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	41063	41953	+	phosphoadenosine phosphosulfate reductase	phosphoadenosine phosphosulfate reductase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	41081	41953	+			phosphoadenosine phosphosulfate reductase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	41950	42123	+			NinD protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	41972	42169	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	42090	42272	+			NinE family protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	42227	42439	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	42269	42439	+			protein ninF	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	42429	43043	+	ning/ rap dna junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	43040	43246	+			NinH family protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	43152	43889	+	nini-like serine-threonine phosphatase	hypothetical protein		False	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	43224	43889	+			serine/threonine protein phosphatase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	43886	44509	+	anti-termination protein q-like	anti-termination protein Q-like	antitermination protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	44538	44690	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	44621	44815	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	44654	44938	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	45147	45242	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	45186	45509	+	holin/anti-holin	holin/anti-holin	holin/anti-holin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	45192	45509	+			holin/anti-holin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	45493	45969	+	endolysin	endolysin	endolysin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	45966	46427	+	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	46186	46368	+			Rz-like spanin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	46459	46752	-	bor-like outer membrane protein	Bor-like outer membrane protein	Bor-like outer membrane protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	46896	46994	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	47042	47494	-	head protein	head protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	47042	47575	-			head protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001416.1	47572	47736	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001416.1	47738	47944	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	48109	48303	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001416.1	48319	48432	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001422.1	2	136	+	conserved phage protein of unknown function	DNA replication initiation		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_001422.1	51	221	+			K	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001422.1	133	393	+	terminase protein	terminase	terminase	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001422.1	390	848	+	head morphogenesis protein	head morphogenesis	head morphogenesis	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001422.1	568	843	+			endolysin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001422.1	848	964	+	dna condensation	DNA condensation	DNA condensation	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001422.1	1001	2284	+	major capsid protein	major head protein	major head protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001422.1	2395	2922	+	major spike protein	major spike protein	major spike protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001422.1	2931	3917	+	pilot protein for dna ejection	pilot protein for DNA ejection	pilot protein for DNA ejection	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001422.1	3981	5384	+	dna replication initiation	DNA replication initiation		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	3	98	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	474	608	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	627	749	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	766	921	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	925	1278	+	ocr-like anti-restriction	ocr-like anti-restriction	ocr-like anti-restriction	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	1278	1433	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	1430	1639	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	1496	1639	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	1636	1797	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	1639	1797	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	1781	1972	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	2021	3100	+	serine-threonine kinase	serine-threonine kinase	serine-threonine kinase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	3171	5822	+	rna polymerase	RNA polymerase	RNA polymerase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	6007	6135	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	6137	6394	+	dgtpase inhibitor target for f exclusion	dGTPase inhibitor target for F exclusion	dGTPase inhibitor; target for F exclusion	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	6475	7554	+	atp-dependent dna ligase	DNA ligase	DNA ligase	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001604.1	7608	7763	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	7791	7880	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	7906	8166	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	8166	8756	+	nucleotide kinase	nucleotide kinase	nucleotide kinase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	8749	8895	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	8892	9092	+	rna polymerase inhibitor	RNA polymerase inhibitor		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	8898	9092	+			RNA polymerase inhibitor	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	9158	9856	+	gp2.5-like ssdna binding protein and ssdna annealing protein	Gp2.5-like ssDNA binding protein and ssDNA annealing protein	Gp2.5-like ssDNA binding protein and ssDNA annealing protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	9857	10276	+	hnh endonuclease	endonuclease	endonuclease	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001604.1	10257	10706	+	endonuclease	endonuclease	endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	10706	11161	+	amidase	amidase	amidase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	11225	11590	+	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	11565	13265	+	dna primase/helicase	DNA primase/helicase	DNA primase/helicase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	11635	11757	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	11754	13265	+			DNA primase/helicase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	12988	13326	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	13352	13564	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	13584	13853	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	13798	14334	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	13927	14334	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	14353	16467	+	dna polymerase i	DNA polymerase I	DNA polymerase I	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	16483	16839	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	16851	17150	+	gp5.5-like host hns inhibition	hypothetical protein	DUF2675 domain-containing protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	17150	17359	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	17359	17517	+	gp5.9-like inihibitor of recbcd nuclease	Gp5.9-like inihibitor of recBCD nuclease	Gp5.9-like inihibitor of recBCD nuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	17504	18406	+	exonuclease	exonuclease	exonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	18394	18507	+	conserved phage protein of unknown function	hypothetical protein	DUF5516 domain-containing protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	18605	18859	+	conserved phage protein of unknown function	hypothetical protein	DUF2717 domain-containing protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	18864	19130	+	conserved phage protein of unknown function	hypothetical protein	DUF5476 family protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	19130	19531	+	host range and adsorption protein	host range and adsorption protein	host range and adsorption protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	19535	19834	+	host range and adsorption protein	host range and adsorption protein	host range and adsorption protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	19848	20240	+	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	20225	21850	+	head-tail adaptor	head-tail adaptor		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	20240	21850	+			head-tail adaptor	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	21950	22873	+	head assembly	head assembly	head assembly	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	22967	24004	+	major capsid protein	major head protein	major head protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_001604.1	24004	24162	+	head protein	head protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	24228	24818	+	tail protein	tail protein	tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	24842	27226	+	tail protein	tail protein	tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	27307	27723	+	internal virion protein	internal virion protein	internal virion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	27728	28318	+	internal virion protein	internal virion protein	internal virion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	28325	30568	+	internal virion protein	internal virion protein	internal virion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	30595	34551	+	internal virion protein with endolysin domain	internal virion protein with endolysin domain	internal virion protein with endolysin domain	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	34624	36285	+	tail fiber protein	tail fiber protein	tail fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	36344	36547	+	holin	holin	holin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	36553	36822	+	terminase small subunit	terminase small subunit	terminase small subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	36797	36898	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	36917	37348	+	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	37032	37283	+			Rz-like spanin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	37370	39130	+	terminase large subunit	terminase large subunit	terminase large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	38016	38273	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	38553	38726	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_001604.1	39389	39538	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_001604.1	39494	39604	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	39713	39847	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_001604.1	39834	39935	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	1	225	+	terminase small subunit	terminase small subunit		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	203	1702	+	conserved phage protein of unknown function	hypothetical protein	terminase large subunit	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	1702	3879	+	portal protein	hypothetical protein	portal protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	3893	4804	+	head scaffolding protein	head scaffolding protein	head scaffolding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	4804	6096	+	conserved phage protein of unknown function	head protein	head protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_002371.2	6135	6344	+	putative tail-associated protein	hypothetical protein	hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	6328	6828	+	head-tail adaptor ad3	head-tail adaptor Ad3	head-tail adaptor Ad3	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	6788	8206	+	head closure hc3	head closure Hc3	head closure Hc3	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	8210	8911	+	tail needle protein	tail needle protein	tail needle protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	8911	9366	+	head morphogenesis protein	head morphogenesis	head morphogenesis	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_002371.2	9369	10058	+	dna ejection	DNA ejection	DNA ejection	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	10069	11484	+	released from the phage upon host infection	released from the phage upon host infection	released from the phage upon host infection	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	11484	13313	+	conserved phage protein of unknown function	head morphogenesis	head morphogenesis	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_002371.2	13336	13830	-			superinfection exclusion SieA-like	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	13336	14046	-	superinfection exclusion siea-like	superinfection exclusion SieA-like		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	14020	14226	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	14240	14419	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	14519	14770	-			partition protein ATPase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	14519	15106	-	hypothetical protein	partition protein ATPase		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_002371.2	14861	15022	+			Arc-like repressor	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	15091	15993	+	anti-repressor ant	hypothetical protein	Ant	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	16204	18207	+	tail spike protein	tail spike protein	tail spike protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	18266	19498	-	gtrc-like o-antigen conversion translocase	GtrC-like O-antigen conversion translocase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	18266	19726	-			GtrC-like O-antigen conversion translocase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	19519	19623	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	19713	20645	-			GtrB glycosyltransferase for O-antigen conversion	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	19713	20690	-	gtrb-like o-antigen conversion	GtrB glycosyltransferase for O-antigen conversion		False	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_002371.2	20642	21004	-	gtra-like o-antigen conversion	GtrA-like O-antigen conversion	GtrA-like O-antigen conversion	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	21155	21244	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	21353	22516	-	integrase	integrase	integrase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	22393	22743	-			excisionase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	22548	22718	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	22746	23381	-	conserved phage protein of unknown function	hypothetical protein	EaC	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	23463	23702	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	23482	23661	-			EaG	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	23758	24711	-	conserved phage protein of unknown function	hypothetical protein	EaA	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	24715	24903	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	24715	24909	-			EaI	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	24906	25499	-			EaD	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	24906	25616	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	25496	25855	-	conserved phage protein of unknown function	hypothetical protein	EaF	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	25830	25967	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	25964	26461	-	conserved phage protein of unknown function	hypothetical protein	EaE	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	26449	26619	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	26630	26923	-	abc2 anti-recbcd	abc2 anti-RecBCD	abc2 anti-RecBCD	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	26970	27254	-	conserved phage protein of unknown function	transcriptional regulator, D5-like	Abc1	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_002371.2	27254	27871	-	erf-like ssdna annealing protein	Erf-like ssDNA annealing protein	Erf-like ssDNA annealing protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	27868	28011	-	erf recombination cofactor arf	Erf recombination cofactor Arf	Erf recombination cofactor Arf	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	28001	28189	-	kil protein for bacterial septation inhibition	Kil protein for bacterial septation inhibition	Kil protein for bacterial septation inhibition	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	28170	28328	-	ciii anti-termination	CIII anti-termination	CIII anti-termination	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	28414	28725	-	superinfection exclusion	superinfection exclusion	superinfection exclusion	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	28873	29076	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	29076	29312	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	29349	29543	-	restriction alleviation ral	restriction alleviation ral	restriction alleviation ral	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	29581	30336	+	superinfection exclusion inhibits sieb	superinfection exclusion inhibits SieB		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	29758	30336	+			superinfection exclusion; inhibits SieB	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	29830	30336	+			superinfection exclusion; inhibits SieB	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	30357	30659	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	30387	30545	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	30679	30891	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	31013	31663	-	transcriptional repressor	hypothetical protein	C2	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	31744	31929	+	transcriptional regulator	transcriptional regulator	transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	32036	32314	+	conserved phage protein of unknown function	CII-like transcriptional activator	CII-like transcriptional activator	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_002371.2	32349	32495	+	tail protein	tail protein	tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	32488	33303	+	replication initiation o-like	replication initiation O-like	replication initiation O-like	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	33300	34676	+	dnab-like replicative helicase	hypothetical protein	hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	34673	34753	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	34750	35187	+	ninb/ orf homologous recombination mediator	NinB/ Orf homologous recombination mediator	NinB/ Orf homologous recombination mediator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	35184	35357	+	conserved phage protein of unknown function	hypothetical protein	NinD	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	35324	35500	+	conserved phage protein of unknown function	hypothetical protein	NinE	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	35497	35835	+	conserved phage protein of unknown function	hypothetical protein	NinX	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	35828	36004	+	conserved phage protein of unknown function	hypothetical protein	NinF	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	35997	36608	+	ning/ rap dna junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	NinG/ Rap DNA junction specific endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	36605	36829	+	conserved phage protein of unknown function	hypothetical protein	NinY	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	36826	37029	+			NinH	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	36856	37029	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	37010	37189	+	conserved phage protein of unknown function	hypothetical protein	NinZ	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	37186	37809	+	anti-termination protein q-like	anti-termination protein Q-like	transcription antitermination protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	37899	38108	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	38131	38235	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	38244	38570	+	holin/anti-holin	holin/anti-holin	holin/anti-holin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	38253	38570	+			holin/anti-holin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	38551	38991	+			endolysin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	38554	38991	+	endolysin	endolysin		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	38988	39425	+	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	39187	39372	+			Rz-like spanin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	39466	39651	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	39575	40180	+			anti-repressor	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	39644	40180	+	conserved phage protein of unknown function	Rha-like transcriptional regulator		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_002371.2	40173	40325	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	40310	40474	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	40329	40406	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_002371.2	40446	40706	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	40768	40932	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	40947	41039	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_002371.2	41014	41256	+	conserved phage protein of unknown function	hypothetical protein	Orf80	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	41258	41437	+	conserved phage protein of unknown function	hypothetical protein	Orf59c	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_002371.2	41455	41724	+	conserved phage protein of unknown function	terminase small subunit		False	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_005859.1	124	858	-	polynucleotide kinase	polynucleotide kinase	deoxynucleoside-5'-monophosphatase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	939	1334	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	1371	1649	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	1706	3376	-	dna transfer protein	DNA transfer protein	DNA transfer protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	3473	3670	-	membrane protein	membrane protein	membrane protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	3727	4134	-	dna binding protein	DNA binding protein	DNA binding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	4230	4481	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	4538	4639	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	4715	4918	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	4915	5022	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	4915	5118	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	5206	5319	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	5411	5929	-	hnh endonuclease	hypothetical protein	putative H-N-H-endonuclease P-TflVII	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	6205	6294	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	6495	7505	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	7624	7854	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	7904	8083	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	8086	8298	+	endonuclease nicking abasic sites generated by host uracil glycosylase ung	endonuclease nicking abasic sites generated by host uracil glycosylase Ung	endonuclease nicking abasic sites generated by host uracil glycosylase Ung	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	8300	8644	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	8681	8938	+	hypothetical protein	hypothetical protein	hypothetical protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	8954	9157	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	9171	9398	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	9653	9883	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	9870	10022	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	10030	10128	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	10194	10331	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	10368	10460	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	10580	10675	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	10680	10775	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	10936	11820	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	11902	12510	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	12510	12695	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	12695	12928	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	12916	13206	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	13199	13645	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	13199	13747	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	13647	13850	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	13816	13926	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	13907	14278	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	14226	14687	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	14684	14884	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	14841	14987	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	14984	15310	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	15300	15545	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	15542	15823	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	15823	15987	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	15987	16238	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	16317	16748	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	16801	16923	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	16916	17437	-	phosphoesterase	phosphoesterase	phosphoesterase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	17437	18300	-	nini-like serine-threonine phosphatase	NinI-like serine-threonine phosphatase	NinI-like serine-threonine phosphatase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	18303	18548	-	major capsid protein	major head protein	major head protein	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_005859.1	18646	18936	-	thioredoxin domain	thioredoxin domain	putative thioredoxin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	18929	19360	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	19436	19852	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	19931	20344	-	endolysin	endolysin	endolysin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	20341	20997	-			holin	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	20341	21024	-	holin	holin		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	21154	21753	-	atp-dependent protease	ATP-dependent protease	ATP-dependent protease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	21766	22518	-	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	deoxynucleoside monophosphate kinase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	22518	22871	-	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	22802	23245	-	rz-like spanin	Rz-like spanin	Rz-like spanin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	23245	23742	-	hnh endonuclease	HNH endonuclease	H-N-H-endonuclease F-TflVI	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	23739	24437	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	24592	24936	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	25047	25331	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	25328	25624	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	25328	25657	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	25638	26150	-	hnh endonuclease	HNH endonuclease	H-N-H-endonuclease F-TflV	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	26147	26443	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	26147	26446	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	26436	26717	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	26794	27141	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	27263	27439	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	27263	27574	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	27495	27656	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	27656	28024	-	conserved phage protein of unknown function	hypothetical protein	putative acetyltransferase-related protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	28108	28191	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	28302	28592	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	28752	28916	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	28909	29160	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	29397	29978	-	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	29980	30180	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	30434	30550	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	30566	30673	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	30651	30824	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	31022	31606	-	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	32048	32140	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	32240	32407	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	32593	32751	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	32612	32755	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	32733	32942	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	32995	33087	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	33115	33213	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	33205	33552	-			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	33205	33633	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	33664	33849	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	33860	33988	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	34006	34524	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	34627	34755	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	34806	35078	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	35617	35892	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	35983	36189	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	36182	36349	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	36379	37062	-	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	37279	37797	-			DNA primase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	37279	37848	-	dna primase	DNA primase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	37849	38034	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	38064	39029	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	39051	39467	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	39477	39671	+	hypothetical protein	hypothetical protein	hypothetical protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	39791	40738	-	lipoprotein	lipoprotein	lipoprotein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	40917	41030	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	41127	41216	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	41229	41318	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	41617	42045	-	trna amidotransferase	tRNA amidotransferase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	41617	42051	-			tRNA amidotransferase	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	42051	42221	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	42290	42739	-	endolysin	endolysin	endolysin	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	42745	43062	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	43078	43182	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	43505	44143	-	tail fiber protein	tail fiber protein	tail fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	44196	44378	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	44449	45150	-	exonuclease	exonuclease	exonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	45179	45415	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	45458	45973	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	46057	46335	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	46412	46888	-	rnase h	Rnase H	Rnase H	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	47022	47861	-	thymidylate synthase	thymidylate synthase	thymidylate synthase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	47861	48394	-	dihydrofolate reductase	dihydrofolate reductase	putative dihydrofolate reductase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	48391	49536	-	conserved phage protein of unknown function	ribonucleoside diphosphate reductase small subunit	putative aerobic ribonucleoside diphosphate reductase, small subunit	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_005859.1	49536	50060	-	hnh endonuclease	HNH endonuclease	putative H-N-H-endonuclease P-TflVIII	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	50072	50179	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	50163	52598	-	ribonucleotide reductase large subunit	ribonucleotide reductase large subunit	ribonucleoside-diphosphate reductase large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	52678	52836	-	tail length tape measure protein	tail length tape measure protein	tail length tape measure protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	52838	53590	-	phoh-like phosphate starvation-inducible	PhoH-like phosphate starvation-inducible	PhoH-like phosphate starvation-inducible	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	53607	53708	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	53961	55685	+	nrdd-like anaerobic ribonucleotide reductase large subunit	NrdD-like anaerobic ribonucleotide reductase large subunit	NrdD-like anaerobic ribonucleotide reductase large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	55786	56166	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	56159	56392	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	56447	57265	+	sir2 (nad-dependent deacetylase)	Sir2 (NAD-dependent deacetylase)	Sir2 (NAD-dependent deacetylase)	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	57243	57428	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	57419	57601	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	57588	58094	+	sir2 (nad-dependent deacetylase)	Sir2 (NAD-dependent deacetylase)	Sir2 (NAD-dependent deacetylase)	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	58097	58525	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	58535	58927	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	58962	59063	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	59204	59320	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	59339	59455	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	59545	62331	+	replication origin binding	replication origin binding	replication origin binding	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	62318	62836	+	hnh endonuclease	HNH endonuclease	HNH endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	62820	63053	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	63122	63826	+	helicase	helicase	helicase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	63819	64070	+	transcriptional regulator	transcriptional regulator	transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	64174	64584	+	dna binding protein	DNA binding protein	DNA binding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	64621	64917	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	64968	65276	+	transcriptional regulator	transcriptional regulator	transcriptional regulator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	65364	66335	+	nad-dependent dna ligase	NAD-dependent DNA ligase	NAD-dependent DNA ligase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	66308	66430	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	66538	67317	+	nad-dependent dna ligase	NAD-dependent DNA ligase	NAD-dependent DNA ligase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	67310	68077	+	transcriptional regulator, d5-like	transcriptional regulator, D5-like	D5 protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	68109	69617	+	dnab-like replicative helicase	DnaB-like replicative helicase	D6 protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	69614	70147	+	hnh endonuclease	HNH endonuclease	putative H-N-H-endonuclease P-TflX	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	70144	71034	+	dna primase	DNA primase	putative DNA replication primase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	71097	73664	+	dna polymerase	DNA polymerase	DNA polymerase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	73657	74154	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	74151	75503	+	dna helicase	DNA helicase	putative ATP-dependent helicase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	75724	76008	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	76001	76774	+	single strand dna binding protein	single strand DNA binding protein	single strand DNA binding protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	76811	77788	+	sbcd-like subunit of palindrome specific endonuclease	SbcD-like subunit of palindrome specific endonuclease	putative recombination endonuclease, subunit D12	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	77769	79607	+	sbcc-like subunit of palindrome specific endonuclease	SbcC-like subunit of palindrome specific endonuclease	putative recombination endonuclease, subunit D13	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	79611	80093	+	rusa-like holliday junction resolvase	RusA-like Holliday junction resolvase	RusA-like Holliday junction resolvase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	80093	80968	+	exonuclease	exonuclease	flap endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	80965	81411	+	dutpase	dUTPase	dUTPase	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	81374	81637	+	putative tail-associated protein	hypothetical protein	hypothetical protein	True	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	81865	86055	-	tail fiber protein	tail fiber protein	tail fiber protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	81955	82326	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	86055	86318	-	conserved phage protein of unknown function	unknown function	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	86294	86479	-	collar tail protein for l-shaped tail fibre attachment	collar tail protein for L-shaped tail fibre attachment	collar tail protein for L-shaped tail fibre attachment	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	86484	88550	-	straight fibre tail protein	straight fibre tail protein	straight fibre tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	88551	91400	-	central tail fiber j	central tail fiber J	tail protein Pb3	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	91397	92011	-	distal tail protein	distal tail protein	distal tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	92014	92103	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	92121	95780	-	tail length tape measure protein	tail length tape measure protein	tail length tape measure protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	95777	96529	-			endonuclease	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	95777	96574	-	endonuclease	endonuclease		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	96624	96992	-	tail assembly chaperone	tail assembly chaperone	tail assembly chaperone	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	97054	97458	-	tail assembly chaperone	Tail assembly chaperone	Tail assembly chaperone	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	97458	98354	-	base plate tail tube protein	base plate tail tube protein	base plate tail tube protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	98359	99753	-	major tail protein	major tail protein	major tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	99780	100265	-	tail terminator	tail terminator	tail terminator	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	100269	101036	-	tail completion or neck1 protein	tail completion or Neck1 protein	tail completion or Neck1 protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	101036	101548	-	head-tail adaptor	head-tail adaptor	head-tail adaptor	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	101608	102984	-	conserved phage protein of unknown function	major head protein	major head protein	True	A_UNNAMED_B_NAMED	NOT_ADJUDICATED				
+NC_005859.1	103002	103634	-	capsid maturation protease	head maturation protease	head maturation protease	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_005859.1	103638	104132	-	hoc-like head decoration protein	tail protein	Hoc-like head decoration	True	DIFFERENT_NAMED_LABELS	NOT_ADJUDICATED				
+NC_005859.1	104135	105346	-	portal protein	portal protein	portal protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	105346	105783	-	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	105773	106606	-	endonuclease	endonuclease	endonuclease	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	106618	107934	-	terminase large subunit	terminase large subunit	terminase large subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	107934	108416	-	terminase small subunit	terminase small subunit	terminase small subunit	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	108427	110349	-	receptor binding tail protein	receptor binding tail protein	receptor binding tail protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	110429	110662	+	cor superinfection exclusion protein	Cor superinfection exclusion protein	Cor superinfection exclusion protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	110781	110954	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	110826	110954	+			hypothetical protein	True	MODEL_MISSING_BOTH	NOT_ADJUDICATED				
+NC_005859.1	110954	111061	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	111058	111252	+	conserved phage protein of unknown function	hypothetical protein	hypothetical protein	True	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	111245	111490	+	membrane protein	membrane protein	membrane protein	True	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	111523	111651	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	111655	112389	-	polynucleotide kinase	polynucleotide kinase		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	112470	112865	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	112902	113180	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	113237	114907	-	dna transfer protein	DNA transfer protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	115004	115201	-	membrane protein	membrane protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	115258	115665	-	dna binding protein	DNA binding protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	115761	116012	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	116069	116170	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	116246	116449	-	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	116446	116649	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	116737	116850	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	116942	117460	-	hnh endonuclease	hypothetical protein		False	A_NAMED_B_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	117736	117825	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	118026	119036	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	119155	119385	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	119435	119614	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	119617	119829	+	endonuclease nicking abasic sites generated by host uracil glycosylase ung	endonuclease nicking abasic sites generated by host uracil glycosylase Ung		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	119831	120175	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	120212	120469	+	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	120485	120688	+	conserved phage protein of unknown function	hypothetical protein		False	BOTH_UNNAMED	NOT_ADJUDICATED				
+NC_005859.1	120702	120929	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	121184	121414	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				
+NC_005859.1	121455	121748	-	hypothetical protein	hypothetical protein		False	SAME_NORMALIZED_LABEL	NOT_ADJUDICATED				

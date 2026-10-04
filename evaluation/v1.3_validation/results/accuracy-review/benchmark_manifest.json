@@ -1,0 +1,74 @@
+{
+  "analysis_type": "FRESH_EVIDENCE_DECISION_AUDIT",
+  "raw_searches_generated_fresh": true,
+  "source_commit": "6ab82e5c49041fe860c46382ee570e9af3e1defe",
+  "current_fusion_rules_version": "1.11",
+  "current_fusion_sha256": "4e2eb2b004671d65c7a0df977000dcb1149b3e966df7696f287553d1284609ff",
+  "runner_sha256": "ac853028beb181ef1675eee16a4e3ef6ed3838894fa1911c7ef23a519bd1d1c6",
+  "genomes": [
+    {
+      "accession": "NC_000866.4",
+      "fresh_manifest_sha256": "0af9cae2eef5b63263809285bb91f97938cdf763ef0efd0d869233076748ef28",
+      "fresh_input_sha256": "43e147ed766f12bdb3e8102642cb39a9ed1503696834741bba93fa5f80695680",
+      "raw_evidence_sha256": "112fe0dc526814b3cd83f88aa6df8c80cf178491f8f7fc0c6b1070c6fae338b9",
+      "corrected_evidence_sha256": "112fe0dc526814b3cd83f88aa6df8c80cf178491f8f7fc0c6b1070c6fae338b9"
+    },
+    {
+      "accession": "NC_000929.1",
+      "fresh_manifest_sha256": "497ed54f3ee7c3272f9a950b88eee79282d4c95ae66e04cac3e54a30f5f7ab80",
+      "fresh_input_sha256": "dbb0abf7a35bdda344a42176d2d4b9e414c40ae7255ff7556cde8e161a5653b9",
+      "raw_evidence_sha256": "e14a5bc0e9723da991fa271bd04eb25dd1290983144f48560a044b0371261766",
+      "corrected_evidence_sha256": "e14a5bc0e9723da991fa271bd04eb25dd1290983144f48560a044b0371261766"
+    },
+    {
+      "accession": "NC_001416.1",
+      "fresh_manifest_sha256": "eb4577b995d138b3cae54fcc0493bf40f287083e0f1d0ecbf265f202cd68e750",
+      "fresh_input_sha256": "dfe1fbbb945aab5a8bccd99bc95c28209b1414a7421edb33ba06972fedcd4dc1",
+      "raw_evidence_sha256": "49dc55c4bcacbe583e32f0fd2fdf26c7c11a53e85ae9ba494681910a4ae64c8c",
+      "corrected_evidence_sha256": "49dc55c4bcacbe583e32f0fd2fdf26c7c11a53e85ae9ba494681910a4ae64c8c"
+    },
+    {
+      "accession": "NC_001422.1",
+      "fresh_manifest_sha256": "db799237babd448d8eb007890c3d5973b76f581101e006bf005021c625e33b49",
+      "fresh_input_sha256": "a2bfb508cd6fcb36cb2960f01b7763d9de5928d2ad5befd854b2eacf8dabc799",
+      "raw_evidence_sha256": "1adc3d57dd6546a8ec8ce7d3f45141450597c9934816af4befaa4d4200b8bc8f",
+      "corrected_evidence_sha256": "1adc3d57dd6546a8ec8ce7d3f45141450597c9934816af4befaa4d4200b8bc8f"
+    },
+    {
+      "accession": "NC_001604.1",
+      "fresh_manifest_sha256": "38587fcc7b4d90ed26dab51a50dd409727604112205bcdf1273ebc878c89910a",
+      "fresh_input_sha256": "b52a291b02fb2e2624476da9092ae87ef64b0afa080ef024f46c56c2ccef3e79",
+      "raw_evidence_sha256": "430e06f355a2a7b02f570d9be139f16b04745ab4e89a66a2db4e7836145aee48",
+      "corrected_evidence_sha256": "430e06f355a2a7b02f570d9be139f16b04745ab4e89a66a2db4e7836145aee48"
+    },
+    {
+      "accession": "NC_002371.2",
+      "fresh_manifest_sha256": "06c38826b61eba70c7aac7d354b2e8e9db9877d99b27c2013af6ecafe99ae0f6",
+      "fresh_input_sha256": "a6820c53d462165a5d746fbea6debd8f22d9b4ab0e0d00f53dec1330778a557b",
+      "raw_evidence_sha256": "6e853a301d40d601202513b68315369e99be35a649a2a91ad0d9c80969864980",
+      "corrected_evidence_sha256": "6e853a301d40d601202513b68315369e99be35a649a2a91ad0d9c80969864980"
+    },
+    {
+      "accession": "NC_005859.1",
+      "fresh_manifest_sha256": "b46666991dcd343fa955ad7a18c2e562e9c1bd08df6f212a8adc552522d63d44",
+      "fresh_input_sha256": "87c6a49f007a4cc5e29c104a226f4d42331c2b2b814c59910c0e99d994ce1730",
+      "raw_evidence_sha256": "56b9f993d23874c5c8971f70ecf8bec9c352ee95a04821acb43c5130d6a691d8",
+      "corrected_evidence_sha256": "56b9f993d23874c5c8971f70ecf8bec9c352ee95a04821acb43c5130d6a691d8"
+    }
+  ],
+  "database_checksums_table_sha256": "8e0ca7ce669eb04b714afdee3b77a394371c651aa5a7b6e909eb64d8daf4ca83",
+  "omitted_non_scientific_rendering_caches": [],
+  "reclassification_method": "Current rules applied to newly generated raw evidence; no repeat searches",
+  "changed_assignments": 0,
+  "held_out": false,
+  "independence_established": false,
+  "accuracy_superiority_established": false,
+  "scope": "PHROGs-only PhageMine vs standard Pharokka vs viral Prokka; CDS comparison",
+  "limitations": [
+    "Search thresholds differ; commands and adapter manifests retain them",
+    "Prokka uses its packaged databases; PHROGs is shared by PhageMine and Pharokka",
+    "Reference gene symbols are locus-specific; differences are not proven errors",
+    "This familiar panel is not a held-out accuracy benchmark",
+    "Decision changes require independent review; partial-profile filtering can increase abstention"
+  ]
+}
