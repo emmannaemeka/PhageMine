@@ -170,12 +170,36 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
     def _metadata_index(self) -> Path | None:
         """Build/reuse a checksum-validated local metadata index atomically."""
         if not self.metadata_path or not self.metadata_path.exists(): return None
-        source=str(self.metadata_path); stat=self.metadata_path.stat(); sha=hashlib.sha256(self.metadata_path.read_bytes()).hexdigest()
+        source=str(self.metadata_path); stat=self.metadata_path.stat()
         index=self.metadata_path.with_suffix(self.metadata_path.suffix+'.sqlite')
+        def signature():
+            source_stat = self.metadata_path.stat()
+            index_stat = index.stat() if index.is_file() else None
+            return (source, source_stat.st_dev, source_stat.st_ino, source_stat.st_size,
+                    source_stat.st_mtime_ns, source_stat.st_ctime_ns,
+                    (index_stat.st_ino, index_stat.st_size, index_stat.st_mtime_ns,
+                     index_stat.st_ctime_ns) if index_stat else None)
+        current = signature()
+        if current == getattr(self, '_verified_metadata_signature', None):
+            return index
+        def remember_verified():
+            verified = signature()
+            if verified[:6] != current[:6]:
+                raise RuntimeError('Swiss-Prot metadata changed while its index was being verified')
+            self._verified_metadata_signature = verified
+        # Validate once for unchanged files, rather than reading the complete
+        # Swiss-Prot metadata for every alignment hit. Stream to bound memory.
+        digest = hashlib.sha256()
+        with self.metadata_path.open('rb') as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+                digest.update(chunk)
+        sha = digest.hexdigest()
         try:
             with sqlite3.connect(index) as db:
                 meta=db.execute("SELECT value FROM meta WHERE key='source_sha256'").fetchone()
-                if meta and meta[0]==sha: return index
+                if meta and meta[0]==sha:
+                    remember_verified()
+                    return index
         except sqlite3.Error: pass
         tmp=index.with_name(index.name+'.tmp')
         if tmp.exists(): tmp.unlink()
@@ -193,7 +217,9 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
                     else: current.append(line.rstrip('\n'))
             db.executemany('INSERT OR REPLACE INTO metadata VALUES (?,?)',rows)
             db.executemany('INSERT INTO meta VALUES (?,?)',[('source_sha256',sha),('source_path',source),('source_size',str(stat.st_size)),('index_version','1')]); db.commit()
-        os.replace(tmp,index); return index
+        os.replace(tmp,index)
+        remember_verified()
+        return index
 
     @staticmethod
     def _parse_dat_record(lines: list[str]) -> dict[str, Any]:

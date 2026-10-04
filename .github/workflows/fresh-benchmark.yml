@@ -8,6 +8,7 @@ on:
       - 'evaluation/v1.3_validation/external_panel/**'
       - 'src/phagemine/fusion.py'
       - 'src/phagemine/database_installer.py'
+      - 'src/phagemine/swissprot.py'
   workflow_dispatch:
 
 permissions:
@@ -15,7 +16,7 @@ permissions:
 
 concurrency:
   group: full-phagemine-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   benchmark:
