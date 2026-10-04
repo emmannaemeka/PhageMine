@@ -1,4 +1,5 @@
 import re
+import json
 from pathlib import Path
 
 import phagemine
@@ -15,3 +16,8 @@ def test_release_versions_are_synchronized():
     assert project_version is not None
     assert citation_version is not None
     assert project_version.group(1) == phagemine.__version__ == citation_version.group(1)
+    assert json.loads((ROOT / '.zenodo.json').read_text())['version'] == phagemine.__version__
+    recipe = (ROOT / 'packaging/bioconda/recipe/meta.yaml').read_text()
+    assert f'set version = "{phagemine.__version__}"' in recipe
+    if re.fullmatch(r'\d+\.\d+\.\d+', phagemine.__version__):
+        assert (ROOT / 'docs/releases' / f'v{phagemine.__version__}.md').is_file()

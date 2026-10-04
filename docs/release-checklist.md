@@ -1,48 +1,40 @@
 # Release checklist
 
-A PhageMine release is complete only after the published artifact, not merely
-the source checkout, passes these checks.
+## GitHub source and wheel release
 
-Record each gate as PASS, FAIL or NOT RUN with artifact hashes and logs.
-NOT RUN is an outstanding gate. Keep historical release evidence separate
-from current development-branch checks.
+1. Synchronize the stable version in package metadata, citation metadata, Zenodo
+   metadata and the local Conda recipe. Add dated release notes and a changelog.
+2. Run the complete unit suite and GUI tests on the release commit. Install the
+   built wheel with dependencies in clean Linux, Intel macOS and Apple-silicon
+   macOS environments; run `pip check` and the installed-package smoke check.
+3. Pass Linux external-tool integration and container annotation, output
+   validation and bundle verification on that same commit. Preserve check URLs
+   and exact dependencies in the release artifacts.
+4. Retain the fresh all-six-resource benchmark and sequence-bound naming review.
+   Rerun biological searches when functional code or sequence inputs change;
+   a metadata-only stable version promotion does not require repeated searches.
+5. Build the wheel and source distribution, verify their version metadata and
+   SHA256 checksums, and execute the newly built wheel outside source imports.
+6. Create the version tag from the checked commit. Upload all assets to a draft
+   release, then publish only if the release commit remains current `main` and
+   all required checks remain successful. Never reuse a published version.
+7. Verify the public release, tag target and downloaded asset checksums.
 
-1. Update the version in `pyproject.toml`, `src/phagemine/__init__.py`,
-   `CITATION.cff`, and `CHANGELOG.md`; run the metadata consistency test.
-2. Run the complete unit suite and the external-tool integration suite.
-3. Create the release tag from the exact reviewed commit. Do not add documented
-   functionality to `main` under an already published version number.
-4. Update the Bioconda recipe to the new tag and checksum. Its run dependencies
-   must include `phanotate`, `hmmer`, `mmseqs2`, `diamond`, `mash`, and `blast`.
-5. In clean Linux, Intel macOS, and Apple-silicon macOS environments, install
-   the Bioconda artifact using the documented command.
-6. Run each binary directly and require a zero exit status: PHANOTATE, HMMER,
-   MMseqs2, DIAMOND, and Mash.
-7. Run `phagemine doctor --deep`; all production executables, operational
-   database format checks, and intended capabilities must be `READY`, and the
-   command must exit zero.
-8. Install all six databases in a clean user-data directory and run Doctor
-   again. Repeat with a registry retained from the immediately previous
-   PhageMine version.
-9. Run the bundled demo genome through Core and full-evidence annotation, and
-   run a small cohort through discovery/Both mode. Verify expected reports,
-   tables, figures, provenance, and GenBank pre-submission outputs.
-10. On at least one real phage with a reviewed reference annotation, compare
-    PhageMine gene calls and products with Pharokka plus Phold and multiPhATE2;
-    include Prokka as a general prokaryotic baseline. Record exact-coordinate
-    agreement, caller-specific ORFs, boundary differences, hallmark-product
-    agreement, and unresolved disagreements. Do not treat tool consensus as
-    experimental validation or infer phage lifestyle.
-11. Publish the release only after the clean-install evidence and exact package
-    versions are recorded in the release notes.
-12. Run the tests with `PHAGEMINE_REGISTRY_PATH` set to a disposable path and
-    verify the real user registry is byte-for-byte unchanged afterward.
-13. Install the built wheel into a fresh environment with dependencies and run
-    `python -m pip check`. Execute `tools/smoke_installed.py` outside source
-    imports using a new output directory and retain its JSON record. Run both
-    the synthetic and `--external` Core check; neither validates accuracy.
-14. Install the GUI extra, run `tests/test_gui.py` and `tests/test_gui_app.py`,
-    and inspect the actual browser interface. Check Both results, repeated
-    protein IDs, incomplete/failed runs and submission exports.
-15. Complete independent held-out validation before claiming superiority or
-    calibrated confidence; report unresolved adjudications explicitly.
+The publication workflow enforces the current-main CI, external integration and
+container gates. Tests use disposable database registries. Release validation
+is software validation; it does not establish superior biological accuracy.
+
+## Additional distribution channels
+
+PyPI and Bioconda publication are separate actions. Do not describe them as
+available merely because a GitHub release exists. A public Bioconda submission
+must replace the local recipe source with the release URL and actual checksum,
+then pass channel-specific clean-install and executable checks. Keep external
+executables and post-install database setup explicit in every installation route.
+
+## Scientific claims
+
+Use independent representative or held-out review before claiming accuracy
+superiority or calibrated confidence. Report reference concordance separately
+from functional correctness, and retain unresolved adjudications. Historical
+release records remain separate from current evidence.

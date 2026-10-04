@@ -1,7 +1,9 @@
 include environment.yml CITATION.cff CHANGELOG.md RELEASE_VALIDATION.md
+include .zenodo.json
 include Dockerfile .dockerignore
 recursive-include packaging *.yaml *.sh
 recursive-include examples *.fasta *.json
 recursive-include docs *.md *.png *.svg *.pdf *.tsv *.py
 include RESEARCHER_VALIDATION.md
 include tools/smoke_installed.py
+include tools/publish_verified_release.py

@@ -1,0 +1,74 @@
+name: Publish verified release
+on:
+  workflow_run:
+    workflows: ["PhageMine CI", "External-tool integration", "Container annotation smoke"]
+    types: [completed]
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: release-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require all checks on current main
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: python tools/publish_verified_release.py --check --repo "$GITHUB_REPOSITORY" --sha "$RELEASE_COMMIT"
+      - name: Read synchronized stable release metadata
+        if: steps.gate.outputs.ready == 'true'
+        id: version
+        run: |
+          python - <<'PY'
+          import os, re, tomllib
+          from pathlib import Path
+          version=tomllib.loads(Path('pyproject.toml').read_text())['project']['version']
+          if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
+              raise SystemExit('Publication requires a stable version')
+          package=re.search(r'__version__ = "([^"]+)"', Path('src/phagemine/__init__.py').read_text()).group(1)
+          citation=re.search(r'^version: (\S+)', Path('CITATION.cff').read_text(), re.M).group(1)
+          assert version == package == citation
+          notes=Path('docs/releases') / ('v' + version + '.md')
+          assert notes.is_file(), 'Release notes are required'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as handle:
+              handle.write('tag=v' + version + '\nnotes=' + str(notes) + '\n')
+          PY
+      - name: Build release and benchmark evidence
+        if: steps.gate.outputs.ready == 'true'
+        run: |
+          python -m pip install build
+          python -m build
+          python -m pip install dist/*.whl
+          python -m pip check
+          python tools/smoke_installed.py --input examples/demo_phage.fasta --output release-smoke
+          cp release-smoke/installed_smoke_check.json dist/installed_smoke_check.json
+          python -m pip freeze > dist/python-dependencies.txt
+          python tools/publish_verified_release.py --evidence --repo "$GITHUB_REPOSITORY" --sha "$RELEASE_COMMIT" --output dist/release-validation.json
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          files=sorted(p for p in Path('dist').iterdir() if p.is_file())
+          Path('dist/SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name + '\n' for p in files))
+          PY
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      - name: Publish once from the verified commit
+        if: steps.gate.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_NOTES: ${{ steps.version.outputs.notes }}
+          RELEASE_COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: python tools/publish_verified_release.py --repo "$GITHUB_REPOSITORY" --sha "$RELEASE_COMMIT" --tag "$RELEASE_TAG" --notes "$RELEASE_NOTES"
