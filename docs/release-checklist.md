@@ -3,6 +3,10 @@
 A PhageMine release is complete only after the published artifact, not merely
 the source checkout, passes these checks.
 
+Record each gate as PASS, FAIL or NOT RUN with artifact hashes and logs.
+NOT RUN is an outstanding gate. Keep historical release evidence separate
+from current development-branch checks.
+
 1. Update the version in `pyproject.toml`, `src/phagemine/__init__.py`,
    `CITATION.cff`, and `CHANGELOG.md`; run the metadata consistency test.
 2. Run the complete unit suite and the external-tool integration suite.
@@ -33,3 +37,12 @@ the source checkout, passes these checks.
     versions are recorded in the release notes.
 12. Run the tests with `PHAGEMINE_REGISTRY_PATH` set to a disposable path and
     verify the real user registry is byte-for-byte unchanged afterward.
+13. Install the built wheel into a fresh environment with dependencies and run
+    `python -m pip check`. Execute `tools/smoke_installed.py` outside source
+    imports using a new output directory and retain its JSON record. Run both
+    the synthetic and `--external` Core check; neither validates accuracy.
+14. Install the GUI extra, run `tests/test_gui.py` and `tests/test_gui_app.py`,
+    and inspect the actual browser interface. Check Both results, repeated
+    protein IDs, incomplete/failed runs and submission exports.
+15. Complete independent held-out validation before claiming superiority or
+    calibrated confidence; report unresolved adjudications explicitly.

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "source_annotation_sha256": "089e11b74b28723248471c32f16aeb4e9eb3d984d94a3df9e4bc410a94089fae",
+  "reviewer": "Codex evidence review; user-approved product correction",
+  "annotations": {
+    "PM_000190": {
+      "product": "capsid vertex protein",
+      "reason": "Exact sequence match to reviewed UniProt P19896 distinguishes vertex pentons from major capsid hexamers.",
+      "evidence_reference": "https://www.uniprot.org/uniprotkb/P19896/entry; PubMed:15071181,11162794; reviewed record version 105"
+    }
+  }
+}

@@ -14,5 +14,6 @@ def main(argv: list[str] | None = None) -> int:
 
     app = Path(__file__).with_name("app.py")
     passthrough = sys.argv[1:] if argv is None else argv
-    sys.argv = ["streamlit", "run", "--browser.gatherUsageStats=false", "--server.headless=true", *passthrough, str(app)]
+    sys.argv = ["streamlit", "run", "--browser.gatherUsageStats=false", "--server.headless=true",
+                "--server.address=127.0.0.1", *passthrough, str(app)]
     return int(stcli.main() or 0)

@@ -27,18 +27,15 @@ python -m pip install .
 phagemine doctor
 ```
 
-Install the annotation databases before running functional annotation:
+Install the databases before running functional annotation:
 
 ```bash
-phagemine databases install pfam
-phagemine databases install vogdb
-phagemine databases install swissprot
-phagemine databases install phrogs
+phagemine databases install --all
 ```
 
-For protein-family and reference-genome comparisons, also install `pmfdb` and
-`inphared`. Database preparation requires additional disk space; allow at least
-15–20 GiB for the complete resource set.
+This installs PHROGs, Swiss-Prot, Pfam and VOGDB, plus PMFDB and INPHARED
+comparative references. Prepared databases require additional disk space beyond
+the download sizes.
 
 See the [installation guide](docs/installation.md) for platform requirements
 and troubleshooting.
@@ -48,7 +45,7 @@ and troubleshooting.
 Supply a single-genome nucleotide FASTA file:
 
 ```bash
-phagemine run genome.fasta --output results/genome --evidence full --threads 8
+phagemine run genome.fasta --output results/genome --threads 8
 ```
 
 Open `results/genome/report.html` to browse the results. The output directory
@@ -61,9 +58,8 @@ To check the installation with the bundled example:
 phagemine run examples/demo_phage.fasta --output results/example
 ```
 
-This example runs without evidence databases and checks gene prediction and
-report generation. Use `--evidence full` with the installed databases for
-functional annotation.
+Installed databases are detected automatically. Without them, the example
+checks gene prediction and report generation; functional evidence is unavailable.
 
 Run `phagemine --help` for all commands and `phagemine run --help` for annotation
 options.

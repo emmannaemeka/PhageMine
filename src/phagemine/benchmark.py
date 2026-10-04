@@ -1,6 +1,7 @@
 """Import-only benchmarking for PhageMine and external annotations."""
 from __future__ import annotations
 import csv,json,re
+from urllib.parse import unquote
 from pathlib import Path
 from hashlib import sha256
 from .hallmarks import HALLMARKS
@@ -10,8 +11,8 @@ def import_gff(path, tool, genome_id=None):
     for line in path.read_text().splitlines():
         if not line or line.startswith('#'): continue
         f=line.split('\t')
-        if len(f)<9 or f[2].lower() not in {'cds','gene'}: continue
-        attrs=dict((x.split('=',1) for x in f[8].split(';') if '=' in x)); start,end=int(f[3]),int(f[4]); seq=attrs.get('translation','')
+        if len(f)<9 or f[2].lower() not in {'cds'}: continue
+        attrs={unquote(k):unquote(v) for k,v in (x.split('=',1) for x in f[8].split(';') if '=' in x)}; start,end=int(f[3]),int(f[4]); seq=attrs.get('translation','')
         records.append({'genome_id':genome_id or f[0],'tool':tool,'tool_version':None,'locus_id':attrs.get('ID') or attrs.get('locus_tag') or f"{tool}_{len(records)+1}",'start':start,'end':end,'strand':f[6],'protein_length':len(seq) if seq else None,'protein_sequence_checksum':sha256(seq.encode()).hexdigest() if seq else None,'product':attrs.get('product'),'gene':attrs.get('gene'),'source_annotation':attrs,'original_identifier':attrs.get('ID'),'source_path':str(path),'source_sha256':source_checksum})
     return records
 
@@ -21,22 +22,33 @@ def import_multiphate(path, genome_id=None): return import_gff(path, 'multiPhATE
 
 def import_genbank(path, tool, genome_id=None):
     """Import CDS coordinates and products from a GenBank flat file."""
-    path=Path(path); source_checksum=sha256(path.read_bytes()).hexdigest(); records=[]; current=None; qualifier=None
+    path=Path(path); source_checksum=sha256(path.read_bytes()).hexdigest(); records=[]; current=None; qualifier=None; record_id=genome_id; locus_id=None
     for line in path.read_text().splitlines():
+        locus = re.match(r"^LOCUS\s+(\S+)", line)
+        if locus:
+            if current: records.append(current)
+            current=None; qualifier=None; locus_id=locus.group(1); record_id=genome_id or locus_id
+        accession = re.match(r"^(VERSION|ACCESSION)\s+(\S+)", line)
+        if accession and genome_id is None:
+            if accession.group(1) == "VERSION" or record_id is None or record_id == locus_id:
+                record_id=accession.group(2)
         match=re.match(r"^\s{5}CDS\s+(complement\()?<?(\d+)\.\.>?(\d+)\)?", line)
         if match:
             if current: records.append(current)
-            current={'genome_id':genome_id,'tool':tool,'tool_version':None,'locus_id':None,
+            current={'genome_id':record_id,'tool':tool,'tool_version':None,'locus_id':None,
                      'start':int(match.group(2)),'end':int(match.group(3)),'strand':'-' if match.group(1) else '+',
                      'protein_length':None,'protein_sequence_checksum':None,'product':None,'gene':None,
                      'source_annotation':{},'original_identifier':None}
             qualifier=None; continue
+        if re.match(r"^\s{5}\S", line) or line.startswith(("ORIGIN", "//")):
+            if current: records.append(current)
+            current=None; qualifier=None
         if current is None: continue
         q=re.match(r'^\s+/([A-Za-z_]+)="?(.*)$', line)
         if q:
             qualifier=q.group(1); current['source_annotation'][qualifier]=q.group(2).rstrip('"')
         elif qualifier and re.match(r'^\s{21}\S', line):
-            current['source_annotation'][qualifier] += line.strip().rstrip('"')
+            current['source_annotation'][qualifier] += ('' if qualifier == 'translation' else ' ') + line.strip().rstrip('"')
         else: qualifier=None
     if current: records.append(current)
     for index, record in enumerate(records,1):
@@ -72,10 +84,12 @@ def import_phagemine(results):
     return records
 
 def _relation(a,b):
+    if a.get('genome_id') and b.get('genome_id') and a['genome_id'] != b['genome_id']:
+        return None, 0
     ov=max(0,min(a['end'],b['end'])-max(a['start'],b['start'])+1)
     if a['start']==b['start'] and a['end']==b['end'] and a['strand']==b['strand']: kind='EXACT_MATCH'
-    elif a['strand']==b['strand'] and a['start']==b['start'] and a['end']!=b['end']: kind='STOP_DIFFERENCE'
-    elif a['strand']==b['strand'] and a['end']==b['end'] and a['start']!=b['start']: kind='START_DIFFERENCE'
+    elif a['strand']==b['strand'] and a['start']==b['start'] and a['end']!=b['end']: kind='STOP_DIFFERENCE' if a['strand']=='+' else 'START_DIFFERENCE'
+    elif a['strand']==b['strand'] and a['end']==b['end'] and a['start']!=b['start']: kind='START_DIFFERENCE' if a['strand']=='+' else 'STOP_DIFFERENCE'
     # A one-base contact at a shared endpoint is not a meaningful overlap.
     elif ov > 1 and a['strand']!=b['strand']: kind='STRAND_CONFLICT'
     elif ov > 1 and a['strand']==b['strand']: kind='START_AND_STOP_DIFFERENCE'

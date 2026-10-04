@@ -6,6 +6,8 @@ channels:
 dependencies:
   - python=3.12
   - pip
+  # PHANOTATE 1.6.7 imports pkg_resources, removed in setuptools 81.
+  - setuptools<81
   - phanotate=1.6.7
   - prodigal=2.6.3
   - hmmer=3.4
@@ -13,6 +15,7 @@ dependencies:
   - diamond
   - mash=2.3
   - blast
+  - trnascan-se=2.0.12
   - matplotlib
   - pyhmmer>=0.10,<0.13
   - pytest

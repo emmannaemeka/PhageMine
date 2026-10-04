@@ -1,0 +1,8 @@
+rule_id	term_a	term_b	rationale
+N001	major head protein	major capsid protein	Whole-term structural nomenclature equivalence; supported by reviewed P04535/P19726. Does not equate capsid vertex protein with either term.
+N002	head maturation protease	capsid maturation protease	Whole-term maturation-protease nomenclature; reviewed P06807/Q6QGD7 describe capsid maturation. No inference of substrate specificity.
+N003	head morphogenesis	head morphogenesis protein	Adds the product noun only; does not equate this broad role with a specific assembly protein.
+N004	tail tube	tail tube protein	Adds the product noun only; reviewed P13333 supports the tail-tube role.
+N005	Hoc-like head decoration	Hoc-like head decoration protein	Adds the product noun only; retains the Hoc-like qualifier. Reviewed P18056 supports head decoration.
+N006	head closure Hc1	head closure protein Hc1	Adds the product noun while preserving the Hc1 designation; does not infer a different neck or tail role.
+N007	terminase	terminase protein	Adds the product noun only; does not establish ATPase/nuclease activity or change subunit specificity.

@@ -1,0 +1,59 @@
+name: Full PhageMine benchmark
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/fresh-benchmark.yml'
+      - 'evaluation/v1.3_validation/scripts/run_full_system.py'
+      - 'evaluation/v1.3_validation/external_panel/**'
+      - 'src/phagemine/fusion.py'
+      - 'src/phagemine/database_installer.py'
+      - 'src/phagemine/swissprot.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-phagemine-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    name: All databases on ten genomes
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PHAGEMINE_REGISTRY_PATH: ${{ github.workspace }}/full-registry.json
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make room for complete reference databases
+        run: |
+          sudo rm -rf /usr/local/lib/android /opt/ghc /usr/share/dotnet
+          df -h /
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+      - name: Install current PhageMine
+        shell: micromamba-shell {0}
+        run: python -m pip install .
+      - name: Install and verify all six resources
+        shell: micromamba-shell {0}
+        run: |
+          mkdir -p full-results-setup
+          set -o pipefail
+          phagemine databases install --all --directory "${{ runner.temp }}/full-databases" --threads 2 --json 2>&1 | tee full-results-setup/database-install.log
+          phagemine databases status > full-results-setup/database-status.json
+          cp "$PHAGEMINE_REGISTRY_PATH" full-results-setup/registry.json
+      - name: Generate fresh full-system annotations and evaluate evidence
+        shell: micromamba-shell {0}
+        run: python evaluation/v1.3_validation/scripts/run_full_system.py --registry "$PHAGEMINE_REGISTRY_PATH" --output full-results --threads 2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-phagemine-ten-genome-benchmark
+          path: |
+            full-results/
+            full-results-setup/
+          retention-days: 30

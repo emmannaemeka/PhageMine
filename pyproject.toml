@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phagemine"
-version = "1.2.0"
+version = "1.3.0.dev0"
 description = "Evidence-first phage annotation and discovery mining"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
@@ -19,6 +19,8 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
+    "biopython>=1.85,<2",
+    "psutil>=5,<8",
     "matplotlib>=3.7,<4",
     "pyhmmer>=0.10,<0.13",
     # These providers are invoked automatically for fresh genome analyses.
@@ -33,7 +35,7 @@ Repository = "https://github.com/emmannaemeka/PhageMine"
 Issues = "https://github.com/emmannaemeka/PhageMine/issues"
 
 [project.optional-dependencies]
-gui = ["streamlit>=1.36,<2"]
+gui = ["streamlit>=1.49,<2"]
 test = [
     "biopython>=1.85,<2",
     "build>=1,<2",

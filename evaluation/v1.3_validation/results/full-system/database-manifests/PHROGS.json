@@ -1,0 +1,35 @@
+{
+  "extracted_files": [
+    "VERSION_1_11_0",
+    "all_phrogs.h3m",
+    "phrog_annot_v4.tsv",
+    "phrogs_profile_db",
+    "phrogs_profile_db.dbtype",
+    "phrogs_profile_db.index",
+    "phrogs_profile_db.lookup",
+    "phrogs_profile_db.source",
+    "phrogs_profile_db_h",
+    "phrogs_profile_db_h.dbtype",
+    "phrogs_profile_db_h.index"
+  ],
+  "format_version": "1",
+  "installed_at": "2026-10-04T07:46:23.275750+00:00",
+  "preparation_commands": [],
+  "primary_path": "phrogs_profile_db",
+  "provenance": {
+    "annotations_path": "phrog_annot_v4.tsv",
+    "distribution": "Pharokka database 1.11.0",
+    "hmm_profiles_path": "all_phrogs.h3m",
+    "provider": "PHROGs",
+    "release": "v4"
+  },
+  "resource": "phrogs",
+  "resource_type": "PHROGS",
+  "source_artifacts": [
+    {
+      "md5": "143bb375ddb0b0653e5cb5671f4a7629",
+      "url": "https://zenodo.org/records/21755221/files/pharokka_v1.11.0_databases.tar.gz"
+    }
+  ],
+  "version": "v4-pharokka-1.11.0"
+}

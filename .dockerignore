@@ -1,0 +1,15 @@
+.git
+.venv
+.validation
+.pytest_cache
+**/__pycache__
+**/*.pyc
+dist
+build
+*.egg-info
+evaluation
+automated_benchmark_results
+benchmark
+diagnostics
+results
+scratch*

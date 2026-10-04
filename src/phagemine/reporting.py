@@ -224,14 +224,21 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     (root / "proteins.faa").write_text("".join(f">{p.protein_id} genome={p.genome_id} start={p.start} end={p.end}\n{p.sequence}\n" for p in proteins))
     (root / "cds.fna").write_text("".join(f">{p.protein_id}\n{p.cds}\n" for p in proteins))
     gff_records = []
+    cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
     for p in proteins:
+        from urllib.parse import quote
+        c = cls_by_id.get(p.protein_id, {})
+        product = quote(str(c.get("display_product") or "hypothetical protein"), safe="")
+        gene = quote(str(c.get("gene") or ""), safe="")
+        evidence_sources = quote(";".join(c.get("supporting_sources") or []), safe="")
         raw_start = p.gene_call_parameters.get("raw_start", p.start)
         raw_end = p.gene_call_parameters.get("raw_end", p.end)
         gff_records.append(
             f"{representation.analysis_sequence_id}\tPhageMine\tCDS\t{p.start}\t{p.end}\t.\t{p.strand}\t0\t"
             f"ID={p.protein_id};Name={p.protein_id};calling_source={p.gene_call_source};"
             f"coordinate_representation={representation.analysis_sequence_id};coordinate_system=1-based-inclusive;"
-            f"raw_start={raw_start};raw_end={raw_end}\n"
+            f"raw_start={raw_start};raw_end={raw_end};product={product};gene={gene};"
+            f"evidence_sources={evidence_sources};confidence={quote(str(c.get('confidence') or 'NONE'), safe='')}\n"
         )
     (root / "genes.gff3").write_text("##gff-version 3\n" + "".join(gff_records))
     cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
@@ -289,7 +296,7 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
     for protein in proteins:
         c = cls_by_id.get(protein.protein_id, {})
         rows.append(f"<tr><td><a href='protein_details/{html.escape(protein.protein_id)}.html'>{html.escape(protein.protein_id)}</a></td><td>{protein.start}..{protein.end}</td><td>{html.escape(protein.strand)}</td><td>{protein.length}</td><td>{html.escape(str(c.get('display_classification') or 'No reliable function identified'))}</td><td>{html.escape(str(c.get('display_product') or 'hypothetical protein'))}</td><td>{html.escape(str(c.get('confidence') or 'NONE'))}</td><td>{html.escape(str(c.get('gene_call_confidence') or 'NOT_ASSESSED'))}</td></tr>")
-    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1500px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}td,th{{border:1px solid #bbb;padding:.4em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Functional evidence strength is a deterministic rule category, not a measured probability. Gene-call confidence independently describes caller agreement/support. Select a protein identifier to inspect its domains, orthologs, alignments, and reasoning.</p><p><a href='hallmark_completeness.tsv'>Annotation-derived hallmark screen</a> · <a href='annotation_review.tsv'>Manual-review queue</a> · <a href='annotated_proteins.faa'>Product-labelled protein FASTA</a></p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Length (aa)</th><th>Classification</th><th>Proposed function</th><th>Rule-based evidence strength</th><th>Gene-call confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
+    report_html = f"<html><head><meta charset='utf-8'><style>body{{font-family:Arial;max-width:1500px;margin:auto;padding:2em}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}td,th{{border:1px solid #bbb;padding:.4em;vertical-align:top}}th{{background:#eee;position:sticky;top:0}}</style></head><body><h1>PhageMine annotation report</h1><h2>Summary</h2><p>Predicted proteins: {len(proteins)}</p><p><b>Interpretation:</b> Predicted CDS does not mean experimentally validated gene function. Functional evidence strength is a deterministic rule category, not a measured probability. Gene-call confidence independently describes caller agreement/support. Select a protein identifier to inspect its domains, orthologs, alignments, and reasoning.</p><p><a href='hallmark_completeness.tsv'>Annotation-derived hallmark screen</a> · <a href='annotation_review.tsv'>Manual-review queue</a> · <a href='annotation_conflicts.tsv'>Evidence conflicts</a> · <a href='database_health.json'>Database health</a> · <a href='annotated_proteins.faa'>Product-labelled protein FASTA</a></p><h2>Protein annotation table</h2><table><tr><th>Protein</th><th>Coordinates</th><th>Strand</th><th>Length (aa)</th><th>Classification</th><th>Proposed function</th><th>Rule-based evidence strength</th><th>Gene-call confidence</th></tr>{''.join(rows)}</table><h2>Methods and provenance</h2><pre>{html.escape(markdown)}</pre></body></html>"
     (root / "report.html").write_text(report_html)
 
 

@@ -1,0 +1,10 @@
+panel	tool	genomes	predicted_cds	reference_cds	exact_reference_models	named_reference_loci	named_assertions	literal_name_agreements	equivalent_name_agreements	exact_or_equivalent_agreements	unresolved_named_differences	missing_models_at_named_loci	abstentions_at_exact_named_loci	functional_accuracy
+original	PhageMine	7	804	700	588	451	334	276	14	290	44	73	44	
+original	Pharokka	7	804	700	588	451	341	303	0	303	38	73	37	
+original	Prokka	7	678	700	616	451	259	35	3	38	221	52	140	
+external	PhageMine	3	174	151	131	86	60	55	1	56	4	12	14	
+external	Pharokka	3	173	151	131	86	66	59	0	59	7	12	8	
+external	Prokka	3	146	151	131	86	14	1	0	1	13	9	63	
+combined	PhageMine	10	978	851	719	537	394	331	15	346	48	85	58	
+combined	Pharokka	10	977	851	719	537	407	362	0	362	45	85	45	
+combined	Prokka	10	824	851	747	537	273	36	3	39	234	61	203	

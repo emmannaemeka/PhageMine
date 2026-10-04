@@ -1,0 +1,825 @@
+accession	start	end	strand	product	gene
+NC_000866.4	12	2189	-	Protein rIIA	rIIA
+NC_000866.4	2200	2403	-	hypothetical protein	
+NC_000866.4	2458	2751	-	DNA topoisomerase small subunit	
+NC_000866.4	2850	2990	-	DNA topoisomerase small subunit	
+NC_000866.4	2971	3351	-	putative 14.7 kDa protein in Gp60-mobA intergenic region	
+NC_000866.4	3778	5328	-	DNA topoisomerase large subunit	
+NC_000866.4	5398	5595	-	hypothetical protein	
+NC_000866.4	5702	5839	-	hypothetical protein	
+NC_000866.4	5842	6267	-	hypothetical protein	
+NC_000866.4	6267	6482	-	hypothetical protein	
+NC_000866.4	6653	7141	-	hypothetical protein	
+NC_000866.4	7291	7650	-	hypothetical protein	
+NC_000866.4	7661	8161	-	hypothetical protein	
+NC_000866.4	8225	8908	-	Exodeoxyribonuclease	dexA
+NC_000866.4	8908	9150	-	hypothetical protein	
+NC_000866.4	9143	9388	-	hypothetical protein	
+NC_000866.4	9410	10729	-	ATP-dependent DNA helicase dda	dda
+NC_000866.4	10726	11037	-	hypothetical protein	
+NC_000866.4	11039	11785	-	hypothetical protein	
+NC_000866.4	11908	12510	-	NAD--protein ADP-ribosyltransferase modA	modA
+NC_000866.4	12507	13130	-	NAD--protein ADP-ribosyltransferase modB	modB
+NC_000866.4	13198	13380	-	hypothetical protein	
+NC_000866.4	13389	13859	-	hypothetical protein	
+NC_000866.4	13852	14016	-	hypothetical protein	
+NC_000866.4	14013	14216	-	hypothetical protein	
+NC_000866.4	14191	14676	-	hypothetical protein	
+NC_000866.4	14685	15026	-	hypothetical protein	
+NC_000866.4	15026	15232	-	hypothetical protein	
+NC_000866.4	15331	15573	-	Small outer capsid protein	soc
+NC_000866.4	15606	16280	-	hypothetical protein	
+NC_000866.4	16270	16785	-	hypothetical protein	
+NC_000866.4	16846	17625	-	DNA adenine methylase	DAM
+NC_000866.4	17738	17938	+	hypothetical protein	
+NC_000866.4	17935	18963	-	DNA primase	
+NC_000866.4	18966	19130	-	hypothetical protein	
+NC_000866.4	19132	19758	-	hypothetical protein	
+NC_000866.4	19758	20051	-	Protein spackle	sp
+NC_000866.4	20112	20369	-	hypothetical protein	
+NC_000866.4	20371	20553	-	Antitoxin Dmd	dmd
+NC_000866.4	20612	22039	-	ATP-dependent helicase 41	
+NC_000866.4	22049	22393	-	Head formation protein	
+NC_000866.4	22386	23561	-	Recombination and repair protein	UVSX
+NC_000866.4	23570	24235	-	hypothetical protein	
+NC_000866.4	24400	25455	-	DNA beta-glucosyltransferase	bgt
+NC_000866.4	25479	26219	-	Deoxycytidylate 5-hydroxymethyltransferase	
+NC_000866.4	26373	26624	-	Immunity protein	imm
+NC_000866.4	26636	27013	-	hypothetical protein	
+NC_000866.4	27197	29893	-	DNA-directed DNA polymerase	
+NC_000866.4	29972	30340	-	Translation repressor protein	regA
+NC_000866.4	30342	30905	-	Sliding-clamp-loader gp44 subunit	
+NC_000866.4	30907	31866	-	Sliding-clamp-loader gp44 subunit	
+NC_000866.4	31917	32603	-	DNA polymerase clamp	
+NC_000866.4	32659	33048	-	15 kDa RNA polymerase-binding protein	rpbA
+NC_000866.4	33058	33246	-	hypothetical protein	
+NC_000866.4	33302	34984	-	Exonuclease subunit 2	
+NC_000866.4	34981	35187	-	hypothetical protein	
+NC_000866.4	35168	35431	-	hypothetical protein	
+NC_000866.4	35428	36447	-	Exonuclease subunit 1	
+NC_000866.4	36624	37826	-	DNA alpha-glucosyltransferase	agt
+NC_000866.4	37885	38679	-	hypothetical protein	
+NC_000866.4	38731	38922	-	hypothetical protein	
+NC_000866.4	38907	39110	-	hypothetical protein	
+NC_000866.4	39079	39396	-	hypothetical protein	
+NC_000866.4	39398	39616	-	hypothetical protein	
+NC_000866.4	39600	40157	-	RNA polymerase sigma factor	
+NC_000866.4	40193	40456	-	hypothetical protein	
+NC_000866.4	40459	40785	-	hypothetical protein	
+NC_000866.4	40799	41038	-	hypothetical protein	
+NC_000866.4	41039	41170	-	hypothetical protein	
+NC_000866.4	41178	41471	-	hypothetical protein	
+NC_000866.4	41464	41646	-	hypothetical protein	
+NC_000866.4	41805	42113	-	hypothetical protein	
+NC_000866.4	42116	42328	-	hypothetical protein	
+NC_000866.4	42446	42916	-	hypothetical protein	
+NC_000866.4	42906	43538	-	hypothetical protein	
+NC_000866.4	43535	44728	-	Anaerobic ribonucleoside-triphosphate reductase	nrdD_1
+NC_000866.4	44836	45612	-	hypothetical protein	
+NC_000866.4	45840	46385	-	Anaerobic ribonucleoside-triphosphate reductase	nrdD_2
+NC_000866.4	46382	46855	-	Recombination endonuclease VII	
+NC_000866.4	46897	47382	-	hypothetical protein	
+NC_000866.4	47506	47826	-	hypothetical protein	
+NC_000866.4	47823	48131	-	hypothetical protein	
+NC_000866.4	48128	48391	-	Glutaredoxin	NRDC
+NC_000866.4	48393	48635	-	hypothetical protein	
+NC_000866.4	48622	48936	-	hypothetical protein	
+NC_000866.4	48933	49859	-	hypothetical protein	
+NC_000866.4	49914	50915	-	hypothetical protein	
+NC_000866.4	50973	51995	-	hypothetical protein	
+NC_000866.4	52066	52893	-	hypothetical protein	
+NC_000866.4	52901	53302	-	hypothetical protein	
+NC_000866.4	53358	53885	-	hypothetical protein	
+NC_000866.4	53946	54248	-	hypothetical protein	
+NC_000866.4	54343	55320	-	hypothetical protein	
+NC_000866.4	55435	56445	-	hypothetical protein	
+NC_000866.4	56429	57208	-	hypothetical protein	
+NC_000866.4	57283	57828	-	hypothetical protein	
+NC_000866.4	57828	57932	-	hypothetical protein	
+NC_000866.4	58049	58165	-	hypothetical protein	
+NC_000866.4	58155	58349	-	hypothetical protein	
+NC_000866.4	58352	58534	-	hypothetical protein	
+NC_000866.4	58534	58722	-	hypothetical protein	
+NC_000866.4	58819	59205	-	hypothetical protein	
+NC_000866.4	59202	59495	-	Antiholin	rI
+NC_000866.4	59508	59720	-	hypothetical protein	
+NC_000866.4	59763	60344	-	hypothetical protein	
+NC_000866.4	60346	60534	-	hypothetical protein	
+NC_000866.4	60531	60716	-	hypothetical protein	
+NC_000866.4	60713	60925	-	hypothetical protein	
+NC_000866.4	60922	61389	-	hypothetical protein	
+NC_000866.4	61386	61733	-	Valyl--tRNA ligase modifier	vs
+NC_000866.4	61726	62271	-	hypothetical protein	
+NC_000866.4	62279	62740	-	Endoribonuclease RegB	regB
+NC_000866.4	62800	63078	-	hypothetical protein	
+NC_000866.4	63078	63344	-	hypothetical protein	
+NC_000866.4	63557	63919	-	hypothetical protein	
+NC_000866.4	63927	64256	-	hypothetical protein	
+NC_000866.4	64253	64912	-	hypothetical protein	
+NC_000866.4	64939	65355	-	Endonuclease V	
+NC_000866.4	65416	65718	-	Internal protein II	ipi2
+NC_000866.4	65834	66415	-	Internal protein III	ipi3
+NC_000866.4	66503	66997	-	Endolysin	E
+NC_000866.4	67035	67475	-	hypothetical protein	
+NC_000866.4	67652	67960	-	hypothetical protein	
+NC_000866.4	67957	68319	-	hypothetical protein	
+NC_000866.4	68301	68693	-	hypothetical protein	
+NC_000866.4	68662	69270	-	hypothetical protein	
+NC_000866.4	69312	69905	-	hypothetical protein	
+NC_000866.4	69968	70303	-	hypothetical protein	
+NC_000866.4	70360	70623	-	hypothetical protein	
+NC_000866.4	71253	71918	-	hypothetical protein	
+NC_000866.4	72628	72915	-	hypothetical protein	
+NC_000866.4	72918	73328	-	hypothetical protein	
+NC_000866.4	73329	73514	-	hypothetical protein	
+NC_000866.4	73591	73878	-	Internal protein I	ipi1
+NC_000866.4	73952	74410	-	hypothetical protein	
+NC_000866.4	74407	74649	-	Tail fiber assembly helper protein	
+NC_000866.4	74649	75374	-	Deoxynucleotide monophosphate kinase	1
+NC_000866.4	75424	75954	-	Tail tube terminator protein	3
+NC_000866.4	76061	76885	-	hypothetical protein	
+NC_000866.4	76885	77337	-	hypothetical protein	
+NC_000866.4	77385	77975	+	Baseplate wedge protein gp53	
+NC_000866.4	77959	79686	+	Baseplate central spike complex protein gp5	5
+NC_000866.4	79721	80215	+	hypothetical protein	
+NC_000866.4	80196	80618	+	hypothetical protein	
+NC_000866.4	80779	81072	+	Baseplate puncturing device gp5.4	
+NC_000866.4	81081	83063	+	Baseplate wedge protein gp6	6
+NC_000866.4	83060	86158	+	Baseplate wedge protein gp7	7
+NC_000866.4	86151	87155	+	Baseplate wedge protein gp8	8
+NC_000866.4	87219	88085	+	Baseplate protein gp9	9
+NC_000866.4	88085	89893	+	Baseplate wedge protein gp10	
+NC_000866.4	89893	90552	+	Baseplate wedge protein gp11	
+NC_000866.4	90549	92132	+	Short tail fiber protein gp12	
+NC_000866.4	92129	93592	+	Fibritin	wac
+NC_000866.4	93624	94553	+	Neck protein gp13	
+NC_000866.4	94555	95325	+	Neck protein gp14	
+NC_000866.4	95367	96185	+	Tail completion protein gp15	
+NC_000866.4	96194	96688	+	Terminase, small subunit	
+NC_000866.4	96672	98504	+	Terminase, large subunit	
+NC_000866.4	98536	100515	+	Tail sheath protein	
+NC_000866.4	100632	101123	+	Tail tube protein gp19	
+NC_000866.4	101207	102781	+	Portal protein	
+NC_000866.4	102781	103023	+	hypothetical protein	
+NC_000866.4	103023	103448	+	Prohead assembly protein gp68	
+NC_000866.4	103448	104086	+	Prohead core protein protease	
+NC_000866.4	104117	104926	+	Capsid assembly scaffolding protein	
+NC_000866.4	104945	106510	+	Major capsid protein	
+NC_000866.4	106561	107223	-	hypothetical protein	
+NC_000866.4	107323	108606	+	Capsid vertex protein	
+NC_000866.4	108636	109640	-	RNA ligase 2	
+NC_000866.4	109650	109928	-	hypothetical protein	
+NC_000866.4	109915	110085	-	hypothetical protein	
+NC_000866.4	110187	111317	-	Highly immunogenic outer capsid protein	hoc
+NC_000866.4	111327	112007	-	hypothetical protein	
+NC_000866.4	112057	112674	+	hypothetical protein	
+NC_000866.4	112677	114440	+	ATP-dependent DNA helicase uvsW	uvsW
+NC_000866.4	114496	114663	-	hypothetical protein	
+NC_000866.4	114690	114914	-	hypothetical protein	
+NC_000866.4	114914	115327	-	Recombination protein uvsY	uvsY
+NC_000866.4	115404	115802	-	Baseplate wedge protein gp25	
+NC_000866.4	115802	116428	-	hypothetical protein	
+NC_000866.4	116479	117228	+	hypothetical protein	
+NC_000866.4	117228	118403	+	Baseplate central spike complex protein gp27	
+NC_000866.4	118348	118881	+	Baseplate hub assembly protein gp28	
+NC_000866.4	118878	120650	+	hypothetical protein	
+NC_000866.4	120659	121753	+	Baseplate tail-tube junction protein gp48	
+NC_000866.4	121753	122715	+	Baseplate tail-tube junction protein gp54	
+NC_000866.4	122742	123032	-	hypothetical protein	
+NC_000866.4	123065	123268	-	NAD(+)--arginine ADP-ribosyltransferase	alt_1
+NC_000866.4	123265	123450	-	NAD(+)--arginine ADP-ribosyltransferase	alt_2
+NC_000866.4	123454	125502	-	NAD(+)--arginine ADP-ribosyltransferase	alt_3
+NC_000866.4	125560	125748	-	hypothetical protein	
+NC_000866.4	125745	127208	-	DNA ligase	
+NC_000866.4	127205	127474	-	hypothetical protein	
+NC_000866.4	127474	128310	-	hypothetical protein	
+NC_000866.4	128307	128765	-	hypothetical protein	
+NC_000866.4	128758	128964	-	hypothetical protein	
+NC_000866.4	128961	129158	-	hypothetical protein	
+NC_000866.4	129158	129445	-	hypothetical protein	
+NC_000866.4	129487	129852	-	hypothetical protein	
+NC_000866.4	129921	130253	-	hypothetical protein	
+NC_000866.4	130364	130540	-	hypothetical protein	
+NC_000866.4	130785	131033	-	Lysis inhibition accessory protein	rIII
+NC_000866.4	131181	131516	-	Capsid assembly protein Gp31	
+NC_000866.4	131573	131881	-	hypothetical protein	
+NC_000866.4	131882	132118	-	hypothetical protein	
+NC_000866.4	132118	132699	-	Deoxycytidylate deaminase	CD
+NC_000866.4	132696	133034	-	hypothetical protein	
+NC_000866.4	133334	133609	-	hypothetical protein	
+NC_000866.4	133612	133812	-	hypothetical protein	
+NC_000866.4	133805	134002	-	hypothetical protein	
+NC_000866.4	134002	134907	-	Polynucleotide kinase	pseT
+NC_000866.4	134908	135135	-	hypothetical protein	
+NC_000866.4	135132	135431	-	hypothetical protein	
+NC_000866.4	135428	135781	-	hypothetical protein	
+NC_000866.4	135772	136278	-	hypothetical protein	
+NC_000866.4	136340	137464	-	T4 RNA ligase 1	
+NC_000866.4	137517	137927	-	Endonuclease II	denA
+NC_000866.4	137955	138434	-	hypothetical protein	
+NC_000866.4	139054	139719	-	hypothetical protein	
+NC_000866.4	139716	139967	-	hypothetical protein	
+NC_000866.4	139991	140416	-	hypothetical protein	
+NC_000866.4	140416	142680	-	Ribonucleoside-diphosphate reductase large subunit	I4L
+NC_000866.4	142671	142997	-	hypothetical protein	
+NC_000866.4	142951	143214	-	hypothetical protein	
+NC_000866.4	143235	143549	-	Thymidylate synthase	TD_1
+NC_000866.4	143694	144431	-	Intron-associated endonuclease 1	ITEVIR
+NC_000866.4	144561	145112	-	Thymidylate synthase	TD_2
+NC_000866.4	145109	145690	-	Dihydrofolate reductase	frd
+NC_000866.4	145762	146004	-	hypothetical protein	
+NC_000866.4	146143	146529	-	hypothetical protein	
+NC_000866.4	146575	146802	-	hypothetical protein	
+NC_000866.4	146948	147853	-	Single-stranded DNA-binding protein	
+NC_000866.4	147909	148541	-	hypothetical protein	
+NC_000866.4	148543	149196	-	Protein Gp59	
+NC_000866.4	149193	149531	-	RNA polymerase-associated protein Gp33	
+NC_000866.4	149509	149778	-	Double-stranded DNA-binding protein	dsbA
+NC_000866.4	149787	150704	-	Ribonuclease H	rnh
+NC_000866.4	150809	154678	+	Long-tail fiber proximal subunit	
+NC_000866.4	154687	155805	+	Long-tail fiber protein gp35	
+NC_000866.4	155868	156533	+	Long-tail fiber protein gp36	
+NC_000866.4	156542	159622	+	Long-tail fiber protein gp37	
+NC_000866.4	159649	160200	+	Tail fiber assembly protein	tfa
+NC_000866.4	160221	160877	+	Holin	t
+NC_000866.4	160878	161150	-	10 kDa anti-sigma factor	asiA
+NC_000866.4	161163	161315	-	hypothetical protein	
+NC_000866.4	161312	161590	-	Anti-restriction endonuclease	arn
+NC_000866.4	161580	161699	-	hypothetical protein	
+NC_000866.4	161876	162172	-	hypothetical protein	
+NC_000866.4	162172	162630	-	hypothetical protein	
+NC_000866.4	162627	162833	-	hypothetical protein	
+NC_000866.4	162967	163602	-	Middle transcription regulatory protein motA	motA
+NC_000866.4	163730	163879	-	hypothetical protein	
+NC_000866.4	163876	165204	-	DNA topoisomerase medium subunit	
+NC_000866.4	165342	165497	-	hypothetical protein	
+NC_000866.4	165585	166040	-	Nucleoid disruption protein	ndd
+NC_000866.4	166101	166316	-	hypothetical protein	
+NC_000866.4	166325	166435	-	hypothetical protein	
+NC_000866.4	166815	166913	-	hypothetical protein	
+NC_000866.4	167103	167660	-	Endonuclease IV	denB
+NC_000866.4	167743	167937	-	hypothetical protein	
+NC_000866.4	167965	168903	-	hypothetical protein	
+NC_000929.1	339	929	-	Repressor protein c	repc
+NC_000929.1	1099	1326	+	Negative regulator of transcription	ner
+NC_000929.1	1328	3319	+	DDE-recombinase A	A
+NC_000929.1	3358	4296	+	ATP-dependent target DNA activator B	B
+NC_000929.1	4312	4539	+	Protein kil	kil
+NC_000929.1	4542	4772	+	putative protein gp6	
+NC_000929.1	4784	5047	+	putative protein gp7	
+NC_000929.1	5062	5481	+	putative protein gp8	
+NC_000929.1	5482	5781	+	putative protein gp9	
+NC_000929.1	5801	6325	+	Putative DNA ends protecting protein gam	gam
+NC_000929.1	6424	6954	+	putative protein gp11	
+NC_000929.1	6954	7484	+	putative protein gp12	
+NC_000929.1	7471	7653	+	putative protein gp13	
+NC_000929.1	7655	7957	+	putative protein gp14	
+NC_000929.1	7896	8162	-	putative protein gp15	
+NC_000929.1	8233	8784	+	GemA protein	gemA
+NC_000929.1	8781	9170	+	Middle operon regulator	mor
+NC_000929.1	9248	9466	+	putative protein gp18	
+NC_000929.1	9459	9821	+	putative protein gp19	
+NC_000929.1	9831	9950	+	putative protein gp20	
+NC_000929.1	9963	10385	+	Late transcription activator C	C
+NC_000929.1	10480	10995	+	SAR-endolysin	lys
+NC_000929.1	10979	11365	+	putative spanin, inner membrane subunit	
+NC_000929.1	11524	11718	+	putative protein gp24	
+NC_000929.1	11718	12017	+	putative protein gp25	
+NC_000929.1	12014	12304	+	putative protein gp26	
+NC_000929.1	12316	12891	+	putative terminase, small subunit gp27	
+NC_000929.1	12899	14554	+	putative terminase, large subunit gp28	
+NC_000929.1	14554	16092	+	Portal protein	H
+NC_000929.1	16073	17392	+	Putative capsid assembly protein F	F
+NC_000929.1	17389	17859	+	Putative capsid assembly protein G	G
+NC_000929.1	18056	19141	+	Protease I	I
+NC_000929.1	19138	20055	+	Major capsid protein	T
+NC_000929.1	20122	20532	+	putative protein gp35	
+NC_000929.1	20529	20954	+	Gene product J	J
+NC_000929.1	20954	21502	+	putative tail terminator protein	
+NC_000929.1	21486	21692	+	Putative sheath terminator protein	
+NC_000929.1	21689	23176	+	Tail sheath protein	L
+NC_000929.1	23186	23542	+	Tail tube protein	M
+NC_000929.1	23552	23986	+	putative tail assembly protein gp41	
+NC_000929.1	24131	26203	+	putative tape measure protein	
+NC_000929.1	26208	27695	+	DNA circularization protein N	N
+NC_000929.1	27688	28827	+	Baseplate hub protein gp44	P
+NC_000929.1	28815	29408	+	Baseplate puncturing device gp45	
+NC_000929.1	29405	29842	+	Baseplate protein gp46	
+NC_000929.1	29843	30925	+	Baseplate protein gp47	
+NC_000929.1	30916	31458	+	Baseplate protein gp48	
+NC_000929.1	31458	32972	+	Tail fiber protein S	S
+NC_000929.1	32975	33502	+	Tail fiber assembly protein U	U
+NC_000929.1	33531	34064	-	Tail fiber assembly protein U'	U'
+NC_000929.1	34067	35062	-	Tail fiber protein S'	S'
+NC_000929.1	35092	35673	+	Serine recombinase gin	gin
+NC_000929.1	35768	35956	+	Translational activator com	com
+NC_000929.1	35907	36602	+	Adenine modification enzyme mom	mom
+NC_001416.1	191	736	+	Terminase small subunit	Nu1
+NC_001416.1	711	2636	+	Terminase, large subunit	A
+NC_001416.1	2633	2839	+	Head completion protein	W
+NC_001416.1	2836	4437	+	Portal protein B	B
+NC_001416.1	4418	5737	+	Capsid assembly protease C	C
+NC_001416.1	5747	6079	+	Capsid decoration protein	D
+NC_001416.1	6135	7160	+	Major capsid protein	E
+NC_001416.1	7202	7600	+	DNA-packaging protein FI	Fi
+NC_001416.1	7612	7965	+	Head-tail connector protein FII	FII
+NC_001416.1	7977	8555	+	hypothetical protein	
+NC_001416.1	8552	8947	+	Tail tube terminator protein	U
+NC_001416.1	8955	9695	+	Tail tube protein	V
+NC_001416.1	9711	10133	+	Tail assembly protein G	G
+NC_001416.1	10115	10549	+	Tail assembly protein GT	T
+NC_001416.1	10542	13103	+	Tape measure protein	H
+NC_001416.1	13100	13429	+	hypothetical protein	
+NC_001416.1	13429	14127	+	Tail tip protein L	L
+NC_001416.1	14276	14875	+	hypothetical protein	
+NC_001416.1	14872	15444	+	hypothetical protein	
+NC_001416.1	15505	18903	+	Tip attachment protein J	J
+NC_001416.1	18965	19585	+	Outer membrane protein lom	lom
+NC_001416.1	19650	20855	+	hypothetical protein	
+NC_001416.1	21029	21973	+	Long-tail fiber protein gp37	
+NC_001416.1	21973	22557	+	Tail fiber assembly protein	tfa
+NC_001416.1	22686	23918	-	hypothetical protein	
+NC_001416.1	24509	25399	-	hypothetical protein	
+NC_001416.1	25396	26973	-	hypothetical protein	
+NC_001416.1	27812	28882	-	Integrase	int
+NC_001416.1	29118	29285	-	hypothetical protein	
+NC_001416.1	29374	29655	-	hypothetical protein	
+NC_001416.1	29847	30395	-	hypothetical protein	
+NC_001416.1	31005	31196	-	hypothetical protein	
+NC_001416.1	31169	31351	-	hypothetical protein	
+NC_001416.1	31348	32028	-	Exonuclease	exo
+NC_001416.1	32025	32810	-	Recombination protein bet	bet
+NC_001416.1	32816	33112	-	Host-nuclease inhibitor protein gam	gam
+NC_001416.1	33187	33330	-	hypothetical protein	
+NC_001416.1	33299	33463	-	Protease inhibitor III	cIII
+NC_001416.1	33536	33904	-	hypothetical protein	
+NC_001416.1	34087	34287	-	hypothetical protein	
+NC_001416.1	34497	35036	+	hypothetical protein	
+NC_001416.1	35037	35360	-	Antitermination protein N	N
+NC_001416.1	35825	36259	-	Protein rexB	rexB
+NC_001416.1	36275	37114	-	hypothetical protein	
+NC_001416.1	37227	37940	-	Repressor protein cI	cI
+NC_001416.1	38041	38241	+	Regulatory protein cro	cro
+NC_001416.1	38360	38653	+	Transcriptional activator II	cII
+NC_001416.1	38686	39585	+	hypothetical protein	
+NC_001416.1	39582	40283	+	Replication protein P	P
+NC_001416.1	40280	40570	+	hypothetical protein	
+NC_001416.1	40644	41084	+	Protein ninB	ninB
+NC_001416.1	41081	41953	+	hypothetical protein	
+NC_001416.1	42432	43043	+	hypothetical protein	
+NC_001416.1	43040	43246	+	hypothetical protein	
+NC_001416.1	43224	43889	+	Serine/threonine-protein phosphatase	
+NC_001416.1	43886	44509	+	Antitermination protein Q	Q
+NC_001416.1	45186	45509	+	Antiholin	S
+NC_001416.1	45493	45969	+	Endolysin	R
+NC_001416.1	45966	46427	+	Spanin, inner membrane subunit	Rz
+NC_001416.1	46459	46752	-	Lipoprotein bor	bor
+NC_001416.1	47042	47452	-	hypothetical protein	
+NC_001416.1	47738	47944	+	hypothetical protein	
+NC_001422.1	51	221	+	hypothetical protein	
+NC_001422.1	390	848	+	External scaffolding protein D	D
+NC_001422.1	848	964	+	DNA-binding protein J	J
+NC_001422.1	1001	2284	+	Capsid protein F	F
+NC_001422.1	2395	2922	+	Major spike protein G	G
+NC_001422.1	2931	3917	+	Minor spike protein H	H
+NC_001604.1	925	1278	+	Overcome classical restriction gp0.3	
+NC_001604.1	1278	1433	+	Gene 0.4 protein	
+NC_001604.1	1496	1639	+	hypothetical protein	
+NC_001604.1	1636	1797	+	hypothetical protein	
+NC_001604.1	2021	3100	+	Protein kinase 0.7	
+NC_001604.1	3171	5822	+	T7 RNA polymerase	1
+NC_001604.1	6007	6135	+	hypothetical protein	
+NC_001604.1	6137	6394	+	Inhibitor of dGTPase	
+NC_001604.1	6475	7554	+	DNA ligase	
+NC_001604.1	7608	7763	+	hypothetical protein	
+NC_001604.1	7791	7880	+	hypothetical protein	
+NC_001604.1	7906	8166	+	hypothetical protein	
+NC_001604.1	8166	8756	+	Nucleotide kinase gp1.7	
+NC_001604.1	8749	8895	+	hypothetical protein	
+NC_001604.1	8898	9092	+	Bacterial RNA polymerase inhibitor	2
+NC_001604.1	9158	9856	+	Single-stranded DNA-binding protein gp2.5	
+NC_001604.1	9857	10276	+	hypothetical protein	
+NC_001604.1	10257	10706	+	Endonuclease I	3
+NC_001604.1	10706	11161	+	Endolysin	
+NC_001604.1	11225	11590	+	hypothetical protein	
+NC_001604.1	11565	13265	+	DNA primase/helicase	4
+NC_001604.1	13352	13564	+	hypothetical protein	
+NC_001604.1	13584	13853	+	Inhibitor of toxin/antitoxin system	
+NC_001604.1	13927	14334	+	hypothetical protein	
+NC_001604.1	14353	16467	+	DNA-directed DNA polymerase	5
+NC_001604.1	16483	16839	+	hypothetical protein	
+NC_001604.1	16851	17150	+	Protein suppressor of silencing	
+NC_001604.1	17150	17359	+	Fusion protein 5.5/5.7	
+NC_001604.1	17359	17517	+	hypothetical protein	
+NC_001604.1	17504	18406	+	Exonuclease	6
+NC_001604.1	18605	18859	+	hypothetical protein	
+NC_001604.1	18864	19130	+	hypothetical protein	
+NC_001604.1	19130	19531	+	hypothetical protein	
+NC_001604.1	19535	19834	+	Protein 7.3	
+NC_001604.1	19848	20240	+	hypothetical protein	
+NC_001604.1	20240	21850	+	Portal protein	8
+NC_001604.1	21950	22873	+	Capsid assembly scaffolding protein	9
+NC_001604.1	22967	24004	+	Minor capsid protein	
+NC_001604.1	24004	24162	+	Minor capsid protein	
+NC_001604.1	24228	24818	+	Tail tubular protein gp11	
+NC_001604.1	24842	27226	+	Tail tubular protein gp12	
+NC_001604.1	27307	27723	+	hypothetical protein	
+NC_001604.1	27728	28318	+	Internal virion protein gp14	
+NC_001604.1	28325	30568	+	Internal virion protein gp15	
+NC_001604.1	30595	34551	+	Peptidoglycan transglycosylase gp16	
+NC_001604.1	34624	36285	+	Tail fiber protein	
+NC_001604.1	36344	36547	+	hypothetical protein	
+NC_001604.1	36553	36822	+	Terminase, small subunit gp18	
+NC_001604.1	36917	37348	+	Spanin, inner membrane subunit	
+NC_001604.1	37370	39130	+	Terminase, large subunit gp19	
+NC_001604.1	39389	39538	+	hypothetical protein	
+NC_002371.2	203	1702	+	Terminase, large subunit	2
+NC_002371.2	1702	3879	+	Portal protein	1
+NC_002371.2	3893	4804	+	Scaffolding protein	8
+NC_002371.2	4804	6096	+	Major capsid protein	5
+NC_002371.2	6135	6344	+	hypothetical protein	
+NC_002371.2	6328	6828	+	Peptidoglycan hydrolase gp4	4
+NC_002371.2	6788	8206	+	hypothetical protein	
+NC_002371.2	8210	8911	+	Tail needle protein gp26	
+NC_002371.2	8911	9366	+	hypothetical protein	
+NC_002371.2	9369	10058	+	Internal virion protein gp7	7
+NC_002371.2	10069	11484	+	Internal virion protein gp20	
+NC_002371.2	11484	13313	+	Internal virion protein gp16	
+NC_002371.2	13336	13830	-	hypothetical protein	
+NC_002371.2	13861	14226	+	hypothetical protein	
+NC_002371.2	14240	14419	-	hypothetical protein	
+NC_002371.2	14519	14770	-	Regulatory protein mnt	mnt
+NC_002371.2	14861	15022	+	Transcriptional repressor arc	arc
+NC_002371.2	15091	15993	+	Antirepressor protein ant	ant
+NC_002371.2	16204	18207	+	Tail spike protein	9
+NC_002371.2	18266	19723	-	hypothetical protein	
+NC_002371.2	19713	20645	-	hypothetical protein	
+NC_002371.2	21353	22348	-	hypothetical protein	
+NC_002371.2	22393	22743	-	Excisionase	xis
+NC_002371.2	22746	23381	-	hypothetical protein	
+NC_002371.2	23482	23661	-	hypothetical protein	
+NC_002371.2	23758	24711	-	hypothetical protein	
+NC_002371.2	24715	24909	-	hypothetical protein	
+NC_002371.2	24906	25499	-	hypothetical protein	
+NC_002371.2	25496	25855	-	hypothetical protein	
+NC_002371.2	25830	25967	-	hypothetical protein	
+NC_002371.2	25964	26461	-	hypothetical protein	
+NC_002371.2	26449	26619	-	hypothetical protein	
+NC_002371.2	26630	26923	-	hypothetical protein	
+NC_002371.2	26970	27254	-	hypothetical protein	
+NC_002371.2	27254	27871	-	hypothetical protein	
+NC_002371.2	27868	28011	-	hypothetical protein	
+NC_002371.2	28001	28189	-	hypothetical protein	
+NC_002371.2	28170	28328	-	Protease inhibitor III	cIII
+NC_002371.2	28414	28725	-	hypothetical protein	
+NC_002371.2	29076	29312	-	hypothetical protein	
+NC_002371.2	29349	29543	-	hypothetical protein	
+NC_002371.2	29785	30336	+	hypothetical protein	
+NC_002371.2	30357	30659	-	putative regulatory protein N	N
+NC_002371.2	31013	31663	-	Repressor protein C2	C2
+NC_002371.2	31744	31929	+	Regulatory protein cro	cro
+NC_002371.2	32036	32314	+	Transcriptional activator protein C1	C1
+NC_002371.2	32349	32495	+	hypothetical protein	
+NC_002371.2	32488	33303	+	hypothetical protein	
+NC_002371.2	33300	34676	+	hypothetical protein	
+NC_002371.2	34750	35187	+	Protein ninB	ninB
+NC_002371.2	35503	35835	+	hypothetical protein	
+NC_002371.2	35828	36004	+	hypothetical protein	
+NC_002371.2	35997	36608	+	hypothetical protein	
+NC_002371.2	36605	36829	+	hypothetical protein	
+NC_002371.2	36826	37029	+	hypothetical protein	
+NC_002371.2	37010	37189	+	hypothetical protein	
+NC_002371.2	37186	37809	+	Antitermination protein Q	Q
+NC_002371.2	38244	38570	+	Antiholin	
+NC_002371.2	38554	38991	+	Endolysin	
+NC_002371.2	38988	39425	+	Spanin, inner membrane subunit	Rz
+NC_002371.2	39575	40180	+	hypothetical protein	
+NC_002371.2	40446	40706	-	hypothetical protein	
+NC_002371.2	41014	41256	+	hypothetical protein	
+NC_002371.2	41258	41437	+	hypothetical protein	
+NC_005859.1	124	858	-	5'-deoxynucleotidase	dmp_1
+NC_005859.1	939	1334	-	hypothetical protein	
+NC_005859.1	1371	1649	-	hypothetical protein	
+NC_005859.1	1706	3376	-	Protein A1	A1_1
+NC_005859.1	3327	3473	-	hypothetical protein	
+NC_005859.1	3473	3670	-	hypothetical protein	
+NC_005859.1	3727	4134	-	Protein A2	A2_1
+NC_005859.1	4230	4481	-	hypothetical protein	
+NC_005859.1	4715	4918	-	hypothetical protein	
+NC_005859.1	5411	5929	-	hypothetical protein	
+NC_005859.1	6495	7505	+	hypothetical protein	
+NC_005859.1	7624	7854	+	hypothetical protein	
+NC_005859.1	7904	8083	+	hypothetical protein	
+NC_005859.1	8086	8298	+	hypothetical protein	
+NC_005859.1	8300	8644	+	hypothetical protein	
+NC_005859.1	8641	8736	+	hypothetical protein	
+NC_005859.1	8681	8938	+	hypothetical protein	
+NC_005859.1	8954	9157	+	hypothetical protein	
+NC_005859.1	9154	9267	+	hypothetical protein	
+NC_005859.1	10936	11820	-	hypothetical protein	
+NC_005859.1	11902	12510	-	hypothetical protein	
+NC_005859.1	12510	12695	-	hypothetical protein	
+NC_005859.1	12695	12928	-	hypothetical protein	
+NC_005859.1	12916	13206	-	hypothetical protein	
+NC_005859.1	13199	13687	-	hypothetical protein	
+NC_005859.1	13647	13850	-	hypothetical protein	
+NC_005859.1	13907	14278	-	hypothetical protein	
+NC_005859.1	14226	14687	-	hypothetical protein	
+NC_005859.1	14684	14884	-	hypothetical protein	
+NC_005859.1	14841	14987	-	hypothetical protein	
+NC_005859.1	14984	15310	-	hypothetical protein	
+NC_005859.1	15300	15545	-	hypothetical protein	
+NC_005859.1	15542	15823	-	hypothetical protein	
+NC_005859.1	15823	15987	-	hypothetical protein	
+NC_005859.1	15987	16238	-	hypothetical protein	
+NC_005859.1	16317	16748	-	hypothetical protein	
+NC_005859.1	16801	16923	-	hypothetical protein	
+NC_005859.1	16916	17437	-	hypothetical protein	
+NC_005859.1	17437	18300	-	Serine/threonine-protein phosphatase	
+NC_005859.1	18303	18548	-	hypothetical protein	
+NC_005859.1	18646	18936	-	hypothetical protein	
+NC_005859.1	18929	19360	-	hypothetical protein	
+NC_005859.1	19436	19852	-	hypothetical protein	
+NC_005859.1	19931	20344	-	L-alanyl-D-glutamate peptidase	lys
+NC_005859.1	20341	20997	-	Holin	C1
+NC_005859.1	21154	21753	-	hypothetical protein	
+NC_005859.1	21766	22518	-	Deoxynucleoside-5'-monophosphate kinase	dnk
+NC_005859.1	22802	23245	-	hypothetical protein	
+NC_005859.1	23245	23742	-	hypothetical protein	
+NC_005859.1	23739	24437	-	hypothetical protein	
+NC_005859.1	24592	24936	-	hypothetical protein	
+NC_005859.1	25047	25331	-	hypothetical protein	
+NC_005859.1	25328	25657	-	hypothetical protein	
+NC_005859.1	25638	26150	-	hypothetical protein	
+NC_005859.1	26147	26443	-	hypothetical protein	
+NC_005859.1	26436	26717	-	hypothetical protein	
+NC_005859.1	26794	27141	-	hypothetical protein	
+NC_005859.1	27263	27370	-	hypothetical protein	
+NC_005859.1	27656	28024	-	hypothetical protein	
+NC_005859.1	28302	28592	-	hypothetical protein	
+NC_005859.1	28752	28916	-	hypothetical protein	
+NC_005859.1	28909	29160	-	hypothetical protein	
+NC_005859.1	29397	29978	-	H-N-H endonuclease F-TflII	hegD
+NC_005859.1	29980	30180	-	hypothetical protein	
+NC_005859.1	30651	30824	-	hypothetical protein	
+NC_005859.1	31022	31606	-	H-N-H endonuclease F-TflI	hegC
+NC_005859.1	32240	32407	-	hypothetical protein	
+NC_005859.1	33205	33552	-	hypothetical protein	
+NC_005859.1	33664	33849	-	hypothetical protein	
+NC_005859.1	34006	34524	-	hypothetical protein	
+NC_005859.1	34627	34755	-	hypothetical protein	
+NC_005859.1	34806	35078	-	hypothetical protein	
+NC_005859.1	35617	35892	-	hypothetical protein	
+NC_005859.1	35983	36189	-	hypothetical protein	
+NC_005859.1	36182	36349	-	hypothetical protein	
+NC_005859.1	36379	37062	-	H-N-H endonuclease F-TflIV	hegA
+NC_005859.1	37279	37797	-	hypothetical protein	
+NC_005859.1	38064	39029	+	hypothetical protein	
+NC_005859.1	39051	39467	+	hypothetical protein	
+NC_005859.1	39791	40738	-	hypothetical protein	
+NC_005859.1	41617	42051	-	hypothetical protein	
+NC_005859.1	42051	42221	-	hypothetical protein	
+NC_005859.1	42290	42739	-	hypothetical protein	
+NC_005859.1	42745	43062	-	hypothetical protein	
+NC_005859.1	43505	44143	-	hypothetical protein	
+NC_005859.1	44196	44378	-	hypothetical protein	
+NC_005859.1	44449	45150	-	hypothetical protein	
+NC_005859.1	45179	45415	-	hypothetical protein	
+NC_005859.1	45458	45973	-	hypothetical protein	
+NC_005859.1	46057	46335	-	hypothetical protein	
+NC_005859.1	46412	46888	-	hypothetical protein	
+NC_005859.1	47022	47861	-	putative thymidylate synthase	thy
+NC_005859.1	47861	48394	-	Dihydrofolate reductase	frd
+NC_005859.1	48391	49536	-	hypothetical protein	
+NC_005859.1	49536	50060	-	hypothetical protein	
+NC_005859.1	50163	52598	-	Ribonucleoside-diphosphate reductase large subunit	I4L
+NC_005859.1	52678	52836	-	hypothetical protein	
+NC_005859.1	52838	53590	-	hypothetical protein	
+NC_005859.1	53961	55685	+	Anaerobic ribonucleoside-triphosphate reductase	nrdD
+NC_005859.1	55786	56166	+	hypothetical protein	
+NC_005859.1	56159	56392	+	hypothetical protein	
+NC_005859.1	56447	57265	+	hypothetical protein	
+NC_005859.1	57243	57428	+	hypothetical protein	
+NC_005859.1	57419	57601	+	hypothetical protein	
+NC_005859.1	57588	58094	+	hypothetical protein	
+NC_005859.1	58097	58525	+	hypothetical protein	
+NC_005859.1	58535	58927	+	hypothetical protein	
+NC_005859.1	59545	62331	+	Putative replication origin binding protein	obp
+NC_005859.1	62318	62836	+	hypothetical protein	
+NC_005859.1	62820	63053	+	hypothetical protein	
+NC_005859.1	63122	63826	+	hypothetical protein	
+NC_005859.1	63819	64070	+	hypothetical protein	
+NC_005859.1	64174	64584	+	hypothetical protein	
+NC_005859.1	64621	64917	+	hypothetical protein	
+NC_005859.1	64968	65276	+	hypothetical protein	
+NC_005859.1	65364	66335	+	DNA ligase	
+NC_005859.1	66538	67317	+	hypothetical protein	
+NC_005859.1	67310	68077	+	Putative transcription factor D5	D5
+NC_005859.1	68109	69617	+	hypothetical protein	
+NC_005859.1	69614	70147	+	hypothetical protein	
+NC_005859.1	70144	71034	+	hypothetical protein	
+NC_005859.1	71097	73664	+	DNA polymerase	
+NC_005859.1	73657	74154	+	hypothetical protein	
+NC_005859.1	74151	75503	+	putative helicase D10	
+NC_005859.1	75724	76008	+	hypothetical protein	
+NC_005859.1	76001	76774	+	putative ssDNA-binding protein	
+NC_005859.1	76811	77788	+	putative exonuclease subunit 1	
+NC_005859.1	77769	79607	+	putative exonuclease subunit 2	
+NC_005859.1	79611	80093	+	Protein D14	
+NC_005859.1	80093	80968	+	Flap endonuclease	
+NC_005859.1	80965	81411	+	Deoxyuridine 5'-triphosphate nucleotidohydrolase	DUT
+NC_005859.1	81374	81637	+	hypothetical protein	
+NC_005859.1	81865	86055	-	L-shaped tail fiber protein pb1	ltf
+NC_005859.1	86055	86318	-	L-shaped tail fiber protein p132	
+NC_005859.1	86294	86479	-	L-shaped tail fiber protein p132	
+NC_005859.1	86484	88550	-	putative central straight fiber	
+NC_005859.1	88551	91400	-	putative baseplate hub protein	
+NC_005859.1	91397	92011	-	Distal tail protein	
+NC_005859.1	92121	95780	-	putative tape measure protein	
+NC_005859.1	95777	96529	-	Putative endonuclease	
+NC_005859.1	96624	96992	-	hypothetical protein	
+NC_005859.1	97054	97458	-	hypothetical protein	
+NC_005859.1	97458	98354	-	Minor tail protein	
+NC_005859.1	98359	99753	-	Tail tube protein	N4
+NC_005859.1	99780	100265	-	Tail tube terminator protein	
+NC_005859.1	100269	101036	-	Tail completion protein	
+NC_005859.1	101036	101548	-	hypothetical protein	
+NC_005859.1	101608	102984	-	Major capsid protein	
+NC_005859.1	103002	103634	-	Prohead protease	
+NC_005859.1	103638	104132	-	Decoration protein	N5
+NC_005859.1	104135	105346	-	Portal protein	
+NC_005859.1	105346	105783	-	Nicking endonuclease	
+NC_005859.1	105773	106447	-	Putative endonuclease	
+NC_005859.1	106618	107934	-	Terminase, large subunit	
+NC_005859.1	107934	108416	-	putative terminase, small subunit	
+NC_005859.1	108427	110349	-	Receptor-binding protein	oad
+NC_005859.1	110429	110662	+	Lytic conversion lipoprotein	llp
+NC_005859.1	110826	110954	+	hypothetical protein	
+NC_005859.1	110954	111061	+	hypothetical protein	
+NC_005859.1	111058	111252	+	hypothetical protein	
+NC_005859.1	111245	111490	+	hypothetical protein	
+NC_005859.1	111655	112389	-	5'-deoxynucleotidase	dmp_2
+NC_005859.1	112470	112865	-	hypothetical protein	
+NC_005859.1	112902	113180	-	hypothetical protein	
+NC_005859.1	113237	114907	-	Protein A1	A1_2
+NC_005859.1	114858	115004	-	hypothetical protein	
+NC_005859.1	115004	115201	-	hypothetical protein	
+NC_005859.1	115258	115665	-	Protein A2	A2_2
+NC_005859.1	115761	116012	-	hypothetical protein	
+NC_005859.1	116246	116449	-	hypothetical protein	
+NC_005859.1	116942	117460	-	hypothetical protein	
+NC_005859.1	118026	119036	+	hypothetical protein	
+NC_005859.1	119155	119385	+	hypothetical protein	
+NC_005859.1	119435	119614	+	hypothetical protein	
+NC_005859.1	119617	119829	+	hypothetical protein	
+NC_005859.1	119831	120175	+	hypothetical protein	
+NC_005859.1	120172	120267	+	hypothetical protein	
+NC_005859.1	120212	120469	+	hypothetical protein	
+NC_005859.1	120485	120688	+	hypothetical protein	
+NC_005859.1	120685	120798	+	hypothetical protein	
+NC_001706.1	253	402	-	hypothetical protein	
+NC_001706.1	426	800	-	hypothetical protein	
+NC_001706.1	823	1125	-	hypothetical protein	
+NC_001706.1	1118	1441	-	Gene product 19	
+NC_001706.1	1442	1942	-	hypothetical protein	
+NC_001706.1	1939	2103	-	hypothetical protein	
+NC_001706.1	2116	2460	-	SSB protein	
+NC_001706.1	2526	3065	-	hypothetical protein	
+NC_001706.1	3065	3217	-	hypothetical protein	
+NC_001706.1	3211	3462	-	hypothetical protein	
+NC_001706.1	3434	3616	-	hypothetical protein	
+NC_001706.1	3594	3962	-	hypothetical protein	
+NC_001706.1	4034	4207	-	hypothetical protein	
+NC_001706.1	4265	4654	-	hypothetical protein	
+NC_001706.1	4654	5034	-	hypothetical protein	
+NC_001706.1	5024	5218	-	hypothetical protein	
+NC_001706.1	5288	6187	-	hypothetical protein	
+NC_001706.1	6189	6389	-	hypothetical protein	
+NC_001706.1	6494	6634	-	hypothetical protein	
+NC_001706.1	7246	7395	+	hypothetical protein	
+NC_001706.1	7406	7891	+	hypothetical protein	
+NC_001706.1	7892	8617	+	hypothetical protein	
+NC_001706.1	8628	9467	+	hypothetical protein	
+NC_001706.1	9418	10860	+	hypothetical protein	
+NC_001706.1	10880	11596	+	hypothetical protein	
+NC_001706.1	11603	12220	+	hypothetical protein	
+NC_001706.1	12290	12544	+	hypothetical protein	
+NC_001706.1	12586	12762	+	hypothetical protein	
+NC_001706.1	12732	13136	+	hypothetical protein	
+NC_001706.1	13129	15249	+	hypothetical protein	
+NC_001706.1	15246	15533	+	hypothetical protein	
+NC_001706.1	15546	17102	+	hypothetical protein	
+NC_001706.1	17102	17401	+	hypothetical protein	
+NC_001706.1	17398	19314	+	hypothetical protein	
+NC_001706.1	19311	20456	+	hypothetical protein	
+NC_001706.1	20449	21696	+	hypothetical protein	
+NC_001706.1	21719	22009	+	hypothetical protein	
+NC_001835.1	263	787	+	hypothetical protein	
+NC_001835.1	788	2410	+	hypothetical protein	
+NC_001835.1	2400	2684	+	hypothetical protein	
+NC_001835.1	2715	3833	+	putative portal protein	
+NC_001835.1	3814	4350	+	hypothetical protein	
+NC_001835.1	4343	5524	+	Capsid protein	
+NC_001835.1	5545	5808	+	hypothetical protein	
+NC_001835.1	5808	6122	+	putative head completion protein 1	
+NC_001835.1	6112	6282	+	putative head completion protein 2	
+NC_001835.1	6447	6806	+	putative tail terminator protein	
+NC_001835.1	6819	7724	+	Tail tube protein	
+NC_001835.1	7775	8050	+	Chaperone protein gp12	
+NC_001835.1	8070	8582	+	hypothetical protein	
+NC_001835.1	8582	11581	+	putative tape measure protein	
+NC_001835.1	11581	12477	+	Distal tail protein	
+NC_001835.1	12477	13604	+	Baseplate protein gp16	
+NC_001835.1	13594	13887	+	hypothetical protein	
+NC_001835.1	13877	14671	+	Receptor binding protein	rbp
+NC_001835.1	14693	15046	+	hypothetical protein	
+NC_001835.1	15043	15783	+	hypothetical protein	
+NC_001835.1	15994	16185	-	hypothetical protein	
+NC_001835.1	16246	16512	-	hypothetical protein	
+NC_001835.1	16685	17032	-	hypothetical protein	
+NC_001835.1	17032	17229	-	hypothetical protein	
+NC_001835.1	17219	17476	-	hypothetical protein	
+NC_001835.1	17540	17926	-	SaV protein	
+NC_001835.1	17926	18045	-	hypothetical protein	
+NC_001835.1	18042	18227	-	hypothetical protein	
+NC_001835.1	18238	18594	-	hypothetical protein	
+NC_001835.1	18617	18859	-	hypothetical protein	
+NC_001835.1	18860	18970	-	hypothetical protein	
+NC_001835.1	19005	19322	-	hypothetical protein	
+NC_001835.1	19406	19915	-	hypothetical protein	
+NC_001835.1	19912	20127	-	Gene product 38	
+NC_001835.1	20143	20502	-	SSB protein	
+NC_001835.1	20507	21142	-	hypothetical protein	
+NC_001835.1	21139	21450	-	hypothetical protein	
+NC_001835.1	21508	21738	-	hypothetical protein	
+NC_001835.1	21735	21995	-	hypothetical protein	
+NC_001835.1	21952	22239	-	hypothetical protein	
+NC_001835.1	22236	22622	-	hypothetical protein	
+NC_001835.1	22679	22945	-	hypothetical protein	
+NC_001835.1	22908	23090	-	hypothetical protein	
+NC_001835.1	23083	23895	-	hypothetical protein	
+NC_001835.1	23892	24032	-	hypothetical protein	
+NC_001835.1	24025	24297	-	hypothetical protein	
+NC_001835.1	24358	24561	-	hypothetical protein	
+NC_001835.1	24706	25398	-	hypothetical protein	
+NC_001835.1	25836	26015	-	hypothetical protein	
+NC_001835.1	26020	26154	-	hypothetical protein	
+NC_001835.1	26154	26342	-	hypothetical protein	
+NC_001835.1	26473	26601	+	hypothetical protein	
+NC_001835.1	26606	26737	+	hypothetical protein	
+NC_001835.1	26734	27216	+	hypothetical protein	
+NC_001835.1	27213	27380	+	hypothetical protein	
+NC_001835.1	28212	28334	+	hypothetical protein	
+NC_002703.1	94	1218	-	hypothetical protein	
+NC_002703.1	1339	1860	-	hypothetical protein	
+NC_002703.1	1921	2781	-	hypothetical protein	
+NC_002703.1	3023	3253	+	hypothetical protein	
+NC_002703.1	3267	3983	+	hypothetical protein	
+NC_002703.1	3996	4331	+	hypothetical protein	
+NC_002703.1	4660	4935	-	hypothetical protein	
+NC_002703.1	5038	5253	+	hypothetical protein	
+NC_002703.1	5369	5887	+	hypothetical protein	
+NC_002703.1	5896	6519	+	hypothetical protein	
+NC_002703.1	6519	6971	+	hypothetical protein	
+NC_002703.1	7096	7878	+	hypothetical protein	
+NC_002703.1	7878	8603	+	hypothetical protein	
+NC_002703.1	8600	9358	+	hypothetical protein	
+NC_002703.1	9333	9737	+	hypothetical protein	
+NC_002703.1	9741	9980	+	hypothetical protein	
+NC_002703.1	10092	10271	+	hypothetical protein	
+NC_002703.1	10261	10830	+	hypothetical protein	
+NC_002703.1	10841	11236	+	hypothetical protein	
+NC_002703.1	11229	11774	+	hypothetical protein	
+NC_002703.1	11771	12190	+	hypothetical protein	
+NC_002703.1	12193	12444	+	hypothetical protein	
+NC_002703.1	12473	12619	+	hypothetical protein	
+NC_002703.1	12722	13144	+	hypothetical protein	
+NC_002703.1	13546	14376	+	hypothetical protein	
+NC_002703.1	14449	14910	+	hypothetical protein	
+NC_002703.1	15070	15264	+	hypothetical protein	
+NC_002703.1	15340	16473	+	hypothetical protein	
+NC_002703.1	16486	17847	+	Portal protein	6
+NC_002703.1	17844	18884	+	hypothetical protein	
+NC_002703.1	18930	19262	+	hypothetical protein	
+NC_002703.1	19388	20050	+	hypothetical protein	
+NC_002703.1	20052	20219	+	Major capsid protein	
+NC_002703.1	20390	21322	+	hypothetical protein	
+NC_002703.1	21737	22183	+	Major capsid protein	
+NC_002703.1	22183	22383	+	hypothetical protein	
+NC_002703.1	22367	22699	+	hypothetical protein	
+NC_002703.1	22696	23004	+	hypothetical protein	
+NC_002703.1	23004	23330	+	hypothetical protein	
+NC_002703.1	23327	23716	+	hypothetical protein	
+NC_002703.1	23727	24224	+	Putative tail protein	
+NC_002703.1	24340	24675	+	hypothetical protein	
+NC_002703.1	24714	25034	+	hypothetical protein	
+NC_002703.1	25049	28126	+	hypothetical protein	
+NC_002703.1	28136	28897	+	hypothetical protein	
+NC_002703.1	28897	31617	+	hypothetical protein	
+NC_002703.1	31630	32598	+	hypothetical protein	
+NC_002703.1	32552	33460	+	hypothetical protein	
+NC_002703.1	33479	34000	+	hypothetical protein	
+NC_002703.1	34013	34237	+	hypothetical protein	
+NC_002703.1	34250	36280	+	hypothetical protein	
+NC_002703.1	36305	36571	+	hypothetical protein	
+NC_002703.1	36568	37854	+	hypothetical protein	

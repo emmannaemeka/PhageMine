@@ -1,0 +1,39 @@
+{
+  "format_version": "1",
+  "installed_at": "2026-10-04T07:51:28.429739+00:00",
+  "preparation_commands": [
+    [
+      "mash",
+      "sketch",
+      "-i",
+      "-o",
+      "inphared",
+      "reference_phage_genomes.fna"
+    ]
+  ],
+  "primary_path": "reference_phage_genomes.fna",
+  "provenance": {
+    "database_version": "INPHARED-2026-04-07",
+    "mash_index_path": "inphared.msh",
+    "metadata_path": "genome_metadata.tsv",
+    "provider": "INPHARED",
+    "qc_path": "genome_qc.tsv",
+    "reference_manifest_path": "genome_manifest.json",
+    "release": "2026-04-07"
+  },
+  "resource": "inphared",
+  "resource_type": "INPHARED_GENOMES",
+  "source_artifacts": [
+    {
+      "bytes": 714521461,
+      "md5": "5fadc36048ced47f431fe510557cc797",
+      "url": "https://s3.climb.ac.uk/millardlab-inphared/2026/7Apr2026_genomes.fa.gz"
+    },
+    {
+      "bytes": 681798,
+      "md5": "7ca76b6d60f077a07d75e4c6ea635ea4",
+      "url": "https://s3.climb.ac.uk/millardlab-inphared/2026/7Apr2026_millardlab_website_table.txt.gz"
+    }
+  ],
+  "version": "2026-04-07"
+}

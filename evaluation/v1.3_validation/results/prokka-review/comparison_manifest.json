@@ -1,0 +1,68 @@
+{
+  "comparison_target": "Prokka 1.14.6",
+  "PhageMine_current_rules": "1.14",
+  "initial_rules": "1.13",
+  "shared_gene_models": 729,
+  "gene_calling_changed": false,
+  "protein_sequences_changed": false,
+  "all_four_annotation_sources_and_two_comparative_resources_completed": true,
+  "workflow_run": 37186254566,
+  "initial_pair_counts": {
+    "A_NAMED_B_UNNAMED": 192,
+    "A_UNNAMED_B_NAMED": 25,
+    "BOTH_UNNAMED": 265,
+    "DIFFERENT_NAMED_LABELS": 56,
+    "MODEL_MISSING_A": 95,
+    "MODEL_MISSING_B": 249,
+    "MODEL_MISSING_BOTH": 69,
+    "SAME_NORMALIZED_LABEL": 191
+  },
+  "current_pair_counts": {
+    "A_NAMED_B_UNNAMED": 190,
+    "A_UNNAMED_B_NAMED": 5,
+    "BOTH_UNNAMED": 268,
+    "DIFFERENT_NAMED_LABELS": 58,
+    "MODEL_MISSING_A": 95,
+    "MODEL_MISSING_B": 249,
+    "MODEL_MISSING_BOTH": 69,
+    "SAME_NORMALIZED_LABEL": 208
+  },
+  "Prokka_named_PhageMine_unnamed_before": 25,
+  "Prokka_named_PhageMine_unnamed_after": 5,
+  "recovered_names": 20,
+  "review_cases": 274,
+  "exact_reviewed_sequence_cases": 154,
+  "no_exact_reviewed_sequence_cases": 120,
+  "reviewed_snapshot_records": 151,
+  "functional_accuracy": null,
+  "accuracy_superiority_established": false,
+  "independent_expert_review": false,
+  "sources": {
+    "full_current_predictions_sha256": "733b815802d7f5ede3826e67ae1b7a49ccd158280da6bfea65d11332e4de8c60",
+    "Prokka_predictions_sha256": "5ef488d2d1c70207bc3a4649779bfe4963b80782983d3ebf7a3deb45868e36b8",
+    "record_snapshots": [
+      {
+        "name": "uniprot-reviewed.json",
+        "sha256": "bc1f27d1996624eb845d43c2b613c7e57155e3fe017b62b363b9c0ce370b84c6"
+      },
+      {
+        "name": "uniprot-phix.json",
+        "sha256": "466be40aa3dfd895a8d4da8f98133bca290ac6b587c1af436d905c4467dad8d6"
+      },
+      {
+        "name": "additional-reviewed-records.json",
+        "sha256": "bfd833d5c4b9197153ff0c1dcc4fcdff193a3aa458c67ba76a1361dea9b2f817"
+      }
+    ],
+    "reviewed_records_sha256": "160d69ed5c624caee16bb3583ef1abc399366e6dd54ff822b3e8090640d82580",
+    "decisions_sha256": "767756db4a6462f50a44288687f576b9439b01540473a5201e56807918b869e0"
+  },
+  "limitations": [
+    "This diagnostic comparison informed the rule adjustment; it is not an independent held-out trial.",
+    "The annotation databases and reviewed-record sources overlap.",
+    "Reviewed record names/comments can be inferred and are not proof of experimentally established function.",
+    "Not established by the record does not mean a prediction is false.",
+    "No exact sequence match is inferred from a high-identity alignment alone."
+  ],
+  "reviewed_record_projection": "Names, versions, genes, organism, sequence, keywords and relevant comments are frozen without rewriting; full source-record checksums are retained in record_projection_manifest.json."
+}

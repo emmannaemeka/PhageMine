@@ -22,10 +22,11 @@ computational predictions unless explicit experimental provenance is present.
 
 PHANOTATE is the retained primary caller. Prodigal comparison measures caller
 agreement and creates a review queue; it does not establish which discordant
-model is biologically correct. PhageMine does not currently call tRNA, tmRNA,
-other structured RNAs, programmed frameshifts, translational bypasses, introns,
-or alternative genetic codes. Submitters must review these features with
-specialist tools.
+model is biologically correct. Development version 1.3 supports optional tRNAscan-SE
+calling of simple tRNA features and validated imports of tRNA, tmRNA, rRNA and
+ncRNA GFF3. It does not independently call the other RNA classes or resolve
+programmed frameshifts, translational bypasses, introns or alternative genetic
+codes. See [annotation workflows](annotation-workflows.md) for scope and review.
 
 ## Hallmarks and completeness
 

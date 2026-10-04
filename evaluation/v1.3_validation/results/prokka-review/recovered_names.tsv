@@ -1,0 +1,21 @@
+accession	start	end	strand	previous_product	current_product	Prokka_product	reviewed_accession	current_name_review
+NC_000866.4	155868	156533	+	conserved phage protein of unknown function	long-tail fiber protein gp36	Long-tail fiber protein gp36	P03743	CONSISTENT_WITH_RECORD
+NC_000929.1	32975	33502	+	conserved phage protein of unknown function	tail fiber assembly protein u	Tail fiber assembly protein U	Q9T1U9	CONSISTENT_WITH_RECORD
+NC_000929.1	33531	34064	-	conserved phage protein of unknown function	tail fiber assembly protein u'	Tail fiber assembly protein U'	P0DJY5	CONSISTENT_WITH_RECORD
+NC_001416.1	191	736	+	conserved phage protein of unknown function	terminase small subunit	Terminase small subunit	P03707	CONSISTENT_WITH_RECORD
+NC_001416.1	2836	4437	+	conserved phage protein of unknown function	portal protein b	Portal protein B	P03710	CONSISTENT_WITH_RECORD
+NC_001416.1	5747	6079	+	conserved phage protein of unknown function	capsid decoration protein	Capsid decoration protein	P03712	CONSISTENT_WITH_RECORD
+NC_001416.1	39582	40283	+	conserved phage protein of unknown function	helicase loader	Replication protein P	P03689	CONSISTENT_WITH_RECORD
+NC_001422.1	2931	3917	+	conserved phage protein of unknown function	minor spike protein h	Minor spike protein H	P03646	CONSISTENT_WITH_RECORD
+NC_001604.1	3171	5822	+	conserved phage protein of unknown function	t7 rna polymerase	T7 RNA polymerase	P00573	CONSISTENT_WITH_RECORD
+NC_001604.1	10257	10706	+	conserved phage protein of unknown function	endonuclease i	Endonuclease I	P00641	CONSISTENT_WITH_RECORD
+NC_001604.1	16851	17150	+	conserved phage protein of unknown function	protein suppressor of silencing	Protein suppressor of silencing	P0DJY3	CONSISTENT_WITH_RECORD
+NC_001604.1	17504	18406	+	conserved phage protein of unknown function	exonuclease	Exonuclease	P00638	CONSISTENT_WITH_RECORD
+NC_001604.1	22967	24004	+	conserved phage protein of unknown function	major capsid protein	Minor capsid protein	P19726	CONSISTENT_WITH_RECORD
+NC_001604.1	24228	24818	+	conserved phage protein of unknown function	tail tubular protein gp11	Tail tubular protein gp11	P03746	CONSISTENT_WITH_RECORD
+NC_001604.1	36553	36822	+	conserved phage protein of unknown function	terminase, small subunit gp18	Terminase, small subunit gp18	P03693	CONSISTENT_WITH_RECORD
+NC_002371.2	9369	10058	+	conserved phage protein of unknown function	internal virion protein gp7	Internal virion protein gp7	Q01074	CONSISTENT_WITH_RECORD
+NC_002371.2	11484	13313	+	conserved phage protein of unknown function	internal virion protein gp16	Internal virion protein gp16	Q01146	CONSISTENT_WITH_RECORD
+NC_005859.1	29397	29978	-	conserved phage protein of unknown function	h-n-h endonuclease f-tflii	H-N-H endonuclease F-TflII	Q6QGM6	CONSISTENT_WITH_RECORD
+NC_005859.1	31022	31606	-	conserved phage protein of unknown function	h-n-h endonuclease f-tfli	H-N-H endonuclease F-TflI	Q6QGM3	CONSISTENT_WITH_RECORD
+NC_005859.1	47022	47861	-	conserved phage protein of unknown function	probable thymidylate synthase	putative thymidylate synthase	Q6QGJ5	CONSISTENT_WITH_RECORD

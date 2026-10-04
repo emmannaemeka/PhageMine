@@ -1,0 +1,25 @@
+name: Container annotation smoke
+on:
+  pull_request:
+    paths: ["Dockerfile", ".dockerignore", "environment.yml", "pyproject.toml", "src/**", ".github/workflows/container.yml"]
+  workflow_dispatch:
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build --tag phagemine:ci .
+      - name: Real-caller annotation and RNA stage
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" -v "${{ runner.temp }}:/data" phagemine:ci run /opt/phagemine/examples/demo_phage.fasta --output /data/container-core --rna-features trnascan --quiet
+          docker run --rm --user "$(id -u):$(id -g)" -v "${{ runner.temp }}:/data" phagemine:ci validate-run --run /data/container-core
+          docker run --rm --user "$(id -u):$(id -g)" -v "${{ runner.temp }}:/data" phagemine:ci bundle create --run /data/container-core --output /data/container-core.zip
+          docker run --rm --user "$(id -u):$(id -g)" -v "${{ runner.temp }}:/data" phagemine:ci bundle verify /data/container-core.zip
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-smoke
+          path: |
+            ${{ runner.temp }}/container-core/run_manifest.json
+            ${{ runner.temp }}/container-core/rna_features.json

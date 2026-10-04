@@ -1,0 +1,13 @@
+{
+  "protein_id": "PM_000190",
+  "accession": "NC_000866.4",
+  "start": 107323,
+  "end": 108606,
+  "strand": "+",
+  "product": "capsid vertex protein",
+  "gene": "",
+  "curation_state": "MANUALLY_REVIEWED",
+  "artifact_validation": "ARTIFACTS_CONSISTENT",
+  "raw_evidence_sha256": "92820d441547e891f6f952c300a03b5cd1487135ab447a84b6099c2ab90607f1",
+  "automatic_benchmark_modified": false
+}

@@ -1,0 +1,25 @@
+{
+  "accuracy_superiority_established": false,
+  "analysis_type": "FRESH_REFERENCE_CONCORDANCE_BY_PANEL",
+  "current_fusion_rules_version": "1.12",
+  "equivalences_sha256": "7bbf837f59f30438ae5d4b152e04f77082b3b5b8181abdff6bcb2dcc4e990fd2",
+  "external_accessions": [
+    "NC_001706.1",
+    "NC_001835.1",
+    "NC_002703.1"
+  ],
+  "independent_ground_truth": false,
+  "interpretation": "External genomes were excluded from rule tuning; database overlap and reference independence are not excluded. Named assertions and exact/equivalent labels are concordance, not biological accuracy.",
+  "original_accessions": [
+    "NC_000866.4",
+    "NC_000929.1",
+    "NC_001416.1",
+    "NC_001422.1",
+    "NC_001604.1",
+    "NC_002371.2",
+    "NC_005859.1"
+  ],
+  "scope": "PHROGs-only PhageMine vs standard Pharokka vs viral Prokka; CDS comparison",
+  "selection_sha256": "d3bc2ef62f8441b0e67e3b2e543e068cf97c511589663b08892fdb67aca5093e",
+  "source_audit_sha256": "24ea8b4724ea34d3731138674da245028023c758eb0843b0e99d43335dd9aa2e"
+}

@@ -1,0 +1,979 @@
+accession	protein_id	start	end	strand	product	gene	state	supporting_sources	curated_anchor	rules_version
+NC_000866.4	PM_000001	12	2189	-	riia lysis inhibitor		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000002	2200	2403	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000003	2458	2751	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000004	2850	2954	-	dna topoisomerase ii		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000005	2971	3351	-	homing endonuclease		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000006	3457	3549	-	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000007	3654	3767	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000008	3778	5328	-	dna topoisomerase large subunit		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000009	5398	5595	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000010	5702	5839	-	fmdb-like transcriptional regulator		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000011	5842	6267	-	gof mrna metabolism modulator		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_000866.4	PM_000012	6267	6482	-	cef modifier of supressor trnas		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000013	6500	6589	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000014	6653	7141	-	transcription regulatory protein motb	motB	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000015	7218	7307	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000016	7291	7650	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000017	7661	8161	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000018	8225	8908	-	exodeoxyribonuclease	dexA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000019	8908	9150	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000020	9143	9388	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000021	9410	10729	-	atp-dependent dna helicase dda	dda	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000022	10726	11037	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000023	11039	11785	-	srd anti-sigma factor		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000024	11908	12510	-	nad--protein adp-ribosyltransferase moda	modA	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000025	12507	13130	-	nad--protein adp-ribosyltransferase modb	modB	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000026	13198	13380	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000027	13389	13859	-	mrh transcription modulator under heat shock		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000028	13852	14016	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000029	14013	14198	-	decoy of host sigma32		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000030	14191	14676	-	rpoh-modulating protein	mrh	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000031	14685	15026	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000032	15026	15232	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000033	15260	15349	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000034	15331	15573	-	small outer capsid protein	soc	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000035	15606	16280	-	dna replication protein		PROBABLE_FUNCTION	Swiss-Prot	False	1.14
+NC_000866.4	PM_000036	16270	16785	-	dctp pyrophosphatase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000037	16846	17625	-	dna adenine methylase	DAM	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000038	17653	17766	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000039	17738	17938	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000040	17935	18963	-	dna primase		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000041	18966	19130	-	major capsid protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000042	19132	19758	-	anti-dart factor a	adfA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000043	19758	20051	-	protein spackle	sp	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000044	20112	20369	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000045	20371	20553	-	antitoxin dmd	dmd	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000046	20612	22039	-	dnab-like replicative helicase		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000047	22049	22393	-	head formation protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000048	22386	23561	-	recombination and repair protein	UVSX	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000049	23570	24235	-	endonuclease sega	segA	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000050	24279	24410	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000051	24400	25455	-	dna beta-glucosyltransferase	bgt	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000052	25479	26219	-	deoxycytidylate 5-hydroxymethyltransferase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000053	26227	26376	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000054	26373	26624	-	immunity protein	imm	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000055	26636	27013	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000056	27010	27126	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000057	27197	29893	-	dna-directed dna polymerase		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000058	29972	30340	-	translation repressor protein	regA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000059	30342	30905	-	sliding-clamp-loader small subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000060	30907	31866	-	sliding-clamp-loader large subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000061	31917	32603	-	sliding clamp		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000062	32659	33048	-	15 kda rna polymerase-binding protein	rpbA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000063	33058	33246	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000064	33302	34942	-	exonuclease subunit 2		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000065	34981	35196	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000066	35168	35431	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000067	35428	36447	-	exonuclease subunit 1		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000068	36444	36584	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000069	36624	37826	-	dna alpha-glucosyltransferase	agt	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000070	37885	38679	-	probable mobile endonuclease b	mobB	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000071	38731	38922	-	capsid maturation protease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000072	38907	39110	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000073	39079	39396	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000074	39398	39616	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000075	39600	40157	-	rna polymerase sigma-like factor		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000076	40193	40456	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000077	40459	40785	-	homing endonuclease		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000078	40799	41038	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000079	41039	41170	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000080	41178	41471	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000081	41464	41646	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000082	41805	42113	-	thioredoxin domain		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000083	42116	42328	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000084	42370	42468	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000085	42446	42916	-	anaerobic ribonucleoside-triphosphate reductase-activating protein	NRDG	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000086	42906	43538	-	probable mobile endonuclease c	mobC	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000087	43535	44728	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000088	44836	45612	-	intron-associated endonuclease 2	ITEVIIR	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000089	45575	45694	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000090	45840	46385	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000091	46382	46855	-	recombination endonuclease vii		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000092	46897	47382	-	host protease inhibitor	pin	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000093	47366	47521	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000094	47506	47826	-	ribonucleotide reductase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000095	47823	48131	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000096	48128	48391	-	glutaredoxin	NRDC	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000097	48393	48635	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000098	48622	48936	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000099	48933	49859	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000100	49914	50915	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000101	50973	51995	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000102	52066	52893	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000103	52901	53302	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000104	53358	53885	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000105	53946	54248	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000106	54343	55320	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000107	55340	55438	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000108	55435	56469	-	nucleotidyltransferase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000109	56429	57208	-	probable mobile endonuclease d	mobD	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000110	57283	57828	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000111	57892	57993	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000112	58049	58165	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000113	58155	58349	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000114	58352	58534	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000115	58534	58722	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000116	58819	59205	-	starvation-inducible transcriptional regulator		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000117	59202	59495	-	antiholin	rI	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000118	59508	59720	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000119	59763	60344	-	thymidine kinase	TK	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000120	60346	60534	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000121	60531	60722	-	virion structural protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000122	60713	60925	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000123	60922	61389	-	phosphatase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000124	61386	61733	-	valyl--trna ligase modifier	vs	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000125	61726	62271	-	lytic tail protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000126	62279	62740	-	endoribonuclease regb	regB	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000127	62800	63078	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000128	63078	63344	-	anti-cbass protein 2	acb2	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000129	63337	63459	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000130	63557	63919	-	autonomous glycyl radical cofactor		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000131	63927	64256	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000132	64253	64912	-	terminase, large subunit		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000133	64939	65355	-	endonuclease v		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000134	65416	65718	-	internal protein ii	ipi2	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000135	65834	66415	-	internal protein iii	ipi3	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000136	66503	66997	-	endolysin	E	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000137	67035	67490	-	nudix hydrolase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000138	67472	67570	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000139	67572	67664	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000140	67652	67960	-	membrane protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000141	67957	68319	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000142	68301	68693	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000143	68662	69270	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000144	69312	69905	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000145	69968	70303	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000146	70360	70623	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000147	70587	70676	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000148	70821	70982	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000149	70979	71098	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000150	71253	71918	-	putative endonuclease segb	segB	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000151	72628	72915	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000152	72918	73328	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000153	73329	73514	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000154	73591	73878	-	internal protein i	ipi1	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000155	73952	74410	-	anti-cbass protein acb1		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000156	74407	74649	-	tail fiber assembly helper protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000157	74649	75374	-	deoxynucleotide monophosphate kinase		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000158	75424	75954	-	tail tube terminator protein		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000159	76061	76885	-	terminal dna protecting protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000160	76885	77337	-	head completion nuclease		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000161	77385	77975	+	baseplate wedge protein gp53		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000162	77959	79686	+	pre-baseplate central spike protein gp5		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000163	79661	80215	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000164	80196	80618	+	homing endonuclease		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_000866.4	PM_000165	80621	80791	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000166	80779	81072	+	baseplate puncturing device gp5.4		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000167	81081	83063	+	baseplate wedge protein gp6		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000168	83060	86158	+	baseplate wedge protein gp7		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000169	86151	87155	+	baseplate wedge protein gp8		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000170	87219	88085	+	baseplate protein gp9		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000171	88085	89893	+	baseplate wedge protein gp10		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000172	89893	90552	+	baseplate wedge protein gp11		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000173	90549	92132	+	short tail fiber protein gp12		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000174	92129	93592	+	fibritin	wac	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000175	93624	94553	+	neck protein gp13		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000176	94555	95325	+	neck protein gp14		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000177	95367	96185	+	tail completion protein gp15		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000178	96194	96688	+	terminase, small subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000179	96672	98504	+	terminase, large subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000180	98536	100515	+	tail sheath protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000181	100632	101123	+	tail tube protein gp19		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000182	101207	102781	+	portal protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000183	102781	103023	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000184	103023	103448	+	prohead assembly protein gp68	gp68	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000185	103448	104086	+	prohead core protein protease		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000186	104117	104926	+	capsid assembly scaffolding protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000187	104945	106510	+	major capsid protein	gp23	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000188	106561	107232	-	putative endonuclease segd	segD	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000189	107241	107330	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000190	107323	108606	+	capsid vertex protein		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000191	108636	109640	-	rna ligase 2	Y10A	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000192	109650	109928	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000193	109915	110097	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000194	110187	111317	-	highly immunogenic outer capsid protein	hoc	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000195	111327	112007	-	minor head protein inhibitor of protease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000196	112057	112674	+	putative endonuclease sege	segE	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000197	112677	114440	+	atp-dependent dna helicase uvsw	uvsW	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000198	114496	114663	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000199	114690	114914	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000200	114914	115327	-	recombination protein uvsy	uvsY	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000201	115404	115802	-	baseplate wedge protein gp25		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000202	115802	116428	-	baseplate hub assembly protein gp26		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000203	116479	117228	+	baseplate hub assembly protein gp51		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000204	117234	118403	+	baseplate central spike complex protein gp27		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000205	118348	118881	+	baseplate hub assembly protein gp28		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000206	118878	120650	+	tape measure protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000207	120659	121753	+	baseplate tail-tube junction protein gp48		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000208	121753	122715	+	baseplate tail-tube junction protein gp54		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000209	122742	123032	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000210	123065	123268	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000211	123265	123450	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000212	123454	125502	-	nad(+)--arginine adp-ribosyltransferase	alt	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000213	125560	125748	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000214	125745	127208	-	dna ligase		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000215	127205	127474	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000216	127474	128310	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000217	128307	128765	-	anti-dart factor nadar	adfN	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000218	128758	128964	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000219	128961	129158	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000220	129158	129445	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000221	129487	129852	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000222	129921	130253	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000223	130255	130362	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000224	130364	130582	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000225	130573	130677	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000226	130785	131033	-	lysis inhibition accessory protein	rIII	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000227	131181	131516	-	capsid assembly protein gp31		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000228	131573	131881	-	tail fiber protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000229	131882	132118	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000230	132118	132699	-	deoxycytidylate deaminase	CD	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000231	132696	133034	-	dnad-like helicase loader		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000866.4	PM_000232	133031	133261	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000233	133334	133609	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000234	133612	133812	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000235	133805	134002	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000236	134002	134907	-	polynucleotide kinase	pseT	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000237	134908	135135	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000238	135132	135431	-	spanin, outer lipoprotein subunit	y13J	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000239	135428	135781	-	spanin, inner membrane subunit	y13K	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000240	135772	136278	-	inhibitor of host transcription		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000241	136340	137464	-	rna ligase 1		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000242	137517	137927	-	endonuclease ii	denA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000243	137955	138434	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000244	138424	138603	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000245	138640	138777	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000246	138774	138935	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000247	139054	139719	-	ribonucleotide reductase class ia beta subunit		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000248	139716	139967	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000249	139991	140416	-	probable mobile endonuclease e	mobE	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000250	140416	142680	-	ribonucleoside-diphosphate reductase subunit alpha	NRDA	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000251	142671	142997	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000252	142951	143214	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000253	143235	143549	-	thymidylate synthase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_000866.4	PM_000254	143694	144431	-	intron-associated endonuclease 1	ITEVIR	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000255	144561	145112	-	thymidylate synthase		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	False	1.14
+NC_000866.4	PM_000256	145109	145690	-	dihydrofolate reductase	frd	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000257	145762	146004	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000258	146143	146529	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000259	146575	146802	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000260	146948	147853	-	single-stranded dna-binding protein		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000261	147909	148541	-	homing endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000262	148543	149181	-	dna helicase assembly protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000263	149193	149531	-	late transcription coactivator		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000264	149509	149778	-	double-stranded dna-binding protein	dsbA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000265	149787	150704	-	ribonuclease h	rnh	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000266	150809	154678	+	long-tail fiber proximal subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000267	154687	155805	+	long-tail fiber protein gp35		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000268	155868	156533	+	long-tail fiber protein gp36		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000269	156542	159622	+	long-tail fiber protein gp37		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000866.4	PM_000270	159649	160200	+	tail fiber assembly protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000271	160221	160877	+	holin		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000272	160878	161150	-	10 kda anti-sigma factor	asiA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000273	161163	161315	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000274	161312	161590	-	anti-restriction endonuclease	arn	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000275	161674	161805	-	anti-restriction nuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000276	161876	162172	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000277	162172	162630	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000278	162627	162833	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000279	162967	163602	-	middle transcription regulatory protein mota	motA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000280	163730	163879	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000281	163876	165204	-	dna topoisomerase medium subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000282	165209	165349	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000283	165342	165497	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000284	165585	166040	-	nucleoid disruption protein	ndd	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000285	166101	166316	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000286	166325	166432	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000287	166432	166554	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000288	166548	166649	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_000866.4	PM_000289	166636	166749	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000290	166815	166913	-	outer membrane protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000866.4	PM_000291	166993	167121	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000866.4	PM_000292	167103	167660	-	endonuclease iv	T4147_276	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000866.4	PM_000293	167743	167937	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000866.4	PM_000294	167965	168903	-	riib lysis inhibitor		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000929.1	PM_000001	3	101	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_000929.1	PM_000002	339	863	-	repressor protein c	repc	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000003	1015	1131	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_000929.1	PM_000004	1099	1326	+	negative regulator of transcription	ner	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000005	1328	3319	+	dde-recombinase a	A	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000006	3358	4296	+	atp-dependent target dna activator b	B	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000007	4312	4539	+	kil protein for bacterial septation inhibition		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000929.1	PM_000008	4542	4772	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000009	4784	5047	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000010	5038	5481	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000011	5482	5781	+	helix-turn-helix transcriptional regulator		PROBABLE_FUNCTION		False	1.14
+NC_000929.1	PM_000012	5801	6325	+	putative dna ends protecting protein gam	gam	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000013	6424	6954	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000014	6954	7484	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000015	7471	7653	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000016	7655	7957	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000017	7896	8162	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000018	8233	8784	+	gema protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_000929.1	PM_000019	8781	9170	+	middle operon regulator	mor	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000020	9248	9466	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000021	9459	9821	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000022	9831	9950	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_000929.1	PM_000023	9963	10385	+	late transcription activator c	C	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000024	10477	10995	+	sar-endolysin	lys	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000025	11211	11567	+	spanin, outer lipoprotein subunit		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000026	11524	11718	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000027	11718	12017	+	releasin protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000028	12014	12304	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000029	12316	12891	+	probable terminase, small subunit gp27		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000030	12707	14554	+	probable terminase, large subunit gp28		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000031	14554	16092	+	portal protein	H	PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_000929.1	PM_000032	16073	17392	+	putative capsid assembly protein f	F	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000033	17401	17859	+	putative capsid assembly protein g	G	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000034	18056	19141	+	protease i	I	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000035	19138	20055	+	major capsid protein	T	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000036	20122	20532	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000037	20529	20954	+	head-tail adaptor		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_000929.1	PM_000038	20954	21502	+	probable tail terminator protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000039	21486	21692	+	putative sheath terminator protein		KNOWN_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000040	21689	23176	+	tail sheath protein	L	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000041	23186	23542	+	tail tube protein	M	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000042	23552	23986	+	probable tail assembly protein gp41		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000043	24028	24168	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_000929.1	PM_000044	24131	26203	+	probable tape measure protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000045	26208	27695	+	dna circularization protein n	N	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000046	27688	28827	+	baseplate hub protein gp44	P	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000047	28863	29408	+	baseplate puncturing device gp45		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000048	29405	29842	+	baseplate protein gp46		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000049	29843	30925	+	baseplate protein gp47		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000050	30916	31458	+	baseplate protein gp48		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000051	31458	32972	+	tail fiber protein s	S	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000052	32975	33502	+	tail fiber assembly protein u	U	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000053	33531	34064	-	tail fiber assembly protein u'		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_000929.1	PM_000054	34067	35263	-	tail fiber protein s'		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000055	35299	35673	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_000929.1	PM_000056	35768	35956	+	translational activator com	com	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_000929.1	PM_000057	35877	36602	+	methylcarbamoylase mom	mom	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000001	191	736	+	terminase small subunit	Nu1	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000002	751	894	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000003	891	2636	+	terminase, large subunit	A	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000004	2633	2839	+	head completion protein	W	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000005	2836	4437	+	portal protein b	B	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000006	4319	5737	+	capsid assembly protease c	NU3	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000007	5747	6079	+	capsid decoration protein	D	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000008	6135	7160	+	major capsid protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_001416.1	PM_000009	7163	7600	+	dna-packaging protein fi	Fi	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000010	7678	7965	+	conserved phage protein of unknown function		CONFLICTING_EVIDENCE		False	1.14
+NC_001416.1	PM_000011	7977	8555	+	tail completion protein z	Z	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000012	8552	8947	+	tail tube terminator protein	U	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000013	8955	9695	+	tail tube protein	V	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000014	9711	10133	+	tail assembly protein g	G	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000015	10160	10549	+	tail assembly protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000016	10542	13103	+	tape measure protein	H	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000017	13100	13429	+	tail tip protein m	M	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000018	13429	14127	+	tail tip protein l	L	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000019	14090	14257	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000020	14276	14875	+	tail tip assembly protein k	K	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000021	14773	15444	+	tail tip assembly protein i	I	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000022	15505	18903	+	tip attachment protein j	J	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000023	18965	19585	+	outer membrane protein lom	lom	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000024	19650	20855	+	tail fiber protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	False	1.14
+NC_001416.1	PM_000025	20815	20964	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000026	21029	21973	+	tail fiber protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	False	1.14
+NC_001416.1	PM_000027	21973	22557	+	tail fiber assembly protein	tfa	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000028	22686	23918	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000029	23947	24045	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000030	24108	24317	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000031	24509	25399	-	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000032	25396	26973	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000033	27009	27164	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000034	27157	27351	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000035	27335	27604	-	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000036	27766	27855	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000037	27812	28882	-	integrase	int	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000038	28860	29078	-	excisionase	xis	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000039	29118	29285	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000040	29374	29655	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000041	29847	30347	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000042	30392	30613	-	dksa-like zinc-finger protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000043	30620	30709	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000044	30712	30894	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000045	31005	31196	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000046	31169	31351	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000047	31348	32028	-	exonuclease	exo	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000048	32025	32810	-	recombination protein bet	bet	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000049	32816	33232	-	host-nuclease inhibitor protein gam	gam	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000050	33187	33456	-	kil protein for bacterial septation inhibition		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000051	33536	33904	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000052	33917	34006	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000053	34087	34287	-	restriction inhibitor protein ral	ral	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000054	34261	34386	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000055	34485	35036	+	superinfection exclusion protein b	sieB	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000056	35037	35438	-	antitermination protein n	N	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000057	35471	35581	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000058	35583	35672	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000059	35669	35854	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000060	35825	36259	-	rexb-like exclusion protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000061	36275	37114	-	rexa-like exclusion protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000062	37227	37940	-	repressor protein ci	cI	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000063	37919	38056	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000064	38041	38241	+	regulatory protein cro	cro	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000065	38300	38653	+	conserved phage protein of unknown function		CONFLICTING_EVIDENCE		False	1.14
+NC_001416.1	PM_000066	38686	39585	+	replication protein o	O	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000067	39582	40283	+	helicase loader	P	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000068	40280	40570	+	ren-like exclusion protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000069	40644	41084	+	ninb/ orf homologous recombination mediator		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000070	41063	41953	+	phosphoadenosine phosphosulfate reductase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000071	41972	42169	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000072	42227	42439	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000073	42429	43043	+	ning/ rap dna junction specific endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000074	43152	43889	+	serine/threonine-protein phosphatase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000075	43886	44509	+	antitermination protein q	Q	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000076	44538	44690	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001416.1	PM_000077	44654	44938	-	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000078	45147	45242	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000079	45186	45509	+	antiholin	S	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000080	45493	45969	+	endolysin	R	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000081	45966	46427	+	spanin, inner membrane subunit	Rz	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001416.1	PM_000082	46459	46752	-	lipoprotein bor	bor	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001416.1	PM_000083	46896	46994	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000084	47042	47494	-	head protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001416.1	PM_000085	47572	47736	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001416.1	PM_000086	47738	47944	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000087	48109	48303	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001416.1	PM_000088	48319	48432	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001422.1	PM_000001	2	136	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001422.1	PM_000002	133	393	+	terminase protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001422.1	PM_000003	390	848	+	external scaffolding protein d	D	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001422.1	PM_000004	848	964	+	dna-binding protein j	J	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001422.1	PM_000005	1001	2284	+	capsid protein f	F	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001422.1	PM_000006	2395	2922	+	major spike protein g	G	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001422.1	PM_000007	2931	3917	+	minor spike protein h	H	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001422.1	PM_000008	3981	5384	+	conserved phage protein of unknown function		CONFLICTING_EVIDENCE		False	1.14
+NC_001604.1	PM_000001	3	98	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001604.1	PM_000002	474	608	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001604.1	PM_000003	627	749	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001604.1	PM_000004	766	921	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001604.1	PM_000005	925	1278	+	ocr-like anti-restriction		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001604.1	PM_000006	1278	1433	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000007	1430	1639	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000008	1639	1797	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000009	1781	1972	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000010	2021	3100	+	protein kinase 0.7		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000011	3171	5822	+	t7 rna polymerase		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000012	6007	6135	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000013	6137	6394	+	inhibitor of dgtpase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000014	6475	7554	+	dna ligase		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000015	7608	7763	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000016	7791	7880	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000017	7906	8166	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000018	8166	8756	+	nucleotide kinase gp1.7		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000019	8749	8895	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000020	8892	9092	+	bacterial rna polymerase inhibitor		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000021	9158	9856	+	single-stranded dna-binding protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000022	9857	10276	+	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001604.1	PM_000023	10257	10706	+	endonuclease i		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000024	10706	11161	+	endolysin		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000025	11225	11590	+	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001604.1	PM_000026	11565	13265	+	dna helicase/primase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000027	13352	13564	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000028	13584	13853	+	inhibitor of toxin/antitoxin system		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000029	13798	14334	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000030	14353	16467	+	dna-directed dna polymerase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000031	16483	16839	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000032	16851	17150	+	protein suppressor of silencing		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000033	17150	17359	+	fusion protein 5.5/5.7		PROBABLE_FUNCTION	Swiss-Prot	False	1.14
+NC_001604.1	PM_000034	17359	17517	+	probable recbcd inhibitor gp5.9		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000035	17504	18406	+	exonuclease		PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_001604.1	PM_000036	18394	18507	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000037	18605	18859	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000038	18864	19130	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001604.1	PM_000039	19130	19531	+	host range and adsorption protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001604.1	PM_000040	19535	19834	+	host range and adsorption protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001604.1	PM_000041	19848	20240	+	hnh endonuclease		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001604.1	PM_000042	20225	21850	+	portal protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000043	21950	22873	+	capsid assembly scaffolding protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000044	22967	24004	+	major capsid protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_001604.1	PM_000045	24004	24162	+	head protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001604.1	PM_000046	24228	24818	+	tail tubular protein gp11		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001604.1	PM_000047	24842	27226	+	tail tubular protein gp12		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000048	27307	27723	+	probable scaffold protein gp13		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000049	27728	28318	+	internal virion protein gp14		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000050	28325	30568	+	internal virion protein gp15		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000051	30595	34551	+	peptidoglycan transglycosylase gp16		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000052	34624	36285	+	tail fiber protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000053	36344	36547	+	holin		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000054	36553	36822	+	terminase, small subunit gp18		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000055	36797	36898	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001604.1	PM_000056	36917	37348	+	spanin, inner membrane subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000057	37370	39130	+	terminase, large subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001604.1	PM_000058	39389	39538	+	holin		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_001604.1	PM_000059	39494	39604	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001604.1	PM_000060	39713	39847	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001604.1	PM_000061	39834	39935	-	minor capsid protein p14		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002371.2	PM_000001	1	225	+	terminase, small subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	False	1.14
+NC_002371.2	PM_000002	203	1702	+	terminase, large subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000003	1702	3879	+	portal protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000004	3893	4804	+	scaffolding protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000005	4804	6096	+	major capsid protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_002371.2	PM_000006	6135	6344	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000007	6328	6828	+	head-to-tail adapter gp4		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000008	6788	8206	+	tail hub protein gp10		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000009	8210	8911	+	tail needle protein gp26		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000010	8911	9366	+	head morphogenesis protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002371.2	PM_000011	9369	10058	+	internal virion protein gp7		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000012	10069	11484	+	internal virion protein gp20		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000013	11484	13313	+	internal virion protein gp16		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000014	13336	14046	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000015	14020	14226	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000016	14240	14419	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000017	14519	15106	-	regulatory protein mnt		PROBABLE_FUNCTION	Swiss-Prot	False	1.14
+NC_002371.2	PM_000018	15091	15993	+	antirepressor protein ant	ant	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000019	16204	18207	+	tail spike protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000020	18266	19498	-	gtrc-like o-antigen conversion translocase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002371.2	PM_000021	19519	19623	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000022	19713	20690	-	bactoprenol glucosyl transferase	gtrB	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000023	20642	21004	-	bactoprenol-linked glucose translocase	gtrA	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000024	21155	21244	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000025	21353	22516	-	integrase	int	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000026	22548	22718	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000027	22746	23381	-	eac protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002371.2	PM_000028	23463	23702	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000029	23758	24711	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000030	24715	24903	-	eai protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002371.2	PM_000031	24906	25616	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000032	25496	25855	-	eaf protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002371.2	PM_000033	25830	25967	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000034	25964	26461	-	eae protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002371.2	PM_000035	26449	26619	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000036	26630	26923	-	anti-recbcd protein 2	abc2	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000037	26970	27254	-	anti-recbcd protein 1	abc1	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000038	27254	27871	-	essential recombination function protein	erf	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000039	27868	28011	-	accessory recombination function protein	arf	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000040	28001	28189	-	kil protein for bacterial septation inhibition		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002371.2	PM_000041	28170	28328	-	regulatory protein c3	C3	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000042	28414	28725	-	superinfection exclusion protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000043	28873	29076	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000044	29076	29312	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000045	29349	29543	-	restriction inhibitor protein ral	ral	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000046	29581	30336	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000047	30387	30545	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000048	30679	30891	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000049	31013	31663	-	repressor protein c2	C2	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000050	31744	31929	+	regulatory protein cro	cro	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000051	32036	32314	+	transcriptional activator protein c1	C1	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000052	32349	32495	+	tail protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002371.2	PM_000053	32488	33303	+	dna replication protein gp18		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000054	33300	34676	+	replicative dna helicase		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000055	34750	35187	+	ninb/ orf homologous recombination mediator		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002371.2	PM_000056	35184	35357	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000057	35324	35500	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000058	35497	35835	+	putative protein ninx	ninX	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000059	35828	36004	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000060	35997	36608	+	ning/ rap dna junction specific endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002371.2	PM_000061	36605	36829	+	putative protein niny	ninY	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000062	36856	37029	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000063	37010	37189	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000064	37186	37809	+	antitermination protein q	Q	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002371.2	PM_000065	37899	38108	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_002371.2	PM_000066	38131	38235	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000067	38244	38570	+	antiholin	S	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000068	38554	38991	+	endolysin		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000069	38988	39425	+	spanin, inner membrane subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_002371.2	PM_000070	39466	39651	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000071	39644	40180	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000072	40173	40325	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_002371.2	PM_000073	40310	40474	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000074	40446	40706	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000075	40768	40932	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000076	40947	41039	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002371.2	PM_000077	41014	41256	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000078	41258	41437	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002371.2	PM_000079	41455	41724	+	terminase, small subunit		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	False	1.14
+NC_005859.1	PM_000001	124	858	-	5'-deoxynucleotidase	T5p159	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000002	939	1334	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000003	1371	1649	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000004	1706	3376	-	dna transfer protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000005	3473	3670	-	membrane protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000006	3727	4134	-	dna binding protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000007	4230	4481	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000008	4538	4639	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000009	4715	4918	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000010	4915	5118	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000011	5206	5319	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000012	5411	5929	-	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000013	6205	6294	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000014	6495	7505	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000015	7624	7854	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000016	7904	8083	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000017	8086	8298	+	endonuclease nicking abasic sites generated by host uracil glycosylase ung		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000018	8300	8644	+	dna-(apurinic or apyrimidinic site) endonuclease	T5.015	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000019	8681	8938	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000020	8954	9157	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000021	9171	9398	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000022	9653	9883	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000023	9870	10022	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000024	10030	10128	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000025	10194	10331	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000026	10368	10460	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000027	10580	10675	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000028	10680	10775	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000029	10936	11820	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000030	11902	12510	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000031	12510	12695	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000032	12695	12928	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000033	12916	13206	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000034	13199	13747	-	putative endonuclease		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_005859.1	PM_000035	13816	13926	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000036	13907	14278	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000037	14226	14687	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000038	14684	14884	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000039	14841	14987	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000040	14984	15310	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000041	15300	15545	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000042	15542	15823	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000043	15823	15987	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000044	15987	16238	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000045	16317	16748	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000046	16801	16923	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000047	16916	17437	-	phosphoesterase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000048	17437	18300	-	nini-like serine-threonine phosphatase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000049	18303	18548	-	major capsid protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000050	18646	18936	-	thioredoxin domain		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000051	18929	19360	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000052	19436	19852	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000053	19931	20344	-	l-alanyl-d-glutamate peptidase	orf10c	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000054	20341	21024	-	holin	orf11c	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000055	21154	21753	-	atp-dependent protease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000056	21766	22518	-	deoxynucleoside-5'-monophosphate kinase	T5.043	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000057	22518	22871	-	rz-like spanin		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000058	22802	23245	-	rz-like spanin		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000059	23245	23742	-	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000060	23739	24437	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000061	24592	24936	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000062	25047	25331	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000063	25328	25657	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000064	25638	26150	-	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000065	26147	26446	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000066	26436	26717	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000067	26794	27141	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000068	27263	27439	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000069	27495	27656	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000070	27656	28024	-	autonomous glycyl radical cofactor		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000071	28302	28592	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000072	28752	28916	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000073	28909	29160	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000074	29397	29978	-	h-n-h endonuclease f-tflii	T5.061	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000075	29980	30180	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000076	30434	30550	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000077	30566	30673	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000078	30651	30824	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000079	31022	31606	-	h-n-h endonuclease f-tfli	T5.064	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000080	32048	32140	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000081	32240	32407	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000082	32612	32755	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000083	32733	32942	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000084	32995	33087	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000085	33115	33213	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000086	33205	33633	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000087	33664	33849	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000088	33860	33988	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000089	34006	34524	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000090	34627	34755	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000091	34806	35078	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000092	35617	35892	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000093	35983	36189	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000094	36182	36349	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000095	36379	37062	-	h-n-h endonuclease f-tfliv	ORF070	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000096	37279	37848	-	dna primase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000097	37849	38034	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000098	38064	39029	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000099	39051	39467	+	capsid protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_005859.1	PM_000100	39477	39671	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000101	39791	40738	-	band 7/spfh family protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_005859.1	PM_000102	40917	41030	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000103	41127	41216	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000104	41229	41318	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000105	41617	42045	-	trna amidotransferase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000106	42051	42221	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000107	42290	42739	-	endolysin		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000108	42745	43062	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000109	43078	43182	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000110	43505	44143	-	tail fiber protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000111	44196	44378	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000112	44449	45150	-	exonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000113	45179	45415	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000114	45458	45973	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000115	46057	46335	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000116	46412	46888	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000117	47022	47861	-	probable thymidylate synthase	T5.092	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000118	47861	48394	-	dihydrofolate reductase	T5.093	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000119	48391	49536	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000120	49536	50060	-	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000121	50072	50179	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000122	50163	52598	-	ribonucleotide reductase large subunit		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000123	52678	52836	-	tail length tape measure protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000124	52838	53590	-	phoh-like phosphate starvation-inducible		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000125	53607	53708	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000126	53961	55685	+	anaerobic ribonucleoside-triphosphate reductase		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000127	55786	56166	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000128	56159	56392	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000129	56447	57265	+	sir2 (nad-dependent deacetylase)		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000130	57243	57428	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000131	57419	57601	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000132	57588	58094	+	sir2 (nad-dependent deacetylase)		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000133	58097	58525	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000134	58535	58927	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000135	58962	59063	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000136	59204	59320	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000137	59339	59455	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000138	59545	62331	+	putative replication origin binding protein	T5.108	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000139	62318	62836	+	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000140	62820	63053	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000141	63122	63826	+	helicase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000142	63819	64070	+	transcriptional regulator		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000143	64174	64584	+	dna binding protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000144	64621	64917	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000145	64968	65276	+	transcriptional regulator		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000146	65364	66335	+	nad-dependent dna ligase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000147	66308	66430	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000148	66538	67317	+	nad-dependent dna ligase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000149	67310	68077	+	putative transcription factor d5	ORF109	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000150	68109	69617	+	dnab-like replicative helicase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000151	69614	70147	+	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000152	70144	71034	+	dna primase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000153	71097	73664	+	dna polymerase	T5.122	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000154	73657	74154	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000155	74151	75503	+	probable helicase d10	T5.124	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000156	75724	76008	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000157	76001	76774	+	probable ssdna-binding protein	T5.126	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000158	76811	77788	+	probable exonuclease subunit 1	T5.127	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000159	77769	79607	+	probable exonuclease subunit 2	T5.128	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000160	79611	80093	+	rusa-like holliday junction resolvase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000161	80093	80968	+	flap endonuclease	T5.130	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000162	80965	81411	+	deoxyuridine 5'-triphosphate nucleotidohydrolase	T5.131	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000163	81374	81637	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000164	81865	86055	-	side tail fiber protein pb1	T5.133	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000165	86055	86318	-	collar protein p132		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	False	1.14
+NC_005859.1	PM_000166	86294	86479	-	collar tail protein for l-shaped tail fibre attachment		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000167	86484	88550	-	straight fiber protein pb4	ORF126	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000168	88551	91400	-	baseplate hub protein pb3	ORF127	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000169	91397	92011	-	distal tail protein pb9	ORF128	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000170	92014	92103	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000171	92121	95780	-	tape measure protein pb2 precursor	T5.140	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000172	95777	96574	-	putative endonuclease	T5.141	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000173	96624	96992	-	tail assembly chaperone		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000174	97054	97458	-	tail assembly chaperone		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000175	97458	98354	-	baseplate tube protein p140	ORF133	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000176	98359	99753	-	tail tube protein pb6	ORF134	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000177	99780	100265	-	tail tube terminator protein p142	ORF135	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000178	100269	101036	-	tail completion protein p143	ORF136	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000179	101036	101548	-	head completion protein	T5.148	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000180	101608	102984	-	major capsid protein	ORF138	PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_005859.1	PM_000181	103002	103634	-	prohead protease	T5.150	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000182	103638	104132	-	decoration protein	T5.151	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000183	104135	105346	-	portal protein	ORF141	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000184	105346	105783	-	nicking endonuclease	ORF142	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000185	105773	106606	-	putative endonuclease	T5.154	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_005859.1	PM_000186	106618	107934	-	terminase, large subunit	ORF144	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000187	107934	108416	-	probable terminase, small subunit	T5.156	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000188	108427	110349	-	receptor-binding protein pb5	T5.157	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000189	110429	110662	+	lytic conversion lipoprotein	T5.158	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000190	110781	110954	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000191	110954	111061	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000192	111058	111252	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000193	111245	111490	+	membrane protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000194	111523	111651	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000195	111655	112389	-	5'-deoxynucleotidase	T5p159	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000196	112470	112865	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000197	112902	113180	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000198	113237	114907	-	dna transfer protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000199	115004	115201	-	membrane protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_005859.1	PM_000200	115258	115665	-	dna binding protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000201	115761	116012	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000202	116069	116170	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_005859.1	PM_000203	116246	116449	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000204	116446	116649	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000205	116737	116850	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000206	116942	117460	-	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000207	117736	117825	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000208	118026	119036	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000209	119155	119385	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000210	119435	119614	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_005859.1	PM_000211	119617	119829	+	endonuclease nicking abasic sites generated by host uracil glycosylase ung		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_005859.1	PM_000212	119831	120175	+	dna-(apurinic or apyrimidinic site) endonuclease	T5.015	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_005859.1	PM_000213	120212	120469	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000214	120485	120688	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000215	120702	120929	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000216	121184	121414	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_005859.1	PM_000217	121455	121748	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000001	85	216	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000002	253	402	-	transcriptional regulator		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000003	426	800	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000004	823	1125	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000005	1118	1441	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000006	1442	1942	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000007	1939	2103	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000008	2116	2460	-	single strand dna binding protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001706.1	PM_000009	2526	3065	-	erf-like ssdna annealing protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001706.1	PM_000010	3065	3217	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000011	3211	3462	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000012	3434	3613	-	transcriptional regulator		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000013	3594	3962	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000014	4034	4207	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000015	4265	4654	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000016	4654	5034	-	dna polymerase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000017	5024	5218	-	dna polymerase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000018	5288	6187	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000019	6189	6389	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000020	6386	6493	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001706.1	PM_000021	6494	6634	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000022	6624	6719	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000023	6833	6937	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001706.1	PM_000024	6930	7061	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001706.1	PM_000025	7246	7395	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000026	7406	7891	+	holliday junction resolvase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001706.1	PM_000027	8024	8617	+	endolysin	L3	PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001706.1	PM_000028	8628	9467	+	virion structural protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000029	9418	10860	+	major capsid protein	l5	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001706.1	PM_000030	10880	11596	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000031	11603	12220	+	major tail protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000032	12290	12544	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000033	12586	12762	+	putative tail-associated protein		PROBABLE_FUNCTION		False	1.14
+NC_001706.1	PM_000034	12732	13136	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000035	13129	15249	+	probable tape measure protein	l10	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001706.1	PM_000036	15246	15533	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000037	15546	17102	+	terminase large subunit		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001706.1	PM_000038	17102	17401	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001706.1	PM_000039	17398	19314	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001706.1	PM_000040	19311	20456	+	tail protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000041	20449	21696	+	virion structural protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000042	21719	22009	+	holin		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001706.1	PM_000043	22081	22170	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000001	85	180	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001835.1	PM_000002	263	787	+	terminase small subunit		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000003	788	2410	+	terminase large subunit		PROBABLE_FUNCTION	PHROGs;Swiss-Prot	True	1.14
+NC_001835.1	PM_000004	2400	2684	+	probable hnh endonuclease		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001835.1	PM_000005	2715	3833	+	probable portal protein		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001835.1	PM_000006	3814	4350	+	probable capsid maturation protease		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001835.1	PM_000007	4343	5524	+	capsid protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000008	5545	5808	+	head-tail connector protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001835.1	PM_000009	5808	6122	+	probable head completion protein 1		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000010	6112	6282	+	probable head completion protein 2		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	False	1.14
+NC_001835.1	PM_000011	6361	6450	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000012	6447	6806	+	probable tail terminator protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000013	6819	7724	+	tail tube protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000014	7775	8050	+	chaperone protein gp12		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000015	8070	8582	+	virion structural protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001835.1	PM_000016	8582	11581	+	probable tape measure protein		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001835.1	PM_000017	11581	12477	+	distal tail protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000018	12477	13604	+	baseplate protein gp16		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000019	13594	13887	+	putative tail-associated protein		PROBABLE_FUNCTION		False	1.14
+NC_001835.1	PM_000020	13961	14671	+	receptor binding protein	rbp	PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000021	14693	15046	+	holin		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_001835.1	PM_000022	15043	15783	+	endolysin		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001835.1	PM_000023	15827	15934	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000024	15994	16185	-	transglycosylase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001835.1	PM_000025	16246	16512	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000026	16509	16610	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000027	16685	17032	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000028	17032	17229	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000029	17219	17476	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000030	17540	17926	-	sav protein		PROBABLE_FUNCTION	Swiss-Prot;VOGDB	True	1.14
+NC_001835.1	PM_000031	17926	18045	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000032	18042	18227	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000033	18238	18561	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000034	18617	18859	-	dna methyltransferase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001835.1	PM_000035	18860	18970	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000036	19005	19322	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000037	19406	19792	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000038	19912	20127	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000039	20143	20502	-	ssb protein		PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_001835.1	PM_000040	20507	21142	-	sak-like ssdna annealing protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_001835.1	PM_000041	21139	21450	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000042	21508	21738	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000043	21735	21995	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000044	21952	22239	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001835.1	PM_000045	22236	22622	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000046	22679	22936	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000047	22908	23090	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001835.1	PM_000048	23083	23895	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000049	23892	24032	-	aaa family atpase		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_001835.1	PM_000050	24025	24297	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000051	24358	24561	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000052	24706	25398	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000053	25381	25482	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000054	25586	25759	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000055	25836	26015	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000056	26020	26154	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000057	26154	26342	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001835.1	PM_000058	26473	26601	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_001835.1	PM_000059	26606	26737	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000060	26734	27216	+	holliday junction resolvase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_001835.1	PM_000061	27213	27380	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_001835.1	PM_000062	27591	27689	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000063	27755	27850	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000064	28031	28129	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_001835.1	PM_000065	28212	28334	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000001	94	1218	-	integrase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000002	1339	1860	-	superinfection exclusion sie-like		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000003	1921	2781	-	transcriptional repressor		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000004	3023	3253	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000005	3267	3983	+	anti-repressor		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000006	3996	4331	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000007	4328	4456	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000008	4469	4663	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000009	4660	4935	-	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000010	4925	5020	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002703.1	PM_000011	5038	5253	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000012	5255	5353	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_002703.1	PM_000013	5369	5887	+	mu gam-like end protection		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000014	5896	6519	+	sak-like ssdna annealing protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000015	6519	6971	+	single-stranded dna-binding protein 1	ssb1	PROBABLE_FUNCTION	Swiss-Prot	False	1.14
+NC_002703.1	PM_000016	7111	7878	+	dnad-like helicase loader		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000017	7878	8603	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000018	8600	9358	+	dna methyltransferase		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000019	9375	9737	+	crossover junction endodeoxyribonuclease rusa	rusA	PROBABLE_FUNCTION	Swiss-Prot	True	1.14
+NC_002703.1	PM_000020	9741	9980	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000021	10092	10271	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000022	10261	10830	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000023	10841	11236	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000024	11229	11774	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000025	11771	12190	+	dutpase		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000026	12193	12444	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000027	12434	12619	+	hypothetical protein		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000028	12722	13144	+	alt-like transcription activator		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000029	13187	13333	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002703.1	PM_000030	13344	13472	+	holin		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002703.1	PM_000031	13546	14376	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000032	14449	14910	+	terminase small subunit		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000033	14953	15075	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002703.1	PM_000034	15070	15264	+	terminase small subunit		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000035	15340	16473	+	terminase large subunit		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000036	16510	17847	+	portal protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000037	17844	18884	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000038	18930	19262	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000039	19388	20050	+	head scaffolding protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000040	20052	20219	+	minor capsid protein		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002703.1	PM_000041	20265	20372	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002703.1	PM_000042	20390	21322	+	hnh endonuclease		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000043	21358	21642	-	hypothetical protein		UNRESOLVED		False	1.14
+NC_002703.1	PM_000044	21645	21740	+	hypothetical protein		UNRESOLVED		False	1.14
+NC_002703.1	PM_000045	21737	22183	+	major capsid protein		PROBABLE_FUNCTION	PHROGs;Swiss-Prot;VOGDB	False	1.14
+NC_002703.1	PM_000046	22183	22383	+	arc-like repressor		PROBABLE_FUNCTION	VOGDB	False	1.14
+NC_002703.1	PM_000047	22367	22699	+	head-tail adaptor		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000048	22696	23004	+	minor head protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000049	23004	23330	+	tail completion or neck1 protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000050	23327	23716	+	tail terminator		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000051	23727	24224	+	major tail protein		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000052	24340	24675	+	tail chaperone protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000053	24714	25034	+	tail assembly chaperone		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000054	25049	28126	+	tail length tape measure protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000055	28136	28897	+	putative tail-associated protein		PROBABLE_FUNCTION		False	1.14
+NC_002703.1	PM_000056	28924	31617	+	minor head protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000057	31630	32598	+	minor head protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000058	32600	33460	+	tail protein		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000059	33479	34000	+	conserved phage protein of unknown function		FUNCTIONAL_CLASS_ONLY		False	1.14
+NC_002703.1	PM_000060	34013	34237	+	holin		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000061	34250	36280	+	neck passage structure		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000062	36305	36571	+	holin		PROBABLE_FUNCTION	PHROGs;VOGDB	False	1.14
+NC_002703.1	PM_000063	36568	37854	+	endolysin		PROBABLE_FUNCTION	PHROGs	False	1.14
+NC_002703.1	PM_000064	37857	37955	-	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_002703.1	PM_000065	38035	38220	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14
+NC_002703.1	PM_000066	38243	38347	+	conserved phage protein of unknown function		CONSERVED_UNKNOWN		False	1.14

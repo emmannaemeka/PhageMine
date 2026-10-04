@@ -1,0 +1,25 @@
+{
+  "format_version": "1",
+  "installed_at": "2026-10-04T07:41:36.109313+00:00",
+  "preparation_commands": [
+    [
+      "hmmpress",
+      "-f",
+      "Pfam-A.hmm"
+    ]
+  ],
+  "primary_path": "Pfam-A.hmm",
+  "provenance": {
+    "provider": "Pfam/InterPro",
+    "release": "38.2"
+  },
+  "resource": "pfam",
+  "resource_type": "PFAM",
+  "source_artifacts": [
+    {
+      "md5": "7ab3c4e215d0daaea3004e37c4e24f8a",
+      "url": "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz"
+    }
+  ],
+  "version": "38.2"
+}

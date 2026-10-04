@@ -1,0 +1,33 @@
+{
+  "format_version": "1",
+  "installed_at": "2026-10-04T07:43:25.496361+00:00",
+  "preparation_commands": [
+    [
+      "diamond",
+      "makedb",
+      "--in",
+      "uniprot_sprot-2026_03.fasta.gz",
+      "--db",
+      "uniprot_sprot"
+    ]
+  ],
+  "primary_path": "uniprot_sprot.dmnd",
+  "provenance": {
+    "metadata_path": "uniprot_sprot.dat.gz",
+    "provider": "UniProtKB/Swiss-Prot",
+    "release": "2026_03"
+  },
+  "resource": "swissprot",
+  "resource_type": "SWISSPROT",
+  "source_artifacts": [
+    {
+      "md5": "bc9d398533e6df582b563c6c03093bd0",
+      "url": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz"
+    },
+    {
+      "md5": "a31b5d0756f0a8f94164bf20b703812c",
+      "url": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz"
+    }
+  ],
+  "version": "2026_03"
+}

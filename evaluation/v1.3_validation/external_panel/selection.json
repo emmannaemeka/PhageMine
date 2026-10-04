@@ -1,0 +1,33 @@
+{
+  "selected_utc": "2026-10-04T06:37:21.859257+00:00",
+  "selection_reason": "Three dairy Lactococcus phages outside the seven-genome rule-development panel; selected without inspecting new tool outputs.",
+  "held_out_from_rule_tuning": true,
+  "database_overlap_excluded": false,
+  "independent_accuracy_truth": false,
+  "genomes": [
+    {
+      "accession": "NC_001706.1",
+      "organism": "Lactococcus phage c2",
+      "nt": 22172,
+      "reference_sha256": "38eb82498784384273050d6689de365b94fcbe7eb801f0f161e54df05657581d",
+      "sequence_sha256": "c98c0b11e3a89414c6e69f8a6f28da0e60b200ac0b452cac6ce3a6b0408ca2eb",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NC_001706.1&rettype=gbwithparts&retmode=text"
+    },
+    {
+      "accession": "NC_001835.1",
+      "organism": "Lactococcus phage SK1",
+      "nt": 28451,
+      "reference_sha256": "379eb92839e1cfad26f1770f0ce319a2c748f62ee087fd9b5641d2d0e30e1ad8",
+      "sequence_sha256": "0dcd8310712574237d966ddef9bd4fa9cbaae5cc0c2b135037d1c708f50ba343",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NC_001835.1&rettype=gbwithparts&retmode=text"
+    },
+    {
+      "accession": "NC_002703.1",
+      "organism": "Lactococcus phage Tuc2009",
+      "nt": 38347,
+      "reference_sha256": "df863b136c0d0d0ed99ceac0a56507a2273154d73f50351234179d887d1a555a",
+      "sequence_sha256": "f6bda5d0c9b5401e789b18c5b239950f435f84cda53056d488a22063e4769c54",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NC_002703.1&rettype=gbwithparts&retmode=text"
+    }
+  ]
+}

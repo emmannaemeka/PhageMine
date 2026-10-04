@@ -76,3 +76,9 @@ docs/v1.2-pyrodigal-rv-install-diagnostic.txt
 
 # Public benchmark inclusion must not re-include Python bytecode.
 docs/benchmark_v1.2/**/__pycache__/
+
+# Isolated validation environments and generated readiness artifacts.
+.venv/
+.validation/
+dist/
+build/

@@ -1,0 +1,152 @@
+[
+  {
+    "accession": "NC_000866.4",
+    "raw_evidence_sha256": "a094859c73e4354d12f680a38465180872f2c68535364d5ad5d1a105bf9400de",
+    "updated_evidence_sha256": "a094859c73e4354d12f680a38465180872f2c68535364d5ad5d1a105bf9400de",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 294,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_000929.1",
+    "raw_evidence_sha256": "b6bdd0d3b99f116e7e204f63656aa132d675172c7c59f36c701126b8d437368e",
+    "updated_evidence_sha256": "b6bdd0d3b99f116e7e204f63656aa132d675172c7c59f36c701126b8d437368e",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 57,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_001416.1",
+    "raw_evidence_sha256": "9835fdfe9abeaf632ce7897b3082482f0f3d2def03b81630c722ee273ce4196d",
+    "updated_evidence_sha256": "9835fdfe9abeaf632ce7897b3082482f0f3d2def03b81630c722ee273ce4196d",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 88,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_001422.1",
+    "raw_evidence_sha256": "c3c2cf935d705a3c73017d7b252c85db04d772c4cdba9e0a8f75b27841d11ed2",
+    "updated_evidence_sha256": "c3c2cf935d705a3c73017d7b252c85db04d772c4cdba9e0a8f75b27841d11ed2",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 8,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_001604.1",
+    "raw_evidence_sha256": "6138f5ffb24e3511a7ea873bb4c1e3740b08dd1842bd84a106886059b8c89fed",
+    "updated_evidence_sha256": "6138f5ffb24e3511a7ea873bb4c1e3740b08dd1842bd84a106886059b8c89fed",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 61,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_002371.2",
+    "raw_evidence_sha256": "d67b8b98961e0611975102d68cc6a38bb446a420c5db4122f6bf211f6bf7dccc",
+    "updated_evidence_sha256": "d67b8b98961e0611975102d68cc6a38bb446a420c5db4122f6bf211f6bf7dccc",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 79,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_005859.1",
+    "raw_evidence_sha256": "3ba90cf95721546bf37f40478e43d8e2482d21c04c22922c89d182a8990b08b5",
+    "updated_evidence_sha256": "3ba90cf95721546bf37f40478e43d8e2482d21c04c22922c89d182a8990b08b5",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 217,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_001706.1",
+    "raw_evidence_sha256": "7c19597e91f3d70fd2f7631c1790805bba32da1d45d34f868e6de28aa519e833",
+    "updated_evidence_sha256": "7c19597e91f3d70fd2f7631c1790805bba32da1d45d34f868e6de28aa519e833",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 43,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_001835.1",
+    "raw_evidence_sha256": "57babbdd7c04ed47e02d98201d102e8328d7f03fba0aa0c4d7924a4997acc7f4",
+    "updated_evidence_sha256": "57babbdd7c04ed47e02d98201d102e8328d7f03fba0aa0c4d7924a4997acc7f4",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 65,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  },
+  {
+    "accession": "NC_002703.1",
+    "raw_evidence_sha256": "96b0fc28866ec734bc5eeabb5bc598785a1931d9a4335ec17c64d08eb37d6020",
+    "updated_evidence_sha256": "96b0fc28866ec734bc5eeabb5bc598785a1931d9a4335ec17c64d08eb37d6020",
+    "evidence_objects_unchanged": true,
+    "coordinates_unchanged": true,
+    "integrity": {
+      "status": "ARTIFACTS_CONSISTENT",
+      "protein_count": 66,
+      "gene_coordinates_checked": true,
+      "curation_audit_checked": false,
+      "scientific_accuracy_validated": false,
+      "official_ncbi_validation": false
+    }
+  }
+]

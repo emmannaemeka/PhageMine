@@ -1,0 +1,144 @@
+{
+  "analysis_type": "FRESH_T4_DIAGNOSTIC_WITH_RECOMPUTED_DECISIONS",
+  "accession": "NC_000866.4",
+  "held_out": false,
+  "independence_established": false,
+  "accuracy_superiority_established": false,
+  "fresh_raw_annotation_runs": true,
+  "raw_source_commit": "25eb8d30dadeba9d5e6fd415da7c4aa86976b006",
+  "source_artifact_id": 11287959791,
+  "source_artifact_url": "https://github.com/emmannaemeka/PhageMine/actions/runs/37162951614/artifacts/11287959791",
+  "source_archive_sha256": "78c7ec42b17f8ec83d8e6d7044bc709277343726da84a8038f2cb2a963fd44f2",
+  "source_batch_status": "CANCELLED_AFTER_COMPLETE_T4_TOOL_RUNS; remaining panel moved to parallel jobs",
+  "completed_commands": [
+    {
+      "command": [
+        "phagemine",
+        "annotate",
+        "/home/runner/work/PhageMine/PhageMine/fresh-results/inputs/NC_000866.4.fasta",
+        "--output",
+        "/home/runner/work/PhageMine/PhageMine/fresh-results/runs/PhageMine/NC_000866.4",
+        "--threads",
+        "2",
+        "--rna-features",
+        "none",
+        "--no-progress"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 111.802,
+      "log": "PhageMine-NC_000866.4.log",
+      "log_sha256": "d52e85eba5d4dab46768f06d39677f3198840d02b7dadef162ca0de059e2ce29"
+    },
+    {
+      "command": [
+        "micromamba",
+        "run",
+        "-n",
+        "comparators",
+        "pharokka",
+        "run",
+        "-i",
+        "/home/runner/work/PhageMine/PhageMine/fresh-results/inputs/NC_000866.4.fasta",
+        "-o",
+        "/home/runner/work/PhageMine/PhageMine/fresh-results/runs/Pharokka/NC_000866.4",
+        "-d",
+        "/home/runner/work/_temp/pharokka-db",
+        "-t",
+        "2",
+        "-p",
+        "NC_000866.4",
+        "--skip_extra_annotations",
+        "--skip_mash"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 393.058,
+      "log": "Pharokka-NC_000866.4.log",
+      "log_sha256": "998d1cae2e3a18fc5bd96bfb2d7728dd8644e6686557ea12c38c6ad70e44509f"
+    },
+    {
+      "command": [
+        "micromamba",
+        "run",
+        "-n",
+        "comparators",
+        "prokka",
+        "--outdir",
+        "/home/runner/work/PhageMine/PhageMine/fresh-results/runs/Prokka/NC_000866.4",
+        "--prefix",
+        "NC_000866.4",
+        "--kingdom",
+        "Viruses",
+        "--gcode",
+        "11",
+        "--cpus",
+        "2",
+        "--norrna",
+        "--notrna",
+        "/home/runner/work/PhageMine/PhageMine/fresh-results/inputs/NC_000866.4.fasta"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 2.713,
+      "log": "Prokka-NC_000866.4.log",
+      "log_sha256": "760cd0a27097a2594c171abf436300b03c903327c3515cb9d71fabf33c118a50"
+    }
+  ],
+  "database": "PHROGs v4 / Pharokka distribution 1.8.0; Prokka packaged viral databases",
+  "scope": "PHROGs-only PhageMine; CDS-only standard Pharokka; viral Prokka",
+  "reference_sha256": "24acc08a8ecaa62d6a7a58b9f59e15b3935a9f787012ea5f24ed7191df552764",
+  "raw_evidence_sha256": "0e18d280b700573ca0f6cec79f67a0079008986b2e20d3df069f532a6c2acc06",
+  "corrected_evidence_sha256": "0e18d280b700573ca0f6cec79f67a0079008986b2e20d3df069f532a6c2acc06",
+  "raw_evidence_unchanged": true,
+  "corrected_fusion_rules_version": "1.10",
+  "corrected_fusion_implementation_sha256": "a3cdd032d9489ed76e93c8d45de1b32a9c1409fd5724e506e56d07df334fad47",
+  "correction_method": "phagemine reclassify: recomputed decisions from newly generated evidence; searches were not repeated",
+  "changed_products": 18,
+  "summaries": {
+    "PhageMine": {
+      "named_assertions": 137,
+      "EXACT_PRODUCT_AGREEMENT": 117,
+      "unresolved": 20,
+      "abstentions_on_exact_named_reference_loci": 11,
+      "exact_model_matches": 244,
+      "predicted_models": 294,
+      "reference_models": 274,
+      "strict_functional_precision": null
+    },
+    "Pharokka": {
+      "named_assertions": 137,
+      "EXACT_PRODUCT_AGREEMENT": 122,
+      "unresolved": 15,
+      "abstentions_on_exact_named_reference_loci": 11,
+      "exact_model_matches": 244,
+      "predicted_models": 294,
+      "reference_models": 274,
+      "strict_functional_precision": null
+    },
+    "Prokka": {
+      "named_assertions": 100,
+      "EXACT_PRODUCT_AGREEMENT": 11,
+      "unresolved": 89,
+      "abstentions_on_exact_named_reference_loci": 50,
+      "exact_model_matches": 246,
+      "predicted_models": 261,
+      "reference_models": 274,
+      "strict_functional_precision": null
+    },
+    "PhageMine-corrected": {
+      "named_assertions": 130,
+      "EXACT_PRODUCT_AGREEMENT": 113,
+      "unresolved": 17,
+      "abstentions_on_exact_named_reference_loci": 18,
+      "exact_model_matches": 244,
+      "predicted_models": 294,
+      "reference_models": 274,
+      "strict_functional_precision": null
+    }
+  },
+  "independently_reviewed_functional_precision": null,
+  "remaining_review": [
+    "Review collateral abstentions caused by partial-profile rule",
+    "Capsid vertex vs major capsid paralog specificity remains unresolved in shared PHROGs evidence",
+    "Complete and review seven-genome panel",
+    "Independent held-out validation and full-evidence configuration are still required"
+  ]
+}

@@ -343,6 +343,8 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
     project = Path(output).resolve()
     project.mkdir(parents=True, exist_ok=True)
     inputs = discover_inputs(root, recursive)
+    if not inputs:
+        raise ValueError(f"No FASTA genomes found in input directory: {root}")
     if mode == "discover":
         rows = pooled_batch(inputs, project, profile=evidence_profile, threads=threads,
                             gene_predictor=gene_predictor, phanotate=phanotate, progress=progress,
@@ -357,11 +359,15 @@ def batch(input_dir: str | Path, output: str | Path, recursive=False, resume_exi
                                 resume_existing=resume_existing, source_mode="discover")
         return rows
     if mode == "both":
-        batch(input_dir, project / "annotation", recursive, resume_existing, fail_fast,
+        annotation_rows = batch(input_dir, project / "annotation", recursive, resume_existing, fail_fast,
               gene_predictor, phanotate, progress, reconcile_orfs, prodigal, threads,
               evidence_profile, mode="annotate", gene_model_policy=gene_model_policy,
               gene_model_profile=gene_model_profile, molecule_type=molecule_type,
               segmented=segmented)
+        if any(row.get("status") == "FAILED" for row in annotation_rows):
+            # Keep the recorded failures and completed annotations for resume;
+            # a partial cohort must not be presented as a successful BOTH run.
+            return annotation_rows
         samples = discovery_from_annotation(project / "annotation", project / "discovery")
         sample_dirs = [project / "discovery" / _sample_id(path) for path in inputs]
         pmfdb, inphared, inphared_reason = _comparative_resources()

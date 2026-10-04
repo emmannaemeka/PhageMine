@@ -1,0 +1,42 @@
+{
+  "accuracy_superiority_established": false,
+  "analysis_type": "CURATED_RECORD_REVIEW_OF_SELECTED_DISAGREEMENTS",
+  "exact_reviewed_sequence_matches": 154,
+  "functional_accuracy": null,
+  "held_out": false,
+  "independent_expert_adjudication": false,
+  "limitations": [
+    "Selected disagreements are not an unbiased accuracy sample.",
+    "Reviewed records can contain inferred or uncertain functions.",
+    "A missing function in a reviewed record does not prove a prediction false.",
+    "Database/reference overlap is not excluded.",
+    "Review is by Codex, not an independent domain expert."
+  ],
+  "reviewed_cases": 274,
+  "sources": {
+    "decisions": "767756db4a6462f50a44288687f576b9439b01540473a5201e56807918b869e0",
+    "paired": "7d412f6433646b7e24436cd6d656f1a4cd18ae6579a59ce94ff0e3cfbc833943",
+    "snapshot": "160d69ed5c624caee16bb3583ef1abc399366e6dd54ff822b3e8090640d82580"
+  },
+  "verdicts": {
+    "PhageMine": {
+      "ABSTENTION": 5,
+      "COMPATIBLE_BROAD_ROLE": 2,
+      "CONSISTENT_WITH_RECORD": 111,
+      "NOT_ESTABLISHED_BY_RECORD": 32,
+      "SPECIFICITY_NOT_ESTABLISHED": 4,
+      "UNRESOLVED_NO_EXACT_MATCH": 120
+    },
+    "Prokka": {
+      "ABSTENTION": 98,
+      "COMPATIBLE_BROAD_ROLE": 6,
+      "CONFLICTS_WITH_RECORD": 2,
+      "CONSISTENT_WITH_RECORD": 45,
+      "NOT_ESTABLISHED_BY_RECORD": 2,
+      "SPECIFICITY_NOT_ESTABLISHED": 1,
+      "UNRESOLVED_NO_EXACT_MATCH": 120
+    }
+  },
+  "selection_scope": "Union of 273 initial naming differences and 253 current differences (274 loci); includes resolved cases and the newly named locus.",
+  "review_basis": "Direct versioned record-name/alternative-name agreement plus explicit semantic decisions bound to FUNCTION comments and other reviewed fields; no independent paper review or expert adjudication."
+}

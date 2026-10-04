@@ -19,7 +19,7 @@ phagemine doctor --deep
 ```
 
 The command sequence assumes a supported Conda-compatible client. The package
-and unit-test CI matrix covers Ubuntu Linux, Intel macOS (`macos-13`) and
+and unit-test CI matrix covers Ubuntu Linux, Intel macOS (`macos-15-intel`) and
 Apple-silicon macOS (`macos-14`); external-tool integration is exercised on
 Ubuntu. This is not a claim that every Conda package is available on every
 local architecture.
@@ -28,6 +28,13 @@ The environment supplies PHANOTATE, Prodigal, HMMER (`hmmscan`), MMseqs2,
 DIAMOND, Mash and BLASTN. PyHMMER is a Python library used by the PHROGs
 provider; it is not the HMMER executable. `table2asn` is optional. Database
 downloads do not install missing executables.
+
+PHANOTATE 1.6.7 imports `pkg_resources`. The environment therefore includes
+`setuptools<81`, which still supplies that module. If a separately assembled
+environment fails with `ModuleNotFoundError: No module named 'pkg_resources'`,
+install `python -m pip install 'setuptools<81'` in that environment and rerun
+`phagemine doctor`. This is an external-caller compatibility requirement,
+not a reason to reinstall biological databases.
 
 For development, install the test extras in editable mode after the environment
 has been created:

@@ -33,6 +33,8 @@ Individual installers are also available:
     from . import __version__
     parser.add_argument("--version", action="version", version=__version__)
     subcommands = parser.add_subparsers(dest="command")
+    from .workflow_cli import add_commands
+    add_commands(subcommands)
     gui_command = subcommands.add_parser("gui", help="Launch the optional local graphical interface")
     doctor_command = subcommands.add_parser("doctor", help="Validate executables and registered evidence resources")
     doctor_command.add_argument("--output", help="Optional JSON report path")
@@ -164,12 +166,21 @@ Individual installers are also available:
         command.add_argument("--quiet", action="store_true", help="Suppress progress display")
         command.add_argument("--no-progress", action="store_true", help="Disable dynamic progress rendering")
         command.add_argument("--threads", type=int, default=1, help="Threads for evidence tools")
+        command.add_argument("--evidence-cache", help="Reuse successful sequence searches with full input checksum validation")
+        command.add_argument("--rna-features", choices=("auto", "none", "trnascan"), default="auto", help="Run tRNAscan-SE when installed, disable it, or require it")
+        command.add_argument("--trnascan", default="tRNAscan-SE", help="tRNAscan-SE executable path")
         command.add_argument("--mock-evidence", action="store_true", help="Use demonstration evidence; fixture/testing only")
     revise = subcommands.add_parser("revise", help="Revise a completed GenBank submission without rerunning analysis")
     revise.add_argument("results_dir")
     revise.add_argument("--corrections", required=True)
     revise.add_argument("--output", required=True)
     args = parser.parse_args(argv)
+    from .workflow_cli import COMMANDS, dispatch
+    if args.command in COMMANDS:
+        try:
+            return dispatch(args)
+        except (OSError, ValueError, RuntimeError, KeyError) as exc:
+            parser.error(str(exc))
     if args.command is None:
         parser.print_help()
         return 0
@@ -251,8 +262,8 @@ Individual installers are also available:
         if args.multiphate_gff: methods["multiPhATE2"]=import_multiphate(args.multiphate_gff)
         if args.phold_genbank: methods["Phold"]=import_phold(args.phold_genbank)
         truth_records = None
-        if args.truth_gff: truth_records = import_pharokka(args.truth_gff, genome_id="reviewed_truth")
-        if args.truth_genbank: truth_records = import_phold(args.truth_genbank, genome_id="reviewed_truth")
+        if args.truth_gff: truth_records = import_pharokka(args.truth_gff, genome_id=None)
+        if args.truth_genbank: truth_records = import_phold(args.truth_genbank, genome_id=None)
         references = {name: truth_records for name in methods} if truth_records else None
         benchmark(methods,args.output,references=references)
         print(f"PhageMine benchmark complete. Outputs: {args.output}"); return 0
@@ -276,8 +287,12 @@ Individual installers are also available:
         print(f"PhageMine comparison complete. Outputs: {args.output}")
         return 0
     if args.command == "batch":
-        try: batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode, gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented)
+        try: rows = batch(args.input_dir,args.output,args.recursive,args.resume_existing,args.fail_fast,args.gene_predictor,args.phanotate,ProgressReporter(quiet=False),args.reconcile_orfs,args.prodigal,args.threads,args.evidence_profile,args.mode, gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented)
         except (OSError, ValueError, RuntimeError) as exc: parser.error(str(exc))
+        failures = [row for row in rows if row.get("status") == "FAILED"]
+        if failures:
+            print(f"PhageMine batch finished with {len(failures)} failed sample(s). Inspect batch_summary.tsv and sample logs in {args.output}", file=sys.stderr)
+            return 1
         print(f"PhageMine batch complete. Outputs: {args.output}"); return 0
     if args.command == "extract":
         if args.extract_command != "protein":
@@ -396,7 +411,7 @@ Individual installers are also available:
         # reconciliation layer.  ``run()`` still gates execution to genuine
         # PHANOTATE DNA analysis and keeps the flag as compatibility metadata.
         reconcile_orfs = args.reconcile_orfs or args.command in {"annotate", "mine", "run", "genbank"}
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress), gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented)
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress), gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented, rna_annotation=args.rna_features, trnascan_executable=args.trnascan, evidence_cache_dir=args.evidence_cache)
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

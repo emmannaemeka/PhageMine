@@ -1,0 +1,194 @@
+[
+  {
+    "command": [
+      "/home/runner/micromamba/envs/phagemine/bin/python",
+      "-m",
+      "pip",
+      "freeze"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.27,
+    "log": "packages.log",
+    "log_sha256": "531755261159da501d7ed966a0a0d4e432c47c69c07cdda67c7a01152243f8fd"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_000866.4.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_000866.4",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 568.542,
+    "log": "NC_000866.4.log",
+    "log_sha256": "f4ec30c51d36e97738e745d3361915468ce22e5f6f978e88da77af97fd150065"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_000929.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_000929.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 233.125,
+    "log": "NC_000929.1.log",
+    "log_sha256": "11ca696e81f0b8eda7f5e13978fde55668760ed0c4dde2654400f883be0e88fe"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_001416.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_001416.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 255.342,
+    "log": "NC_001416.1.log",
+    "log_sha256": "811c38af8e25beba2b5d688b01af80e1b1f9fc20a5a50707fcd7113874fbac86"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_001422.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_001422.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 157.574,
+    "log": "NC_001422.1.log",
+    "log_sha256": "f750e4711c1ddc27870d3a35772f672c3246aae96dcd1aaca2ebc48cd11cba30"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_001604.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_001604.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 225.246,
+    "log": "NC_001604.1.log",
+    "log_sha256": "ab93599d20afa8fea67bbee232248dcf0c4865d428af6eaa5cfb750f29bb1411"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_002371.2.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_002371.2",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 239.802,
+    "log": "NC_002371.2.log",
+    "log_sha256": "91c89f41df5c1abd47fa8a739c7551f937fd82aa80c7eef95c4a4faf67477b41"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/original/inputs/NC_005859.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_005859.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 386.026,
+    "log": "NC_005859.1.log",
+    "log_sha256": "2a9acd3b579a31024d46b913cc398c11be68344519484b2a7092ca045b31802c"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/external/inputs/NC_001706.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_001706.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 197.423,
+    "log": "NC_001706.1.log",
+    "log_sha256": "451b7f9ba52a835d9130412444ae9df335c83ae0bf630db6289af2970a9101d7"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/external/inputs/NC_001835.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_001835.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 221.591,
+    "log": "NC_001835.1.log",
+    "log_sha256": "4c58b36d1d56abbb1807bc54c55ceb855a5a2fdd65d1503ef526c503d1939bc6"
+  },
+  {
+    "command": [
+      "phagemine",
+      "run",
+      "/home/runner/work/PhageMine/PhageMine/full-results/external/inputs/NC_002703.1.fasta",
+      "--output",
+      "/home/runner/work/PhageMine/PhageMine/full-results/runs/NC_002703.1",
+      "--threads",
+      "2",
+      "--rna-features",
+      "none",
+      "--no-progress"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 226.28,
+    "log": "NC_002703.1.log",
+    "log_sha256": "e43a8e892739f3c39d05c67149eb41f09b9589d0aba853cb99adcd2beb9ba1e0"
+  }
+]

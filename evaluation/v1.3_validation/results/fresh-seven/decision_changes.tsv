@@ -1,0 +1,42 @@
+accession	protein_id	start	end	strand	before_product	after_product	before_gene	after_gene	before_ec	after_ec	review_status
+NC_000866.4	PM_000007	3654	3767	-	homing endonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000015	7218	7307	-	motb-like transcriptional regulator	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000088	44836	45612	-	homing endonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000090	45840	46385	-	nrdd-like anaerobic ribonucleotide reductase large subunit	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000096	48128	48391	-	thioredoxin domain	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000125	61726	62271	-	lytic tail protein	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000136	66503	66997	-	baseplate hub subunit and tail lysozyme	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000138	67472	67570	-	membrane protein	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000150	71253	71918	-	homing endonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000181	100632	101123	+	tail tube	tail tube protein					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000196	112057	112674	+	homing endonuclease	hnh endonuclease					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000210	123065	123268	-	alt-like rna polymerase adp-ribosyltransferase	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000211	123265	123450	-	alt-like rna polymerase adp-ribosyltransferase	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000248	139716	139967	-	homing endonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000249	139991	140416	-	homing endonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000251	142671	142997	-	ribonucleotide reductase nrda-like	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000268	155868	156533	+	tail fiber protein	hinge connector of long tail fiber protein distal connector					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000866.4	PM_000287	166432	166554	-	periplasmic protein	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000929.1	PM_000011	5482	5781	+	transcriptional regulator, d5-like	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000929.1	PM_000012	5801	6325	+	mu gam-like end protection	host nuclease inhibitor					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000929.1	PM_000030	12707	14554	+	terminase large subunit	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_000929.1	PM_000055	35299	35673	+	conserved phage protein of unknown function	dna binding protein					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001416.1	PM_000006	4319	5737	+	conserved phage protein of unknown function	capsid maturation protease					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001416.1	PM_000013	8955	9695	+	conserved phage protein of unknown function	major tail protein					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001416.1	PM_000015	10160	10549	+	putative minor tail protein	tail assembly protein					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001416.1	PM_000021	14773	15444	+	tail protein	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001416.1	PM_000064	38041	38241	+	transcriptional repressor	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001422.1	PM_000001	2	136	+	dna replication initiation	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_001604.1	PM_000023	10257	10706	+	holliday junction resolvase	endonuclease					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_002371.2	PM_000002	203	1702	+	terminase large subunit	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_002371.2	PM_000022	19713	20690	-	gtrb glycosyltransferase for o-antigen conversion	gtrb-like o-antigen conversion					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_002371.2	PM_000037	26970	27254	-	transcriptional regulator, d5-like	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_002371.2	PM_000051	32036	32314	+	cii-like transcriptional activator	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_002371.2	PM_000079	41455	41724	+	terminase small subunit	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000051	18929	19360	-	dna binding protein	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000113	45179	45415	-	exonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000116	46412	46888	-	conserved phage protein of unknown function	rnase h					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000165	86055	86318	-	l-shaped tail fiber protein assembly	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000180	101608	102984	-	major capsid protein	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000181	103002	103634	-	conserved phage protein of unknown function	capsid maturation protease					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED
+NC_005859.1	PM_000184	105346	105783	-	hnh endonuclease	conserved phage protein of unknown function					DECISION_CHANGE_NOT_INDEPENDENTLY_ADJUDICATED

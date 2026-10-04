@@ -1,0 +1,4893 @@
+{
+  "results": [
+    {
+      "primaryAccession": "P00276",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 144,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Glutaredoxin"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Thioredoxin"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MFKVYGYDSNIHKCVYCDNAKRLLTVKKQPFEFINIMPEKGVFDDEKIAELLTKLGRDTQIGLTMPQVFAPDGSHIGGFDQLREYFK",
+        "length": 87,
+        "molWeight": 10050,
+        "crc64": "7CBB775323D1B4CE",
+        "md5": "1C6354563F7F9577F496E2DC9F64CBB7"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "8440680"
+                }
+              ],
+              "value": "Serves as a reducing agent for the phage-induced ribonucleotide reductase, but not for the bacterial ones. This specificity may be the result of sequence differences around the redox-active disulfide bond. The oxidized form accepts electrons from bacterial glutathione and will, in turn, reduce other small disulfides. Can also be reduced by NADPH and by bacterial thioredoxin reductase"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "15017142",
+        "3575111",
+        "366603",
+        "3735493",
+        "4565673",
+        "8440680"
+      ],
+      "source_record_sha256": "2d85ca0204928104e01e30764ec15a93d6ee430dd27d976142aaf8479467f647"
+    },
+    {
+      "primaryAccession": "P00969",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 143,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage T7",
+        "commonName": "Bacteriophage T7",
+        "taxonId": 10760,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Autographivirales",
+          "Autotranscriptaviridae",
+          "Studiervirinae",
+          "Teseptimavirus",
+          "Teseptimavirus T7"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "DNA ligase"
+          },
+          "ecNumbers": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "PROSITE-ProRule",
+                  "id": "PRU10135"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "8653795"
+                }
+              ],
+              "value": "6.5.1.1"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "DNA ligase gp1.3"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Gene product 1.3"
+            },
+            "shortNames": [
+              {
+                "value": "Gp1.3"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MMNIKTNPFKAVSFVESAIKKALDNAGYLIAEIKYDGVRGNICVDNTANSYWLSRVSKTIPALEHLNGFDVRWKRLLNDDRCFYKDGFMLDGELMVKGVDFNTGSGLLRTKWTDTKNQEFHEELFVEPIRKKDKVPFKLHTGHLHIKLYAILPLHIVESGEDCDVMTLLMQEHVKNMLPLLQEYFPEIEWQAAESYEVYDMVELQQLYEQKRAEGHEGLIVKDPMCIYKRGKKSGWWKMKPENEADGIIQGLVWGTKGLANEGKVIGFEVLLESGRLVNATNISRALMDEFTETVKEATLSQWGFFSPYGIGDNDACTINPYDGWACQISYMEETPDGSLRHPSFVMFRGTEDNPQEKM",
+        "length": 359,
+        "molWeight": 41133,
+        "crc64": "43DA453B71BDF8DC",
+        "md5": "F73BB0B6A5095B30D888CBCC3413FF45"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "10656817"
+                }
+              ],
+              "value": "DNA ligase that seals nicks in double-stranded DNA during DNA replication, DNA recombination and DNA repair in an ATP-dependent reaction. Binds specifically to DNA nicks containing a 3'-OH and a 5'-phosphate group"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "10656817",
+        "6254001",
+        "6864790",
+        "7001354",
+        "7310871",
+        "8653795"
+      ],
+      "source_record_sha256": "fbf24848d6547e74a194f93d76809c3c7999be4337ef010488b09e5d0cfa33bb"
+    },
+    {
+      "primaryAccession": "P03006",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 128,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Replicative DNA helicase"
+          },
+          "ecNumbers": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000250",
+                  "source": "UniProtKB",
+                  "id": "P0ACB0"
+                }
+              ],
+              "value": "5.6.2.3"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "DNA 5'-3' helicase gp12"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Replication protein gp12"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MRQDIEASVIGGLLIGGLTPTASDVLATLEPEAFSIPLYRKAFEVIRKQARNRNLIDGLMVAEECGDEYATAVMMTARSCPSAANLKGYAGMVADSYQRRQVLQLLDEMREPISNGTLDASGRAMDELVKRLSSIRKPRNEVKPVRLGEIINDYTDTLDRRLRNGEESDTLKTGIEELDAITGGMNAEDLVIIAARPGMGKTELALKIAEGVASRVIPGSGVRRGVLIFSMEMSAIQVVERGIAGAGMMSVSVLRNPSRMDDEGWARVASGMKLLAELDVWVVDASRLSVEEIRSISERHKQEHPNLSLIMADYLGLIEKPKAERNDLAIAHISGSLKAMAKDLKTPVISLSQLSRDVEKRPNKRPTNADLRDSGSIEQDADSIIMLYREAVYDENSSAAPFAEIIVTKNRFGSLGTVYQRFCNGHFVACDQDEARQICTASNAPAGRRKRYAQGADV",
+        "length": 458,
+        "molWeight": 50127,
+        "crc64": "7981F1C2A5293322",
+        "md5": "3E1099FB7129E66C3D73B55100613755"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Renders P22 DNA replication independent of a functional dnaB gene of the host"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "6241581"
+      ],
+      "source_record_sha256": "bc05cfec00bfaf3d100913f28aa43ad2454c7823afda0b9538ce5fe4dc366158"
+    },
+    {
+      "primaryAccession": "P03034",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2007-01-23",
+        "entryVersion": 167,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Repressor protein cI"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MSTKKKPLTQEQLEDARRLKAIYEKKKNELGLSQESVADKMGMGQSGVGALFNGINALNAYNAALLAKILKVSVEEFSPSIAREIYEMYEAVSMQPSLRSEYEYPVFSHVQAGMFSPELRTFTKGDAERWVSTTKKASDSAFWLEVEGNSMTAPTGSKPSFPDGMLILVDPEQAVEPGDFCIARLGGDEFTFKKLIRDSGQVFLQPLNPQYPMIPCNESCSVVGKVIASQWPEETFG",
+        "length": 237,
+        "molWeight": 26212,
+        "crc64": "4785A4915479ED97",
+        "md5": "CD07CBC181AC775DFE2B344EC30B621B"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11711436"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "21873207"
+                }
+              ],
+              "value": "Acts as a transcriptional repressor that allows virus to establish and maintain latency. Prevents both the viral DNA replication and the exit programs. Clamps the two operator OL (operator left made of OL1, OL2 and OL3 sites) and OR (operator right made of OR1, OR2 and OR3 sites) together by binding to them and arranging the intervening DNA in a loop. This step allows repression of lytic pR and pL promoters by binding to OL1, OL2, OR1 and OR2 simultaneously. The binding of cI on OR2 additionally activates the transcription of the cI gene thereby mediating an autoregulatory function to maintain the latent state. Once cI is present in sufficient amount, it can repress its own transcription by binding to OL3 and OR3"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11711436",
+        "19181516",
+        "21873207",
+        "3187530",
+        "6221115",
+        "6226802",
+        "629949",
+        "714163"
+      ],
+      "source_record_sha256": "d7e5f1d3bce93454991ccaccb238329515bacf0533b80c76e22c82dbee68844f"
+    },
+    {
+      "primaryAccession": "P03037",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 80,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Antirepressor protein ant"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MNSIAILEAVNTSYVPFNGQHVLTAMVAGVAYVAMKPVVDNIGLSWSSQVQKLLKMKDKFNYVDIDMVAGDMKKRLMGCIPLKKLNGWLFSINPEKVRADIRDKLIKYQEECFTVLYDYWTKGKAENPRKKTSVDERTPLRDAVNMLVSKKHLMYPEAYAMIHQRFNVESIEELEASQIPLAVEYIHRVVLEGEFIGKQEKKTNDLSAKEANSLVWLWDYANRSQALFRELYPAMRQIQSNYSGKCYDYGHEFSYIIGIARDVLINHTRDVDINEPDGPTNLSAWMRLKDKELPPSLHRY",
+        "length": 300,
+        "molWeight": 34649,
+        "crc64": "C43A038A0F045B12",
+        "md5": "8F3D957BEEECD7087C14E25BA6C21460"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "This protein prevents the prophage P22 c2 repressor protein from binding to its operators and also inhibits the action of other prophage repressor proteins, including those of phages lambda and 434. The synthesis of antirepressor is negatively regulated by the protein products of the two other immI genes, mnt and arc"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "6350606"
+      ],
+      "source_record_sha256": "0e71ccf8e250b10dcf74c43e3230d5cec5c9cb84027ac91704e12999e5f2359f"
+    },
+    {
+      "primaryAccession": "P03040",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 155,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Regulatory protein cro"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MEQRITLKDYAMRFGQTKTAKDLGVYQSAINKAIHAGRKIFLTINADGSVYAEEVKPFPSNKKTTA",
+        "length": 66,
+        "molWeight": 7363,
+        "crc64": "233A02DA0873E4D4",
+        "md5": "2DE82AC20539D20C6CD895EFB849CD31"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "1065873"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "17908932"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "29158090"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "6457992"
+                }
+              ],
+              "value": "Plays an essential role in the switch from lysogenic to lytic state and in fine-tuning the lytic phase activation. Mediates the de-repression of the lytic promoters from repression by cI at an early stage of prophage induction. Turns down the expression of the transcriptional activator cII, a factor that initiates the expression of repressor cI, the major component promoting latency. Additionally, cro is able to directly bind to the promoter region of cI thereby preventing the transcription of cI repressor. These two mechanisms ultimately lead to a strong decrease in the amount of cI that will become unable to maintain the latent phase, allowing the transition to lytic growth. Low level of Cro also stimulates the lytic promoters while cI repressor is still present (PubMed:29158090). Cro-mediated up-regulation of pR and pL ultimately leads to its own increased expression and to a successful switch to lytic growth (PubMed:29158090). The second function assigned to Cro is the fine-tuning of the lytic phase activation. Indeed, cro initially diminishes the strength of activation by turning down the expression of lytic genes as well as its own expression"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "1065873",
+        "10686105",
+        "16700549",
+        "17908932",
+        "18054042",
+        "2146682",
+        "264238",
+        "29158090",
+        "593347",
+        "593348",
+        "6221115",
+        "6226802",
+        "6452580",
+        "6457992",
+        "7500341",
+        "9653036",
+        "9653037",
+        "9684880"
+      ],
+      "source_record_sha256": "37b2dd82ed1de2136f63cdd9396ec44d7a5a0dcae5aa01c52584f18da7f824c3"
+    },
+    {
+      "primaryAccession": "P03041",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 117,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Transcriptional activator protein C1"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MELTSTRKKANAITSSILNRIAIRGQRKVADALGINESQISRWKGDFIPKMGMLLAVLEWGVEDEELAELAKKVAHLLTKEKPQDCGNSFEA",
+        "length": 92,
+        "molWeight": 10211,
+        "crc64": "D479C6D90085CEE6",
+        "md5": "A98D0BF5AB702291C4A8488ED6C474E7"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Binds to two promoters, P(RE) and Pa23 and activate transcription from these promoters"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "1385814",
+        "3954988",
+        "6241581"
+      ],
+      "source_record_sha256": "f97892f3fd80e43f62eec84e604cd408cef268029bb0f478ff170dcbea257047"
+    },
+    {
+      "primaryAccession": "P03641",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2007-01-23",
+        "entryVersion": 135,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage phiX174",
+        "commonName": "Isolate Sanger",
+        "synonyms": [
+          "Bacteriophage phi-X174"
+        ],
+        "taxonId": 1217068,
+        "lineage": [
+          "Viruses",
+          "Floreoviria",
+          "Sangervirae",
+          "Phixviricota",
+          "Microviricetes",
+          "Bullavirales",
+          "Sinsheimervirus",
+          "Escherichia phage phiX174"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Capsid protein F"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "F protein"
+            }
+          },
+          {
+            "fullName": {
+              "value": "GPF"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MSNIQTGAERMPHDLSHLGFLAGQIGRLITISTTPVIAGDSFEMDAVGALRLSPLRRGLAIDSTVDIFTFYVPHRHVYGEQWIKFMKDGVNATPLPTVNTTGYIDHAAFLGTINPDTNKIPKHLFQGYLNIYNNYFKAPWMPDRTEANPNELNQDDARYGFRCCHLKNIWTAPLPPETELSRQMTTSTTSIDIMGLQAAYANLHTDQERDYFMQRYHDVISSFGGKTSYDADNRPLLVMRSNLWASGYDVDGTDQTSLGQFSGRVQQTYKHSVPRFFVPEHGTMFTLALVRFPPTATKEIQYLNAKGALTYTDIAGDPVLYGNLPPREISMKDVFRSGDSSKKFKIAEGQWYRYAPSYVSPAYHLLEGFPFIQEPPSGDLQERVLIRHHDYDQCFQSVQLLQWNSQVKFNVTVYRNLPTTRDSIMTS",
+        "length": 427,
+        "molWeight": 48483,
+        "crc64": "837DE99C73F426BC",
+        "md5": "730CA18AC9BF82AA19CD14BE6C0F92B5"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11991963"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "1370343"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "29229840"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "8158636"
+                }
+              ],
+              "value": "Assembles to form an icosahedral capsid with a T=1 symmetry, about 30 nm in diameter, and consisting of 60 capsid proteins F (PubMed:11991963, PubMed:1370343, PubMed:8158636). Upon virus binding to host cell, one of the spikes dissociates from the capsid and the virus interacts with LPS through the exposed EF loops on the F proteins (PubMed:29229840). After the genome had been ejected, the channel formed by the F proteins at the unique fivefold axis remains open (PubMed:29229840)"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "10329166",
+        "11991963",
+        "1370343",
+        "29229840",
+        "731693",
+        "731694",
+        "794486",
+        "8158636",
+        "870828",
+        "9305849"
+      ],
+      "source_record_sha256": "082f0808ab7c58910a869de03d67466d06138f342f9c4c7b233f1eea83274242"
+    },
+    {
+      "primaryAccession": "P03689",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 78,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000305"
+              }
+            ],
+            "value": "Helicase loader"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "30582519"
+                }
+              ],
+              "value": "Lambda P helicase loader"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Replication protein P"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MKNIAAQMVNFDREQMRRIANNMPEQYDEKPQVQQVAQIINGVFSQLLATFPASLANRDQNEVNEIRRQWVLAFRENGITTMEQVNAGMRVARRQNRPFLPSPGQFVAWCREEASVTAGLPNVSELVDMVYEYCRKRGLYPDAESYPWKSNAHYWLVTNLYQNMRANALTDAELRRKAADELVHMTARINRGEAIPEPVKQLPVMGGRPLNRAQALAKIAEIKAKFGLKGASV",
+        "length": 233,
+        "molWeight": 26518,
+        "crc64": "31342D4D356CB33C",
+        "md5": "91B80A68A6AC3D434FB7FDDB390E0423"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "30582519"
+                },
+                {
+                  "evidenceCode": "ECO:0000305",
+                  "source": "PubMed",
+                  "id": "30582519"
+                }
+              ],
+              "value": "Loads (host) replicative DNA helicase DnaB onto single-stranded (ss)DNA at the origin of replication (Probable) (PubMed:30582519). Reconfigures the DnaB hexameric ring, generating an opening large enough to permit ssDNA into the central channel (PubMed:30582519). Necessary for the bidirectional replication of lambda DNA. It interacts with the ori (origin of replication) region of the genome during the initiation of replication"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "30582519",
+        "6221115",
+        "CI-FS4VFDSM2C76V"
+      ],
+      "source_record_sha256": "6fce18601f0d56ee10da8f8c1077caab5022605d4a5d8bb20b8c626bba118a04"
+    },
+    {
+      "primaryAccession": "P03698",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 97,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Recombination protein bet"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MSTALATLAGKLAERVGMDSVDPQELITTLRQTAFKGDASDAQFIALLIVANQYGLNPWTKEIYAFPDKQNGIVPVVGVDGWSRIINENQQFDGMDFEQDNESCTCRIYRKDRNHPICVTEWMDECRREPFKTREGREITGPWQSHPKRMLRHKAMIQCARLAFGFAGIYDKDEAERIVENTAYTAERQPERDITPVNDETMQEINTLLIALDKTWDDDLLPLCSQIFRRDIRASSELTQAEAVKALGFLKQKAAEQKVAA",
+        "length": 261,
+        "molWeight": 29689,
+        "crc64": "99583014F97330A6",
+        "md5": "77016B98E38BDD252BAC947A91A6777B"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Gene bet protein functions in general recombination and in the late, rolling-circle mode of lambda DNA replication. Has a function similar to that of E.coli recT. It is a single-stranded DNA binding protein that can promote renaturation of DNA"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "6221115",
+        "6458018"
+      ],
+      "source_record_sha256": "5c77bedbb46bb823095d0d2ec0ef34b334e9171ab01a8a032ffba9145d212e7e"
+    },
+    {
+      "primaryAccession": "P03713",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 103,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04133"
+              },
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "265585"
+              }
+            ],
+            "value": "Major capsid protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04133"
+                }
+              ],
+              "value": "Gene product E"
+            },
+            "shortNames": [
+              {
+                "evidences": [
+                  {
+                    "evidenceCode": "ECO:0000255",
+                    "source": "HAMAP-Rule",
+                    "id": "MF_04133"
+                  }
+                ],
+                "value": "gpE"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04133"
+                }
+              ],
+              "value": "Major head protein"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MSMYTTAQLLAANEQKFKFDPLFLRLFFRESYPFTTEKVYLSQIPGLVNMALYVSPIVSGEVIRSRGGSTSEFTPGYVKPKHEVNPQMTLRRLPDEDPQNLADPAYRRRRIIMQNMRDEELAIAQVEEMQAVSAVLKGKYTMTGEAFDPVEVDMGRSEENNITQSGGTEWSKRDKSTYDPTDDIEAYALNASGVVNIIVFDPKGWALFRSFKAVKEKLDTRRGSNSELETAVKDLGKAVSYKGMYGDVAIVVYSGQYVENGVKKNFLPDNTMVLGNTQARGLRTYGCIQDADAQREGINASARYPKNWVTTGDPAREFTMIQSAPLMLLADPDEFVSVQLA",
+        "length": 341,
+        "molWeight": 38188,
+        "crc64": "31C50E4B38DA44A9",
+        "md5": "3AD01770994BAA6EDCFBF0AE84CB44AD"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04133"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "2141087"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "265585"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "8411174"
+                }
+              ],
+              "value": "Assembles to form an icosahedral capsid with a T=7 symmetry. The icosahedral capsid is about 60 nm in diameter and composed of 415 major capsid proteins. The assembly is primed by the interaction between capsid assembly protease and portal dodecamer, and major capsid proteins assemble cooperatively to form the procapsid with the help of capsid scaffolding protein. Major capsid protein forms hexons and pentons of the icosahedron. Viral genomic DNA is packaged into the procapsid through the portal vertex (By similarity). The packaging triggers a dramatic reconfiguration of the capsid shell, expanding from roughly 50nm to 60nm while the capsid thickness decreases. The capsid decoration protein binds the expanded capsid and stabilizes it"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "20620152",
+        "2141087",
+        "22801427",
+        "265585",
+        "6221115",
+        "8411174"
+      ],
+      "source_record_sha256": "dc035cd2e3e70055d640b5a79417259eaaad8da86446d1998cbb77d10f657435"
+    },
+    {
+      "primaryAccession": "P03729",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 94,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Tail tip assembly protein K"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Probable endopeptidase"
+            },
+            "ecNumbers": [
+              {
+                "value": "3.4.-.-"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Tail assembly protein K"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MSPEDWLQAEMQGEIVALVHSHPGGLPWLSEADRRLQVQSDLPWWLVCRGTIHKFRCVPHLTGRRFEHGVTDCYTLFRDAYHLAGIEMPDFHREDDWWRNGQNLYLDNLEATGLYQVPLSAAQPGDVLLCCFGSSVPNHAAIYCGDGELLHHIPEQLSKRERYTDKWQRRTHSLWRHRAWRASAFTGIYNDLVAASTFV",
+        "length": 199,
+        "molWeight": 23011,
+        "crc64": "CEEB88F01E31ABAE",
+        "md5": "A39BD968B6D60A424222A9154134B216"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "1003470"
+                }
+              ],
+              "value": "Plays a role in tail tip complex assembly. The tail tip complex is assembled successively with three tail tip proteins J, one tail tip protein I, one tail tip protein L and one tail tip protein K. The tail tip complex interacts with tail measure protein to initiate tail tube assembly. The formation of the tail tip complex is completed by the addition of tail tip protein M, which is followed by tail tube polymerization. May be excluded form tail tip during maturation and would be absent from virions. May be involved in tail measure protein processing"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "1003470",
+        "6221115"
+      ],
+      "source_record_sha256": "b1a2312d6e536f4a3024bfac4f82d096145e646f1e3e5d110d6ff9a14fa84f70"
+    },
+    {
+      "primaryAccession": "P03731",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 74,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Tail completion protein Z"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product Z"
+            },
+            "shortNames": [
+              {
+                "value": "GpZ"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Minor tail protein Z"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Tail terminator protein"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MAIKGLEQAVENLSRISKTAVPGAAAMAINRVASSAISQSASQVARETKVRRKLVKERARLKRATVKNPQARIKVNRGDLPVIKLGNARVVLSRRRRRKKGQRSSLKGGGSVLVVGNRRIPGAFIQQLKNGRWHVMQRVAGKNRYPIDVVKIPMAVPLTTAFKQNIERIRRERLPKELGYALQHQLRMVIKR",
+        "length": 192,
+        "molWeight": 21561,
+        "crc64": "361DBF1CE95EEAAE",
+        "md5": "DC94ECDA1284B74B476A057B0BA3DC3C"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Stabilizes the tail structure and acts as a connector between the end of tail and the portal vertex of the capsid"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "1003470",
+        "6221115"
+      ],
+      "source_record_sha256": "18cb60c8be0a0b895141683ccd19d5cbe0aa8b0a9c10f3cdaa742b093dd5e79a"
+    },
+    {
+      "primaryAccession": "P03734",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 89,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04134"
+              }
+            ],
+            "value": "Tail assembly protein G"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04134"
+                }
+              ],
+              "value": "Gene product G"
+            },
+            "shortNames": [
+              {
+                "evidences": [
+                  {
+                    "evidenceCode": "ECO:0000255",
+                    "source": "HAMAP-Rule",
+                    "id": "MF_04134"
+                  }
+                ],
+                "value": "gpG"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04134"
+                }
+              ],
+              "value": "Minor tail protein G"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04134"
+                }
+              ],
+              "value": "Tail assembly chaperone"
+            },
+            "shortNames": [
+              {
+                "evidences": [
+                  {
+                    "evidenceCode": "ECO:0000255",
+                    "source": "HAMAP-Rule",
+                    "id": "MF_04134"
+                  }
+                ],
+                "value": "TAC"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MFLKTESFEHNGVTVTLSELSALQRIEHLALMKRQAEQAESDSNRKFTVEDAIRTGAFLVAMSLWHNHPQKTQMPSMNEAVKQIEQEVLTTWPTEAISHAENVVYRLSGMYEFVVNNAPEQTEDAGPAEPVSAGKCSTVS",
+        "length": 140,
+        "molWeight": 15608,
+        "crc64": "C50DA2AFD77D2313",
+        "md5": "1FE1D33EB74A6570D4B592891C867416"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04134"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "23851014"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "23911548"
+                }
+              ],
+              "value": "Promotes tail assembly by creating a scaffold for the tail tube proteins. Tail assembly proteins G and GT probably wrap the linear tape measure protein to create a tail assembly scaffold. This allows the polymerization of the tail tube protein, during which G and GT are released, therefore they are absent in the mature virion. The tail assembly protein GT is produced by a rare -1 ribosomal frameshift. The ratio of translated G/GT is about 20, and this ratio is important for proper tail assembly"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "15469818",
+        "23851014",
+        "23911548",
+        "6221115",
+        "8230192"
+      ],
+      "source_record_sha256": "19f6033d0984c32bde098630e3593a8d1bea9a44b46da997d5d4ffab96e76818"
+    },
+    {
+      "primaryAccession": "P03749",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 120,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Tip attachment protein J"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Central tail fiber"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Host specificity protein J"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "gpJ protein"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MGKGSSKGHTPREAKDNLKSTQLLSVIDAISEGPIEGPVDGLKSVLLNSTPVLDTEGNTNISGVTVVFRAGEQEQTPPEGFESSGSETVLGTEVKYDTPITRTITSANIDRLRFTFGVQALVETTSKGDRNPSEVRLLVQIQRNGGWVTEKDITIKGKTTSQYLASVVMGNLPPRPFNIRMRRMTPDSTTDQLQNKTLWSSYTEIIDVKQCYPNTALVGVQVDSEQFGSQQVSRNYHLRGRILQVPSNYNPQTRQYSGIWDGTFKPAYSNNMAWCLWDMLTHPRYGMGKRLGAADVDKWALYVIGQYCDQSVPDGFGGTEPRITCNAYLTTQRKAWDVLSDFCSAMRCMPVWNGQTLTFVQDRPSDKTWTYNRSNVVMPDDGAPFRYSFSALKDRHNAVEVNWIDPNNGWETATELVEDTQAIARYGRNVTKMDAFGCTSRGQAHRAGLWLIKTELLETQTVDFSVGAEGLRHVPGDVIEICDDDYAGISTGGRVLAVNSQTRTLTLDREITLPSSGTALISLVDGSGNPVSVEVQSVTDGVKVKVSRVPDGVAEYSVWELKLPTLRQRLFRCVSIRENDDGTYAITAVQHVPEKEAIVDNGAHFDGEQSGTVNGVTPPAVQHLTAEVTADSGEYQVLARWDTPKVVKGVSFLLRLTVTADDGSERLVSTARTTETTYRFTQLALGNYRLTVRAVNAWGQQGDPASVSFRIAAPAAPSRIELTPGYFQITATPHLAVYDPTVQFEFWFSEKQIADIRQVETSTRYLGTALYWIAASINIKPGHDYYFYIRSVNTVGKSAFVEAVGRASDDAEGYLDFFKGKITESHLGKELLEKVELTEDNASRLEEFSKEWKDASDKWNAMWAVKIEQTKDGKHYVAGIGLSMEDTEEGKLSQFLVAANRIAFIDPANGNETPMFVAQGNQIFMNDVFLKRLTAPTITSGGNPPAFSLTPDGKLTAKNADISGSVNANSGTLSNVTIAENCTINGTLRAEKIVGDIVKAASAAFPRQRESSVDWPSGTRTVTVTDDHPFDRQIVVLPLTFRGSKRTVSGRTTYSMCYLKVLMNGAVIYDGAANEAVQVFSRIVDMPAGRGNVILTFTLTSTRHSADIPPYTFASDVQVMVIKKQALGISVV",
+        "length": 1132,
+        "molWeight": 124422,
+        "crc64": "53D4AC9044CF3C05",
+        "md5": "5C60AA4F5FF99C281B21F17FBE862262"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "6228546"
+                }
+              ],
+              "value": "Attaches the virion to the host receptor LamB, inducing viral DNA ejection. During tail assembly, initiates distal tail tip assembly by interacting with gpI, gpL and gpK. During virus entry to host cell, binds strongly to host LamB in an irreversible attachment. The binding induces structural changes in the tail leading to viral DNA injection through LamB trimeric pore"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "10629200",
+        "16489764",
+        "23202520",
+        "6221115",
+        "6228546",
+        "8106335",
+        "9826917"
+      ],
+      "source_record_sha256": "d51d38ceb5fde702a0b3b42cb040647563b5f22b8cd19d044c3d10dfde7160a6"
+    },
+    {
+      "primaryAccession": "P03752",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 67,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage lambda",
+        "commonName": "Bacteriophage lambda",
+        "taxonId": 2681611,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lambdavirus",
+          "Lambdavirus lambda"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Protein ea47"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MTKKPWERRLKDLSHLLKCCIDTYFDPELFRLNLNQFLQTARTVTFIIQKNKNQIIGYDIWYNNNVIEKWKNDPLMAWAKNSRNTIEKQGDLEMYSEAKATLISSYIEENDIEFITNESMLNIGIKKLVRLAQKKLPSYLTESSIIKSERRWVANTLKDYELLHALAIIYGRMYNCCNSLGIQINNPMGDDVISPTSFDSLFDEARRITYLKLKDYSISKLSFSMIQYDNKIIPEDIKERLKLVDKPKNITSTEELVDYTAKLAETTFLKDGYHIQTLIFYDKQFHPIDLINTTFEDQADKYIFWRYAADRAKITNAYGFIWISELWLRKASIYSNKPIHTMPIIDERLQVIGIDSNNNQKCISWKIVRENEEKKPTLEISTADSKHDEKPYFMRSVLKAIGGDVNTMNN",
+        "length": 410,
+        "molWeight": 48096,
+        "crc64": "360E376E261EE1C1",
+        "md5": "2491F7318D8B700C465F03D1703A02C0"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "6221115"
+      ],
+      "source_record_sha256": "7bb07ea0c1dfdc4d294d84ba738bd88c30fec6d84bb5cf2e633352c77053096b"
+    },
+    {
+      "primaryAccession": "P04524",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1987-08-13",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1987-08-13",
+        "entryVersion": 101,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04164"
+              },
+              {
+                "evidenceCode": "ECO:0000305"
+              }
+            ],
+            "value": "RNA polymerase sigma-like factor"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product 55"
+            },
+            "shortNames": [
+              {
+                "value": "gp55"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04164"
+                }
+              ],
+              "value": "Promoter specificity factor"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MSETKPKYNYVNNKELLQAIIDWKTELANNKDPNKVVRQNDTIGLAIMLIAEGLSKRFNFSGYTQSWKQEMIADGIEASIKGLHNFDETKYKNPHAYITQACFNAFVQRIKKERKEVAKKYSYFVHNVYDSRDDDMVALVDETFIQDIYDKMTHYEESTYRTPGAEKKSVVDDSPSLDFLYEAND",
+        "length": 185,
+        "molWeight": 21536,
+        "crc64": "C516CD13A63963D4",
+        "md5": "BA9E6CCF72A49B03F6535CCC4C3CD06D"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04164"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "12051907"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "33602900"
+                }
+              ],
+              "value": "Plays a role in the transcription of the viral late genes by acting as a late promoter recognition subunit (PubMed:33602900). Associates with host RNA polymerase (RNAP) core and thus replaces the host sigma-70/rpoD subunit in the complex (PubMed:33602900). May also play a role in DNA packaging by interacting with the terminase subunit gp17 (PubMed:12051907)"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12051907",
+        "12496274",
+        "12626685",
+        "21029432",
+        "3305506",
+        "33602900",
+        "3575111",
+        "4018026"
+      ],
+      "source_record_sha256": "78b4eca9ad02b7e82e268cd9ee304729069a08eb9f9e512cf3891e0d9f43b505"
+    },
+    {
+      "primaryAccession": "P04529",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1987-08-13",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2001-07-11",
+        "entryVersion": 120,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Recombination and repair protein"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MSDLKSRLIKASTSKLTAELTASKFFNEKDVVRTKIPMMNIALSGEITGGMQSGLLILAGPSKSFKSNFGLTMVSSYMRQYPDAVCLFYDSEFGITPAYLRSMGVDPERVIHTPVQSLEQLRIDMVNQLDAIERGEKVVVFIDSLGNLASKKETEDALNEKVVSDMTRAKTMKSLFRIVTPYFSTKNIPCIAINHTYETQEMFSKTVMGGGTGPMYSADTVFIIGKRQIKDGSDLQGYQFVLNVEKSRTVKEKSKFFIDVKFDGGIDPYSGLLDMALELGFVVKPKNGWYAREFLDEETGEMIREEKSWRAKDTNCTTFWGPLFKHQPFRDAIKRAYQLGAIDSNEIVEAEVDELINSKVEKFKSPESKSKSAADLETDLEQLSDMEEFNE",
+        "length": 391,
+        "molWeight": 43998,
+        "crc64": "96A38E586706CB27",
+        "md5": "22BDF46A7803EDC05412C9208A67A49F"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Important in genetic recombination, DNA repair, and replication. Possesses pairing and strand-transfer activity. Interacts with dda and gene 32 proteins"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "2668290",
+        "2932679"
+      ],
+      "source_record_sha256": "dbeebf3402a7f11ad1994795400e6368d30548e2c4015d602d524c5d589a41f0"
+    },
+    {
+      "primaryAccession": "P04535",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1987-08-13",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2001-12-19",
+        "entryVersion": 105,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04117"
+              },
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "6335532"
+              }
+            ],
+            "value": "Major capsid protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "6335532"
+                }
+              ],
+              "value": "Gene product 23"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04117"
+                },
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Major head protein"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04117"
+                },
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "6335532"
+                }
+              ],
+              "value": "gp23"
+            }
+          }
+        ],
+        "contains": [
+          {
+            "recommendedName": {
+              "fullName": {
+                "evidences": [
+                  {
+                    "evidenceCode": "ECO:0000255",
+                    "source": "HAMAP-Rule",
+                    "id": "MF_04117"
+                  },
+                  {
+                    "evidenceCode": "ECO:0000305"
+                  }
+                ],
+                "value": "Mature major capsid protein"
+              }
+            },
+            "alternativeNames": [
+              {
+                "fullName": {
+                  "evidences": [
+                    {
+                      "evidenceCode": "ECO:0000255",
+                      "source": "HAMAP-Rule",
+                      "id": "MF_04117"
+                    },
+                    {
+                      "evidenceCode": "ECO:0000303",
+                      "source": "PubMed",
+                      "id": "1069310"
+                    }
+                  ],
+                  "value": "gp23*"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MTIKTKAELLNKWKPLLEGEGLPEIANSKQAIIAKIFENQEKDFQTAPEYKDEKIAQAFGSFLTEAEIGGDHGYNATNIAAGQTSGAVTQIGPAVMGMVRRAIPNLIAFDICGVQPMNSPTGQVFALRAVYGKDPVAAGAKEAFHPMYGPDAMFSGQGAAKKFPALAASTQTTVGDIYTHFFQETGTVYLQASVQVTIDAGATDAAKLDAEIKKQMEAGALVEIAEGMATSIAELQEGFNGSTDNPWNEMGFRIDKQVIEAKSRQLKAAYSIELAQDLRAVHGMDADAELSGILATEIMLEINREVVDWINYSAQVGKSGMTLTPGSKAGVFDFQDPIDIRGARWAGESFKALLFQIDKEAVEIARQTGRGEGNFIIASRNVVNVLASVDTGISYAAQGLATGFSTDTTKSVFAGVLGGKYRVYIDQYAKQDYFTVGYKGPNEMDAGIYYAPYVALTPLRGSDPKNFQPVMGFKTRYGIGINPFAESAAQAPASRIQSGMPSILNSLGKNAYFRRVYVKGI",
+        "length": 521,
+        "molWeight": 56022,
+        "crc64": "41E495E66D96A453",
+        "md5": "A1D199339C0F18422BB39A8402B62CB8"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04117"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "1069310"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11162794"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "15071181"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "4612249"
+                }
+              ],
+              "value": "Major capsid protein that self-associates to form hexamers, building most of the capsid in association with pentons made of the capsid vertex protein and one dodecamer of the portal protein. The major capsid protein self-associates to form 160 hexamers, building most of the T=13 laevo capsid. Folding of major capsid protein requires the assistance of two chaperones, the host chaperone groL acting with the phage encoded gp23-specific chaperone, gp31. The capsid also contains two nonessential outer capsid proteins, Hoc and Soc, which decorate the capsid surface. Through binding to adjacent gp23 subunits, Soc reinforces the capsid structure"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "1069310",
+        "11162794",
+        "12626685",
+        "15071181",
+        "15919824",
+        "21129201",
+        "22808021",
+        "3447164",
+        "35458430",
+        "4612249",
+        "6323755",
+        "6335532",
+        "6406677"
+      ],
+      "source_record_sha256": "545c776c5626417bb4d096bf5151709fc2a22ca5b86ee028dbbc212cec28029f"
+    },
+    {
+      "primaryAccession": "P06807",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1988-01-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2001-12-19",
+        "entryVersion": 102,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Prohead core protein protease"
+          },
+          "ecNumbers": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "12371"
+                }
+              ],
+              "value": "3.4.21.-"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Protein Gp21"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "12371"
+                }
+              ],
+              "value": "T4PPase"
+            }
+          }
+        ],
+        "flag": "Precursor"
+      },
+      "sequence": {
+        "value": "MNEPQLLIETWGQPGEIIDGVPMLESHDGKDLGLKPGLYIEGIFMQAEVVNRNKRLYPKRILEKAVKDYINEQVLTKQALGELNHPPRANVDPMQAAIIIEDMWWKGNDVYGRARVIEGDHGPGDKLAANIRAGWIPGVSSRGLGSLTDTNEGYRIVNEGFKLTVGVDAVWGPSAPDAWVTPKEITESQTAEADTSADDAYMALAEAMKKAL",
+        "length": 212,
+        "molWeight": 23251,
+        "crc64": "8CB2A799B10CF44F",
+        "md5": "36638D9FFAE7ED4688EC554C19A66A37"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "12371"
+                },
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "27667692"
+                },
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "35458430"
+                },
+                {
+                  "evidenceCode": "ECO:0000305",
+                  "source": "PubMed",
+                  "id": "27667692"
+                }
+              ],
+              "value": "Serine protease ot the inner core, which is activated by autocatalytic cleavage after completion of prohead assembly and processes many prohead proteins (PubMed:12371). These cleaved peptides from the inner core and the auto-cleaved protease escape from the capsid, thus liberating space for the phage DNA genome (Probable). Cleaves the prohead proteins after the sequence motif L/I-X-E (PubMed:27667692, PubMed:35458430)"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12371",
+        "12626685",
+        "1641978",
+        "27667692",
+        "35458430",
+        "3552886",
+        "6512858"
+      ],
+      "source_record_sha256": "ac82ab175c21d7a166d0a38191f49c70c270ef72b744996a74eb70dc517c50cb"
+    },
+    {
+      "primaryAccession": "P07072",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1988-04-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2001-12-19",
+        "entryVersion": 88,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Intron-associated endonuclease 2"
+          },
+          "ecNumbers": [
+            {
+              "value": "3.1.-.-"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "I-TevII"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MKWKLRKSLKIANSVAFTYMVRFPDKSFYIGFKKFKTIYGKDTNWKEYNSSSKLVKEKLKDYKAKWIILQVFDSYESALKHEEMLIRKYFNNEFILNKSIGGYKFNKYPDSEEHKQKLSNAHKGKILSLKHKDKIREKLIEHYKNNSRSEAHVKNNIGSRTAKKTVSIALKSGNKFRSFKSAAKFLKCSEEQVSNHPNVIDIKITIHPVPEYVKINDNIYKSFVDAAKDLKLHPSRIKDLCLDDNYPNYIVSYKRVEK",
+        "length": 258,
+        "molWeight": 30389,
+        "crc64": "6BD6918C4EA34F99",
+        "md5": "989A571DD6FF1655F9242492DB2DAB05"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "This endonuclease is specific to the nrdD gene splice junction and is involved in intron homing"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "3575111"
+      ],
+      "source_record_sha256": "18531e16a16c33a1b8fcf9746aa05a5bfa62b128a55abcadb37d69c4c8433616"
+    },
+    {
+      "primaryAccession": "P07636",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1988-04-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1996-02-01",
+        "entryVersion": 159,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "DDE-recombinase A"
+          },
+          "ecNumbers": [
+            {
+              "value": "3.1.22.-"
+            },
+            {
+              "value": "6.5.1.-"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "DDE-transposase A"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Gene product 03"
+            },
+            "shortNames": [
+              {
+                "value": "gp03"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Gene product A"
+            },
+            "shortNames": [
+              {
+                "value": "gpA"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "MuA"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MELWVSPKECANLPGLPKTSAGVIYVAKKQGWQNRTRAGVKGGKAIEYNANSLPVEAKAALLLRQGEIETSLGYFEIARPTLEAHDYDREALWSKWDNASDSQRRLAEKWLPAVQAADEMLNQGISTKTAFATVAGHYQVSASTLRDKYYQVQKFAKPDWAAALVDGRGASRRNVHKSEFDEDAWQFLIADYLRPEKPAFRKCYERLELAAREHGWSIPSRATAFRRIQQLDEAMVVACREGEHALMHLIPAQQRTVEHLDAMQWINGDGYLHNVFVRWFNGDVIRPKTWFWQDVKTRKILGWRCDVSENIDSIRLSFMDVVTRYGIPEDFHITIDNTRGAANKWLTGGAPNRYRFKVKEDDPKGLFLLMGAKMHWTSVVAGKGWGQAKPVERAFGVGGLEEYVDKHPALAGAYTGPNPQAKPDNYGDRAVDAELFLKTLAEGVAMFNARTGRETEMCGGKLSFDDVFEREYARTIVRKPTEEQKRMLLLPAEAVNVSRKGEFTLKVGGSLKGAKNVYYNMALMNAGVKKVVVRFDPQQLHSTVYCYTLDGRFICEAECLAPVAFNDAAAGREYRRRQKQLKSATKAAIKAQKQMDALEVAELLPQIAEPAAPESRIVGIFRPSGNTERVKNQERDDEYETERDEYLNHSLDILEQNRRKKAI",
+        "length": 663,
+        "molWeight": 75003,
+        "crc64": "B882CFDCBFC0B2E3",
+        "md5": "638EBFA8BE2F9C4A4216AED083042F28"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Responsible for viral genome integration into the host chromosome. During integration of the incoming virus, DDE-recombinase A cleaves both viral DNA ends and the resulting 3'-OH perform a nucleophilic attack of the host DNA. The 5' flanking DNA attached to the ends of the viral genome (flaps) are resected by the DDE-recombinase A endonuclease activity, with the help of host chaperone ClpX. The gaps created in the host chromosome by the viral genome insertion are repaired by the host primary machinery for double-strand break repair"
+            }
+          ],
+          "commentType": "FUNCTION"
+        },
+        {
+          "texts": [
+            {
+              "value": "Responsible for replication of the viral genome by replicative transposition. During replicative transposition, DDE-recombinase A is part of the transpososome complex. DDE-recombinase A cleaves the viral DNA and the resulting 3'-OH performs a nucleophilic attack of the host DNA. The 5' flanking DNA is not resected and an intermediary structure is formed. This structure is resolved by target-primed replication leading to two copies of the viral genome (the original one and the copied one). Host ClpX and translation initiation factor IF2 play an essential transpososome-remodeling role by releasing the block between transposition and DNA replication. Successive rounds of replicative transposition can lead up to 100 copies of the viral genome"
+            }
+          ],
+          "commentType": "FUNCTION"
+        },
+        {
+          "texts": [
+            {
+              "value": "Promotes replication and thereby lytic development by competing with repressor c (Repc) for binding to the internal activation sequence (IAS) in the enhancer/operator region. The outcome of this competition determines if the virus enters latency or starts replication"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11298282",
+        "11756423",
+        "11756424",
+        "11922669",
+        "12086600",
+        "14661976",
+        "16046622",
+        "1655409",
+        "17669422",
+        "18406325",
+        "20133746",
+        "20167799",
+        "22511883",
+        "23135398",
+        "2524470",
+        "2555166",
+        "2999776",
+        "6214696",
+        "6222246",
+        "7628012",
+        "7641701",
+        "7836417",
+        "7881904",
+        "7912831",
+        "8577730",
+        "9203582",
+        "9367742",
+        "9405381",
+        "9649447"
+      ],
+      "source_record_sha256": "51848aa6b0e9798c14815a5f40ea7f700a57229c6e64cfb3a7f4f70337549814"
+    },
+    {
+      "primaryAccession": "P08557",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1988-08-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2000-12-01",
+        "entryVersion": 99,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "DNA circularization protein N"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "64 kDa virion protein"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Gene product 43"
+            },
+            "shortNames": [
+              {
+                "value": "gp43"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Gene product N"
+            },
+            "shortNames": [
+              {
+                "value": "gpN"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MFEDALNAVNAVRDKTGGGRKTTGKGTFRNVPFLVIEEQKQAGGRRLVKREYPLRDTGGVNDLGKKLRSRTFSACILNSNAETARDEAGALMDALDAPGSGELVHPDFGTVDVMVDSWECRTKADELNYYAFTVTVYPSLQDTAPDAETDTSAAVPAQAVAVTGSLGDTLSSVWQTVKDGTAAATAVMEAVTGVIDDISDAVDNLGVTQTVSGLMGSLSAMKGSVTSLINQPAMLASSLMGALSGVSSLCDTRTAFSTWNRLAQRFERRHAATAGRQGTITTSYNSPVAEKNIATLNYVMLAAAQTYRAEAASQALTAALDFSRRMDNAARAPVLDAPSTTTGTASGASSTSATVTQGQLQLTAITPDGGFSQVSFSDSGTATPPVFESVSDIEKTTAMLGAALDSVILTASEQGFSTDSVQLTQLRLLVVADLEKRGLQLAGSESHHLPETLPAMVALYRFTGNSRNWQRLARRNGISNPLFVPGGVSIEVINE",
+        "length": 495,
+        "molWeight": 52041,
+        "crc64": "DF9D4FA3B157007B",
+        "md5": "968811736C4C17A59382D05EB4C5B150"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11894948"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "3023361"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "6306260"
+                }
+              ],
+              "value": "Required for tail assembly of phage Mu and responsible for circularizing the viral DNA after it has been ejected into the host cell. Following infection, the circularized DNA can be isolated as a supercoiled, non-covalent protein-DNA complex, in which the protein N is bound to the ends of the DNA. Protects linear double-stranded DNA of viral genome from host exonuclease degradation"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11894948",
+        "11922669",
+        "24097944",
+        "27555589",
+        "2968539",
+        "3023361",
+        "3904174",
+        "6306260",
+        "8293968",
+        "8599204"
+      ],
+      "source_record_sha256": "5f5b93fd99baa5b6c849585250555643d72803b4a78eb622e730874fea6eed05"
+    },
+    {
+      "primaryAccession": "P0DJY3",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2014-02-19",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2014-02-19",
+        "entryVersion": 25,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage T7",
+        "commonName": "Bacteriophage T7",
+        "taxonId": 10760,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Autographivirales",
+          "Autotranscriptaviridae",
+          "Studiervirinae",
+          "Teseptimavirus",
+          "Teseptimavirus T7"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Protein suppressor of silencing"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product 5.5"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MAMTKKFKVSFDVTAKMSSDVQAILEKDMLHLCKQVGSGAIVPNGKQKEMIVQFLTHGMEGLMTFVVRTSFREAIKDMHEEYADKDSFKQSPATVREVF",
+        "length": 99,
+        "molWeight": 11206,
+        "crc64": "14048A50BBABDA2C",
+        "md5": "9A3273F190862E5107DF3B3C78D903C3"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "21764926"
+                }
+              ],
+              "value": "Plays a role in the inhibition of gene silencing by the host nucleoid-associated protein H-NS/hns. Disrupts higher-order H-NS-DNA complexes"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "21764926",
+        "6864790"
+      ],
+      "source_record_sha256": "a5fae28fdbeedae11d0907890aef16c8fc7b40a455f9798d07c9593048f6304f"
+    },
+    {
+      "primaryAccession": "P0DJY5",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2014-05-14",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2014-05-14",
+        "entryVersion": 33,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Tail fiber assembly protein U'"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product U'"
+            },
+            "shortNames": [
+              {
+                "value": "gpU'"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MMHLKNITAGNPKTKEQYQLTKQFNIKWLYTEDGKNWYEEQKNFQPDTLKMVYDHNGVIICIEKDVSAINPEGANVVEVPDITANRRADISGKWMFKDGVVIKRTYTEEEQRQQAENEKQSLLQLVRDKTQLWDSQLRLGIISDENKQKLTEWMLYAQKVESTDTSSLPVTFPEQPE",
+        "length": 177,
+        "molWeight": 20698,
+        "crc64": "A7E29392E37B0137",
+        "md5": "EE00150AA6BF12EC3719329E153A52F5"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Chaperone involved in tail fiber assembly. Remains associated to the tail fiber and participates in the host receptor binding. Binds to the primary receptor (Probable). Two alternate tail fiber assembly proteins U and U' are encoded extending the host range of the virus"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11922669",
+        "8293968",
+        "8599204"
+      ],
+      "source_record_sha256": "63ea4b99b2cc18e9dfbe649d21f8cf9f1b5bcb0ef34039842f942ac726896801"
+    },
+    {
+      "primaryAccession": "P11190",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1989-07-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1989-07-01",
+        "entryVersion": 86,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Anti-RecBCD protein 1"
+          },
+          "shortNames": [
+            {
+              "value": "Protein abc1"
+            }
+          ]
+        }
+      },
+      "sequence": {
+        "value": "MRRLNITTAEMESVCGRMVACRAAEHLGLNINQFYYIAKKLSLKTAFIKPRWSDDEDKRMQTLISSGYTQRNVAKILGRSEESVKSRLSRLRKK",
+        "length": 94,
+        "molWeight": 10895,
+        "crc64": "E01DEE1219C55EF3",
+        "md5": "B71395EA7C1D77B61B1C8F8495991F59"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Modulates the activity of the host recBCD nuclease. And thus protects linear double-stranded DNA from exonuclease degradation"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "3660589"
+      ],
+      "source_record_sha256": "efa90f94706f96f3214d3c409017d333e2af7c61b19afc03e4c579d17c002b99"
+    },
+    {
+      "primaryAccession": "P13325",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-01-01",
+        "lastAnnotationUpdateDate": "2026-01-28",
+        "lastSequenceUpdateDate": "2003-08-15",
+        "entryVersion": 100,
+        "sequenceVersion": 4
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Putative endonuclease segB"
+          },
+          "ecNumbers": [
+            {
+              "value": "3.1.-.-"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Endodeoxyribonuclease segB"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MFYYTYKITNKINNKIYIGVHSTENLDDGYMGSGKLLKRAQDKYGIENFSKEILEYFDDKESMLEAEKNIVTEEFLNRPDVYNLKLGGEGGWDHVNIPGMLNQKKDASLKGAKSFKSRFENDILLQEKYRKIGSNVFKRLWSTPEYREKFLNNSRFLNKHHTPETINKMKESHAKNNHQKGEKNSQFGMMWIHSLDEKVSKRIKKTDPIPEGWFKGRKMKF",
+        "length": 221,
+        "molWeight": 26074,
+        "crc64": "49C598DFC6E56D6D",
+        "md5": "0FBE149C5C1678FA72272850CFFF2915"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Probably involved in the movement of the endonuclease-encoding DNA"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "1631169",
+        "4057254"
+      ],
+      "source_record_sha256": "a26a79f5ba7e30ee1bc277f6a30c2764ef29f78f79ec7d201998b990bfc1c989"
+    },
+    {
+      "primaryAccession": "P13328",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-01-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1995-02-01",
+        "entryVersion": 68,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 7.3 kDa protein in mobB-Gp55 intergenic region"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "ORF C"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MVATVKDEHPTSEIDYNKIRSSREEMMRRFKEAHDKAKAEGTITYKRIKFKSSNEPLYGVLCG",
+        "length": 63,
+        "molWeight": 7322,
+        "crc64": "31519E88A4420D7F",
+        "md5": "0A5FAE9FCFCF85CC50DD44BC20839CAE"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685",
+        "4018026"
+      ],
+      "source_record_sha256": "bf888f4d0ef97400128e1487c7ddbd395495c8333156656790210a84ed502b45"
+    },
+    {
+      "primaryAccession": "P13333",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-01-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1990-01-01",
+        "entryVersion": 99,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000305"
+              }
+            ],
+            "value": "Tail tube protein gp19"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Gene product 19"
+            },
+            "shortNames": [
+              {
+                "value": "gp19"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MFVDDVTRAFESGDFARPNLFQVEISYLGQNFTFQCKATALPAGIVEKIPVGFMNRKINVAGDRTFDDWTVTVMNDEAHDARQKFVDWQSIAAGQGNEITGGKPAEYKKSAIVRQYARDAKTVTKEIEIKGLWPTNVGELQLDWDSNNEIQTFEVTLALDYWE",
+        "length": 163,
+        "molWeight": 18462,
+        "crc64": "4F39B2DA401B3CD9",
+        "md5": "B291374F892186844042AAB8E5982D3B"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "14625682"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "27193680"
+                }
+              ],
+              "value": "Forms the central cylindrical rigid tube, which is surrounded by the outer contractile sheath assembled from gp18 subunits. The tail tube first 2 annuli are formed by gp48 and gp54, which are in continuation of the spike complex. During infection, contraction of the sheath drives the central tube through the host outer membrane, creating a channel for DNA ejection from the capsid into the host cell"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "14625682",
+        "15315755",
+        "27193680",
+        "2963141"
+      ],
+      "source_record_sha256": "363094f8f67df25bed410646a7acc43ccb8ae42b2d6ca1900d6feffdae061cdf"
+    },
+    {
+      "primaryAccession": "P17308",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-08-01",
+        "lastAnnotationUpdateDate": "2026-01-28",
+        "lastSequenceUpdateDate": "1990-08-01",
+        "entryVersion": 70,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 11.5 kDa protein in Gp31-cd intergenic region"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "ORF B"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MKLTTEQKVAIREILKTKLSMGVSNVVFEKSDGTIRTMKGTRDADFMPTMQTGKLTESTRKESTDMIPVFDVELGAWRGFSIDKLISVNGMKVEHLLQFIGK",
+        "length": 102,
+        "molWeight": 11469,
+        "crc64": "47BDB2D1FA3112D3",
+        "md5": "9379D9B3212A4BCA6BE17F5911850309"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685",
+        "1587487",
+        "2311934",
+        "2362813",
+        "2377483"
+      ],
+      "source_record_sha256": "ddc6cc7664a76f3ec1bf4eb2a524b53a98e755087a0e4f1a2b62d0f6622fd41f"
+    },
+    {
+      "primaryAccession": "P17313",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-08-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1990-08-01",
+        "entryVersion": 134,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Capsid assembly protein Gp31"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MSEVQQLPIRAVGEYVILVSEPAQAGDEEVTESGLIIGKRVQGEVPELCVVHSVGPDVPEGFCEVGDLTSLPVGQIRNVPHPFVALGLKQPKEIKQKFVTCHYKAIPCLYK",
+        "length": 111,
+        "molWeight": 12079,
+        "crc64": "D4F75212CB849EFD",
+        "md5": "6FBF1B6955BB8BCF635B0C0ED30DA981"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "7908418"
+                }
+              ],
+              "value": "Essential for proper capsid assembly. In absence of Gp31 the major capsid protein (Gp23) assembles into 'lumps'. Acts as a co-chaperonin with the host groEL protein"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "1587487",
+        "2311934",
+        "2362813",
+        "2377483",
+        "3072258",
+        "7908418",
+        "9244309"
+      ],
+      "source_record_sha256": "83ffc9d7ccd91ccf1bcffcece3de3d4202c02d12a35b015d4004e31651db320d"
+    },
+    {
+      "primaryAccession": "P18056",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-11-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1990-11-01",
+        "entryVersion": 115,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04116"
+              }
+            ],
+            "value": "Highly immunogenic outer capsid protein"
+          },
+          "shortNames": [
+            {
+              "value": "Hoc"
+            }
+          ]
+        }
+      },
+      "sequence": {
+        "value": "MTFTVDITPKTPTGVIDETKQFTATPSGQTGGGTITYAWSVDNVPQDGAEATFSYVLKGPAGQKTIKVVATNTLSEGGPETAEATTTITVKNKTQTTTLAVTPASPAAGVIGTPVQFTAALASQPDGASATYQWYVDDSQVGGETNSTFSYTPTTSGVKRIKCVAQVTATDYDALSVTSNEVSLTVNKKTMNPQVTLTPPSINVQQDASATFTANVTGAPEEAQITYSWKKDSSPVEGSTNVYTVDTSSVGSQTIEVTATVTAADYNPVTVTKTGNVTVTAKVAPEPEGELPYVHPLPHRSSAYIWCGWWVMDEIQKMTEEGKDWKTDDPDSKYYLHRYTLQKMMKDYPEVDVQESRNGYIIHKTALETGIIYTYP",
+        "length": 376,
+        "molWeight": 40387,
+        "crc64": "B5595931DCB319EC",
+        "md5": "BB9B084C0089ABE9DEE76E9D8D225C33"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04116"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11162794"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "1469720"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "15071181"
+                }
+              ],
+              "value": "Capsid decoration protein that binds as a monomer at the center of each major capsid protein hexamer once maturation and expension of the capsid has occured. It only has a marginal effect on head stability. Dispensable for the head morphogenesis and phage infection"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11162794",
+        "12626685",
+        "1469720",
+        "15071181",
+        "20497329",
+        "21129201",
+        "2377482"
+      ],
+      "source_record_sha256": "18142b92c2e6bdd66926c11c7474941a2b17ae0e59cc223b6dcaa124b7cb059c"
+    },
+    {
+      "primaryAccession": "P18060",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1990-11-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2001-12-19",
+        "entryVersion": 102,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Putative endonuclease segE"
+          },
+          "ecNumbers": [
+            {
+              "value": "3.1.-.-"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Endodeoxyribonuclease segE"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MYHFVYETTNLINGKKYIGKHSTDDLNDGYLGSGKAIQQAIKKYGENNFSRTILKEFKTSEEAYMYEEEIITPELIKSKNYYNMKPGGIGGIVMTTDVIAKMKESSAKRFENSPGTVLGKTCYTNGTKNIFIKPGELVPEGFVKGMVHPNRKSRKGCKVKPTTTGTFWVNNGAINKLIQPDGIIPDGFIKGRLMKRDSKGKFSKA",
+        "length": 205,
+        "molWeight": 22895,
+        "crc64": "614AAEFF992CC2B7",
+        "md5": "4770804625EA437347ED4BAD496AC0F8"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Probably involved in the movement of the endonuclease-encoding DNA"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "1631169",
+        "2377482"
+      ],
+      "source_record_sha256": "2e65feabdcd297ab6b4b98d05ea6ae4b200be728972dfb2e9565718202d7a2a1"
+    },
+    {
+      "primaryAccession": "P19726",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1991-02-01",
+        "entryVersion": 88,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage T7",
+        "commonName": "Bacteriophage T7",
+        "taxonId": 10760,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Autographivirales",
+          "Autotranscriptaviridae",
+          "Studiervirinae",
+          "Teseptimavirus",
+          "Teseptimavirus T7"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04119"
+              },
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "20962334"
+              }
+            ],
+            "value": "Major capsid protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "20962334"
+                }
+              ],
+              "value": "Gene product 10A"
+            },
+            "shortNames": [
+              {
+                "evidences": [
+                  {
+                    "evidenceCode": "ECO:0000303",
+                    "source": "PubMed",
+                    "id": "20962334"
+                  }
+                ],
+                "value": "Gp10A"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04119"
+                }
+              ],
+              "value": "Major head protein"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MASMTGGQQMGTNQGKGVVAAGDKLALFLKVFGGEVLTAFARTSVTTSRHMVRSISSGKSAQFPVLGRTQAAYLAPGENLDDKRKDIKHTEKVITIDGLLTADVLIYDIEDAMNHYDVRSEYTSQLGESLAMAADGAVLAEIAGLCNVESKYNENIEGLGTATVIETTQNKAALTDQVALGKEIIAALTKARAALTKNYVPAADRVFYCDPDSYSAILAALMPNAANYAALIDPEKGSIRNVMGFEVVEVPHLTAGGAGTAREGTTGQKHVFPANKGEGNVKVAKDNVIGLFMHRSAVGTVKLRDLALERARRANFQADQIIAKYAMGHGGLRPEAAGAVVFKVE",
+        "length": 345,
+        "molWeight": 36546,
+        "crc64": "0CB7973954FE69F5",
+        "md5": "7AAA55410A0A355253CFF4373EE36AFB"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "20962334"
+                }
+              ],
+              "value": "Assembles with the minor capsid protein to form an icosahedral capsid with a T=7 symmetry, about 60 nm in diameter, and consisting of 415 capsid proteins. The major and minor capsid proteins are incorporated into the capsid in about a 90/10 ratio respectively. Once the capsid is formed, encapsidates one single copy of the viral genome"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "1938901",
+        "20962334",
+        "23580619",
+        "23884409",
+        "25313071",
+        "6864790"
+      ],
+      "source_record_sha256": "6408b59603bbf4bd4ac99d7d7e52176dbf91d35516cada0f287219d5a4b9aadd"
+    },
+    {
+      "primaryAccession": "P19896",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1991-02-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1995-02-01",
+        "entryVersion": 105,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000255",
+                "source": "HAMAP-Rule",
+                "id": "MF_04113"
+              },
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "15071181"
+              }
+            ],
+            "value": "Capsid vertex protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "15071181"
+                }
+              ],
+              "value": "Gene product 24"
+            }
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04113"
+                },
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "15071181"
+                }
+              ],
+              "value": "gp24"
+            }
+          }
+        ],
+        "contains": [
+          {
+            "recommendedName": {
+              "fullName": {
+                "evidences": [
+                  {
+                    "evidenceCode": "ECO:0000255",
+                    "source": "HAMAP-Rule",
+                    "id": "MF_04113"
+                  }
+                ],
+                "value": "Mature capsid vertex protein"
+              }
+            },
+            "alternativeNames": [
+              {
+                "fullName": {
+                  "evidences": [
+                    {
+                      "evidenceCode": "ECO:0000255",
+                      "source": "HAMAP-Rule",
+                      "id": "MF_04113"
+                    }
+                  ],
+                  "value": "gp24*"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MAKINELLRESTTTNSNSIGRPNLVALTRATTKLIYSDIVATQRTNQPVAAFYGIKYLNPDNEFTFKTGATYAGEAGYVDREQITELTEESKLTLNKGDLFKYNNIVYKVLEDTPFATIEESDLELALQIAIVLLKVRLFSDAASTSKFESSDSEIADARFQINKWQTAVKSRKLKTGITVELAQDLEANGFDAPNFLEDLLATEMADEINKDILQSLITVSKRYKVTGITDSGFIDLSYASAPEAGRSLYRMVCEMVSHIQKESTYTATFCVASARAAAILAASGWLKHKPEDDKYLSQNAYGFLANGLPLYCDTNSPLDYVIVGVVENIGEKEIVGSIFYAPYTEGLDLDDPEHVGAFKVVVDPESLQPSIGLLVRYALSANPYTVAKDEKEARIIDGGDMDKMAGRSDLSVLLGVKLPKIIIDE",
+        "length": 427,
+        "molWeight": 46993,
+        "crc64": "120631DAD028ADD5",
+        "md5": "B0A0766A35114FF197767339881AEA5F"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000255",
+                  "source": "HAMAP-Rule",
+                  "id": "MF_04113"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11162794"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "15071181"
+                }
+              ],
+              "value": "Capsid protein that self-associates to form pentons, building the capsid in association with hexamers of the major capsid protein and one dodecamer of the portal protein. The capsid vertex protein self-associates to form 11 pentons, building the T=13 laevo capsid in association with 160 hexamers of the major capsid protein"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11162794",
+        "1195380",
+        "12626685",
+        "15071181",
+        "15878991",
+        "21129201",
+        "35458430"
+      ],
+      "source_record_sha256": "f287f9c2485e079e9b9bc82a73368aade692de7877e605a73e70852a1d9d8915"
+    },
+    {
+      "primaryAccession": "P22920",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1991-08-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1991-08-01",
+        "entryVersion": 65,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 5.2 kDa protein in arn-motA intergenic region"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MGYTDTRDLREHIFECGVAKKFSFTCKCLREVIQHYEQFSRKA",
+        "length": 43,
+        "molWeight": 5173,
+        "crc64": "45EE0D7BF3C98BFA",
+        "md5": "A59DC0752FC56802EC65EF0F979ADDC9"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685",
+        "2287273"
+      ],
+      "source_record_sha256": "330b8e9ce4bf6ba36c7918033d786d92bcefa60b6676a68b2e3fb08a56acfc39"
+    },
+    {
+      "primaryAccession": "P26744",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1992-08-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2007-01-23",
+        "entryVersion": 95,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000305"
+              }
+            ],
+            "value": "Portal protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Gene product 1"
+            },
+            "shortNames": [
+              {
+                "value": "Gp1"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Head-to-tail connector"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MADNENRLESILSRFDADWTASDEARREAKNDLFFSRVSQWDDWLSQYTTLQYRGQFDVVRPVVRKLVSEMRQNPIDVLYRPKDGARPDAADVLMGMYRTDMRHNTAKIAVNIAVREQIEAGVGAWRLVTDYEDQSPTSNNQVIRREPIHSACSHVIWDSNSKLMDKSDARHCTVIHSMSQNGWEDFAEKYDLDADDIPSFQNPNDWVFPWLTQDTIQIAEFYEVVEKKETAFIYQDPVTGEPVSYFKRDIKDVIDDLADSGFIKIAERQIKRRRVYKSIITCTAVLKDKQLIAGEHIPIVPVFGEWGFVEDKEVYEGVVRLTKDGQRLRNMIMSFNADIVARTPKKKPFFWPEQIAGFEHMYDGNDDYPYYLLNRTDENSGDLPTQPLAYYENPEVPQANAYMLEAATSAVKEVATLGVDTEAVNGGQVAFDTVNQLNMRADLETYVFQDNLATAMRRDGEIYQSIVNDIYDVPRNVTITLEDGSEKDVQLMAEVVDLATGEKQVLNDIRGRYECYTDVGPSFQSMKQQNRAEILELLGKTPQGTPEYQLLLLQYFTLLDGKGVEMMRDYANKQLIQMGVKKPETPEEQQWLVEAQQAKQGQQDPAMVQAQGVLLQGQAELAKAQNQTLSLQIDAAKVEAQNQLNAARIAEIFNNMDLSKQSEFREFLKTVASFQQDRSEDARANAELLLKGDEQTHKQRMDIANILQSQRQNQPSGSVAETPQ",
+        "length": 725,
+        "molWeight": 82743,
+        "crc64": "264E03CAC14AB156",
+        "md5": "739454F4460B160958BB60D971476DBA"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "21499245"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "28134243"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "30787152"
+                }
+              ],
+              "value": "Forms the portal vertex of the capsid (PubMed:21499245). This portal plays critical roles in head assembly, genome packaging, neck/tail attachment, and genome ejection (PubMed:30787152, PubMed:30787152). Procapsid assembly may initiate with a nucleation complex composed of portal and scaffolding proteins (PubMed:30787152). The portal protein multimerizes as a single ring-shaped homododecamer arranged around a central channel (PubMed:21499245, PubMed:28134243). Switches upon genome packaging from an asymmetrical conformation in the procapsid (PC-portal) to a symmetrical ring in the mature capsid (MV-portal). This change of conformation may serve as a signal for headful packaging (PubMed:28134243)"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "1853558",
+        "21499245",
+        "28134243",
+        "28242514",
+        "30787152",
+        "37952769"
+      ],
+      "source_record_sha256": "0b6b138a7bc83b28cca0ec9b176b6fbda843681efdf6da323a8f61d7f0244475"
+    },
+    {
+      "primaryAccession": "P26747",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1992-08-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2007-01-23",
+        "entryVersion": 107,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000305"
+              }
+            ],
+            "value": "Major capsid protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Gene product 5"
+            },
+            "shortNames": [
+              {
+                "value": "gp5"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Major head protein"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MALNEGQIVTLAVDEIIETISAITPMAQKAKKYTPPAASMQRSSNTIWMPVEQESPTQEGWDLTDKATGLLELNVAVNMGEPDNDFFQLRADDLRDETAYRRRIQSAARKLANNVELKVANMAAEMGSLVITSPDAIGTNTADAWNFVADAEEIMFSRELNRDMGTSYFFNPQDYKKAGYDLTKRDIFGRIPEEAYRDGTIQRQVAGFDDVLRSPKLPVLTKSTATGITVSGAQSFKPVAWQLDNDGNKVNVDNRFATVTLSATTGMKRGDKISFAGVKFLGQMAKNVLAQDATFSVVRVVDGTHVEITPKPVALDDVSLSPEQRAYANVNTSLADAMAVNILNVKDARTNVFWADDAIRIVSQPIPANHELFAGMKTTSFSIPDVGLNGIFATQGDISTLSGLCRIALWYGVNATRPEAIGVGLPGQTA",
+        "length": 430,
+        "molWeight": 46752,
+        "crc64": "BBDF63575C4B3899",
+        "md5": "F30948D7876C993E6EE12DCC6BDD8A0B"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "21220301"
+                },
+                {
+                  "evidenceCode": "ECO:0000305",
+                  "source": "PubMed",
+                  "id": "31068429"
+                }
+              ],
+              "value": "Self-assembles to form an icosahedral capsid with a T=7 symmetry"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "10764583",
+        "11053393",
+        "12562822",
+        "1853558",
+        "18621868",
+        "20223221",
+        "21220301",
+        "24126914",
+        "24600011",
+        "24836025",
+        "26269173",
+        "28270620",
+        "31068429",
+        "36851569",
+        "37952769",
+        "37966427",
+        "9680476",
+        "9792844"
+      ],
+      "source_record_sha256": "c8df085a6c69a8ec1f6ec0c155dafbfd35e441461d41acfcac0d87296e1e221c"
+    },
+    {
+      "primaryAccession": "P26750",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1992-08-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1992-08-01",
+        "entryVersion": 49,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 7.7 kDa protein in gp5-gp4 intergenic region"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "ORF 109"
+            }
+          },
+          {
+            "fullName": {
+              "value": "ORF69"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MKIAIYKPGGSIMVWGVMAQMKVIDSSELPEYVKDGWLDHPSKLLPVEADDVKPRKGRKPKAVSDADKD",
+        "length": 69,
+        "molWeight": 7667,
+        "crc64": "32E2DD93A8FA666B",
+        "md5": "F6F8B42E63DE1471E3FF5B4DB64789AB"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "1853558"
+      ],
+      "source_record_sha256": "c8e546fc086866e371c2e9b0a355d8b01c912f0e7a3231adae9d1fbf415060ba"
+    },
+    {
+      "primaryAccession": "P32273",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1993-10-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "1993-10-01",
+        "entryVersion": 60,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 12.2 kDa protein in e-segB intergenic region"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MILKTRWYDLDDGDDGIPVDRVDWNGCSEDTKKRLIREFRMGYQAAKPFTVTDDKFVCIQNGRAKLTNADWFTDKKVLLWYIISLPISSFVFYFFIKIQWTE",
+        "length": 102,
+        "molWeight": 12156,
+        "crc64": "BCB86F2C5C1CE211",
+        "md5": "CB1FA770A03A77FC2FCB97FD883F33F4"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685"
+      ],
+      "source_record_sha256": "03e36ac1cf20c1ebdc85907f06a51c093704c0e5e82195344197c9a37d09d7f2"
+    },
+    {
+      "primaryAccession": "P32283",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1993-10-01",
+        "lastAnnotationUpdateDate": "2026-01-28",
+        "lastSequenceUpdateDate": "1993-10-01",
+        "entryVersion": 72,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Probable mobile endonuclease E"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MNYQKIYNDLISRAQAREPLSEYKETHHIIPRCMGGSDDKENLVELTAREHFIAHAILSKIYPVKSVIFAFFMMCNMKGTKKRHYKVHSKIYAHAKKLNSQFRKGTVISEETRLKMSKSENRSAFNRRNQTQNIGGNQRKG",
+        "length": 141,
+        "molWeight": 16447,
+        "crc64": "EF510743598A966A",
+        "md5": "5AB2FECCF9ECC15040D57B142A4023D0"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685",
+        "2846540"
+      ],
+      "source_record_sha256": "4b720456d353decaa38270b72ea70a90ddba9aeda3ac23166105efa4633aaf53"
+    },
+    {
+      "primaryAccession": "P39245",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1995-02-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2002-01-23",
+        "entryVersion": 58,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 4.3 kDa protein in ndd-denB intergenic region"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MLIFALGSVVVGIYLMAVVGMDIHQNGLKSVVETIWNGVK",
+        "length": 40,
+        "molWeight": 4303,
+        "crc64": "EFB1FFF8B78A1F6F",
+        "md5": "CAB802E5F907CBEAF4533199C3647EDD"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685"
+      ],
+      "source_record_sha256": "c04559c9ddad5a3094ca2029d7136a9aaf5a02a297c9929214b0073f1361b05d"
+    },
+    {
+      "primaryAccession": "P39262",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1995-02-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1995-02-01",
+        "entryVersion": 83,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "dCTP pyrophosphatase"
+          },
+          "shortNames": [
+            {
+              "value": "dCTPase"
+            }
+          ],
+          "ecNumbers": [
+            {
+              "value": "3.6.1.12"
+            }
+          ]
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Deoxycytidine-triphosphatase"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MAHFNECAHLIEGVDKAQNEYWDILGDEKDPLQVMLDMQRFLQIRLANVREYCYHPDKLETAGDVVSWMREQKDCIDDEFRELLTSLGEMSRGEKEASAVWKKWKARYIEAQEKRIDEMSPEDQLEIKFELVDIFHFVLNMFVGLGMNAEEIFKLYYLKNKHNFERQDNGY",
+        "length": 171,
+        "molWeight": 20424,
+        "crc64": "5BDC643E379D3CE1",
+        "md5": "491F0D72D3298136E60050F3AAC2B951"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685",
+        "1560001",
+        "1692800"
+      ],
+      "source_record_sha256": "db03b9eeda0e1484d56ee9167a434589655bb9f38478abca038387d75aebcab5"
+    },
+    {
+      "primaryAccession": "P39493",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1995-02-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1995-02-01",
+        "entryVersion": 61,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 10.7 kDa protein in Gp54-alt intergenic region"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MKSSLRFLGQELVVEGVIPADNAFNEAVYDEFIKIFGTDKKFGIFPSENFSKPEQTESIFQGVVTGKFESEAPVKIEVYIEDSLVASVAAFISFRK",
+        "length": 96,
+        "molWeight": 10704,
+        "crc64": "7C42C0AACA6CE992",
+        "md5": "1B3CFD58680F88CFDE8E5821DF3E2D63"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685"
+      ],
+      "source_record_sha256": "1be44d3bfd930b2ae8d0f6c2d3e51f6ced2ead8b30d5778774c680dd3633d99f"
+    },
+    {
+      "primaryAccession": "P39505",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1995-02-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1995-02-01",
+        "entryVersion": 60,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized 9.4 kDa protein in nrdB-nrdA intergenic region"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MRKPKTEEAKKNIAAAKVGVLNPMYGTISPTRDVPHTKETRDLISLRTKQGAEYPPCPHCGKKVNKGNALRWHYDKCKFKDSK",
+        "length": 83,
+        "molWeight": 9409,
+        "crc64": "A100C03533A7CB49",
+        "md5": "01073B7859FD91E3B2F26617F525BCBD"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "12626685"
+      ],
+      "source_record_sha256": "c4544366def0488e45ec7b96825cd0ddf973a91b5a358a1d2810ca2861c3f66e"
+    },
+    {
+      "primaryAccession": "P69172",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 55,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage phiX174",
+        "commonName": "Isolate Sanger",
+        "synonyms": [
+          "Bacteriophage phi-X174"
+        ],
+        "taxonId": 1217068,
+        "lineage": [
+          "Viruses",
+          "Floreoviria",
+          "Sangervirae",
+          "Phixviricota",
+          "Microviricetes",
+          "Bullavirales",
+          "Sinsheimervirus",
+          "Escherichia phage phiX174"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Protein C"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MRKFDLSLRSSRSSYFATFRHQLTILSKTDALDEEKWLNMLGTFVKDWFRYESHFVHGRDSLVDILKERGLLSESDAVQPLIGKKS",
+        "length": 86,
+        "molWeight": 10081,
+        "crc64": "28785348340CCE3C",
+        "md5": "DA480A1D58F75AD62E50C6851D3078B6"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "2944602"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "2972714"
+                }
+              ],
+              "value": "Plays a central role in the packaging of viral DNA into phage procapsid, which occurs in the late stage of infection. The protein C can interact with the replicative complex composed of the protein A, the host rep and the viral DNA after the completion of one round of DNA synthesis. When protein C is bound to the replicative form, the complex becomes accessible to procapsid and serves as a DNA packaging apparatus"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "2944602",
+        "2972714",
+        "731693",
+        "870828"
+      ],
+      "source_record_sha256": "bf90f17e5f451c9a8e545dd6ff6d12919b83824447053dac426cbe9177a7ab3e"
+    },
+    {
+      "primaryAccession": "P69202",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1986-07-21",
+        "entryVersion": 94,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Repressor protein C2"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MNTQLMGERIRARRKKLKIRQAALGKMVGVSNVAISQWERSETEPNGENLLALSKALQCSPDYLLKGDLSQTNVAYHSRHEPRGSYPLISWVSAGQWMEAVEPYHKRAIENWHDTTVDCSEDSFWLDVQGDSMTAPAGLSIPEGMIILVDPEVEPRNGKLVVAKLEGENEATFKKLVMDAGRKFLKPLNPQYPMIEINGNCKIIGVVVDAKLANLP",
+        "length": 216,
+        "molWeight": 24069,
+        "crc64": "85A32EE9DB785E09",
+        "md5": "C6B29C211591C37F2A1E2B045D1BAFCB"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "This protein allows the phage to reside inactively in the chromosome of its host bacterium. This lysogenic state is maintained by binding of regulatory protein C2 to the OR and OL operators, preventing transcription of proteins necessary for lytic development"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "6445008",
+        "7260059",
+        "8289306"
+      ],
+      "source_record_sha256": "aaaa1ca15eacda0e88dc7e7b50123e51aea8c2990b79299b1e17875b7e579515"
+    },
+    {
+      "primaryAccession": "P69486",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1986-07-21",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2007-01-23",
+        "entryVersion": 94,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage phiX174",
+        "commonName": "Isolate Sanger",
+        "synonyms": [
+          "Bacteriophage phi-X174"
+        ],
+        "taxonId": 1217068,
+        "lineage": [
+          "Viruses",
+          "Floreoviria",
+          "Sangervirae",
+          "Phixviricota",
+          "Microviricetes",
+          "Bullavirales",
+          "Sinsheimervirus",
+          "Escherichia phage phiX174"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "External scaffolding protein D"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Scaffolding protein D"
+            },
+            "shortNames": [
+              {
+                "value": "GPD"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MSQVTEQSVRFQTALASIKLIQASAVLDLTEDDFDFLTSNKVWIATDRSRARRCVEACVYGTLDFVGYPRFPAPVEFIAAVIAYYVHPVNIQTACLIMEGAEFTENIINGVERPVKAAELFAFTLRVRAGNTDVLTDAEENVRQKLRAEGVM",
+        "length": 152,
+        "molWeight": 16937,
+        "crc64": "E8C912DCBA48D5E4",
+        "md5": "5B39E5A7108EE75BCACB74B9050DFE57"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "15890913"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "159449"
+                }
+              ],
+              "value": "Assembles the procapsid by joining twelve 12S pre-assembly complex into a T=1 icosahedral particle, called 108S procapsid. Ten proteins D bind each 12S complex, which are formed by three pentamers of F, G, B protein and a H protein. The scaffolding protein is released from the provirion after genome packaging to form the mature virion"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "1004533",
+        "1255852",
+        "12788631",
+        "15890913",
+        "159449",
+        "2963134",
+        "870828",
+        "9305849"
+      ],
+      "source_record_sha256": "33dfcd28465c5ed905bab47fc9cee4ed2107c5dbe2d51fec55aa8a60244466b8"
+    },
+    {
+      "primaryAccession": "Q01146",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1993-10-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2018-06-20",
+        "entryVersion": 78,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Salmonella phage P22",
+        "commonName": "Bacteriophage P22",
+        "taxonId": 10754,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Lederbergvirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000305"
+              }
+            ],
+            "value": "Internal virion protein gp16"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Ejection protein gp16"
+            },
+            "shortNames": [
+              {
+                "value": "E protein gp16"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MKVTANGKTFNFPDGTSTEDIGAAVDEYFAGQASAAETQPAEQQEEPQQPEQSLMQRAGDLLTGGQSAGQIAEQAGRGLVNIPFDVLQGGASLINAISQGLGGPKVLDDVYRPVDRPTDPYAQAGESIGGYLIPGAGVAGNMAIGSVAEAANQQGDFAGNVAKNAAVNLGAQGLLSGAAKLVGRGITAARGEIAPEARQLIDTAESMGVKPMTSDMIKPGNAFTRSLMQGGEGALLGTGGKRAEQYAIRSKLLGDYFDRVGGYNPDDIVKSMTSTVGGRKNAAGAVRDEIVNRMGSAPVGTTNSINAIDTNIARLEKLGTSADQRLLTALKNLKGELNSGNVDFDLLQQHRTAFRTNVQGDAMVFPNQAKAATNMVENAMTRDLRNAVGKSLGPQDAAKYLKSNSDFANIYNKVLNKRISNTLNKARSEYTPELINTVVFSRKPSDIKRIWSSLDNKGKDAMRAAYISKIAEKTGDSPAKFITEVNKLKAQSGGEIYNTIFSGRHMKELDALHDVLRQTARSDSANVVTQTGQALANPVRLGAAIPTLGKSLAAEAGYGLAMRVYESKPIRNMLLRLANTKPGTPAYERALNQAATAVRPLLANEATRQ",
+        "length": 609,
+        "molWeight": 64386,
+        "crc64": "019E28AB1D95F2ED",
+        "md5": "9BAD9AB3242C3E5FECA34C9C817BCF53"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "26245366"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "29590587"
+                }
+              ],
+              "value": "Inner capsid protein that plays a role in viral DNA ejection into the host cell"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11053393",
+        "12562822",
+        "1585633",
+        "1853558",
+        "18621868",
+        "26245366",
+        "29590587",
+        "328927",
+        "8464750"
+      ],
+      "source_record_sha256": "1dacb865e0ea9abcb863c35c6cde1b3a2cff27ba675b996022ebe30c80f275b9"
+    },
+    {
+      "primaryAccession": "Q01267",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1993-04-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2000-12-01",
+        "entryVersion": 93,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Protease I"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product 32"
+            },
+            "shortNames": [
+              {
+                "value": "gp32"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Gene product I"
+            },
+            "shortNames": [
+              {
+                "value": "gpI"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MKKHAIGIAALNALSIDDDGWCQLLPAGHFSARDGRPFDVTGGQGWFIDGEIAGRLVEGVRALNQDVLIDYEHNQLRKDKGLPPEQLVAAGWFNADEMQWREGEGLFIHPRWTAAAQQRIDDGEFGYLSAVFPYDTATGAVLQIRLAALTNDPGATGMKKLTALAADLPDILQQENKPMNETLRKLLARLGVTVPENADITDEQATAALTALDTLEINAGKVAALSAELEKAQKAAVDLTKYVPVESYNALRDELAQATAQSATASLSAVLDKAEQEGRIFKSERTYLEQLGGQIGVAALSAQLEKKQPIAALSAMQTTTAKIPSQEKTAVAVLSADEQAAVKALGITEAEYLKMKQEQEK",
+        "length": 361,
+        "molWeight": 38893,
+        "crc64": "0DE858C2E48C7D46",
+        "md5": "2D1F1C1106BB457153244CC2FF655061"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305",
+                  "source": "PubMed",
+                  "id": "11922669"
+                },
+                {
+                  "evidenceCode": "ECO:0000305",
+                  "source": "PubMed",
+                  "id": "8599204"
+                },
+                {
+                  "evidenceCode": "ECO:0000305",
+                  "source": "PubMed",
+                  "id": "9495752"
+                }
+              ],
+              "value": "Protease I is involved in virion assembly and maturation. Protease I cleaves the portal protein to yield mature procapsids competent for DNA packaging (Probable). Isoform scaffold protein Z probably helps the capsid proteins to assemble into a functional capsid (Probable)"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11922669",
+        "1385991",
+        "8293968",
+        "8599204",
+        "9495752"
+      ],
+      "source_record_sha256": "75171bb36a1b03adc463b208a6acbf58739b0151f7d0772be0c6e8c7e4b89438"
+    },
+    {
+      "primaryAccession": "Q01438",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "1993-10-01",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "1993-10-01",
+        "entryVersion": 74,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Enterobacteria phage T4",
+        "commonName": "Bacteriophage T4",
+        "taxonId": 10665,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Pantevenvirales",
+          "Straboviridae",
+          "Tevenvirinae",
+          "Tequatrovirus"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Protein comC-alpha"
+          }
+        }
+      },
+      "sequence": {
+        "value": "MAIKFEVNKWYQFKNKQAQENFIKDHTDNGIYARRLGMEPFKILDADYLGRPTKIMTSIGVLKRCAGGDILDENFIWLSTNEAGFFDEVENPYQAVEEQEQEEKEQEQIEDFTEFPVMKVTIENNDQAWSLYQMLKAYFKE",
+        "length": 141,
+        "molWeight": 16682,
+        "crc64": "96C9EFA8C673C479",
+        "md5": "924D3FB6834A7E9A78D4E40645CFB6E5"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "2544560"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "2668290"
+                }
+              ],
+              "value": "Plays a role in the expression of some T4 genes involved in DNA synthesis including the helicase/primase gp41. May act as a transcriptional antitermination factor"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "12626685",
+        "1400206",
+        "2544560",
+        "2668290"
+      ],
+      "source_record_sha256": "42a9efca832b2087f6cfb169b9a2ea73b8472f73129b1e8bff0b6aa4a5caca48"
+    },
+    {
+      "primaryAccession": "Q38482",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2000-12-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2000-12-01",
+        "entryVersion": 73,
+        "sequenceVersion": 2
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Uncharacterized protein gp9"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "E8"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Gene product 9"
+            },
+            "shortNames": [
+              {
+                "value": "gp9"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MVTDMKCNRKRWSREDREFIEANVGKMTVEEMAEKLKVATTALRAHARRHGISLCVYRISEHDKYLCRELYKEGLDIHVIARKMELSNRAVSSIVYSGY",
+        "length": 99,
+        "molWeight": 11593,
+        "crc64": "1005F88FCBE33703",
+        "md5": "04CB8A591E1F5400E5BD601994B9DC3B"
+      },
+      "comments": [],
+      "pubmed_ids": [
+        "11922669",
+        "2524470"
+      ],
+      "source_record_sha256": "b640703c9063959d59ca23fee4ce30f2b7bf43c6bbfe625eba7dc4db94c70e8e"
+    },
+    {
+      "primaryAccession": "Q6QGD6",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2016-02-17",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2004-07-05",
+        "entryVersion": 111,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage T5",
+        "commonName": "Enterobacteria phage T5",
+        "taxonId": 2695836,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Demerecviridae",
+          "Markadamsvirinae",
+          "Tequintavirus",
+          "Tequintavirus T5"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "24198424"
+              }
+            ],
+            "value": "Decoration protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Capsid protein pb10"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MIDYSGLRTIFGEKLPESHIFFATVAAHKYVPSYAFLRRELGLSSAHTNRKVWKKFVEAYGKAIPPAPPAPPLTLSKDLTASMSVEEGAALTLSVTATGGTGPYTYAWTKDGSPIPDASGATYTKPTAAAEDAGSYKVTVTDSKQVSKDSTTCAVTVNPTVPGG",
+        "length": 164,
+        "molWeight": 17247,
+        "crc64": "ED556D7D2FE3B298",
+        "md5": "419030A0F8FB91E4F07EF3B613DB9DD3"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "16876823"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "26616586"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "28165000"
+                }
+              ],
+              "value": "Decoration protein that binds asymmetrically to the center of each capsid protein hexamer after capsid expansion. Stabilizes the capsid and protects from DNA release"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "15661140",
+        "16876823",
+        "24198424",
+        "26616586",
+        "28165000"
+      ],
+      "source_record_sha256": "cc4950626c275ec9c87ecd4aaba3dda04f6967f02d8687bbbb914efd3c92ed9b"
+    },
+    {
+      "primaryAccession": "Q6QGD7",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2016-02-17",
+        "lastAnnotationUpdateDate": "2026-09-02",
+        "lastSequenceUpdateDate": "2004-07-05",
+        "entryVersion": 77,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage T5",
+        "commonName": "Enterobacteria phage T5",
+        "taxonId": 2695836,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Demerecviridae",
+          "Markadamsvirinae",
+          "Tequintavirus",
+          "Tequintavirus T5"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "24198424"
+              }
+            ],
+            "value": "Prohead protease"
+          },
+          "ecNumbers": [
+            {
+              "value": "3.4.21.-"
+            }
+          ]
+        },
+        "flag": "Precursor"
+      },
+      "sequence": {
+        "value": "MTQAAIDYNKLKSAPVHLDAYIKSIDSESKEGVVKIRGFANTISKDRAGDVIPASAWKTSNALTNYMKNPIILFGHDHRRPIGKCIDLNPTEMGLEIECEINESSDPAIFSLIKNGVLKTFSIGFRCLDAEWDEATDIFIIKDLELYEVSVVSVPCNQDSTFNLAKSMNGHDYTEWRKSFTAISSKAVPAQERNLSELEKLAIALGYVKE",
+        "length": 210,
+        "molWeight": 23379,
+        "crc64": "B1531997730D48CF",
+        "md5": "19DCD91C0821EE77DE84AE7B90ED48B9"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "24198424"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "26616586"
+                }
+              ],
+              "value": "Serine protease involved in capsid assembly and maturation. Cleaves the major capsid protein, the decoration protein, the portal protein to yield mature procapsids competent for DNA packaging (Probable). Acts as a trigger for assembly of the capsid protein"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "15661140",
+        "24198424",
+        "26616586"
+      ],
+      "source_record_sha256": "5d9bb736dc017544ed6c9f6d053e166a654b69737028983dfd2b6597b37a574d"
+    },
+    {
+      "primaryAccession": "Q6QGD8",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2015-03-04",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2004-07-05",
+        "entryVersion": 82,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage T5",
+        "commonName": "Enterobacteria phage T5",
+        "taxonId": 2695836,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Demerecviridae",
+          "Markadamsvirinae",
+          "Tequintavirus",
+          "Tequintavirus T5"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Major capsid protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000303",
+                  "source": "PubMed",
+                  "id": "24198424"
+                }
+              ],
+              "value": "Capsid protein pb8"
+            }
+          },
+          {
+            "fullName": {
+              "value": "Major head protein"
+            }
+          }
+        ],
+        "contains": [
+          {
+            "recommendedName": {
+              "fullName": {
+                "value": "Scaffolding domain delta"
+              }
+            }
+          }
+        ],
+        "flag": "Precursor"
+      },
+      "sequence": {
+        "value": "MTIDINKLKEELGLGDLAKSLEGLTAAQKAQEAERMRKEQEEKELARMNDLVSKAVGEDRKRLEEALELVKSLDEKSKKSNELFAQTVEKQQETIVGLQDEIKSLLTAREGRSFVGDSVAKALYGTQENFEDEVEKLVLLSYVMEKGVFETEHGQRHLKAVNQSSSVEVSSESYETIFSQRIIRDLQKELVVGALFEELPMSSKILTMLVEPDAGKATWVAASTYGTDTTTGEEVKGALKEIHFSTYKLAAKSFITDETEEDAIFSLLPLLRKRLIEAHAVSIEEAFMTGDGSGKPKGLLTLASEDSAKVVTEAKADGSVLVTAKTISKLRRKLGRHGLKLSKLVLIVSMDAYYDLLEDEEWQDVAQVGNDSVKLQGQVGRIYGLPVVVSEYFPAKANSAEFAVIVYKDNFVMPRQRAVTVERERQAGKQRDAYYVTQRVNLQRYFANGVVSGTYAAS",
+        "length": 458,
+        "molWeight": 50885,
+        "crc64": "F109BB8042B04944",
+        "md5": "B9818AC9F1D8171701596D9CA00FE7BA"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "20573812"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "23500494"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "26616586"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "34644530"
+                }
+              ],
+              "value": "Major capsid protein that self-associates to form 120 hexamers and 11 pentamers, building the T=13 icosahedral capsid which about 860 Angstroms in diameter. Responsible for its self-assembly into a procapsid. The phage does not need to encode a separate scaffolfing protein because its capsid protein contains the delta domain that carries that function. The capsid gains its final stability through the reorganization of the subunits that takes place upon expansion. DNA encapsidation through the portal triggers capsid expansion and the binding of the decoration protein to the capsid exterior. Might play a role in counteracting the host Pycsar defense system that is mediated by pyrimidine cyclases and leads to abortive infection"
+            }
+          ],
+          "commentType": "FUNCTION",
+          "molecule": "Major capsid protein"
+        }
+      ],
+      "pubmed_ids": [
+        "15661140",
+        "16876823",
+        "20573812",
+        "23500494",
+        "24198424",
+        "26616586",
+        "34644530",
+        "4571380"
+      ],
+      "source_record_sha256": "60778a96126fb8ab13e5ced3c930686ad3cb9ffd94a8d80a6fe6392a8feb354c"
+    },
+    {
+      "primaryAccession": "Q9T1U9",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2000-12-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2000-05-01",
+        "entryVersion": 71,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Tail fiber assembly protein U"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product 50"
+            },
+            "shortNames": [
+              {
+                "value": "gp50"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Gene product U"
+            },
+            "shortNames": [
+              {
+                "value": "gpU"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MMHLKNIKSENPKTKEQYQLTKNFDVIWLWSEDGKNWYEEVNNFQDDTIKIVYDENNIIVAITKDASTLNPEGFSVVEIPDITANRRADDSGKWMFKDGAVVKRIYTADEQQQQAESQKAALLSEAESVIQPLERAVRLNMATDEERARLESWERYSVLVSRVDTANPEWPQKPE",
+        "length": 175,
+        "molWeight": 20310,
+        "crc64": "71A0EBA3294FCCD1",
+        "md5": "6681A85CB30E4B783C24B8EE5D345280"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Chaperone involved in tail fiber assembly. Remains associated to the tail fiber and participates in the host receptor binding. Binds to the primary receptor (Probable). Two alternate tail fiber assembly proteins U and U' are encoded extending the host range of the virus"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11922669",
+        "3904174",
+        "8293968"
+      ],
+      "source_record_sha256": "b9b36d494d62c32fb1c2a864d8662b8950f918dc6b11bda1aea5ac7db458dea0"
+    },
+    {
+      "primaryAccession": "Q9T1V2",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2000-12-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2000-05-01",
+        "entryVersion": 65,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "value": "Baseplate protein gp47"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product 47"
+            },
+            "shortNames": [
+              {
+                "value": "gp47"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Gene product W"
+            },
+            "shortNames": [
+              {
+                "value": "gpW"
+              }
+            ]
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MAYSPPTLSSLIARTEQNIEQRLPGSWPQAREKTLSAIAYAQAGLAAGCHEHISWVGRQIIPSTADEDELLEHCRFWGVRRKQATAASGPLTVTTSAATTIPAGTRWQRADGVVYSLADTIVIDRAGTTEITVTALAAGEAGNTGENTLLTLITPVACVVSDAITVKGFSGGADIESAAELLSRLEYRVQYPPFGGNQFDYVRWAREVSGVTRAWCFPTWKGGGTVGVTFVMDNRSNIFPQPADVERVADYIAGHTDPITGLIVGQPDGVNVTVFAPKAKPVNPRIYISPKTAELKQAITNAINTMFFNEVMPGGALAPSRIIRAVAGVTGLDDFEVRFPTEIQRSENTELLTAGTIEWL",
+        "length": 360,
+        "molWeight": 38691,
+        "crc64": "063296FB28859279",
+        "md5": "A3E2B1C16599B06387567999545977EC"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "value": "Component of the baseplate. Probably involved in tail assembly"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11922669",
+        "22297511",
+        "27555589",
+        "3904174",
+        "8293968"
+      ],
+      "source_record_sha256": "3fc4204c3f65ca6823e8e1895f4c68466fd89f65c203f3bd0892407579ce3026"
+    },
+    {
+      "primaryAccession": "Q9T1W1",
+      "entryType": "UniProtKB reviewed (Swiss-Prot)",
+      "entryAudit": {
+        "firstPublicDate": "2000-12-01",
+        "lastAnnotationUpdateDate": "2026-06-10",
+        "lastSequenceUpdateDate": "2000-05-01",
+        "entryVersion": 68,
+        "sequenceVersion": 1
+      },
+      "organism": {
+        "scientificName": "Escherichia phage Mu",
+        "commonName": "Bacteriophage Mu",
+        "taxonId": 2681603,
+        "lineage": [
+          "Viruses",
+          "Duplodnaviria",
+          "Heunggongvirae",
+          "Uroviricota",
+          "Caudoviricetes",
+          "Caudoviricetes incertae sedis",
+          "Muvirus",
+          "Muvirus mu"
+        ]
+      },
+      "proteinDescription": {
+        "recommendedName": {
+          "fullName": {
+            "evidences": [
+              {
+                "evidenceCode": "ECO:0000303",
+                "source": "PubMed",
+                "id": "8599204"
+              }
+            ],
+            "value": "Major capsid protein"
+          }
+        },
+        "alternativeNames": [
+          {
+            "fullName": {
+              "value": "Gene product 34"
+            },
+            "shortNames": [
+              {
+                "value": "gp34"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "value": "Gene product T"
+            },
+            "shortNames": [
+              {
+                "value": "gpT"
+              }
+            ]
+          },
+          {
+            "fullName": {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000305"
+                }
+              ],
+              "value": "Major head protein"
+            }
+          }
+        ]
+      },
+      "sequence": {
+        "value": "MIVTPASIKALMTSWRKDFQGGLEDAPSQYNKIAMVVNSSTRSNTYGWLGKFPTLKEWVGKRTIQQMEAHGYSIANKTFEGTVGISRDDFEDDNLGIYAPIFQEMGRSAAVQPDELIFKLLKDGFTQPCYDGQNFFDKEHPVYPNVDGTGSAVNTSNIVEQDSFSGLPFYLLDCSRAVKPLIFQERRKPELVARTRIDDDHVFMDNEFLFGASTRRAAGYGFWQMAVAVKGDLTLDNLWKGWQLMRSFEGDGGKKLGLKPTHIVVPVGLEKAAEQLLNRELFADGNTTVSNEMKGKLQLVVADYL",
+        "length": 305,
+        "molWeight": 34160,
+        "crc64": "01B4925C16EDC4CF",
+        "md5": "82A2B0624224B1918FB11B93F84B15C9"
+      },
+      "comments": [
+        {
+          "texts": [
+            {
+              "evidences": [
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "11922669"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "8599204"
+                },
+                {
+                  "evidenceCode": "ECO:0000269",
+                  "source": "PubMed",
+                  "id": "9495752"
+                }
+              ],
+              "value": "Capsid protein that self-assembles to form an icosahedral capsid, about 54 nm in diameter"
+            }
+          ],
+          "commentType": "FUNCTION"
+        }
+      ],
+      "pubmed_ids": [
+        "11922669",
+        "8293968",
+        "8599204",
+        "9495752"
+      ],
+      "source_record_sha256": "bbd94464f2e2dbc9a322b2849fe6eb18eee3919a4b15232c548ff188e284a745"
+    }
+  ],
+  "retrieval": {
+    "url": "https://rest.uniprot.org/uniprotkb/stream?query=reviewed%3Atrue+AND+%28organism_id%3A10665+OR+organism_id%3A10710+OR+organism_id%3A10677+OR+organism_id%3A10847+OR+organism_id%3A10760+OR+organism_id%3A10726+OR+organism_name%3A%22P22%22+OR+organism_id%3A2681598+OR+organism_id%3A2681611+OR+organism_id%3A2681603+OR+organism_id%3A2886930+OR+organism_id%3A2695836+OR+organism_id%3A2908168%29&format=json",
+    "retrieved_utc": "2026-10-04T06:24:19.273600+00:00",
+    "headers": {
+      "vary": "accept,accept-encoding,x-uniprot-release,x-api-deployment-date, User-Agent",
+      "cache-control": "public, max-age=43200",
+      "content-type": "application/json",
+      "access-control-allow-credentials": "true",
+      "access-control-expose-headers": "Link, X-Total-Results, X-UniProt-Release, X-UniProt-Release-Date, X-API-Deployment-Date",
+      "x-api-deployment-date": "23-September-2026",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "date": "Sun, 04 Oct 2026 06:24:16 GMT",
+      "access-control-max-age": "1728000",
+      "x-uniprot-release": "2026_03",
+      "access-control-allow-origin": "*",
+      "accept-ranges": "bytes",
+      "access-control-allow-methods": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+      "access-control-allow-headers": "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization",
+      "x-uniprot-release-date": "02-September-2026",
+      "x-envoy-upstream-service-time": "1018",
+      "server": "envoy",
+      "connection": "close",
+      "transfer-encoding": "chunked"
+    }
+  },
+  "source_snapshots_sha256": {
+    "uniprot-reviewed.json": "bc1f27d1996624eb845d43c2b613c7e57155e3fe017b62b363b9c0ce370b84c6",
+    "uniprot-phix.json": "466be40aa3dfd895a8d4da8f98133bca290ac6b587c1af436d905c4467dad8d6"
+  },
+  "snapshot_scope": "Exact reviewed sequence matches for selected paired differences only; not an unbiased truth set"
+}

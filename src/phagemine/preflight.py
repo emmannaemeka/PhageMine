@@ -97,8 +97,9 @@ def preflight_profile(profile: str) -> dict[str, Any]:
     required = ["PHROGS"] if profile == "standard" else ["PFAM", "VOGDB", "SWISSPROT", "PHROGS"]
     resources = []
     failures = []
+    validated = manager.validate_all()
     for kind in required:
-        matches = [r for r in manager.validate_all() if r.get("resource_type") == kind]
+        matches = [r for r in validated if r.get("resource_type") == kind]
         ready = next((r for r in matches if r.get("status") == ResourceStatus.READY.value), None)
         if ready is None:
             failures.append(f"{kind}: no registered READY resource")

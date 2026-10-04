@@ -1333,7 +1333,13 @@ class PhageMineTests(unittest.TestCase):
                 self.assertTrue((output / filename).exists(), filename)
             scientific_status = json.loads((output / "scientific_validation_status.json").read_text())
             self.assertFalse(scientific_status["functional_strength_empirically_calibrated"])
-            self.assertEqual(scientific_status["feature_scope"]["tRNA"], "NOT_CALLED")
+            manifest = json.loads((output / "run_manifest.json").read_text())
+            rna_called = manifest["rna_annotation"]["status"] == "COMPLETED"
+            self.assertEqual(scientific_status["feature_scope"]["tRNA"],
+                             "COMPUTATIONALLY_ASSESSED_REQUIRES_REVIEW" if rna_called else "NOT_CALLED")
+            if rna_called:
+                self.assertTrue((output / "rna_features.json").is_file())
+                self.assertTrue((output / "rna_features.gff3").is_file())
             with (output / "annotation.tsv").open() as handle:
                 header = next(csv.reader(handle, delimiter="\t"))
                 self.assertEqual(header[:8], ["protein_id", "start", "end", "strand", "length_aa", "gene", "product", "proposed_function"])
