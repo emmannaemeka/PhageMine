@@ -179,12 +179,12 @@ class SwissProtEvidenceAdapter(EvidenceAdapter):
                     source_stat.st_mtime_ns, source_stat.st_ctime_ns,
                     (index_stat.st_ino, index_stat.st_size, index_stat.st_mtime_ns,
                      index_stat.st_ctime_ns) if index_stat else None)
-        current = signature()
-        if current == getattr(self, '_verified_metadata_signature', None):
+        candidate_signature = signature()
+        if candidate_signature == getattr(self, '_verified_metadata_signature', None):
             return index
         def remember_verified():
             verified = signature()
-            if verified[:6] != current[:6]:
+            if verified[:6] != candidate_signature[:6]:
                 raise RuntimeError('Swiss-Prot metadata changed while its index was being verified')
             self._verified_metadata_signature = verified
         # Validate once for unchanged files, rather than reading the complete
