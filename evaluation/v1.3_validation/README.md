@@ -63,6 +63,9 @@ audit or claimed by these results.
 
 ## Reviewable data
 
+The [paired accuracy review](ACCURACY_REVIEW.md) separates differences between
+tools from differences against the reference and records the review protocol.
+
 - [Manifest and artifact hashes](results/fresh-seven/manifest.json)
 - [Complete summary](results/fresh-seven/summary.tsv)
 - [41 changed product assignments](results/fresh-seven/decision_changes.tsv)

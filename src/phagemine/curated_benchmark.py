@@ -4,7 +4,8 @@ import csv
 import json
 from pathlib import Path
 from .artifact_ops import checksum
-from .functional_benchmark import CATEGORIES, PENDING, classify, informative, load_synonyms, locus, match_loci, summarize
+from .functional_benchmark import CATEGORIES, PENDING, load_synonyms, locus, match_loci, summarize
+from .annotation_labels import classify, informative
 
 
 def read_records(path, curated=False):
@@ -77,7 +78,8 @@ def evaluate(predictions, references, output, *, synonyms=None, adjudications=No
                 'summary': summary, 'source_checksums': {key:value for key,value in source_checksums.items() if value},
                 'analysis_type': 'REFERENCE_CONCORDANCE', 'reference_independence': 'NOT_ESTABLISHED_BY_SOFTWARE',
                 'precision_scope': 'NAMED_ASSERTIONS_AT_EXACT_EVALUABLE_REFERENCE_LOCI',
-                'implementation_checksums': {'curated_benchmark.py': checksum(Path(__file__)),
+                'implementation_checksums': {'annotation_labels.py': checksum(Path(__file__).with_name('annotation_labels.py')),
+                                             'curated_benchmark.py': checksum(Path(__file__)),
                                              'functional_benchmark.py': checksum(Path(__file__).with_name('functional_benchmark.py'))},
                 'matching': 'EXACT_ACCESSION_COORDINATES_STRAND', 'accuracy_superiority_established': False,
                 'interpretation': 'Reference quality and independence require external assessment. Wilson intervals describe loci; loci within genomes are not necessarily independent. Missing exact models are counted as abstentions at evaluable reference loci.'}

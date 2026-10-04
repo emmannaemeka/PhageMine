@@ -1,0 +1,29 @@
+{
+  "accuracy_superiority_established": false,
+  "analysis_type": "PAIRED_DISAGREEMENT_TRIAGE",
+  "counts": {
+    "A_NAMED_B_UNNAMED": 27,
+    "A_UNNAMED_B_NAMED": 29,
+    "BOTH_UNNAMED": 271,
+    "DIFFERENT_NAMED_LABELS": 25,
+    "MODEL_MISSING_BOTH": 112,
+    "SAME_NORMALIZED_LABEL": 452
+  },
+  "functional_accuracy": null,
+  "held_out": false,
+  "interpretation": "Labels and reference agreement are not independent correctness evidence. Missing models are separate from unnamed functions. No automatic biological adjudication.",
+  "sources": {
+    "A": {
+      "path": "evaluation/v1.3_validation/results/fresh-seven/inputs/PhageMine-current-rules.tsv",
+      "sha256": "7144523d8156832fb95810e2d7634c155f01c699ba5e27f0f118e2288aaed540"
+    },
+    "B": {
+      "path": "evaluation/v1.3_validation/results/fresh-seven/inputs/Pharokka.tsv",
+      "sha256": "6355525f28a82c0509ff9797e802ba47a14d7715f7f59a947c3dc40599be4b06"
+    },
+    "reference": {
+      "path": "evaluation/v1.3_validation/results/fresh-seven/inputs/references.tsv",
+      "sha256": "b00ccb31f6de1e5c29a90096eeb608de2be4d4ee3078aa5ab45fac0d8ef1ef4b"
+    }
+  }
+}

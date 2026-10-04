@@ -6,6 +6,41 @@ from pathlib import Path
 import pytest
 
 
+@pytest.mark.parametrize('product', ['NA', 'N/A', 'NaN', '-', 'DUF123 protein',
+                                    'UPF0123 family', 'domain of unknown function'])
+def test_placeholder_names_cannot_count_as_functional_accuracy(product):
+    from phagemine.annotation_labels import classify, informative
+    assert not informative(product)
+    assert classify(product, 'synthetic enzyme', {}) == 'ABSTENTION'
+    assert classify('synthetic enzyme', product, {}) == 'NON_EVALUABLE_REFERENCE'
+
+
+def test_specificity_and_uncertainty_are_preserved_in_accuracy_scoring():
+    from phagemine.annotation_labels import classify, informative, PENDING
+    assert informative('putative conserved DNA helicase')
+    assert classify('putative enzyme subunit A', 'enzyme subunit B', {}) == PENDING
+
+
+def test_paired_review_separates_missing_models_from_abstention(tmp_path):
+    import importlib.util
+    path = Path(__file__).resolve().parents[1] / 'evaluation/v1.3_validation/scripts/review_disagreements.py'
+    spec = importlib.util.spec_from_file_location('paired_review', path)
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    a, b, ref = (tmp_path / name for name in ('a.tsv', 'b.tsv', 'ref.tsv'))
+    base = {'accession': 'fixture', 'start': 1, 'end': 30, 'strand': '+'}
+    other = {**base, 'start': 40, 'end': 70}
+    table(a, [{**base, 'product': 'N/A'}])
+    table(b, [{**base, 'product': 'synthetic enzyme'}, {**other, 'product': 'synthetic protein'}])
+    table(ref, [{**row, 'product': 'synthetic enzyme', 'curated_by': 'fixture',
+                 'reference_evidence': 'synthetic'} for row in (base, other)], True)
+    report = module.audit(a, b, ref, tmp_path / 'review')
+    assert report['counts'] == {'A_UNNAMED_B_NAMED': 1, 'MODEL_MISSING_A': 1}
+    assert report['functional_accuracy'] is None
+    assert report['accuracy_superiority_established'] is False
+    with pytest.raises(ValueError, match='new directory'):
+        module.audit(a, b, ref, tmp_path / 'review')
+
+
 def table(path, rows, reference=False):
     columns = ['accession', 'start', 'end', 'strand', 'product']
     if reference: columns += ['curated_by', 'reference_evidence']
