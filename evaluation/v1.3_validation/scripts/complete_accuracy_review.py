@@ -54,10 +54,28 @@ def validate_decision(case, decision, sequence, records):
     return record
 
 
+def load_sequences(runs_root):
+    """Accept fresh comparison artifacts and direct full-system run layouts."""
+    sequences = {}
+    directories = list(runs_root.glob('NC_*/runs/PhageMine/*')) + list(runs_root.glob('NC_*'))
+    for directory in sorted(directories):
+        if not (directory / 'proteins.faa').is_file():
+            continue
+        classes = {r['protein_id']: r for r in read(directory / 'functional_classification.tsv')}
+        for protein in SeqIO.parse(directory / 'proteins.faa', 'fasta'):
+            row = classes[protein.id]
+            key = (directory.name, int(row['start']), int(row['end']), row['strand'])
+            if key in sequences:
+                raise ValueError('Duplicate predicted locus')
+            sequences[key] = str(protein.seq)
+    return sequences
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('paired', 'runs-root', 'snapshot', 'decisions', 'output'):
         parser.add_argument('--' + name, required=True, type=Path)
+    parser.add_argument('--right-tool', choices=('Pharokka', 'Prokka'), default='Pharokka')
     args = parser.parse_args(argv)
     if args.output.exists():
         raise ValueError('Output must be a new directory')
@@ -72,14 +90,7 @@ def main(argv=None):
     by_locus = {locus(r): r for r in decisions}
     if len(by_locus) != len(decisions) or set(by_locus) != {locus(r) for r in cases}:
         raise ValueError('Review must cover exactly the paired differences, once each')
-    sequences = {}
-    for directory in sorted(args.runs_root.glob('NC_*/runs/PhageMine/*')):
-        classes = {r['protein_id']: r for r in read(directory / 'functional_classification.tsv')}
-        for protein in SeqIO.parse(directory / 'proteins.faa', 'fasta'):
-            row = classes[protein.id]
-            key = (directory.name, int(row['start']), int(row['end']), row['strand'])
-            if key in sequences: raise ValueError('Duplicate predicted locus')
-            sequences[key] = str(protein.seq)
+    sequences = load_sequences(args.runs_root)
     reviewed = []
     for case in cases:
         decision = by_locus[locus(case)]
@@ -91,7 +102,7 @@ def main(argv=None):
                'reviewed_cases': len(reviewed),
                'exact_reviewed_sequence_matches': sum(r['evidence_match'] == 'EXACT_SEQUENCE' for r in reviewed),
                'verdicts': {tool: dict(Counter(r[field] for r in reviewed))
-                           for tool, field in (('PhageMine', 'verdict_a'), ('Pharokka', 'verdict_b'))},
+                           for tool, field in (('PhageMine', 'verdict_a'), (args.right_tool, 'verdict_b'))},
                'functional_accuracy': None, 'accuracy_superiority_established': False,
                'held_out': False, 'independent_expert_adjudication': False,
                'sources': {name: checksum(path) for name, path in

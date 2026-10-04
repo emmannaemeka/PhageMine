@@ -266,7 +266,7 @@ NC_000866.4	149509	149778	-	double-stranded dna-binding protein	dsbA
 NC_000866.4	149787	150704	-	ribonuclease h	rnh
 NC_000866.4	150809	154678	+	long-tail fiber proximal subunit	
 NC_000866.4	154687	155805	+	long-tail fiber protein gp35	
-NC_000866.4	155868	156533	+	long-tail fiber protein gp36	
+NC_000866.4	155868	156533	+	conserved phage protein of unknown function	
 NC_000866.4	156542	159622	+	long-tail fiber protein gp37	
 NC_000866.4	159649	160200	+	tail fiber assembly protein	
 NC_000866.4	160221	160877	+	holin	
@@ -344,23 +344,23 @@ NC_000929.1	29405	29842	+	baseplate protein gp46
 NC_000929.1	29843	30925	+	baseplate protein gp47	
 NC_000929.1	30916	31458	+	baseplate protein gp48	
 NC_000929.1	31458	32972	+	tail fiber protein s	S
-NC_000929.1	32975	33502	+	tail fiber assembly protein u	U
-NC_000929.1	33531	34064	-	tail fiber assembly protein u'	
+NC_000929.1	32975	33502	+	conserved phage protein of unknown function	
+NC_000929.1	33531	34064	-	conserved phage protein of unknown function	
 NC_000929.1	34067	35263	-	tail fiber protein s'	
 NC_000929.1	35299	35673	+	conserved phage protein of unknown function	
 NC_000929.1	35768	35956	+	translational activator com	com
 NC_000929.1	35877	36602	+	methylcarbamoylase mom	mom
-NC_001416.1	191	736	+	terminase small subunit	Nu1
+NC_001416.1	191	736	+	conserved phage protein of unknown function	
 NC_001416.1	751	894	+	conserved phage protein of unknown function	
 NC_001416.1	891	2636	+	terminase, large subunit	A
 NC_001416.1	2633	2839	+	head completion protein	W
-NC_001416.1	2836	4437	+	portal protein b	B
+NC_001416.1	2836	4437	+	conserved phage protein of unknown function	
 NC_001416.1	4319	5737	+	capsid assembly protease c	NU3
-NC_001416.1	5747	6079	+	capsid decoration protein	D
+NC_001416.1	5747	6079	+	conserved phage protein of unknown function	
 NC_001416.1	6135	7160	+	major capsid protein	
 NC_001416.1	7163	7600	+	dna-packaging protein fi	Fi
 NC_001416.1	7678	7965	+	conserved phage protein of unknown function	
-NC_001416.1	7977	8555	+	tail completion protein z	Z
+NC_001416.1	7977	8555	+	putative tail-associated protein	
 NC_001416.1	8552	8947	+	tail tube terminator protein	U
 NC_001416.1	8955	9695	+	tail tube protein	V
 NC_001416.1	9711	10133	+	tail assembly protein g	G
@@ -400,7 +400,7 @@ NC_001416.1	31348	32028	-	exonuclease	exo
 NC_001416.1	32025	32810	-	recombination protein bet	bet
 NC_001416.1	32816	33232	-	host-nuclease inhibitor protein gam	gam
 NC_001416.1	33187	33456	-	kil protein for bacterial septation inhibition	
-NC_001416.1	33536	33904	-	conserved phage protein of unknown function	
+NC_001416.1	33536	33904	-	lambda prophage-derived protein ea10	ea10
 NC_001416.1	33917	34006	-	conserved phage protein of unknown function	
 NC_001416.1	34087	34287	-	restriction inhibitor protein ral	ral
 NC_001416.1	34261	34386	+	hypothetical protein	
@@ -416,12 +416,12 @@ NC_001416.1	37919	38056	+	hypothetical protein
 NC_001416.1	38041	38241	+	regulatory protein cro	cro
 NC_001416.1	38300	38653	+	conserved phage protein of unknown function	
 NC_001416.1	38686	39585	+	replication protein o	O
-NC_001416.1	39582	40283	+	helicase loader	P
+NC_001416.1	39582	40283	+	conserved phage protein of unknown function	
 NC_001416.1	40280	40570	+	ren-like exclusion protein	
-NC_001416.1	40644	41084	+	ninb/ orf homologous recombination mediator	
+NC_001416.1	40644	41084	+	p21 prophage-derived protein ninb	ninB
 NC_001416.1	41063	41953	+	phosphoadenosine phosphosulfate reductase	
 NC_001416.1	41972	42169	+	hypothetical protein	
-NC_001416.1	42227	42439	+	conserved phage protein of unknown function	
+NC_001416.1	42227	42439	+	protein ninf	
 NC_001416.1	42429	43043	+	ning/ rap dna junction specific endonuclease	
 NC_001416.1	43152	43889	+	serine/threonine-protein phosphatase	
 NC_001416.1	43886	44509	+	antitermination protein q	Q
@@ -444,19 +444,19 @@ NC_001422.1	390	848	+	external scaffolding protein d	D
 NC_001422.1	848	964	+	dna-binding protein j	J
 NC_001422.1	1001	2284	+	capsid protein f	F
 NC_001422.1	2395	2922	+	major spike protein g	G
-NC_001422.1	2931	3917	+	minor spike protein h	H
+NC_001422.1	2931	3917	+	conserved phage protein of unknown function	
 NC_001422.1	3981	5384	+	conserved phage protein of unknown function	
 NC_001604.1	3	98	+	hypothetical protein	
 NC_001604.1	474	608	-	hypothetical protein	
 NC_001604.1	627	749	-	hypothetical protein	
 NC_001604.1	766	921	-	conserved phage protein of unknown function	
-NC_001604.1	925	1278	+	ocr-like anti-restriction	
-NC_001604.1	1278	1433	+	conserved phage protein of unknown function	
+NC_001604.1	925	1278	+	protein ocr	
+NC_001604.1	1278	1433	+	gene 0.4 protein	
 NC_001604.1	1430	1639	+	conserved phage protein of unknown function	
 NC_001604.1	1639	1797	+	conserved phage protein of unknown function	
 NC_001604.1	1781	1972	+	conserved phage protein of unknown function	
 NC_001604.1	2021	3100	+	protein kinase 0.7	
-NC_001604.1	3171	5822	+	t7 rna polymerase	
+NC_001604.1	3171	5822	+	conserved phage protein of unknown function	
 NC_001604.1	6007	6135	+	conserved phage protein of unknown function	
 NC_001604.1	6137	6394	+	inhibitor of dgtpase	
 NC_001604.1	6475	7554	+	dna ligase	
@@ -468,19 +468,19 @@ NC_001604.1	8749	8895	+	conserved phage protein of unknown function
 NC_001604.1	8892	9092	+	bacterial rna polymerase inhibitor	
 NC_001604.1	9158	9856	+	single-stranded dna-binding protein	
 NC_001604.1	9857	10276	+	hnh endonuclease	
-NC_001604.1	10257	10706	+	endonuclease i	
+NC_001604.1	10257	10706	+	conserved phage protein of unknown function	
 NC_001604.1	10706	11161	+	endolysin	
 NC_001604.1	11225	11590	+	hnh endonuclease	
 NC_001604.1	11565	13265	+	dna helicase/primase	
-NC_001604.1	13352	13564	+	conserved phage protein of unknown function	
+NC_001604.1	13352	13564	+	gene 4.3 protein	
 NC_001604.1	13584	13853	+	inhibitor of toxin/antitoxin system	
 NC_001604.1	13798	14334	+	conserved phage protein of unknown function	
 NC_001604.1	14353	16467	+	dna-directed dna polymerase	
 NC_001604.1	16483	16839	+	conserved phage protein of unknown function	
-NC_001604.1	16851	17150	+	protein suppressor of silencing	
-NC_001604.1	17150	17359	+	fusion protein 5.5/5.7	
-NC_001604.1	17359	17517	+	probable recbcd inhibitor gp5.9	
-NC_001604.1	17504	18406	+	exonuclease	
+NC_001604.1	16851	17150	+	conserved phage protein of unknown function	
+NC_001604.1	17150	17359	+	gene 5.7 protein	
+NC_001604.1	17359	17517	+	conserved phage protein of unknown function	
+NC_001604.1	17504	18406	+	conserved phage protein of unknown function	
 NC_001604.1	18394	18507	+	conserved phage protein of unknown function	
 NC_001604.1	18605	18859	+	conserved phage protein of unknown function	
 NC_001604.1	18864	19130	+	conserved phage protein of unknown function	
@@ -489,9 +489,9 @@ NC_001604.1	19535	19834	+	host range and adsorption protein
 NC_001604.1	19848	20240	+	hnh endonuclease	
 NC_001604.1	20225	21850	+	portal protein	
 NC_001604.1	21950	22873	+	capsid assembly scaffolding protein	
-NC_001604.1	22967	24004	+	major capsid protein	
+NC_001604.1	22967	24004	+	conserved phage protein of unknown function	
 NC_001604.1	24004	24162	+	head protein	
-NC_001604.1	24228	24818	+	tail tubular protein gp11	
+NC_001604.1	24228	24818	+	conserved phage protein of unknown function	
 NC_001604.1	24842	27226	+	tail tubular protein gp12	
 NC_001604.1	27307	27723	+	probable scaffold protein gp13	
 NC_001604.1	27728	28318	+	internal virion protein gp14	
@@ -499,7 +499,7 @@ NC_001604.1	28325	30568	+	internal virion protein gp15
 NC_001604.1	30595	34551	+	peptidoglycan transglycosylase gp16	
 NC_001604.1	34624	36285	+	tail fiber protein	
 NC_001604.1	36344	36547	+	holin	
-NC_001604.1	36553	36822	+	terminase, small subunit gp18	
+NC_001604.1	36553	36822	+	conserved phage protein of unknown function	
 NC_001604.1	36797	36898	+	hypothetical protein	
 NC_001604.1	36917	37348	+	spanin, inner membrane subunit	
 NC_001604.1	37370	39130	+	terminase, large subunit	
@@ -517,9 +517,9 @@ NC_002371.2	6328	6828	+	head-to-tail adapter gp4
 NC_002371.2	6788	8206	+	tail hub protein gp10	
 NC_002371.2	8210	8911	+	tail needle protein gp26	
 NC_002371.2	8911	9366	+	head morphogenesis protein	
-NC_002371.2	9369	10058	+	internal virion protein gp7	
+NC_002371.2	9369	10058	+	conserved phage protein of unknown function	
 NC_002371.2	10069	11484	+	internal virion protein gp20	
-NC_002371.2	11484	13313	+	internal virion protein gp16	
+NC_002371.2	11484	13313	+	conserved phage protein of unknown function	
 NC_002371.2	13336	14046	-	conserved phage protein of unknown function	
 NC_002371.2	14020	14226	+	conserved phage protein of unknown function	
 NC_002371.2	14240	14419	-	conserved phage protein of unknown function	
@@ -561,14 +561,14 @@ NC_002371.2	32036	32314	+	transcriptional activator protein c1	C1
 NC_002371.2	32349	32495	+	tail protein	
 NC_002371.2	32488	33303	+	dna replication protein gp18	
 NC_002371.2	33300	34676	+	replicative dna helicase	
-NC_002371.2	34750	35187	+	ninb/ orf homologous recombination mediator	
-NC_002371.2	35184	35357	+	conserved phage protein of unknown function	
-NC_002371.2	35324	35500	+	conserved phage protein of unknown function	
+NC_002371.2	34750	35187	+	p21 prophage-derived protein ninb	ninB
+NC_002371.2	35184	35357	+	protein nind	
+NC_002371.2	35324	35500	+	protein nine	
 NC_002371.2	35497	35835	+	putative protein ninx	ninX
-NC_002371.2	35828	36004	+	conserved phage protein of unknown function	
+NC_002371.2	35828	36004	+	protein ninf	
 NC_002371.2	35997	36608	+	ning/ rap dna junction specific endonuclease	
 NC_002371.2	36605	36829	+	putative protein niny	ninY
-NC_002371.2	36856	37029	+	conserved phage protein of unknown function	
+NC_002371.2	36856	37029	+	protein ninh	
 NC_002371.2	37010	37189	+	conserved phage protein of unknown function	
 NC_002371.2	37186	37809	+	antitermination protein q	Q
 NC_002371.2	37899	38108	+	conserved phage protein of unknown function	
@@ -659,12 +659,12 @@ NC_005859.1	27656	28024	-	autonomous glycyl radical cofactor
 NC_005859.1	28302	28592	-	conserved phage protein of unknown function	
 NC_005859.1	28752	28916	-	conserved phage protein of unknown function	
 NC_005859.1	28909	29160	-	conserved phage protein of unknown function	
-NC_005859.1	29397	29978	-	h-n-h endonuclease f-tflii	T5.061
+NC_005859.1	29397	29978	-	conserved phage protein of unknown function	
 NC_005859.1	29980	30180	-	conserved phage protein of unknown function	
 NC_005859.1	30434	30550	-	conserved phage protein of unknown function	
 NC_005859.1	30566	30673	-	hypothetical protein	
 NC_005859.1	30651	30824	-	conserved phage protein of unknown function	
-NC_005859.1	31022	31606	-	h-n-h endonuclease f-tfli	T5.064
+NC_005859.1	31022	31606	-	conserved phage protein of unknown function	
 NC_005859.1	32048	32140	-	hypothetical protein	
 NC_005859.1	32240	32407	-	conserved phage protein of unknown function	
 NC_005859.1	32612	32755	+	hypothetical protein	
@@ -702,7 +702,7 @@ NC_005859.1	45179	45415	-	conserved phage protein of unknown function
 NC_005859.1	45458	45973	-	conserved phage protein of unknown function	
 NC_005859.1	46057	46335	-	conserved phage protein of unknown function	
 NC_005859.1	46412	46888	-	conserved phage protein of unknown function	
-NC_005859.1	47022	47861	-	probable thymidylate synthase	T5.092
+NC_005859.1	47022	47861	-	conserved phage protein of unknown function	
 NC_005859.1	47861	48394	-	dihydrofolate reductase	T5.093
 NC_005859.1	48391	49536	-	conserved phage protein of unknown function	
 NC_005859.1	49536	50060	-	hnh endonuclease	

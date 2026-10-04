@@ -7,6 +7,9 @@ def identifier_only_product(product):
     """Locus/entry designations do not describe protein function."""
     text = re.sub(r'\s+', ' ', str(product or '').strip().lower())
     text = re.sub(r'^(?:(?:putative|probable|predicted|conserved)\s+)+', '', text)
+    text = re.sub(r'^(?:[a-z0-9.-]+\s+)?prophage-derived\s+', '', text)
+    if re.fullmatch(r'gene\s+\d+(?:\.\d+)?[a-z]?\s+protein', text):
+        return True
     return bool(re.fullmatch(
         r'(?:(?:protein|gene product)\s+(?:[a-z]|(?:gp|orf)?\d+(?:\.\d+)?[a-z]?|'
         r'[a-z]+\d+[a-z0-9.-]*|[a-z0-9]+[-.][a-z0-9]+)|'

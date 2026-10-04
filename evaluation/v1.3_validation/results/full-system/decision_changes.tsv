@@ -107,6 +107,7 @@ NC_000866.4	142951	143214	-	conserved phage protein of unknown function		unchara
 NC_000866.4	145762	146004	-	conserved phage protein of unknown function		uncharacterized 9.5 kda protein in frd-gp32 intergenic region	y14C
 NC_000866.4	146575	146802	-	conserved phage protein of unknown function		uncharacterized 8.8 kda protein in frd-gp32 intergenic region	
 NC_000866.4	147909	148541	-	homing endonuclease		uncharacterized 24.6 kda protein in gp32-gp59 intergenic region	y14F
+NC_000866.4	155868	156533	+	long-tail fiber protein gp36		conserved phage protein of unknown function	
 NC_000866.4	161163	161315	-	conserved phage protein of unknown function		uncharacterized 5.9 kda protein in asia-arn intergenic region	y16A
 NC_000866.4	161674	161805	-	anti-restriction nuclease		uncharacterized 5.2 kda protein in arn-mota intergenic region	y16B
 NC_000866.4	161876	162172	-	conserved phage protein of unknown function		uncharacterized 11.4 kda protein in arn-mota intergenic region	y16C
@@ -139,24 +140,47 @@ NC_000929.1	9831	9950	+	conserved phage protein of unknown function		uncharacter
 NC_000929.1	11524	11718	+	conserved phage protein of unknown function		uncharacterized protein gp24	
 NC_000929.1	12014	12304	+	conserved phage protein of unknown function		uncharacterized protein gp26	
 NC_000929.1	20122	20532	+	conserved phage protein of unknown function		uncharacterized protein gp35	
+NC_000929.1	32975	33502	+	tail fiber assembly protein u	U	conserved phage protein of unknown function	
+NC_000929.1	33531	34064	-	tail fiber assembly protein u'		conserved phage protein of unknown function	
+NC_001416.1	191	736	+	terminase small subunit	Nu1	conserved phage protein of unknown function	
+NC_001416.1	2836	4437	+	portal protein b	B	conserved phage protein of unknown function	
+NC_001416.1	5747	6079	+	capsid decoration protein	D	conserved phage protein of unknown function	
+NC_001416.1	7977	8555	+	tail completion protein z	Z	putative tail-associated protein	
 NC_001416.1	33187	33456	-	kil protein for bacterial septation inhibition		protein kil	kil
+NC_001416.1	33536	33904	-	conserved phage protein of unknown function		lambda prophage-derived protein ea10	ea10
 NC_001416.1	35825	36259	-	rexb-like exclusion protein		protein rexb	rexB
 NC_001416.1	36275	37114	-	rexa-like exclusion protein		protein rexa	rexA
+NC_001416.1	39582	40283	+	helicase loader	P	conserved phage protein of unknown function	
 NC_001416.1	40280	40570	+	ren-like exclusion protein		protein ren	ren
-NC_001416.1	40644	41084	+	p21 prophage-derived protein ninb	ninB	protein ninb	ninB
+NC_001416.1	40644	41084	+	ninb/ orf homologous recombination mediator		protein ninb	ninB
 NC_001416.1	41063	41953	+	phosphoadenosine phosphosulfate reductase		uncharacterized nin region protein orf290	
-NC_001416.1	42227	42439	+	protein ninf		protein ninf	ninF
+NC_001416.1	42227	42439	+	conserved phage protein of unknown function		protein ninf	ninF
 NC_001416.1	42429	43043	+	ning/ rap dna junction specific endonuclease		protein ning	ninG
 NC_001416.1	47042	47494	-	head protein		uncharacterized protein ydfo	ydfO
 NC_001416.1	47738	47944	+	conserved phage protein of unknown function		uncharacterized protein ybcw	ybcW
 NC_001416.1	48109	48303	-	conserved phage protein of unknown function		uncharacterized protein ynfo	ynfO
 NC_001422.1	133	393	+	terminase protein		c protein	C
+NC_001422.1	2931	3917	+	minor spike protein h	H	conserved phage protein of unknown function	
+NC_001604.1	925	1278	+	ocr-like anti-restriction		protein ocr	
+NC_001604.1	1278	1433	+	conserved phage protein of unknown function		gene 0.4 protein	
+NC_001604.1	3171	5822	+	t7 rna polymerase		conserved phage protein of unknown function	
 NC_001604.1	6007	6135	+	conserved phage protein of unknown function		uncharacterized protein 1.1	
 NC_001604.1	7906	8166	+	conserved phage protein of unknown function		uncharacterized gene 1.6 protein	
+NC_001604.1	10257	10706	+	endonuclease i		conserved phage protein of unknown function	
+NC_001604.1	13352	13564	+	conserved phage protein of unknown function		gene 4.3 protein	
+NC_001604.1	16851	17150	+	protein suppressor of silencing		conserved phage protein of unknown function	
+NC_001604.1	17150	17359	+	fusion protein 5.5/5.7		gene 5.7 protein	
+NC_001604.1	17359	17517	+	probable recbcd inhibitor gp5.9		conserved phage protein of unknown function	
+NC_001604.1	17504	18406	+	exonuclease		conserved phage protein of unknown function	
 NC_001604.1	18605	18859	+	conserved phage protein of unknown function		uncharacterized gene 6.5 protein	
 NC_001604.1	18864	19130	+	conserved phage protein of unknown function		uncharacterized gene 6.7 protein	
+NC_001604.1	22967	24004	+	major capsid protein		conserved phage protein of unknown function	
+NC_001604.1	24228	24818	+	tail tubular protein gp11		conserved phage protein of unknown function	
+NC_001604.1	36553	36822	+	terminase, small subunit gp18		conserved phage protein of unknown function	
 NC_001604.1	39389	39538	+	holin		uncharacterized gene 19.5 protein	
 NC_002371.2	6135	6344	+	conserved phage protein of unknown function		uncharacterized 7.7 kda protein in gp5-gp4 intergenic region	
+NC_002371.2	9369	10058	+	internal virion protein gp7		conserved phage protein of unknown function	
+NC_002371.2	11484	13313	+	internal virion protein gp16		conserved phage protein of unknown function	
 NC_002371.2	14240	14419	-	conserved phage protein of unknown function		uncharacterized 6.4 kda protein in siea-mnt intergenic region	
 NC_002371.2	18266	19498	-	gtrc-like o-antigen conversion translocase		uncharacterized 55.3 kda protein in gtrb 5'region	
 NC_002371.2	22746	23381	-	eac protein		eac protein	eac
@@ -170,15 +194,18 @@ NC_002371.2	28001	28189	-	kil protein for bacterial septation inhibition		protei
 NC_002371.2	28873	29076	-	conserved phage protein of unknown function		uncharacterized 7.8 kda protein in ral-gp17 intergenic region	
 NC_002371.2	29076	29312	-	conserved phage protein of unknown function		uncharacterized 8.6 kda protein in ral-gp17 intergenic region	
 NC_002371.2	32349	32495	+	tail protein		uncharacterized 5.8 kda protein	
-NC_002371.2	34750	35187	+	p21 prophage-derived protein ninb	ninB	protein ninb	ninB
-NC_002371.2	35184	35357	+	protein nind		protein nind	ninD
-NC_002371.2	35324	35500	+	protein nine		protein nine	ninE
-NC_002371.2	35828	36004	+	protein ninf		protein ninf	ninF
+NC_002371.2	34750	35187	+	ninb/ orf homologous recombination mediator		protein ninb	ninB
+NC_002371.2	35184	35357	+	conserved phage protein of unknown function		protein nind	ninD
+NC_002371.2	35324	35500	+	conserved phage protein of unknown function		protein nine	ninE
+NC_002371.2	35828	36004	+	conserved phage protein of unknown function		protein ninf	ninF
 NC_002371.2	35997	36608	+	ning/ rap dna junction specific endonuclease		protein ning	ninG
-NC_002371.2	36856	37029	+	protein ninh		protein ninh	ninH
+NC_002371.2	36856	37029	+	conserved phage protein of unknown function		protein ninh	ninH
 NC_002371.2	39644	40180	+	conserved phage protein of unknown function		uncharacterized 22.8 kda protein in gp15-gp3 intergenic region	
 NC_002371.2	41014	41256	+	conserved phage protein of unknown function		uncharacterized 9.0 kda protein in gp15-gp3 intergenic region	
 NC_005859.1	4230	4481	-	conserved phage protein of unknown function		uncharacterized 9.2 kda protein	
+NC_005859.1	29397	29978	-	h-n-h endonuclease f-tflii	T5.061	conserved phage protein of unknown function	
+NC_005859.1	31022	31606	-	h-n-h endonuclease f-tfli	T5.064	conserved phage protein of unknown function	
+NC_005859.1	47022	47861	-	probable thymidylate synthase	T5.092	conserved phage protein of unknown function	
 NC_005859.1	115761	116012	-	conserved phage protein of unknown function		uncharacterized 9.2 kda protein	
 NC_001706.1	7406	7891	+	holliday junction resolvase		uncharacterized protein near lysin gene	
 NC_001835.1	26734	27216	+	holliday junction resolvase		uncharacterized protein near lysin gene	

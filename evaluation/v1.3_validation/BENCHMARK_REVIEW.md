@@ -14,7 +14,7 @@ are identical to the earlier Pharokka and Prokka comparison inputs.
 | Configuration | Predicted CDS | Exact reference models / 851 | Named assertions at 537 informative reference loci | Exact or equivalent names | Unresolved named differences |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | PhageMine, all resources, fresh rules 1.12 | 978 | 719 | 395 | 114 | 281 |
-| PhageMine, all resources, corrected rules 1.13 | 978 | 719 | 409 | 137 | 272 |
+| PhageMine, all resources, corrected rules 1.14 | 978 | 719 | 426 | 143 | 283 |
 | Pharokka 1.10.1, earlier matched-input run | 977 | 719 | 407 | 362 | 45 |
 | Prokka 1.14.6, earlier matched-input run | 824 | 747 | 273 | 39 | 234 |
 
@@ -40,17 +40,21 @@ Two general decision-rule defects were exposed and corrected:
   symbol, such as “Protein rIIA”, could replace an informative role. The record
   remains evidence, but that description supplies no transferable function.
 
-Rules 1.13 changed 184 product/gene rows when applied to the fresh all-database
+Rules 1.14 changed 211 product/gene rows when applied to the fresh all-database
 evidence. All ten regenerated exports passed integrity checks; evidence objects,
 gene coordinates and sequences were retained. This is explicitly a decision-rule
 reanalysis of the newly generated full-system evidence, not another database
 search. Informative alternatives remain computational hypotheses, not functions
 proved by discarding an unknown label. No manual product edits enter the scores.
-There are 312 reviewed-anchor selections, and 24 proteins retain conflicting
+There are 331 reviewed-anchor selections, and three proteins retain conflicting
 evidence. Confidence remains rule based and uncalibrated. Local validation:
-417 tests passed, two skipped, 12 external/integration tests deselected.
+429 tests passed, two skipped, 12 external/integration tests deselected.
 
-## Why Prokka matches more gene boundaries
+## Prokka naming and gene boundaries
+
+The [full-system naming review](PROKKA_REVIEW.md) recovered 20 of the 25 shared
+genes where Prokka supplied a name and PhageMine withheld one. The current
+priority is annotation and informative naming; gene calling is unchanged.
 
 Prokka used Prodigal 2.6.3 (`-c -m -g 11 -p single`), whereas PhageMine used
 PHANOTATE. The full database run retained all 978 PhageMine gene models; adding
@@ -166,12 +170,16 @@ independent calibration. More named proteins alone do not demonstrate improvemen
 
 The panel is small, reference annotations are imperfect and database overlap
 has not been excluded. The external panel measures transfer outside the original
-genomes, not independent functional truth. The much larger full-system semantic review remains unfinished. The lower
-wording agreement must not be described as a measured biological accuracy loss
-or hidden by broad synonym substitutions.
+genomes, not independent functional truth. The [Prokka naming review](PROKKA_REVIEW.md) covers all current differences at
+shared gene coordinates plus the resolved initial cases. It binds 154 of 274
+cases to exact reviewed records; 120 have no exact reviewed match and remain
+unresolved. This is a diagnostic record review, not independent functional
+validation. The lower wording agreement must not be described as a measured
+biological accuracy loss or hidden by broad synonym substitutions.
 
 ## Data
 
+- [Prokka evidence review](PROKKA_REVIEW.md)
 - [Full-system comparison counts](results/full-system/panel_summary.tsv)
 - [Full-system review provenance and limitations](results/full-system/review_manifest.json)
 - [All adjudicated names, rules 1.13](results/full-system/all_product_names.tsv)

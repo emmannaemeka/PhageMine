@@ -50,6 +50,16 @@ Fusion rules 1.12 implement these naming safeguards:
    consisting only of `protein` and the record’s explicit gene symbol also
    cannot override an informative role.
 
+9. A complete, ungapped 100%-identity reviewed phage alignment takes priority
+   over differently named less-identical homologues. Query, reference and
+   alignment lengths must agree; partial matches do not receive this priority.
+   Different informative labels among equally complete full-identity records
+   still remain unresolved. This alignment rule does not establish an
+   experimentally validated function or independent sequence identity.
+10. Numeric gene wrappers and database-entry symbols alone do not state
+    function. Prophage-origin text does not make an identifier informative.
+    Raw labels and alternative candidates remain available.
+
 Use the most informative role supported by the selected evidence. Broader family
 labels cannot establish a specific family member, and unknown proteins must not
 be named by copying a neighbouring gene or a comparator's assertion. Explicit

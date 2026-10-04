@@ -2,7 +2,7 @@
   "accuracy_superiority_established": false,
   "analysis_type": "REFERENCE_CONCORDANCE",
   "implementation_checksums": {
-    "annotation_labels.py": "62d1e6cfe2ac01af238f564ebde852f7e3dac3a78c07ff3610b5212dd95821f2",
+    "annotation_labels.py": "2f98101ec3c301653ca6d6587e626290b99353e1d54faf6d34d9805efa11a925",
     "curated_benchmark.py": "06cbf878109c23facb79a09b532bc4c86ff7cadcd782e63ca940182b5883e044",
     "functional_benchmark.py": "2e1955439ca7789833408b7d6e028534a2b5e7c52c67550e1012d7fbd94b9757"
   },

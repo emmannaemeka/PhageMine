@@ -10,7 +10,7 @@ from typing import Any
 from .models import Evidence, Protein
 from .annotation_labels import identifier_only_product
 
-FUSION_RULES_VERSION = "1.13"
+FUSION_RULES_VERSION = "1.14"
 EVIDENCE_HIERARCHY_VERSION = "1.1"
 DIAGNOSTIC_DOMAIN_RULES_VERSION = "1.0"
 CONFIDENCE_CALIBRATION_STATUS = "RULE_BASED_NOT_EMPIRICALLY_CALIBRATED"
@@ -84,8 +84,19 @@ def _product_candidate(evidence: Evidence, label: str | None, accepted: list[Evi
     if not label:
         return None, None
     gene_symbol = str(evidence.metrics.get("gene_name") or "").strip().lower()
-    if gene_symbol and label in {f"protein {gene_symbol}", f"{gene_symbol} protein"}:
+    symbol_label = re.sub(r"^(?:[a-z0-9.-]+\s+)?prophage-derived\s+", "", label)
+    if gene_symbol and symbol_label in {f"protein {gene_symbol}", f"{gene_symbol} protein"}:
         return None, "gene-symbol-only description retained as evidence, not transferred as a protein function"
+    entry_name = str(evidence.metrics.get("entry_name") or "")
+    if not entry_name:
+        tagged_entry = re.search(r"\bsp\|[^|]+\|([^\s]+)", evidence.description or "")
+        entry_name = tagged_entry.group(1) if tagged_entry else ""
+    record_symbol = entry_name.split("_", 1)[0].lower() if "_" in entry_name else ""
+    role_word = record_symbol.endswith("ase") or record_symbol in {
+        "capsid", "coat", "chaperone", "channel", "transporter", "receptor",
+    }
+    if record_symbol and symbol_label == f"protein {record_symbol}" and not role_word:
+        return None, "database-entry-symbol-only description retained as evidence, not transferred as a protein function"
     if evidence.source == "Pfam" or evidence.modality == "domain":
         return None, "domain-only evidence retained as a note, not transferred as a protein product"
     if evidence.source in {"PHROGs", "VOGDB"}:
@@ -260,6 +271,33 @@ def _curated_phage_anchor(evidence: Evidence) -> bool:
 
     return standard_anchor or near_full_length_anchor
 
+
+def _full_identity_curated_anchor(evidence: Evidence) -> bool:
+    """Recognise a complete, ungapped 100%-identity reviewed alignment.
+
+    This is alignment evidence, not a claim of experimental function or an
+    independently verified sequence checksum. Missing lengths cannot establish
+    completeness, and a perfect match to one domain is insufficient.
+    """
+    if not _curated_phage_anchor(evidence):
+        return False
+    identity = _numeric_metric(evidence, "percent_identity", "sequence_identity", "identity")
+    if identity is not None and identity > 1:
+        identity /= 100.0
+    qlen = _numeric_metric(evidence, "query_length")
+    slen = _numeric_metric(evidence, "subject_length")
+    aligned = _numeric_metric(evidence, "alignment_length")
+    qcov = _numeric_metric(evidence, "query_coverage", "qcov")
+    scov = _numeric_metric(evidence, "subject_coverage", "scov")
+    return bool(identity == 1.0 and qlen and qlen == slen == aligned
+                and qcov == 1.0 and scov == 1.0)
+
+
+def _curated_anchor_pool(items):
+    curated = [item for item in items if _curated_phage_anchor(item[1])]
+    full_identity = [item for item in curated if _full_identity_curated_anchor(item[1])]
+    return full_identity or curated
+
 def _candidate_score(evidence: Evidence, label: str) -> float:
     """Rank product hypotheses using provenance and alignment support."""
     source = {"Swiss-Prot": 50.0, "PHROGs": 45.0, "VOGDB": 30.0}.get(evidence.source, 10.0)
@@ -304,7 +342,7 @@ def _select_product(informative: list[tuple[int, Evidence, str]]) -> tuple[str |
     # score-gap rule so a partial computational profile cannot silently
     # overrule substantially full-length curated phage homology.
     # Multiple disagreeing curated anchors do not force a winner here.
-    curated = [item for item in ranked if _curated_phage_anchor(item[1])]
+    curated = _curated_anchor_pool(ranked)
     curated_labels = {item[2] for item in curated}
     if len(curated_labels) > 1:
         return None, None, alternatives
@@ -519,7 +557,7 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
     # member name and therefore takes precedence over ancillary domain labels.
     selected_product, selected_evidence, product_alternatives = _select_product(informative)
     diagnostic_product, diagnostic_evidence, diagnostic_reason = _diagnostic_product(accepted)
-    curated_records = [(i, e, label) for i, e, label in informative if _curated_phage_anchor(e)]
+    curated_records = _curated_anchor_pool(informative)
     curated_disagreement = len({label for _, _, label in curated_records}) > 1
     anchored_product = bool(selected_evidence and _curated_phage_anchor(selected_evidence))
     # A generic domain rule cannot replace a reviewed whole-protein name or
@@ -532,6 +570,13 @@ def classify_protein(protein: Protein) -> dict[str, Any]:
         conflict_sources = sorted({e.source for _, e, _ in conflicting})
         conflict_descriptions = [e.description for _, e, _ in conflicting if e.description]
         ambiguity.append("reviewed whole-protein records disagree; product specificity remains unresolved")
+    full_identity_selected = bool(selected_evidence and _full_identity_curated_anchor(selected_evidence))
+    if full_identity_selected and not curated_disagreement:
+        # Less specific orthology and non-identical homologues remain visible
+        # as alternatives; they do not veto the reviewed full-identity record.
+        conflicting = []
+        conflict_ids, conflict_sources, conflict_descriptions = [], [], []
+        ambiguity.append("full-length 100%-identity reviewed alignment preferred; other labels retained as alternatives")
     conflict_resolved = bool(conflicting and diagnostic_product)
     if diagnostic_product:
         selected_product, selected_evidence = diagnostic_product, diagnostic_evidence

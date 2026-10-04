@@ -69,6 +69,36 @@ def test_record_gene_symbol_does_not_remove_informative_role():
     assert result['proposed_function'] == 'tail tip assembly protein i'
 
 
+def test_gene_number_wrapper_does_not_establish_function():
+    assert classify(hit('gene 4.3 protein'))['proposed_function'] is None
+    assert classify(hit('gene 5.7 protein'))['proposed_function'] is None
+    assert normalize_function('DNA polymerase gene 5 protein') == 'dna polymerase gene 5 protein'
+    assert classify(hit('lambda prophage-derived protein ea10'))['proposed_function'] is None
+    assert normalize_function('prophage-derived DNA polymerase') == 'prophage-derived dna polymerase'
+
+
+def test_prophage_origin_does_not_make_a_gene_symbol_informative():
+    result = classify(hit('P21 prophage-derived protein fixtureA',
+                          source='Swiss-Prot', gene_name='fixtureA'),
+                      hit('recombination mediator protein'))
+    assert result['proposed_function'] == 'recombination mediator protein'
+
+
+@pytest.mark.parametrize('source,description,metrics', [
+    ('Swiss-Prot', 'Protein AbcX', {'entry_name': 'ABCX_BPFIX'}),
+    ('VOGDB', 'sp|FIXTURE|ABCX_BPFIX Protein AbcX', {}),
+])
+def test_entry_symbol_only_description_cannot_override_supported_role(source, description, metrics):
+    result = classify(hit(description, source=source, **metrics),
+                      hit('DNA-binding protein'))
+    assert result['proposed_function'] == 'dna-binding protein'
+
+
+def test_entry_symbol_matching_an_enzyme_role_remains_informative():
+    result = classify(reviewed('Protein kinase', entry_name='KINASE_BPFIX'))
+    assert result['proposed_function'] == 'protein kinase'
+
+
 def test_conflict_clears_gene_and_ec():
     result = classify(hit('integrase', gene='int', ec='1.2.3.4'),
                       hit('major capsid protein', source='Swiss-Prot'))
@@ -164,3 +194,57 @@ def test_conflicting_reviewed_records_do_not_gain_a_domain_rule_winner():
     assert result['functional_state'] == 'CONFLICTING_EVIDENCE'
     assert result['gene'] is None
     assert result['review_flag'] == 'REVIEW_REQUIRED'
+
+
+def full_identity(description, **metrics):
+    return reviewed(description, query_length=30, subject_length=30,
+                    alignment_length=30, **metrics)
+
+
+def test_full_identity_record_precedes_differently_named_distant_homologue():
+    exact = full_identity('probable head decoration protein', gene='fixtureA')
+    distant = hit('capsid-associated protein', source='Swiss-Prot', reviewed=True,
+                  organism='Synthetic bacteriophage fixture', percent_identity=65,
+                  query_coverage=1, subject_coverage=1, evalue=1e-50,
+                  query_length=30, subject_length=30, alignment_length=30)
+    result = classify(exact, distant, hit('major capsid protein'))
+    assert result['proposed_function'] == 'probable head decoration protein'
+    assert result['functional_state'] == 'PROBABLE_FUNCTION'
+    assert result['gene'] == 'fixtureA'
+    assert len(result['product_alternatives']) == 3
+
+
+def test_distinct_full_identity_records_still_require_review():
+    result = classify(full_identity('DNA polymerase', gene='fixtureA'),
+                      full_identity('DNA primase', gene='fixtureB'))
+    assert result['proposed_function'] is None
+    assert result['gene'] is None
+    assert result['functional_state'] == 'CONFLICTING_EVIDENCE'
+
+
+def test_perfect_partial_alignment_cannot_overrule_complete_record():
+    partial = reviewed('DNA polymerase', query_length=30, subject_length=60,
+                       alignment_length=30)
+    result = classify(partial, full_identity('DNA primase'))
+    assert result['proposed_function'] == 'dna primase'
+
+
+def test_missing_lengths_cannot_grant_full_identity_precedence():
+    result = classify(reviewed('DNA polymerase'), reviewed('DNA primase'))
+    assert result['proposed_function'] is None
+
+
+def test_unknown_full_identity_match_cannot_veto_informative_homologue():
+    result = classify(full_identity('uncharacterized 7.3 kDa protein'),
+                      reviewed('head decoration protein'))
+    assert result['proposed_function'] == 'head decoration protein'
+
+
+def test_complete_full_identity_match_disambiguates_related_capsid_members():
+    relative = hit('minor capsid protein', source='Swiss-Prot', reviewed=True,
+                   organism='Synthetic bacteriophage fixture', percent_identity=90,
+                   query_coverage=1, subject_coverage=0.85, evalue=1e-70,
+                   query_length=30, subject_length=35, alignment_length=30)
+    result = classify(full_identity('major capsid protein'), relative)
+    assert result['proposed_function'] == 'major capsid protein'
+    assert len(result['product_alternatives']) == 2

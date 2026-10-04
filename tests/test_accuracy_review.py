@@ -40,6 +40,18 @@ def test_no_exact_match_cannot_be_scored_as_supported():
         module.validate_decision(case, decision, 'MABC', {})
 
 
+def test_review_reads_full_system_sequences_and_rejects_duplicate_loci(tmp_path):
+    module = reviewer()
+    directory = tmp_path / 'NC_fixture'; directory.mkdir()
+    (directory / 'proteins.faa').write_text('>PM_fixture\nMABC\n')
+    (directory / 'functional_classification.tsv').write_text(
+        'protein_id\tstart\tend\tstrand\nPM_fixture\t1\t12\t+\n')
+    assert module.load_sequences(tmp_path) == {('NC_fixture', 1, 12, '+'): 'MABC'}
+    (directory / 'proteins.faa').write_text('>PM_fixture\nMABC\n>PM_fixture\nMABC\n')
+    with pytest.raises(ValueError, match='Duplicate predicted locus'):
+        module.load_sequences(tmp_path)
+
+
 def test_naming_equivalences_preserve_family_members_and_uncertainty():
     from phagemine.annotation_labels import classify
     from phagemine.functional_benchmark import load_synonyms, PENDING

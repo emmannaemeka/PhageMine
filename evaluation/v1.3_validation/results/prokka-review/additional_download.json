@@ -1,0 +1,10 @@
+{
+  "url": "https://rest.uniprot.org/uniprotkb/stream?query=reviewed%3Atrue+AND+%28accession%3AD3WAC2+OR+accession%3AD3WAC4+OR+accession%3AD3WAC7+OR+accession%3AO21869+OR+accession%3AO21870+OR+accession%3AO21871+OR+accession%3AO21873+OR+accession%3AO21876+OR+accession%3AO21882+OR+accession%3AQ38305%29&format=json",
+  "retrieved_utc": "2026-10-04T11:14:35.961115+00:00",
+  "headers": {
+    "content-type": "application/json",
+    "x-uniprot-release": "2026_03",
+    "x-uniprot-release-date": "02-September-2026"
+  },
+  "sha256": "bfd833d5c4b9197153ff0c1dcc4fcdff193a3aa458c67ba76a1361dea9b2f817"
+}

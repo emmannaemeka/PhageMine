@@ -8,25 +8,25 @@
   "verified_artifact_file_checksums": 5202,
   "all_ten_inputs_identical_to_comparator_run": true,
   "fresh_search_rules_version": "1.12",
-  "current_adjudication_rules_version": "1.14",
+  "current_adjudication_rules_version": "1.13",
   "reclassified_fresh_full_evidence": true,
   "additional_database_searches_run": false,
   "manual_product_overrides": 0,
-  "changed_product_or_gene_rows": 211,
+  "changed_product_or_gene_rows": 184,
   "functional_states": {
-    "PROBABLE_FUNCTION": 517,
-    "FUNCTIONAL_CLASS_ONLY": 302,
+    "PROBABLE_FUNCTION": 502,
+    "FUNCTIONAL_CLASS_ONLY": 294,
     "CONSERVED_UNKNOWN": 84,
     "UNRESOLVED": 71,
-    "KNOWN_FUNCTION": 1,
-    "CONFLICTING_EVIDENCE": 3
+    "CONFLICTING_EVIDENCE": 24,
+    "KNOWN_FUNCTION": 3
   },
   "selected_sources": {
-    "PHROGs": 189,
-    "VOGDB": 315,
-    "Swiss-Prot": 343
+    "PHROGs": 183,
+    "VOGDB": 319,
+    "Swiss-Prot": 327
   },
-  "curated_anchor_selections": 331,
+  "curated_anchor_selections": 312,
   "capsid_vertex_automatic_result": {
     "accession": "NC_000866.4",
     "protein_id": "PM_000190",
@@ -38,7 +38,7 @@
     "state": "PROBABLE_FUNCTION",
     "supporting_sources": "Swiss-Prot",
     "curated_anchor": true,
-    "rules_version": "1.14"
+    "rules_version": "1.13"
   },
   "gene_models": {
     "both_exact": 684,
@@ -57,13 +57,5 @@
     "Swiss-Prot reviewed status does not imply every function is experimentally established",
     "PMFDB and INPHARED are comparative context, not functional-name votes",
     "The current rule adjustment was informed by this diagnostic panel"
-  ],
-  "Prokka_comparison": {
-    "shared_gene_models": 729,
-    "recovered_names": 20,
-    "Prokka_named_PhageMine_unnamed_after": 5,
-    "review_cases": 274,
-    "exact_reviewed_sequence_cases": 154,
-    "no_exact_reviewed_sequence_cases": 120
-  }
+  ]
 }
