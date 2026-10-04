@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
-      PHAGEMINE_REGISTRY_PATH: ${{ runner.temp }}/full-registry.json
+      PHAGEMINE_REGISTRY_PATH: ${{ github.workspace }}/full-registry.json
     steps:
       - uses: actions/checkout@v4
       - name: Make room for complete reference databases
