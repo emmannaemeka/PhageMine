@@ -1,6 +1,8 @@
 name: External-tool integration
 
 on:
+  push:
+    branches: [main]
   pull_request:
     paths:
       - "src/**"

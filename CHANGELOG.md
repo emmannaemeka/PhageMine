@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 — 2026-10-04
 
 - Return a failing exit status for failed batch samples, reject empty inputs,
   and stop Both before discovery when its annotation cohort is incomplete.
@@ -13,6 +13,27 @@
   smoke checks to CI; include installation resources in source distributions.
 - Retain the PHANOTATE pkg_resources compatibility dependency and document
   Core-first onboarding and outstanding independent-validation gates.
+
+- Improve multi-resource product naming, suppress identifier-only labels, and
+  prioritize complete 100%-identity reviewed alignments while retaining alternatives.
+- Publish ten-genome full-system benchmarking and a sequence-bound Prokka naming
+  review; retain unresolved cases and avoid claims of accuracy superiority.
+
+- Optional tRNAscan-SE and validated noncoding-RNA GFF3 imports with feature exports.
+- Sequence-validated external GenBank annotation proposals with source/database provenance.
+- Audited manual product, gene and note review in CLI and GUI with regenerated exports.
+- Streaming reproducibility bundles, artifact consistency checks and sampled runtime profiling.
+- Correct cross-genome, negative-strand and CDS-only benchmark imports.
+- Docker build workflow and local development Bioconda recipe.
+- Core-only GUI launcher test isolation.
+
+- Offline database health/version/freshness diagnostics and per-run health reports.
+- Explicit evidence-conflict and external-label review reports, including a GUI filter.
+- Opt-in checksum-validated persistent reuse for single-genome evidence searches.
+- Curator-provenance-bearing benchmark CLI with unresolved review queues and auditable adjudication.
+- Correct tRNAscan-SE help-banner probe and modern-Python container dependency cleanup.
+
+- Accept empty zero-hit tRNAscan-SE tables only with explicit successful-scan statistics.
 
 ## 1.2.0 (finalization)
 
@@ -223,21 +244,3 @@ file without rerunning biological analysis.
 
 The release does not bundle external evidence databases, PMFDB, or research
 datasets. See `docs/limitations.md` for interpretation and validation limits.
-
-## 1.3.0.dev0 annotation workflow development
-
-- Optional tRNAscan-SE and validated noncoding-RNA GFF3 imports with feature exports.
-- Sequence-validated external GenBank annotation proposals with source/database provenance.
-- Audited manual product, gene and note review in CLI and GUI with regenerated exports.
-- Streaming reproducibility bundles, artifact consistency checks and sampled runtime profiling.
-- Correct cross-genome, negative-strand and CDS-only benchmark imports.
-- Docker build workflow and local development Bioconda recipe.
-- Core-only GUI launcher test isolation.
-
-- Offline database health/version/freshness diagnostics and per-run health reports.
-- Explicit evidence-conflict and external-label review reports, including a GUI filter.
-- Opt-in checksum-validated persistent reuse for single-genome evidence searches.
-- Curator-provenance-bearing benchmark CLI with unresolved review queues and auditable adjudication.
-- Correct tRNAscan-SE help-banner probe and modern-Python container dependency cleanup.
-
-- Accept empty zero-hit tRNAscan-SE tables only with explicit successful-scan statistics.

@@ -16,10 +16,12 @@ an HTML report.
 
 ## Install
 
+The current stable release is [v1.3.0](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.0).
+
 Python 3.10 or later is required. Use Conda to install the external analysis tools:
 
 ```bash
-git clone https://github.com/emmannaemeka/PhageMine.git
+git clone --branch v1.3.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
@@ -71,7 +73,7 @@ Proteins without a supported function remain hypothetical or are identified as
 conserved proteins of unknown function. Gene symbols, protein products and
 locus identifiers are reported separately.
 
-PhageMine is beta research software. Functional predictions require review,
+PhageMine is research software. Functional predictions require review,
 and confidence labels describe evidence strength rather than calibrated
 probabilities. See the [limitations](docs/limitations.md) for interpretation.
 

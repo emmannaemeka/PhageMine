@@ -7,7 +7,7 @@ external bioinformatics executables from Conda channels and leaves the Python
 package installation explicit:
 
 ```bash
-git clone https://github.com/emmannaemeka/PhageMine.git
+git clone --branch v1.3.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
@@ -55,7 +55,7 @@ If `phagemine` is not found, activate the environment with `conda activate
 phagemine` and rerun `python -m pip install .`. A new Terminal session also
 requires `cd /path/to/PhageMine` and `conda activate phagemine` again.
 
-The Bioconda recipe for PhageMine 1.2.0 must require PHANOTATE, Prodigal, HMMER,
+The local Bioconda recipe requires PHANOTATE, Prodigal, HMMER,
 MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do not treat package installation alone as proof that these
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
@@ -81,7 +81,7 @@ registered but cannot currently operate, commonly because a required
 executable is missing or broken; it does not mean the database must be
 downloaded again.
 
-The Conda recipe uses the supplied `packaging/bioconda/post-link.sh` reminder.
+The local Conda recipe uses the supplied `packaging/bioconda/post-link.sh` reminder.
 The same instructions appear when `phagemine` or `phagemine --help` is run.
 `phagemine doctor` repeats actionable installation commands for every missing
 resource.

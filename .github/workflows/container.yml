@@ -1,5 +1,7 @@
 name: Container annotation smoke
 on:
+  push:
+    branches: [main]
   pull_request:
     paths: ["Dockerfile", ".dockerignore", "environment.yml", "pyproject.toml", "src/**", ".github/workflows/container.yml"]
   workflow_dispatch:

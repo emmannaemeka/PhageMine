@@ -1,3 +1,6 @@
+Current stable release validation is recorded in [v1.3.0 release notes](docs/releases/v1.3.0.md)
+and the attached `release-validation.json`. The record below is historical.
+
 # PhageMine v1.2 release validation
 
 This is the historical 2026-09-16 record. Current development-branch checks
