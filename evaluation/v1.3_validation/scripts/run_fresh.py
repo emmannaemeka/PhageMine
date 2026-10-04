@@ -30,13 +30,14 @@ DATABASE_URL = 'https://zenodo.org/record/17110353/files/pharokka_v1.8.0_databas
 DATABASE_MD5 = 'a63c485241b900a11989bd1821bfbb09'
 
 
-def prepare(source, output):
+def prepare(source, output, accession=None):
     inputs = output / 'inputs'; inputs.mkdir()
     references, genomes, excluded = [], [], 0
     for path in sorted(source.glob('*.gb')):
         records = list(SeqIO.parse(path, 'genbank'))
         if len(records) != 1: raise ValueError('Expected one genome per reference file')
         record = records[0]
+        if accession and record.id != accession: continue
         fasta = inputs / (record.id + '.fasta')
         # Neither features nor reference product names enter annotation inputs.
         fasta.write_text('>' + record.id + '\n' + str(record.seq) + '\n')
@@ -61,6 +62,7 @@ def prepare(source, output):
 
 def run(command, root, label, records, env=None):
     log = root / (label + '.log')
+    print('START ' + label, flush=True)
     started = time.monotonic()
     with log.open('w') as handle:
         result = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT, env=env, check=False)
@@ -68,6 +70,7 @@ def run(command, root, label, records, env=None):
               'elapsed_seconds': round(time.monotonic()-started, 3), 'log': log.name,
               'log_sha256': checksum(log)}
     records.append(record)
+    print(f'END {label}: exit={result.returncode}, seconds={record["elapsed_seconds"]}', flush=True)
     (root / 'commands.json').write_text(json.dumps(records, indent=2) + '\n')
     if result.returncode: raise RuntimeError(f'{label} failed; see {log}')
 
@@ -78,12 +81,13 @@ def main(argv=None):
     parser.add_argument('--database', required=True)
     parser.add_argument('--comparator-environment', default='comparators')
     parser.add_argument('--threads', type=int, default=2)
+    parser.add_argument('--accession', help='Run one panel genome for parallel evaluation')
     args = parser.parse_args(argv)
     output = Path(args.output).resolve()
     if output.exists(): parser.error('Output must be a new directory')
     output.mkdir(parents=True)
     started = datetime.now(timezone.utc).isoformat()
-    genomes, references, excluded = prepare(ROOT / 'evaluation/v1.2_functional/reference', output)
+    genomes, references, excluded = prepare(ROOT / 'evaluation/v1.2_functional/reference', output, args.accession)
     database = Path(args.database).resolve()
     db_files = sorted(p for p in database.rglob('*') if p.is_file())
     if not db_files or not (database / 'VERSION_1_8_0').is_file():

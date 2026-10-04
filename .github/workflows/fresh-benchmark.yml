@@ -17,6 +17,11 @@ concurrency:
 
 jobs:
   compare:
+    name: Compare ${{ matrix.accession }}
+    strategy:
+      fail-fast: false
+      matrix:
+        accession: [NC_000866.4, NC_000929.1, NC_001416.1, NC_001422.1, NC_001604.1, NC_002371.2, NC_005859.1]
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -35,10 +40,10 @@ jobs:
         run: micromamba run -n comparators pharokka install -o "${{ runner.temp }}/pharokka-db"
       - name: Generate and evaluate fresh annotations
         shell: micromamba-shell {0}
-        run: python evaluation/v1.3_validation/scripts/run_fresh.py --database "${{ runner.temp }}/pharokka-db" --output fresh-results --threads 2
+        run: python evaluation/v1.3_validation/scripts/run_fresh.py --database "${{ runner.temp }}/pharokka-db" --output fresh-results --threads 2 --accession "${{ matrix.accession }}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fresh-annotation-comparison
+          name: fresh-annotation-comparison-${{ matrix.accession }}
           path: fresh-results/
           retention-days: 30

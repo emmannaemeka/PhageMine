@@ -35,3 +35,5 @@ def test_fresh_inputs_do_not_leak_reference_annotations(tmp_path):
     assert references[0]['gene'] == 'answerA'
     assert references[0]['start'] == 1 and references[0]['end'] == 30
     assert len(references) == 1 and excluded == 1
+    other = tmp_path / 'filtered'; other.mkdir()
+    assert runner().prepare(source, other, 'SYNTHETIC.1')[0][0]['accession'] == 'SYNTHETIC.1'
