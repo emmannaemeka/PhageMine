@@ -1,9 +1,16 @@
-# PhageMine
+# PhageMine: Bacteriophage Genome Annotation and Comparative Genomics
 
-PhageMine annotates bacteriophage genomes and organizes the evidence behind
-protein function predictions. It combines phage gene prediction with protein
-sequence and profile searches, and produces annotated sequences, tables and
-an HTML report.
+**PhageMine** is an open-source bioinformatics pipeline for bacteriophage genome
+annotation, functional evidence integration and comparative genomics. It combines
+phage-focused gene prediction with protein sequence and profile searches, links
+functional assignments to their supporting evidence, and produces annotated
+sequences, evidence tables and an HTML report.
+
+PhageMine uses PHANOTATE for protein-coding gene prediction; PHROGs, VOGDB, Pfam
+and Swiss-Prot for functional evidence; and INPHARED references for comparative
+genomic context. It is designed for researchers working in phage genomics,
+bacteriophage genome annotation, viral genomics and related bioinformatics
+workflows.
 
 ## What it does
 
