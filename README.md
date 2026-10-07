@@ -1,5 +1,10 @@
 # PhageMine: Bacteriophage Genome Annotation and Comparative Genomics
 
+[![CI](https://github.com/emmannaemeka/PhageMine/actions/workflows/ci.yml/badge.svg)](https://github.com/emmannaemeka/PhageMine/actions/workflows/ci.yml)
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](https://bioconda.github.io/recipes/phagemine/README.html)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22794629.svg)](https://doi.org/10.5281/zenodo.22794629)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **PhageMine** is an open-source bioinformatics pipeline for bacteriophage genome
 annotation, functional evidence integration and comparative genomics. It combines
 phage-focused gene prediction with protein sequence and profile searches, links
@@ -24,8 +29,23 @@ workflows.
 ## Install
 
 The current stable release is [v1.3.0](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.0).
+Python 3.10 or later is required.
 
-Python 3.10 or later is required. Use Conda to install the external analysis tools:
+Install from Bioconda, which brings the external analysis tools with it:
+
+```bash
+conda create --name phagemine --channel conda-forge --channel bioconda phagemine
+conda activate phagemine
+phagemine doctor
+```
+
+Or from PyPI, with the external tools installed separately:
+
+```bash
+pip install phagemine
+```
+
+To install from source instead:
 
 ```bash
 git clone --branch v1.3.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
