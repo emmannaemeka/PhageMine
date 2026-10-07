@@ -28,7 +28,7 @@ workflows.
 
 ## Install
 
-The current stable release is [v1.3.0](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.0).
+The current stable release is [v1.3.1](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.1).
 Python 3.10 or later is required.
 
 Install from Bioconda, which brings the external analysis tools with it:
@@ -48,7 +48,7 @@ pip install phagemine
 To install from source instead:
 
 ```bash
-git clone --branch v1.3.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
+git clone --branch v1.3.1 --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
