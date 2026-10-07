@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1 — 2026-10-07
+
+- Add the PyPI publishing workflow, refresh the Bioconda recipe, and surface
+  packaged install paths in the README. No functional changes to annotation,
+  gene calling or evidence handling.
+
 ## 1.3.0 — 2026-10-04
 
 - Return a failing exit status for failed batch samples, reject empty inputs,
