@@ -10,7 +10,17 @@ requires-python = ">=3.10"
 license = {file = "LICENSE"}
 readme = "README.md"
 authors = [{name = "Nnaemeka Emmanuel Nnadi"}]
-keywords = ["bacteriophage", "genome annotation", "bioinformatics", "phage"]
+keywords = [
+    "bacteriophage",
+    "phage",
+    "genome annotation",
+    "comparative genomics",
+    "bioinformatics",
+    "viral genomics",
+    "PHANOTATE",
+    "PHROGs",
+    "INPHARED",
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
@@ -33,6 +43,8 @@ dependencies = [
 Homepage = "https://github.com/emmannaemeka/PhageMine"
 Repository = "https://github.com/emmannaemeka/PhageMine"
 Issues = "https://github.com/emmannaemeka/PhageMine/issues"
+Changelog = "https://github.com/emmannaemeka/PhageMine/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/emmannaemeka/PhageMine/blob/main/docs/installation.md"
 
 [project.optional-dependencies]
 gui = ["streamlit>=1.49,<2"]
