@@ -356,9 +356,10 @@ class PyrodigalProvider(GeneModelProvider):
         models: list[GeneModel] = []
         self._raw_records = []
         for index, gene in enumerate(genes, 1):
-            # Pyrodigal exposes zero-based inclusive begin/end coordinates.
+            # Pyrodigal exposes one-based inclusive begin/end coordinates
+            # (Gene.begin/Gene.end), the same convention as PHANOTATE and GFF3.
             raw_start, raw_end = int(gene.begin), int(gene.end)
-            start, end = min(raw_start, raw_end) + 1, max(raw_start, raw_end) + 1
+            start, end = min(raw_start, raw_end), max(raw_start, raw_end)
             strand = "+" if int(gene.strand) == 1 else "-"
             cds = str(gene.sequence()).upper()
             # In meta mode Pyrodigal chooses the translation table as part of

@@ -128,3 +128,16 @@ def test_phanotate_normalization_preserves_segment_identity():
     model = _model_from_protein(protein, provider_id="phanotate", version="1", command=[], input_sha="sha", source_file="x", segment_id="segment-1")
     assert model.genome_id == "genome"
     assert model.segment_id == "segment-1"
+
+
+def test_pyrodigal_coordinates_are_one_based_like_phanotate():
+    """Pyrodigal Gene.begin/end are already 1-based inclusive; no offset may be added."""
+    from phagemine.gene_callers import ProdigalGVProvider
+    orf = "ATG" + "GCTGAAAAACTG" * 60 + "TAA"
+    seq = "TT" + "TAA" * 16 + orf + "T" * 50  # in-frame upstream stops; ORF starts at 51
+    result = ProdigalGVProvider().predict("synthetic", seq)
+    model = max(result.models, key=lambda m: m.end - m.start)
+    assert model.strand == "+"
+    assert seq[model.end - 3:model.end] == "TAA"
+    assert model.start == 51 and seq[model.start - 1:model.start + 2] == "ATG"
+    assert model.end == 50 + len(orf)
