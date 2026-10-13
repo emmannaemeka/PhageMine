@@ -701,7 +701,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             "reconciliation_policy_version": "production-observational-v1",
             "reconciliation_status": "COMPLETE" if gv_result.status == "SUCCESS" else "SECONDARY_FAILED_NONFATAL",
             "reconciliation_dependent_confidence": "AVAILABLE" if gv_result.status == "SUCCESS" else "UNAVAILABLE",
-            "coordinate_conventions": {"PHANOTATE": "1-based-inclusive", "Pyrodigal-gv": "0-based-inclusive-normalized-to-1-based-inclusive"},
+            "coordinate_conventions": {"PHANOTATE": "1-based-inclusive", "Pyrodigal-gv": "1-based-inclusive"},
         }
         (gene_call_root / "gene_call_manifest.json").write_text(json.dumps(automatic_manifest, indent=2, sort_keys=True))
         production_observation = True

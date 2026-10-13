@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.2 — 2026-10-13
+
+- Fix Pyrodigal/Pyrodigal-gv coordinate import: Pyrodigal reports one-based
+  inclusive coordinates, but they were shifted by one nucleotide as if
+  zero-based. Exact PHANOTATE/Pyrodigal-gv agreement was therefore never
+  detected and every reconciled locus was flagged for review. Final CDS
+  coordinates, sequences and functional annotations are unchanged (PHANOTATE
+  remains authoritative); reconciliation classes, structural confidence and
+  review flags are corrected. Adds a regression test.
+- Record the corrected Pyrodigal-gv coordinate convention in the gene-call
+  manifest.
+
 ## 1.3.1 — 2026-10-07
 
 - Add the PyPI publishing workflow, refresh the Bioconda recipe, and surface
