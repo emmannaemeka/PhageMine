@@ -244,7 +244,7 @@ def test_inphared_product_label_remains_predicted_evidence(tmp_path, monkeypatch
         Path(command[4]).write_text("PMF1\tREF1\t100\t8\t8\t8\t1e-20\t80\t1\t1\n")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 
-    monkeypatch.setattr("phagemine.family_external.subprocess.run", fake_run)
+    monkeypatch.setattr("phagemine.family_external.run_mmseqs", fake_run)
     rows = validate_external(
         family_db, reference=reference, metadata=metadata,
         output=tmp_path / "results", mmseqs=str(executable),
