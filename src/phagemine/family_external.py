@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+from .executables import run_mmseqs
 import csv,json,shutil,subprocess,tempfile
 import hashlib
 from datetime import datetime, timezone
@@ -69,13 +71,13 @@ def validate_external(database, reference=None, output=None, metadata=None, mmse
                 [exe,'convertalis',str(query_db),str(cached_target),str(result_db),str(out),'--format-output','query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov'],
             ]
             for cmd in commands:
-                run=subprocess.run(cmd,capture_output=True,text=True,check=False)
+                run=run_mmseqs(cmd,capture_output=True,text=True,check=False)
                 if run.returncode: raise RuntimeError(run.stderr.strip() or 'MMseqs2 search failed')
             cmd=commands
         else:
             shutil.copyfile(reference,ref)
             cmd=[exe,'easy-search',str(q),str(ref),str(out),str(tmp),'--format-output','query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov','--max-seqs','100']
-            run=subprocess.run(cmd,capture_output=True,text=True,check=False)
+            run=run_mmseqs(cmd,capture_output=True,text=True,check=False)
             if run.returncode: raise RuntimeError(run.stderr.strip() or 'MMseqs2 search failed')
         hits=[]
         for line in out.read_text().splitlines():

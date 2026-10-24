@@ -10,6 +10,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from .executables import mmseqs_prefix, run_mmseqs
 from . import __version__
 from .resources import EvidenceResourceManager, ResourceStatus, validate_resource
 
@@ -46,7 +47,8 @@ def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
     diagnostics: list[str] = []
     for command in probes.get(name, [[resolved, "--version"], [resolved, "-h"]]):
         try:
-            result = subprocess.run(command, capture_output=True, text=True, timeout=10, check=False)
+            runner = run_mmseqs if name == "mmseqs" else subprocess.run
+            result = runner(command, capture_output=True, text=True, timeout=10, check=False)
             output = "\n".join(part.strip() for part in (result.stdout, result.stderr) if part and part.strip())
             if result.returncode == 0:
                 lines = [line.strip() for line in output.splitlines() if line.strip()]
@@ -65,6 +67,7 @@ def executable_status(name: str, explicit: str | None = None) -> dict[str, Any]:
     else:
         status = "BROKEN"
     return {"name": name, "status": status, "path": resolved, "version": version,
+            "launch_command": list(mmseqs_prefix(resolved)) if name == "mmseqs" else [resolved],
             "diagnostic": diagnostics[-1] if diagnostics and status != "READY" else None}
 
 
@@ -123,7 +126,7 @@ def _deep_phrogs_checks(resources: list[dict[str, Any]], mmseqs_path: str | None
             continue
         if mmseqs_path:
             try:
-                result = subprocess.run([mmseqs_path, "dbtype", str(resource["path"])],
+                result = run_mmseqs([mmseqs_path, "dbtype", str(resource["path"])],
                                         capture_output=True, text=True, timeout=30, check=False)
                 checks.append({"name": "PHROGs MMseqs2 database", "status": "READY" if result.returncode == 0 else "BROKEN",
                                "diagnostic": None if result.returncode == 0 else (result.stderr or result.stdout).strip()[:500]})
@@ -253,6 +256,8 @@ def doctor_text(payload: dict[str, Any]) -> str:
     for item in payload["executables"]:
         status = item["status"] if item["name"] != "table2asn" or item["status"] == "READY" else "OPTIONAL/MISSING"
         lines.append(f"{labels[item['name']]:<14}{status:<17}{item.get('version') or ''}")
+        if item.get("launch_command", [])[:2] == ["/usr/bin/arch", "-arm64"]:
+            lines.append("  Launch: " + " ".join(item["launch_command"]))
         if item.get("diagnostic") and item["name"] != "table2asn":
             lines.append(f"  Error: {item['diagnostic']}")
     if payload.get("python_modules"):

@@ -1,6 +1,8 @@
 """Cohort-level biological discovery built from completed protein annotations."""
 from __future__ import annotations
 
+from .executables import run_mmseqs
+
 import csv
 import hashlib
 import html
@@ -48,7 +50,7 @@ def _write_tsv(path, rows, columns):
 def _mmseqs_version(executable):
     exe = str(executable) if executable else shutil.which("mmseqs")
     if not exe or not (Path(exe).is_file() or shutil.which(exe)): return "unavailable"
-    result = subprocess.run([exe, "version"], capture_output=True, text=True, check=False)
+    result = run_mmseqs([exe, "version"], capture_output=True, text=True, check=False)
     return (result.stdout or result.stderr).strip().splitlines()[0] or "unknown"
 
 

@@ -6,6 +6,8 @@ resources are not bundled with PhageMine.
 """
 from __future__ import annotations
 
+from .executables import run_mmseqs
+
 import gzip
 import hashlib
 import json
@@ -262,7 +264,8 @@ class DatabaseInstaller:
     def _run(self, command: list[str]) -> None:
         self.reporter("Preparing database: " + " ".join(command))
         try:
-            subprocess.run(command, check=True, text=True, capture_output=True)
+            runner = run_mmseqs if Path(command[0]).name == "mmseqs" else subprocess.run
+            runner(command, check=True, text=True, capture_output=True)
         except subprocess.CalledProcessError as exc:
             detail = (exc.stderr or exc.stdout or "").strip()
             raise DatabaseInstallError(f"database preparation failed ({' '.join(command)}): {detail}") from exc
