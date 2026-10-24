@@ -1,5 +1,7 @@
 """Offline, opt-in Protein Family (PMF) foundation."""
 from __future__ import annotations
+
+from .executables import run_mmseqs
 import csv, hashlib, json, shutil, subprocess, tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,7 +47,7 @@ class MMseqsFamilyBackend:
         with tempfile.TemporaryDirectory(prefix='phagemine-family-') as t:
             root=Path(t); out=root/'cluster'; tmp=root/'tmp'
             cmd=[exe,'easy-cluster',str(Path(protein_fasta).resolve()),str(out),str(tmp),'--min-seq-id',str(minimum_identity),'-c',str(minimum_coverage),'--cov-mode',str(coverage_mode),'--cluster-mode',str(clustering_mode)]
-            r=subprocess.run(cmd,capture_output=True,text=True,check=False)
+            r=run_mmseqs(cmd,capture_output=True,text=True,check=False)
             if r.returncode: raise RuntimeError('MMseqs2 family clustering failed: '+(r.stderr.strip() or r.stdout.strip()))
             pairs=Path(str(out)+'_cluster.tsv')
             groups={}
@@ -101,7 +103,7 @@ def _family_hits(queries, families, executable, config):
         # easy-search internally creates the temporary databases and is kept
         # entirely inside this backend.
         cmd=[exe,'easy-search',str(qf),str(rf),str(out),str(tmp),'--format-output','query,target,pident,alnlen,qlen,tlen,evalue,bits,qcov,tcov','--max-seqs','50']
-        r=subprocess.run(cmd,capture_output=True,text=True,check=False)
+        r=run_mmseqs(cmd,capture_output=True,text=True,check=False)
         if r.returncode: raise RuntimeError('MMseqs2 family assignment failed: '+(r.stderr.strip() or r.stdout.strip()))
         rows=[]
         for line in out.read_text().splitlines():
@@ -109,7 +111,7 @@ def _family_hits(queries, families, executable, config):
             if len(f)!=10: continue
             try: rows.append({'query_protein_id':f[0],'family_id':f[1],'identity':float(f[2]),'alignment_length':int(f[3]),'query_length':int(f[4]),'target_length':int(f[5]),'evalue':float(f[6]),'bitscore':float(f[7]),'query_coverage':float(f[8]),'target_coverage':float(f[9]),'raw_mmseqs_row':line})
             except ValueError: continue
-        return rows, {'search_backend':'MMSEQS2','search_backend_version':subprocess.run([exe,'version'],capture_output=True,text=True,check=False).stdout.strip().splitlines()[0] if subprocess.run([exe,'version'],capture_output=True,text=True,check=False).stdout else 'unknown','command':cmd,'configuration':config}
+        return rows, {'search_backend':'MMSEQS2','search_backend_version':run_mmseqs([exe,'version'],capture_output=True,text=True,check=False).stdout.strip().splitlines()[0] if run_mmseqs([exe,'version'],capture_output=True,text=True,check=False).stdout else 'unknown','command':cmd,'configuration':config}
 
 def assign_protein_families(proteins, family_database, config=None, mmseqs='mmseqs'):
     config=config or {'family_assignment':{'minimum_identity':0.3,'minimum_query_coverage':0.5,'minimum_target_coverage':0.5,'maximum_evalue':1e-3,'ambiguity_margin':0.02}}

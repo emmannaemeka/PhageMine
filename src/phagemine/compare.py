@@ -1,6 +1,8 @@
 """Offline comparative genomic context for completed PhageMine results."""
 from __future__ import annotations
 
+from .executables import run_mmseqs
+
 import csv, json, shutil, subprocess, tempfile
 from pathlib import Path
 from typing import Any
@@ -10,7 +12,7 @@ MMSEQS_FIELDS = "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,ev
 
 
 def _mmseqs_version(executable: str) -> str:
-    result = subprocess.run([executable, "version"], capture_output=True, text=True, check=False)
+    result = run_mmseqs([executable, "version"], capture_output=True, text=True, check=False)
     return (result.stdout or result.stderr).strip().splitlines()[0] or "unknown"
 
 
@@ -22,7 +24,7 @@ def _mmseqs_matches(query: dict[str, Any], reference: dict[str, Any], executable
         qf.write_text(''.join(f">{p['protein_id']}\n{p.get('sequence','')}\n" for p in query.values())); rf.write_text(''.join(f">{p['protein_id']}\n{p.get('sequence','')}\n" for p in reference.values()))
         commands=[[executable,'createdb',str(qf),str(qdb)],[executable,'createdb',str(rf),str(rdb)],[executable,'search',str(qdb),str(rdb),str(resultdb),str(tmp),'--max-seqs','20'],[executable,'convertalis',str(qdb),str(rdb),str(resultdb),str(out),'--format-output',MMSEQS_FIELDS]]
         for command in commands:
-            result=subprocess.run(command,capture_output=True,text=True,check=False)
+            result=run_mmseqs(command,capture_output=True,text=True,check=False)
             if result.returncode:
                 return {}, {"mmseqs_executed": False,"mmseqs":executable,"error":result.stderr.strip(),"commands":commands}
         matches={}

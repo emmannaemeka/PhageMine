@@ -1,6 +1,8 @@
 """Optional local PHROGs sequence- and profile-search evidence adapters."""
 from __future__ import annotations
 
+from .executables import run_mmseqs
+
 import csv
 import gzip
 import importlib
@@ -90,7 +92,7 @@ class PHROGSMMseqsAdapter(EvidenceAdapter):
     def version(self) -> str:
         if not self.mmseqs or not (Path(self.mmseqs).exists() or shutil.which(self.mmseqs)):
             return "unavailable"
-        result = subprocess.run([self.mmseqs, "version"], capture_output=True, text=True, check=False)
+        result = run_mmseqs([self.mmseqs, "version"], capture_output=True, text=True, check=False)
         output = (result.stdout or result.stderr).strip()
         match = re.search(r"(?:Version:\s*)?([0-9][0-9.\-A-Za-z]+)", output)
         return match.group(1) if match else (output.splitlines()[0] if output else "unknown")
@@ -135,7 +137,7 @@ class PHROGSMMseqsAdapter(EvidenceAdapter):
             provenance["search_commands"] = commands
             provenance["search_parameters"] = {"threshold_mode": "MANUAL", "output_format": MMSEQS_FORMAT}
             for command in commands:
-                result = subprocess.run(command, capture_output=True, text=True, check=False)
+                result = run_mmseqs(command, capture_output=True, text=True, check=False)
                 if result.returncode:
                     return EvidenceAdapterResult(
                         self.name, "UNAVAILABLE", provenance=provenance,

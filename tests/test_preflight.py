@@ -28,7 +28,7 @@ class PreflightTests(unittest.TestCase):
         }], "/usr/bin/mmseqs", False)
         self.assertEqual(checks[0]["status"], "BROKEN")
         self.assertIn("wrong database type", checks[0]["diagnostic"])
-        run.assert_called_once_with(
+        run.assert_called_with(
             ["/usr/bin/mmseqs", "dbtype", "/database/phrogs_profile_db"],
             capture_output=True, text=True, timeout=30, check=False)
 

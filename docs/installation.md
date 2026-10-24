@@ -125,3 +125,19 @@ presented as VIRIDIC output. Mash distance is
 never converted into percentage similarity. The
 complete six-resource download is approximately 3.4 GiB; keep at least
 15–20 GiB free during preparation.
+
+### MMseqs2 on Apple Silicon with Intel Python
+
+An Intel (`osx-64`) Conda environment may run through Rosetta on Apple
+Silicon. If MMseqs2 exits with signal 4 (`SIGILL`), PhageMine tests whether
+`arch -arm64 <executable> version` succeeds and uses that invocation for
+subsequent MMseqs2 calls in the same process. This applies to both doctor
+checks and execution. It does not change the search parameters or results.
+The doctor JSON includes `launch_command` for executable diagnostics.
+
+The fallback requires a binary containing an ARM build, such as the
+[official macOS universal binary](https://github.com/soedinglab/MMseqs2#installation).
+It cannot repair an Intel-only executable or missing libraries. Put the
+compatible binary on PATH or select it with `--mmseqs` where supported.
+Prefer a separate native `osx-arm64` environment when dependencies permit;
+do not switch the platform of an existing Intel environment in place.
