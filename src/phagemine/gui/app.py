@@ -1,13 +1,15 @@
-"""PhageMine GUI v0.1 — a local Streamlit view over native CLI artifacts."""
+"""Bundled local interface over native PhageMine CLI artifacts."""
 from __future__ import annotations
 
 import io
+import os
 import tempfile
 import zipfile
 from pathlib import Path
 
 import streamlit as st
 
+from phagemine import __version__
 from phagemine.gui import GUI_VERSION
 from phagemine.gui.services.execution import build_cli_args, display_command, execute, save_uploads, validate_input
 from phagemine.gui.services.results import annotation_records, discovery_tables, downloadable_files, export_files, figures
@@ -15,13 +17,27 @@ from phagemine.gui.services.status import doctor_rows, read_run_status
 from phagemine.preflight import doctor
 
 st.set_page_config(page_title="PhageMine GUI", page_icon="🧬", layout="wide")
-st.title("PhageMine GUI")
-st.caption(f"Local scientific interface · GUI v{GUI_VERSION} · Same PhageMine analysis engine")
+st.title("PhageMine")
+st.caption(f"Version {__version__} · Local analysis workspace")
 
 PAGES = ("Home / New Analysis", "Environment / Database Status", "Run Monitor",
          "Annotation Results", "Review / Curation", "RNA Features", "Discovery Results", "Figures", "Export / Downloads")
-page = st.sidebar.radio("Workspace", PAGES)
-result_dir = st.sidebar.text_input("Result directory", key="result_dir", value="results/gui_run")
+st.sidebar.title("Your workspace")
+page = st.sidebar.radio("Workspace", PAGES, key="workspace_page")
+result_dir = st.sidebar.text_input("Result directory", key="result_dir", value="results/gui_run",
+                                   help="Open an existing result folder to browse its tables, reports, and figures.")
+st.sidebar.caption("Runs and files stay on the computer running PhageMine. Keep its terminal open while working.")
+
+
+def open_results(directory: str) -> None:
+    # Callbacks execute before widgets are rendered on the next run.
+    st.session_state.result_dir = directory
+    st.session_state.workspace_page = "Annotation Results"
+
+
+if st.session_state.get("last_completed_run"):
+    st.sidebar.button("Open latest results", on_click=open_results,
+                      args=(st.session_state.last_completed_run,))
 
 
 def caution() -> None:
@@ -30,6 +46,12 @@ def caution() -> None:
 
 if page == "Home / New Analysis":
     st.subheader("New analysis")
+    st.write("Choose your input, select a workflow, and save the results to a folder. "
+             "To view an earlier run, enter its folder in the sidebar.")
+    with st.expander("First time here? Start with these steps"):
+        st.markdown("1. Open **Environment / Database Status** to check your installation.\n"
+                    "2. Choose a FASTA file, a folder of genomes, or upload files below.\n"
+                    "3. Start the run, then use **Open latest results** to review and download outputs.")
     source_kind = st.radio("Input", ("Single FASTA path", "Cohort directory", "Upload FASTA files"), horizontal=True)
     source = ""
     uploads = None
@@ -40,21 +62,36 @@ if page == "Home / New Analysis":
     else:
         uploads = st.file_uploader("FASTA genome files", type=["fa", "fasta", "fna", "fas"], accept_multiple_files=True)
     col1, col2, col3 = st.columns(3)
-    mode = col1.selectbox("Workflow", ("Annotate", "Discover", "Both")).lower()
+    mode = col1.selectbox("Workflow", ("Annotate", "Discover", "Both"),
+                          help="Annotate produces per-genome results. Discover organizes cohort results. Both runs both workflows.").lower()
     cohort = source_kind != "Single FASTA path"
     evidence_choices = ("core", "standard", "full") if cohort else ("core",)
-    evidence = col2.selectbox("Evidence level", evidence_choices)
+    if cohort:
+        evidence = col2.selectbox("Evidence level", evidence_choices,
+                                 help="Core needs no evidence databases. Standard and Full require their registered resources.")
+    else:
+        col2.selectbox("Evidence", ("Registered resources",), disabled=True,
+                       help="The single-genome workflow uses the databases registered in your environment.")
+        evidence = "core"
     if not cohort:
         st.caption("The single-genome CLI uses the available registered evidence resources. Explicit standard/full profiles are available for cohort inputs.")
-    threads = col3.number_input("Threads", 1, 256, min(4, 256), 1)
-    output = st.text_input("Output directory", result_dir)
+    threads = col3.number_input("Threads", 1, 256, min(4, os.cpu_count() or 1), 1,
+                                help="Reduce this if you want to keep more CPU capacity available for other work.")
+    output = st.text_input("Output directory", result_dir,
+                           help="Use a new folder for each analysis. Relative paths are resolved on the computer running PhageMine.")
+    try:
+        if output.strip() and Path(output).expanduser().is_dir() and any(Path(output).expanduser().iterdir()):
+            st.warning("This output folder already contains files. Choose a new folder or resume an existing batch below.")
+    except OSError as exc:
+        st.error(f"Cannot access output folder: {exc}")
     resume = st.checkbox("Resume existing batch checkpoints", disabled=not cohort)
 
     preview_source = source or ("<uploaded-fasta-directory>" if uploads else "<input>")
     try:
         args = build_cli_args(preview_source, output, mode=mode, evidence=evidence,
                               threads=int(threads), cohort=cohort, resume=resume)
-        st.code(display_command(args), language="shell")
+        with st.expander("Command preview"):
+            st.code(display_command(args), language="shell")
     except ValueError as exc:
         st.error(str(exc)); args = []
     if st.button("Start analysis", type="primary"):
@@ -73,16 +110,25 @@ if page == "Home / New Analysis":
                                             threads=int(threads), cohort=cohort, resume=resume)
                     with st.status("PhageMine analysis running", expanded=True) as box:
                         st.code(display_command(actual), language="shell")
-                        result = execute(actual)
-                        if result.stdout: st.text(result.stdout)
+                        st.caption("Live output appears below. Leave this page open until the run finishes.")
+                        console = st.empty()
+                        log_lines = []
+
+                        def show_output(line: str) -> None:
+                            log_lines.append(line)
+                            console.code("".join(log_lines[-150:]), language="text")
+
+                        result = execute(actual, on_output=show_output)
                         if result.stderr: st.text(result.stderr)
                         if result.exit_code:
                             box.update(label="Analysis failed", state="error")
                             st.error(f"PhageMine exited with code {result.exit_code}. See diagnostic output above.")
                         else:
                             box.update(label="Analysis complete", state="complete")
-                            # A widget's state cannot be changed after it was rendered.
-                            st.success(f"Results saved to {Path(output).expanduser()}. Open this path in the sidebar to review them.")
+                            st.session_state.last_completed_run = str(Path(output).expanduser())
+                            st.success(f"Results saved to {Path(output).expanduser()}.")
+                            st.button("View results", on_click=open_results,
+                                      args=(st.session_state.last_completed_run,))
             except (OSError, ValueError) as exc:
                 st.error(f"Could not start analysis: {exc}")
 
@@ -98,13 +144,24 @@ elif page == "Environment / Database Status":
         for resource in database_health['resources']:
             for warning in resource['warnings']:
                 st.warning(resource['name'] + ': ' + warning)
-        rows = doctor_rows(doctor(deep=deep))
+        payload = doctor(deep=deep)
+        rows = doctor_rows(payload)
+        ready = sum(row["state"] == "READY" for row in rows)
+        st.metric("Components ready", f"{ready} / {len(rows)}")
         st.dataframe(rows, width="stretch", hide_index=True)
+        if payload.get("recommendations"):
+            with st.expander("Setup and repair commands", expanded=True):
+                st.caption("Run these commands in the same environment as PhageMine, then refresh this page.")
+                for recommendation in payload["recommendations"]:
+                    for command in recommendation.get("commands", []):
+                        st.code(command, language="shell")
+        st.button("Refresh environment status")
     except (OSError, ValueError, RuntimeError) as exc:
         st.error(f"Diagnostics failed: {exc}")
 
 elif page == "Run Monitor":
     st.subheader("Run monitor")
+    st.caption("Inspect checkpoint status for the selected folder. Refresh to see changes from a terminal run.")
     status = read_run_status(result_dir)
     st.metric("State", status["state"])
     st.write("Output directory:", status["output_directory"])
@@ -197,6 +254,8 @@ elif page == "Discovery Results":
         rows = tables[table_name]
         keyword = st.text_input("Filter rows")
         if keyword: rows = [r for r in rows if keyword.lower() in " ".join(map(str, r.values())).lower()]
+        if not rows:
+            st.info("No rows in this table. Check the result folder or choose another table.")
         st.dataframe(rows, width="stretch", hide_index=True)
     except ValueError as exc: st.error(str(exc))
 
@@ -205,7 +264,7 @@ elif page == "Figures":
     found = figures(result_dir)
     if not found: st.warning("No generated figures were found.")
     for path in found:
-        st.caption(str(path.relative_to(Path(result_dir))))
+        st.caption(str(path.relative_to(Path(result_dir).expanduser())))
         st.image(str(path), width="stretch")
         data_dir = path.parent.parent / "figure_data"
         if data_dir.is_dir():
@@ -218,9 +277,17 @@ else:
     else:
         files = downloadable_files(root)
         st.dataframe([{"file": str(p.relative_to(root)), "bytes": p.stat().st_size} for p in files], width="stretch", hide_index=True)
+        if files:
+            selected_file = st.selectbox("Download an individual file", files,
+                                         format_func=lambda path: str(path.relative_to(root)))
+            st.download_button("Download selected file", selected_file.read_bytes(), file_name=selected_file.name)
         if st.button("Prepare result ZIP"):
             buffer = io.BytesIO()
             resolved_root = root.resolve()
             with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
                 for path in export_files(root): archive.write(path, path.relative_to(resolved_root))
-            st.download_button("Download result directory as ZIP", buffer.getvalue(), file_name=f"{root.name}.zip", mime="application/zip")
+            st.session_state.result_zip = (str(root.resolve()), buffer.getvalue())
+        bundle = st.session_state.get("result_zip")
+        if bundle and bundle[0] == str(root.resolve()):
+            st.download_button("Download result directory as ZIP", bundle[1], file_name=f"{root.name}.zip", mime="application/zip")
+            st.caption("If result files change, prepare the ZIP again to include the updates.")

@@ -7,7 +7,7 @@ external bioinformatics executables from Conda channels and leaves the Python
 package installation explicit:
 
 ```bash
-git clone --branch v1.3.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
+git clone --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
@@ -60,6 +60,30 @@ MMseqs2, PyHMMER, DIAMOND, Mash and BLASTN (the Bioconda `blast` package). Do no
 compiled programs run on the host. `phagemine doctor` executes each program
 and reports `BROKEN` when a version probe fails, including dynamic-linker
 errors.
+
+## Open the graphical interface
+
+The standard installation includes the GUI and Streamlit; no separate GUI
+extra is needed. Activate your environment and run:
+
+```bash
+conda activate phagemine
+phagemine-gui
+```
+
+The launcher waits for the local server to be ready, then opens your default
+browser. It prints the address as a fallback if a browser cannot be opened.
+Keep the terminal open; Ctrl+C stops the server. If port 8501 is busy, another
+free port is selected automatically. Use `phagemine-gui --port 8502` for a
+specific port, or `phagemine-gui --no-browser` for server-only use. The same
+options work with `phagemine gui`.
+
+For an existing installation, install this updated checkout with
+`python -m pip install --upgrade .`. The `[gui]` extra remains accepted for
+compatibility with older installation commands. Database downloads and
+external-tool setup remain separate from installing the GUI.
+
+See the [GUI guide](gui.md) for results, downloads, and remote access.
 
 ## Required post-installation database setup
 

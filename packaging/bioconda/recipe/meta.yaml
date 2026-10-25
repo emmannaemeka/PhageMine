@@ -28,6 +28,7 @@ requirements:
     - setuptools <81
     - biopython >=1.85,<2
     - psutil >=5,<8
+    - streamlit >=1.49,<2
     - matplotlib-base >=3.7,<4
     - pyhmmer >=0.10,<0.13
     - pyrodigal =3.7.1
@@ -48,6 +49,7 @@ test:
     - phagemine.rna_features
     - phagemine.curation
   commands:
+    - phagemine-gui --help
     - phagemine --version
     - phagemine rna --help
     - phagemine curate --help

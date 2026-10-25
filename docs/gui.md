@@ -5,15 +5,24 @@
 Captured from this development branch on 2026-10-03, using the actual browser
 interface. This is not a screenshot certifying the published v1.2.0 release.
 
-Install the GUI in the same environment as PhageMine:
+The GUI is included in the standard PhageMine installation:
 
 ```bash
-python -m pip install '.[gui]'
+python -m pip install .
 phagemine-gui
 ```
 
-Open the displayed `http://127.0.0.1:8501` address on that computer. The default
-launcher listens on localhost and disables Streamlit usage telemetry. Uploaded
+Your default browser opens automatically after the server is ready. The
+printed address is usually `http://127.0.0.1:8501/`; if that port is busy the
+launcher selects a free port. If no desktop browser is available, copy the
+printed address. Keep the terminal open and press Ctrl+C to stop.
+
+Use `phagemine-gui --port 8502` to choose a port or
+`phagemine-gui --no-browser` to suppress browser opening. `phagemine gui`
+accepts the same options. The `[gui]` installation extra is retained for older
+commands, but is no longer necessary.
+
+The launcher listens on localhost and disables Streamlit usage telemetry. Uploaded
 FASTA files use temporary local storage during the run. Evidence-resource
 installation still requires downloads from their providers.
 
@@ -34,8 +43,10 @@ Use Environment / Database Status before a long run. Enable the operational
 format check to include deep Doctor checks. The table includes external
 executables, Python providers and workflow capabilities.
 
-The interface waits for the subprocess to finish and then displays its output.
-Live background execution, cancellation and concurrent jobs are not implemented.
+The interface streams console output while the subprocess runs and saves
+`gui_console.log` with the results. Leave the page open until completion; use
+**View results** or **Open latest results** to switch to the completed run.
+Background execution, cancellation and concurrent jobs are not implemented.
 Run Monitor reads saved checkpoints; recorded RUNNING state does not establish
 that an operating-system process is still alive.
 
@@ -52,7 +63,9 @@ produce warnings and prevent a completion claim. Both requires completed
 annotation and discovery outputs.
 
 Export / Downloads lists native artifacts, including the `.fsa` submission
-FASTA. Select Prepare result ZIP to build an archive on demand. Symbolic links
+FASTA. Download a selected file directly or select Prepare result ZIP to build
+an archive on demand. The prepared ZIP remains available across page refreshes
+in the same session while that result folder is selected. Symbolic links
 are excluded. ZIP preparation uses memory proportional to the compressed
 archive; copy the output directory directly for very large datasets.
 
@@ -67,3 +80,25 @@ this check; unresolved functions are expected.
 ## Development review pages
 
 Version 1.3.0.dev0 includes Review / Curation for evidence-backed annotation edits saved to a separate result directory, and RNA Features for feature tables and provider provenance. See [annotation workflows](annotation-workflows.md) for CLI equivalents and supported features.
+
+## Run on a remote workstation
+
+Start the GUI on the workstation without opening its browser:
+
+```bash
+phagemine-gui --no-browser --port 8501
+```
+
+From your own computer, forward the local port through SSH:
+
+```bash
+ssh -L 8501:127.0.0.1:8501 your-user@your-workstation
+```
+
+Open `http://127.0.0.1:8501/` locally. Paths and output folders refer to the
+workstation; use file upload for inputs from your own computer. This local
+application has no user authentication. Keep it on loopback or behind an
+authenticated access layer; it is not a public multi-user hosting service.
+
+If browser opening fails, use the printed link. A deliberately selected busy
+port fails with a clear message instead of opening another application's page.

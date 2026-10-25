@@ -8,7 +8,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Sequence
+from typing import Callable, Sequence
 
 from phagemine.gui import GUI_VERSION
 
@@ -84,23 +84,35 @@ class RunResult:
     output_directory: Path
 
 
-def execute(args: Sequence[str]) -> RunResult:
+def execute(args: Sequence[str], on_output: Callable[[str], None] | None = None) -> RunResult:
     """Run via the installed CLI semantics, without a shell."""
     command = list(args)
     executable = [sys.executable, "-m", "phagemine", *command[1:]] if command and command[0] == "phagemine" else command
-    completed = subprocess.run(executable, capture_output=True, text=True, check=False, shell=False)
+    if on_output is None:
+        completed = subprocess.run(executable, capture_output=True, text=True, check=False, shell=False)
+    else:
+        # Merge streams so progress written to stderr is visible immediately and
+        # neither pipe can fill up while the other is being read.
+        with subprocess.Popen(executable, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                              text=True, bufsize=1, shell=False) as process:
+            lines = []
+            for line in process.stdout:
+                lines.append(line)
+                on_output(line)
+            completed = subprocess.CompletedProcess(executable, process.wait(), "".join(lines), "")
     try:
         output = Path(command[command.index("--output") + 1])
     except (ValueError, IndexError):
         output = Path(".")
     result = RunResult(command, completed.stdout, completed.stderr, completed.returncode, output)
-    if completed.returncode == 0:
+    if completed.returncode == 0 or output.is_dir():
         write_gui_metadata(output, result)
     return result
 
 
 def write_gui_metadata(output: Path, result: RunResult) -> None:
     output.mkdir(parents=True, exist_ok=True)
+    (output / "gui_console.log").write_text(result.stdout + result.stderr)
     payload = {"interface": "PhageMine GUI", "gui_version": GUI_VERSION,
                "executed_command": result.command, "exit_code": result.exit_code,
                "recorded_at": datetime.now(timezone.utc).isoformat()}
