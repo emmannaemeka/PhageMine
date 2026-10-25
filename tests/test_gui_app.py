@@ -83,3 +83,26 @@ def test_failed_run_displays_live_diagnostic(tmp_path, monkeypatch):
     assert any("exited with code 2" in item.value for item in app.error)
     assert any("dependency could not start" in code.value for code in app.code)
     assert "last_completed_run" not in app.session_state
+
+
+def test_assistant_search_and_scope_change(tmp_path):
+    (tmp_path / 'annotation.tsv').write_text('protein_id\tproduct\tstart\tend\nPM_1\tmajor capsid protein\t1\t99\n')
+    app = AppTest.from_file(str(APP), default_timeout=15).run()
+    app.sidebar.text_input[0].set_value(str(tmp_path))
+    app.sidebar.radio[0].set_value('Ask PhageMine').run()
+    app.chat_input[0].set_value('Find the capsid gene').run()
+    assert not app.exception
+    assert any('Found 1 matching' in m.value for m in app.markdown)
+    assert len(app.dataframe) == 1
+    app.sidebar.text_input[0].set_value(str(tmp_path / 'other')).run()
+    assert not app.exception
+    assert len(app.dataframe) == 0
+
+
+def test_assistant_annotation_handoff():
+    app = AppTest.from_file(str(APP), default_timeout=15).run()
+    app.sidebar.radio[0].set_value('Ask PhageMine').run()
+    app.chat_input[0].set_value('Annotate my genome').run()
+    next(b for b in app.button if b.label == 'Upload genome and start annotation').click().run()
+    assert not app.exception
+    assert app.sidebar.radio[0].value == 'Home / New Analysis'
