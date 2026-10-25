@@ -1,7 +1,6 @@
-"""Optional local graphical interface for PhageMine.
+"""Bundled local graphical interface for PhageMine.
 
-This package deliberately does not import Streamlit so core installations can
-import :mod:`phagemine.gui` without installing GUI dependencies.
+Service modules keep imports light; Streamlit loads when the GUI is launched.
 """
 
 GUI_VERSION = "0.1"

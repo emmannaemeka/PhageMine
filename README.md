@@ -67,7 +67,14 @@ comparative references. Prepared databases require additional disk space beyond
 the download sizes.
 
 See the [installation guide](docs/installation.md) for platform requirements
-and troubleshooting.
+and troubleshooting. The GUI is included in the normal installation:
+
+```bash
+phagemine-gui
+```
+
+Your default browser opens when the local server is ready. Keep the terminal
+open while using the interface. See the [GUI guide](docs/gui.md).
 
 ## Annotate a genome
 

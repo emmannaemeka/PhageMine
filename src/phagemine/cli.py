@@ -35,7 +35,9 @@ Individual installers are also available:
     subcommands = parser.add_subparsers(dest="command")
     from .workflow_cli import add_commands
     add_commands(subcommands)
-    gui_command = subcommands.add_parser("gui", help="Launch the optional local graphical interface")
+    gui_command = subcommands.add_parser("gui", help="Open the bundled local graphical interface")
+    gui_command.add_argument("--port", type=int, help="Local GUI port")
+    gui_command.add_argument("--no-browser", action="store_true", help="Start without opening a browser")
     doctor_command = subcommands.add_parser("doctor", help="Validate executables and registered evidence resources")
     doctor_command.add_argument("--output", help="Optional JSON report path")
     doctor_command.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
@@ -201,7 +203,10 @@ Individual installers are also available:
         return 0
     if args.command == "gui":
         from .gui.launcher import main as gui_main
-        return gui_main([])
+        gui_args = ["--port", str(args.port)] if args.port is not None else []
+        if args.no_browser:
+            gui_args.append("--no-browser")
+        return gui_main(gui_args)
     if args.command == "doctor":
         from .preflight import doctor, doctor_text, write_doctor_report
         payload = write_doctor_report(args.output, deep=args.deep) if args.output else doctor(deep=args.deep)

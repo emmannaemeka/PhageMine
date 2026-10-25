@@ -29,6 +29,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
+    "streamlit>=1.49,<2",
     "biopython>=1.85,<2",
     "psutil>=5,<8",
     "matplotlib>=3.7,<4",
@@ -47,7 +48,8 @@ Changelog = "https://github.com/emmannaemeka/PhageMine/blob/main/CHANGELOG.md"
 Documentation = "https://github.com/emmannaemeka/PhageMine/blob/main/docs/installation.md"
 
 [project.optional-dependencies]
-gui = ["streamlit>=1.49,<2"]
+# Retained so existing installation commands using [gui] keep working.
+gui = []
 test = [
     "biopython>=1.85,<2",
     "build>=1,<2",

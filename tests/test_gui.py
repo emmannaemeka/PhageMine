@@ -84,11 +84,11 @@ def test_missing_and_invalid_outputs(tmp_path):
         annotation_records(tmp_path)
 
 
-def test_optional_dependency_message(monkeypatch, capsys):
+def test_missing_dependency_repair_message(monkeypatch, capsys):
     from phagemine.gui import launcher
     monkeypatch.setattr(launcher.importlib.util, "find_spec", lambda name: None)
     assert launcher.main() == 2
-    assert 'pip install "phagemine[gui]"' in capsys.readouterr().err
+    assert 'pip install --upgrade "phagemine[gui]"' in capsys.readouterr().err
 
 
 def test_launcher_binds_to_localhost(monkeypatch):
@@ -109,7 +109,8 @@ def test_launcher_binds_to_localhost(monkeypatch):
     monkeypatch.setitem(sys.modules, "streamlit.web.cli", cli)
     monkeypatch.setattr(launcher.importlib.util, "find_spec", lambda name: True)
     monkeypatch.setattr(sys, "argv", ["phagemine-gui"])
-    assert launcher.main([]) == 0
+    monkeypatch.setattr(launcher, "available_port", lambda requested: 8501)
+    assert launcher.main(["--no-browser"]) == 0
     assert "--server.address=127.0.0.1" in commands[0]
 
 

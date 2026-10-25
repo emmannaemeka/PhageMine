@@ -36,6 +36,7 @@ jobs:
           python -m venv "${{ runner.temp }}/phagemine-wheel"
           "${{ runner.temp }}/phagemine-wheel/bin/python" -m pip install dist/*.whl
           "${{ runner.temp }}/phagemine-wheel/bin/python" -m pip check
+          "${{ runner.temp }}/phagemine-wheel/bin/phagemine-gui" --help
       - name: Execute installed package outside checkout
         run: |
           "${{ runner.temp }}/phagemine-wheel/bin/python" tools/smoke_installed.py --input examples/demo_phage.fasta --output "${{ runner.temp }}/installed-smoke"
@@ -53,5 +54,5 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: python -m pip install ".[test,gui]"
-      - run: python -m pytest -q tests/test_gui.py tests/test_gui_app.py
+      - run: python -m pip install ".[test]"
+      - run: python -m pytest -q tests/test_gui.py tests/test_gui_launcher.py tests/test_gui_app.py
