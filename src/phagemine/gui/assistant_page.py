@@ -113,12 +113,15 @@ def render() -> None:
         st.warning("Demo mode: analyses use PhageMine's fixture gene caller and mock evidence. Results are not biology.")
     if provider is None:
         st.error(st.session_state.assistant_provider_error)
-        st.caption("Install with `pip install 'phagemine[assistant]'`, set ANTHROPIC_API_KEY, then restart `phagemine gui`.")
+    else:
+        local = str(getattr(provider, "name", "")).startswith("ollama:")
+        st.caption(f"Model: {provider.name}" + (" · runs on this computer; nothing is sent online" if local else ""))
     if project is None:
         st.info("Create a project in the sidebar to begin.")
         return
     with st.expander("Data and privacy", expanded=False):
-        st.markdown("Analyses run on this computer. To understand your requests, the assistant sends your messages "
+        st.markdown("Analyses run on this computer. With a local Ollama model, nothing leaves it. With a cloud model, "
+                    "to understand your requests the assistant sends your messages "
                     "and tool results (file names, gene IDs, coordinates, product names, database hits and scores, "
                     "NCBI messages) to the language model provider. Genome and protein sequences are not sent unless "
                     "you ask to see one. Every payload is logged in `outbound.jsonl` in the project folder. "

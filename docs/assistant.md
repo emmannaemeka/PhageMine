@@ -6,23 +6,38 @@ The **Ask PhageMine** page is the first page of `phagemine gui`. A researcher up
 
 ## Deploy in one day
 
-**1. Install (10 minutes)**
+**1. Install**
 
 ```bash
-pip install "phagemine[assistant]"
+pip install "phagemine[assistant]"     # the extra is only needed for Anthropic models
 phagemine databases install --all      # evidence databases; can take hours to download
 phagemine doctor                       # confirm tools and databases
 ```
 
 Install MMseqs2 (for example `conda install -c bioconda mmseqs2`). Without it, comparisons can only detect identical proteins, and the assistant will ask before proceeding that way. Install NCBI `table2asn` if you want official validation of submission packages.
 
-**2. Set the model key**
+**2. Choose a language model**
+
+The assistant needs a language model to understand requests. Choose one:
+
+| Option | Cost | Data leaves the computer? | Setup |
+| --- | --- | --- | --- |
+| **Ollama, local** (default when running) | Free | No | Install [Ollama](https://ollama.com), then `ollama pull qwen3:8b`. Keep Ollama open. |
+| **Free cloud tier** (for example Google Gemini) | Free within daily limits | Yes; free tiers may use your data to improve their products | See below |
+| **Anthropic Claude** | Paid per use; [research credits](https://support.claude.com/en/articles/11199177-anthropics-ai-for-science-program) available on application | Yes | `export ANTHROPIC_API_KEY=...` |
+
+*Local model.* PhageMine finds a running Ollama automatically and picks the best installed model in this order: `qwen3:32b`, `qwen3:30b-a3b`, `qwen3:14b`, `qwen3:8b`, `qwen3:4b`. Bigger is more reliable at multi-step requests but needs more memory: `qwen3:8b` runs on a 16 GB laptop (slowly without a GPU); `qwen3:14b` or larger is better with a GPU. Override with `PHAGEMINE_ASSISTANT_MODEL=qwen3:14b`.
+
+*Free cloud tier (OpenAI-compatible).* For Google Gemini, create a free key in Google AI Studio, then:
 
 ```bash
-export ANTHROPIC_API_KEY=...                      # from console.anthropic.com
-export PHAGEMINE_ASSISTANT_MODEL=claude-sonnet-5-5   # optional; this is the default
-export PHAGEMINE_PROJECTS=~/PhageMine/projects       # optional; this is the default
+export PHAGEMINE_ASSISTANT_PROVIDER=openai-compatible
+export PHAGEMINE_ASSISTANT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+export PHAGEMINE_ASSISTANT_MODEL=<a free-tier Flash model ID from AI Studio>
+export PHAGEMINE_ASSISTANT_API_KEY=<your Gemini key>
 ```
+
+Other services with this format work the same way (OpenRouter: `https://openrouter.ai/api/v1`; Groq: `https://api.groq.com/openai/v1`). One request to the assistant can make several model calls, so low daily limits run out quickly.
 
 **3. Start**
 
@@ -30,7 +45,7 @@ export PHAGEMINE_PROJECTS=~/PhageMine/projects       # optional; this is the def
 phagemine gui
 ```
 
-The browser opens on **Ask PhageMine**. Create a project in the sidebar, add FASTA files, and type a request.
+The browser opens on **Ask PhageMine** and shows which model is in use. Create a project in the sidebar, add FASTA files, and type a request.
 
 **4. Try it safely first (optional)**
 
@@ -63,7 +78,7 @@ Analyses run in the background. The page shows progress, and when they end the a
 | Agent loop | `assistant/agent.py` | Model, tools, model, until an answer. A compact project ledger is rebuilt every turn. |
 | Grounding check | `assistant/grounding.py` | Before display: protein and job IDs must appear in tool results, "completed" requires a COMPLETE job, and "novel" is refused. One automatic retry, then a visible warning. |
 | NCBI support | `assistant/ncbi.py` | Error triage, guarded corrections, `phagemine revise`. |
-| Model | `assistant/llm.py` | Anthropic provider; any provider returning the same message shape can replace it. |
+| Model | `assistant/llm.py` | Ollama (local, free), any OpenAI-compatible service, or Anthropic, behind one interface. |
 | Page | `gui/assistant_page.py` | Chat, uploads, job panel, downloads. |
 
 ### Comparisons
@@ -87,7 +102,7 @@ PhageMine never submits anything to NCBI.
 
 ## Data sent to the model provider
 
-Each turn sends your messages, a project summary, and tool results: file names, gene IDs, coordinates, product names, database hits and scores, and NCBI messages. Genome and protein sequences are not sent unless you ask to see one. Every outbound payload is logged in the project's `outbound.jsonl`. Check your provider's current data-retention terms before using unpublished genomes.
+With a local Ollama model nothing leaves the computer. With a cloud model, each turn sends your messages, a project summary, and tool results: file names, gene IDs, coordinates, product names, database hits and scores, and NCBI messages. Genome and protein sequences are not sent unless you ask to see one. Every outbound payload is logged in the project's `outbound.jsonl`. Check your provider's current data-retention terms before using unpublished genomes.
 
 ## Limitations
 
@@ -95,7 +110,7 @@ Each turn sends your messages, a project summary, and tool results: file names, 
 - The grounding check verifies IDs, completion claims and novelty wording. It does not verify every number or sentence; evidence tables remain the authority.
 - The NCBI error catalogue is keyword-based. Extend `CATALOGUE` in `assistant/ncbi.py` with messages from your real submissions.
 - One researcher per project. Concurrent annotations share the machine's CPUs.
-- No local-model provider is included yet.
+- Local models are less reliable than large cloud models at multi-step requests. Measure with your model before relying on it.
 
 ## Tests
 

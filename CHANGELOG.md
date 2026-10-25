@@ -14,6 +14,8 @@
   applied through `phagemine revise` only after researcher approval; product
   names cannot become more specific than recorded evidence.
 - New deterministic comparison gene-map figure with its source table.
+- Model providers: free local models through Ollama (auto-detected), any
+  OpenAI-compatible service (for example free cloud tiers), or Anthropic.
 - No change to annotation, gene calling or evidence handling.
 
 ## 1.3.2 — 2026-10-13

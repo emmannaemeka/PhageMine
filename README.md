@@ -86,13 +86,9 @@ answers are checked against recorded outputs before they are shown. It can also
 prepare an NCBI submission package and propose guarded fixes for validator
 errors you paste back.
 
-```bash
-pip install "phagemine[assistant]"
-export ANTHROPIC_API_KEY=...
-phagemine gui
-```
-
-See the [assistant guide](docs/assistant.md) for deployment, data flow and limits.
+It works with a free local model through [Ollama](https://ollama.com)
+(`ollama pull qwen3:8b`, then `phagemine gui`), with free cloud tiers, or with
+Anthropic Claude. See the [assistant guide](docs/assistant.md) for deployment, data flow and limits.
 
 ## Annotate a genome
 
