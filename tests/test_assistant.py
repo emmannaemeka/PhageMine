@@ -205,6 +205,8 @@ def test_ncbi_errors_are_routed_to_outcomes():
     outcomes = [m["outcome"] for m in result["messages"]]
     assert outcomes == [ncbi.NEEDS_REANALYSIS, ncbi.FIXABLE_METADATA, ncbi.FIXABLE_LABEL, ncbi.UNKNOWN]
     assert result["messages"][0]["protein_ids"] == ["PM_000004"]
+    assert any("complete corrected package" in step for step in result["resubmission_steps"])
+    assert result["error_explanations"]["all submissions"].endswith("/genbank/validation/")
 
 
 def test_product_names_never_become_more_specific():

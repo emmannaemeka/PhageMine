@@ -35,6 +35,17 @@ FIXABLE_METADATA = "FIXABLE_METADATA"
 UNKNOWN = "UNKNOWN"
 
 
+# NCBI GenBank Submission Portal FAQ on correcting a submission with status Error.
+ERROR_EXPLANATIONS = {"all submissions": "https://www.ncbi.nlm.nih.gov/genbank/validation/",
+                      "virus submissions": "https://www.ncbi.nlm.nih.gov/genbank/sequencecheck/virus/"}
+RESUBMISSION_STEPS = (
+    "A submission can be edited only while its status is Error: open it at https://submit.ncbi.nlm.nih.gov/subs/genbank/ and press Fix.",
+    "If there is no Fix button, click the SUB# on that page and edit through the Sequencing Technology, Sequences, Source Modifiers or References tabs.",
+    "Upload the complete corrected package (every sequence), never only the corrected sequence.",
+    "The page shows 'GenBank: Error' until you click Submit; after that the status returns to Submitted.",
+)
+
+
 @dataclass(frozen=True)
 class Rule:
     outcome: str
@@ -78,7 +89,8 @@ def classify(text: str, limit: int = 60) -> dict:
     for item in items:
         counts[item["outcome"]] = counts.get(item["outcome"], 0) + 1
     return {"messages": items[:limit], "total_messages": len(items), "counts": counts,
-            "method": "keyword catalogue; unknown messages are not interpreted"}
+            "method": "keyword catalogue; unknown messages are not interpreted",
+            "error_explanations": ERROR_EXPLANATIONS, "resubmission_steps": RESUBMISSION_STEPS}
 
 
 def _norm(text: str | None) -> str:

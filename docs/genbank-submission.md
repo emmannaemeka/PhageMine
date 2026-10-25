@@ -23,6 +23,20 @@ nucleotide FASTA requires a new PhageMine analysis because gene calls and
 downstream evidence may change. Internal validation is local pre-submission
 validation only; it is not NCBI acceptance.
 
+## When NCBI returns a submission with errors
+
+A submitted genome can be edited only while its status in the GenBank
+Submission Portal is **Error**. Press **Fix**; if there is no Fix button,
+click the submission's SUB# and use the Sequencing Technology, Sequences,
+Source Modifiers or References tabs. Paste NCBI's messages into Ask PhageMine:
+it sorts them into fixable wording, missing source details, and problems
+needing gene-model review, and prepares a revised package after you approve.
+Upload the **complete** revised package, every sequence, never only the
+corrected one, then click **Submit**; the status stays Error until you do.
+NCBI explains individual errors at
+[genbank/validation](https://www.ncbi.nlm.nih.gov/genbank/validation/) and,
+for viruses, [genbank/sequencecheck/virus](https://www.ncbi.nlm.nih.gov/genbank/sequencecheck/virus/).
+
 ## NCBI requirements review
 
 Every package is reviewed against published NCBI and INSDC requirements
