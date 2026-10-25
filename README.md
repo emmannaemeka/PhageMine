@@ -76,6 +76,73 @@ phagemine-gui
 Your default browser opens when the local server is ready. Keep the terminal
 open while using the interface. See the [GUI guide](docs/gui.md).
 
+### Install on Windows with WSL
+
+You can use PhageMine on a **Windows computer through WSL**, which runs Ubuntu
+underneath. The GUI opens in your normal **Windows browser**. The full pipeline
+is not currently supported on native Windows; run the installation and analysis
+commands inside Ubuntu, not PowerShell or Windows Command Prompt.
+
+1. Open **PowerShell as Administrator** and install Ubuntu through WSL:
+
+   ```powershell
+   wsl --install -d Ubuntu
+   ```
+
+   Restart Windows if prompted, then open **Ubuntu** from the Start menu and
+   create your Linux username and password. See Microsoft's
+   [WSL installation guide](https://learn.microsoft.com/windows/wsl/install).
+
+2. In the **Ubuntu terminal**, install Git and Miniforge. Skip the Miniforge
+   download and installation if Conda is already installed inside Ubuntu:
+
+   ```bash
+   sudo apt update
+   sudo apt install -y git curl ca-certificates
+   curl -fL "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-$(uname -m).sh" -o /tmp/miniforge.sh
+   bash /tmp/miniforge.sh -b -p "$HOME/miniforge3"
+   source "$HOME/miniforge3/etc/profile.d/conda.sh"
+   conda init bash
+   ```
+
+   Use Linux Conda inside Ubuntu, even if you already have Conda on Windows.
+   The installer above selects your Linux CPU architecture; availability of
+   PhageMine's external packages still depends on that architecture.
+
+3. Install the current GitHub version and its dependencies **inside Ubuntu**:
+
+   ```bash
+   cd ~
+   git clone https://github.com/emmannaemeka/PhageMine.git
+   cd PhageMine
+   conda env create --file environment.yml
+   conda activate phagemine
+   python -m pip install .
+   phagemine doctor
+   phagemine databases install --all
+   phagemine doctor --deep
+   ```
+
+   Ensure the required tools and evidence resources report ready before using
+   them. Database preparation needs additional disk space beyond the downloads;
+   keep at least 15–20 GiB free for the complete setup.
+
+4. Start the GUI from the same Ubuntu terminal:
+
+   ```bash
+   phagemine-gui
+   ```
+
+   If WSL does not open your Windows browser automatically, open
+   [http://localhost:8501](http://localhost:8501) manually. Use the port printed
+   by the launcher if it selects a different one. Keep the Ubuntu terminal open
+   while using the GUI; press **Ctrl+C** to stop it.
+
+For later sessions, open Ubuntu and run `conda activate phagemine`, followed by
+`phagemine-gui`. Windows files are accessible under `/mnt/c/`; keeping large
+analysis inputs and results in your Ubuntu home directory avoids cross-filesystem
+I/O overhead. WSL-specific end-to-end testing is not part of the current CI matrix.
+
 ## Annotate a genome
 
 Supply a single-genome nucleotide FASTA file:
