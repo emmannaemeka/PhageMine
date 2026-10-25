@@ -22,9 +22,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-from . import jobs
-from .ncbi import (FIXABLE_LABEL, REVISABLE_FIELDS, check_metadata, check_product, classify,
-                   evidence_texts)
+from . import approvals, jobs
+from .ncbi import CURATION_FIELDS, REVISABLE_FIELDS, check_metadata, check_product, classify
 from .store import FASTA_SUFFIXES, Project, now, safe_name
 
 ROW_LIMIT = 50
@@ -83,15 +82,47 @@ def execute(ctx: ToolContext, name: str, arguments: dict | None) -> dict:
     arguments = dict(arguments or {})
     unexpected = set(arguments) - set(spec.parameters)
     missing = [key for key in spec.required if arguments.get(key) in (None, "", [])]
-    if unexpected or missing:
-        return {"ok": False, "error": "Invalid arguments: " + "; ".join(
-            ([f"unexpected {', '.join(sorted(unexpected))}"] if unexpected else []) +
-            ([f"missing {', '.join(missing)}"] if missing else []))}
+    problems = ([f"unexpected {', '.join(sorted(unexpected))}"] if unexpected else []) + \
+               ([f"missing {', '.join(missing)}"] if missing else [])
+    for key, value in arguments.items():
+        if key in spec.parameters:
+            problems += _check_value(key, value, spec.parameters[key])
+    if problems:
+        return {"ok": False, "error": "Invalid arguments: " + "; ".join(problems)}
     try:
         result = spec.handler(ctx, **arguments)
     except (ValueError, OSError, KeyError, json.JSONDecodeError) as exc:
         return {"ok": False, "error": str(exc)}
     return {"ok": True, **result}
+
+
+_TYPES = {"string": str, "integer": int, "boolean": bool, "array": list, "object": dict}
+
+
+def _check_value(name: str, value, schema: dict) -> list[str]:
+    """Runtime check of the JSON-schema subset the tools use: type, enum, bounds, items."""
+    expected = schema.get("type")
+    if value is None:
+        return [f"{name} must not be null"]
+    kind = _TYPES.get(expected)
+    if kind and (not isinstance(value, kind) or (kind is int and isinstance(value, bool))):
+        return [f"{name} must be {expected}"]
+    problems = []
+    if "enum" in schema and value not in schema["enum"]:
+        problems.append(f"{name} must be one of {', '.join(map(str, schema['enum']))}")
+    if expected == "integer":
+        if "minimum" in schema and value < schema["minimum"]:
+            problems.append(f"{name} must be at least {schema['minimum']}")
+        if "maximum" in schema and value > schema["maximum"]:
+            problems.append(f"{name} must be at most {schema['maximum']}")
+    if expected == "array":
+        if len(value) < schema.get("minItems", 0):
+            problems.append(f"{name} needs at least {schema['minItems']} item(s)")
+        for index, item in enumerate(value):
+            problems += _check_value(f"{name}[{index}]", item, schema.get("items", {}))
+    if expected == "string" and len(value) > schema.get("maxLength", 20000):
+        problems.append(f"{name} is too long")
+    return problems
 
 
 # ---------------------------------------------------------------- helpers ----
@@ -110,9 +141,11 @@ def _json(path: Path, default):
         return default
 
 
-def _records(ctx: ToolContext, sample: str) -> list[dict]:
+def _records(ctx: ToolContext, sample: str, run: str | Path | None = None) -> list[dict]:
+    """Annotation rows for a sample: from ``run`` when given (for example the exact run a
+    comparison used), otherwise from the sample's latest completed annotation."""
     from phagemine.gui.services.results import annotation_records
-    run = ctx.project.run_dir(sample)
+    run = ctx.project.contained(run) if run else ctx.project.run_dir(sample)
     rows = annotation_records(run)
     for row in rows:
         row["sample"] = sample
@@ -198,7 +231,7 @@ def check_environment(ctx: ToolContext) -> dict:
             "databases": databases or "none registered", "capabilities": payload.get("capabilities", {}),
             "demo_mode": demo_mode(),
             "notes": ["Missing databases reduce evidence; they do not stop annotation.",
-                      "Without MMseqs2, comparisons can only detect identical proteins."]}
+                      "Without MMseqs2, comparisons find homologs only through shared PHROG assignments and identical sequences."]}
 
 
 @tool("get_job_status", "read", "Status, progress stage, error and last log lines of a job.",
@@ -319,18 +352,57 @@ def _links(ctx: ToolContext, record: dict) -> list[dict]:
     return links
 
 
-def _homologs_for(ctx: ToolContext, sample: str, protein_id: str) -> list[dict] | None:
+def _homologs_for(ctx: ToolContext, sample: str, protein_id: str) -> list[dict] | dict | None:
     try:
         record = _comparison(ctx, None)
     except ValueError:
         return None
     if sample not in record.get("run_dirs", {}):
         return None
-    return [l for l in _links(ctx, record) if l["sample_a"] == sample and l["protein_a"] == protein_id][:20]
+    if ctx.project.contained(record["run_dirs"][sample]) != ctx.project.run_dir(sample):
+        return {"note": f"The latest comparison used an earlier annotation of {sample}; re-run the comparison to see homologs for the current one."}
+    return [p for p in _canonical_pairs(ctx, record, *_pair_of(record, sample)) if p["protein_a"] == protein_id][:20]
+
+
+def _pair_of(record: dict, sample: str) -> tuple[str, str]:
+    other = next(s for s in record["samples"] if s != sample)
+    return sample, other
+
+
+def _canonical_pairs(ctx: ToolContext, record: dict, a: str, b: str) -> list[dict]:
+    """Deduplicated A-B protein pairs from both directions, with which direction(s) found each."""
+    pairs: dict[tuple[str, str], dict] = {}
+    for link in _links(ctx, record):
+        if (link["sample_a"], link["sample_b"]) == (a, b):
+            key, direction = (link["protein_a"], link["protein_b"]), f"{a}->{b}"
+        elif (link["sample_a"], link["sample_b"]) == (b, a):
+            key, direction = (link["protein_b"], link["protein_a"]), f"{b}->{a}"
+        else:
+            continue
+        entry = pairs.setdefault(key, {"protein_a": key[0], "protein_b": key[1], "directions": set(), "methods": set(),
+                                       "identity": link["identity"]})
+        entry["directions"].add(direction)
+        entry["methods"].add(link["method"])
+    result = []
+    for entry in pairs.values():
+        directions = entry.pop("directions")
+        entry["support"] = "both" if len(directions) == 2 else next(iter(directions))
+        entry["methods"] = sorted(entry["methods"])
+        result.append(entry)
+    return sorted(result, key=lambda e: (e["protein_a"], e["protein_b"]))
+
+
+def _method_status(ctx: ToolContext, record: dict) -> dict:
+    executed = bool(record.get("mmseqs2_executed"))
+    status = {"mmseqs2_used": executed, "mmseqs_searches": record.get("mmseqs_searches")}
+    if not executed:
+        status["warning"] = ("MMseqs2 searches did not run successfully for this comparison, so homologs come only from "
+                             "shared PHROG assignments and identical sequences. Shared counts are a lower bound.")
+    return status
 
 
 @tool("get_shared_genes", "read",
-      "Which proteins two compared genomes share, counted from BOTH genomes' side, with the detection method (MMseqs2 or exact sequence identity) and how many shared proteins have unknown function.",
+      "Which proteins two compared genomes share: deduplicated protein pairs found in either direction (with which direction found each), counts of matched proteins in each genome, whether MMseqs2 actually ran, and how many shared proteins have unknown function. Uses the exact annotation runs the comparison was made from.",
       {"comparison_job_id": {"type": "string", "description": "Omit to use the latest completed comparison"},
        "sample_a": {"type": "string"}, "sample_b": {"type": "string"},
        "unknown_function_only": {"type": "boolean"},
@@ -344,35 +416,30 @@ def get_shared_genes(ctx: ToolContext, comparison_job_id: str | None = None, sam
     for name in (a, b):
         if name not in samples:
             raise ValueError(f"{name} was not part of comparison {record['id']} ({', '.join(samples)})")
-    annotations = {name: {r["protein_id"]: r for r in _records(ctx, name)} for name in (a, b)}
-    links = [l for l in _links(ctx, record) if {l["sample_a"], l["sample_b"]} == {a, b}]
-    shared = {a: set(), b: set()}
+    runs = {name: record["run_dirs"][name] for name in (a, b)}
+    annotations = {name: {r["protein_id"]: r for r in _records(ctx, name, runs[name])} for name in (a, b)}
+    pairs = _canonical_pairs(ctx, record, a, b)
+    matched = {a: {p["protein_a"] for p in pairs}, b: {p["protein_b"] for p in pairs}}
     rows = []
-    for link in links:
-        shared[link["sample_a"]].add(link["protein_a"])
-        shared[link["sample_b"]].add(link["protein_b"])
-        if link["sample_a"] == a:
-            pa, pb = annotations[a].get(link["protein_a"], {}), annotations[b].get(link["protein_b"], {})
-            rows.append({f"{a}_protein": link["protein_a"], f"{a}_product": pa.get("product"),
-                         f"{a}_functional_state": pa.get("functional_state"),
-                         f"{b}_protein": link["protein_b"], f"{b}_product": pb.get("product"),
-                         "method": link["method"], "identity": link["identity"]})
+    for pair in pairs:
+        pa, pb = annotations[a].get(pair["protein_a"], {}), annotations[b].get(pair["protein_b"], {})
+        rows.append({f"{a}_protein": pair["protein_a"], f"{a}_product": pa.get("product"),
+                     f"{a}_functional_state": pa.get("functional_state"),
+                     f"{b}_protein": pair["protein_b"], f"{b}_product": pb.get("product"),
+                     "support": pair["support"], "methods": pair["methods"], "identity": pair["identity"]})
     if unknown_function_only:
         rows = [r for r in rows if r[f"{a}_functional_state"] in UNKNOWN_STATES]
-    methods = Counter(l["method"] for l in links)
-    unknown = sum(1 for pid in shared[a] if annotations[a].get(pid, {}).get("functional_state") in UNKNOWN_STATES)
+    unknown = sum(1 for pid in matched[a] if annotations[a].get(pid, {}).get("functional_state") in UNKNOWN_STATES)
     limit = max(1, min(int(limit or ROW_LIMIT), ROW_LIMIT))
-    result = {"comparison_job_id": record["id"], "sample_a": a, "sample_b": b,
-              "proteins_total": {a: len(annotations[a]), b: len(annotations[b])},
-              "proteins_with_homolog_in_other": {a: len(shared[a]), b: len(shared[b])},
-              "shared_with_unknown_function_in_" + a: unknown,
-              "detection_methods": dict(methods), "mmseqs2_used": record.get("mmseqs2_available", False),
-              "thresholds": "MMseqs2: E-value <= 1e-3, query and target coverage >= 0.5 (PhageMine compare defaults)",
-              "pairs_returned": min(len(rows), limit), "pairs_total": len(rows), "pairs": rows[:limit]}
-    if not record.get("mmseqs2_available"):
-        result["warning"] = ("MMseqs2 was not available: only identical protein sequences were detected as shared, "
-                             "so these counts are a lower bound.")
-    return result
+    stale = [n for n in (a, b) if ctx.project.annotation_runs().get(n, {}).get("output") not in (None, runs[n])]
+    return {"comparison_job_id": record["id"], "sample_a": a, "sample_b": b, "source_runs": runs,
+            "proteins_total": {a: len(annotations[a]), b: len(annotations[b])},
+            "proteins_with_homolog_in_other": {a: len(matched[a]), b: len(matched[b])},
+            "distinct_pairs": len(pairs), "shared_with_unknown_function_in_" + a: unknown,
+            **_method_status(ctx, record),
+            "thresholds": "MMseqs2: E-value <= 1e-3, query and target coverage >= 0.5 (PhageMine compare defaults)",
+            "pairs_returned": min(len(rows), limit), "pairs_total": len(rows), "pairs": rows[:limit],
+            **({"stale_note": f"{', '.join(stale)} has been re-annotated since this comparison; results describe the earlier run."} if stale else {})}
 
 
 @tool("get_submission_status", "read",
@@ -446,7 +513,7 @@ def start_annotation(ctx: ToolContext, files: list[str], threads: int | None = N
       "Compare 2-10 annotated genomes in both directions. Accepts completed sample names and/or IDs of annotation jobs still running (it waits for them). Returns a job ID.",
       {"samples": {"type": "array", "items": {"type": "string"}},
        "annotation_job_ids": {"type": "array", "items": {"type": "string"}},
-       "allow_exact_only": {"type": "boolean", "description": "Proceed without MMseqs2, detecting only identical proteins. Only if the researcher agrees."}})
+       "allow_exact_only": {"type": "boolean", "description": "Proceed without MMseqs2 (homologs only from shared PHROG assignments and identical sequences). Works only after the researcher presses Approve on the request this tool creates."}})
 def start_comparison(ctx: ToolContext, samples: list[str] | None = None, annotation_job_ids: list[str] | None = None,
                      allow_exact_only: bool = False) -> dict:
     project = ctx.project
@@ -465,9 +532,18 @@ def start_comparison(ctx: ToolContext, samples: list[str] | None = None, annotat
     if not 2 <= len(run_dirs) <= 10:
         raise ValueError("A comparison needs 2 to 10 genomes")
     mmseqs = shutil.which("mmseqs")
-    if not mmseqs and not allow_exact_only:
-        raise ValueError("MMseqs2 is not installed, so only identical proteins could be detected as shared. "
-                         "Ask the researcher whether to install MMseqs2 or proceed with exact matching only.")
+    consent = None
+    if not mmseqs:
+        consent = approvals.unused_approved(project, "exact_only_comparison") if allow_exact_only else None
+        if consent is None:
+            if not any(r["kind"] == "exact_only_comparison" for r in approvals.pending(project)):
+                approvals.request(project, "exact_only_comparison", {"samples": sorted(run_dirs)},
+                                  "Compare without MMseqs2? Homologs will come only from shared PHROG assignments "
+                                  "and identical sequences, so shared-gene counts will be a lower bound.")
+            raise ValueError("MMseqs2 is not installed. This needs the researcher's approval: an Approve button is now "
+                             "shown in the chat. Explain the limitation and ask them to approve or install MMseqs2; "
+                             "after they approve, call start_comparison again with allow_exact_only=true.")
+        approvals.consume(project, consent["id"])
     names = list(run_dirs)
     directions, steps = [], []
     for query in names:
@@ -480,7 +556,8 @@ def start_comparison(ctx: ToolContext, samples: list[str] | None = None, annotat
         steps.append(step)
     record = jobs.create_job(project, "comparison", steps, output="runs/{job_id}", depends_on=depends,
                              meta={"samples": names, "run_dirs": run_dirs, "directions": directions,
-                                   "mmseqs2_available": bool(mmseqs)})
+                                   "mmseqs2_available": bool(mmseqs),
+                                   "exact_only_approval": consent["id"] if consent else None})
     return {"job_id": record["id"], "samples": names, "waiting_for": depends, "status": record["status"],
             "mmseqs2_available": bool(mmseqs)}
 
@@ -510,8 +587,8 @@ def make_comparison_figure(ctx: ToolContext, comparison_job_id: str | None = Non
     adjacent = [l for l in links if abs(record["samples"].index(l["sample_a"]) - record["samples"].index(l["sample_b"])) == 1]
     base = ctx.project.root / "figures" / f"comparison_{record['id']}"
     title = "Gene map: " + " vs ".join(record["samples"])
-    if not record.get("mmseqs2_available"):
-        title += " (exact-sequence matches only)"
+    if not record.get("mmseqs2_executed"):
+        title += " (without MMseqs2: PHROG anchors and identical sequences only)"
     paths = comparison_map(genomes, adjacent, base, title)
     return {"files": [p.name for p in paths], "comparison_job_id": record["id"],
             "shared_counts": {g["sample"]: sum(x["shared"] for x in g["genes"]) for g in genomes},
@@ -543,11 +620,21 @@ def _latest_revision(ctx: ToolContext, sample: str) -> dict | None:
     return done[-1] if done else None
 
 
+def _original_metadata(run: Path) -> dict:
+    data = _json(run / "genbank_submission" / "submission_metadata.json", {})
+    return {k: v for k, v in data.items() if v not in (None, "", [])}
+
+
+def _approval_payload(preview: dict) -> dict:
+    """Exactly what the researcher approves; any change afterwards voids the approval."""
+    return {key: preview[key] for key in ("id", "sample", "source_run", "input_sha256", "corrections")}
+
+
 @tool("preview_ncbi_corrections", "job",
-      "Prepare (not apply) corrections to a sample's NCBI submission package: submission metadata the researcher typed, and product/note/partial/locus_tag changes. Validates them and returns a before/after preview ID. Coordinates cannot be changed.",
+      "Prepare (not apply) corrections to a sample's NCBI submission package: submission metadata the researcher typed, and product/note/locus_tag changes. Validates them, shows the researcher an Approve/Decline request, and returns a preview ID. Coordinates and partial flags cannot be changed here.",
       {"sample": {"type": "string"},
        "metadata": {"type": "object", "description": "Submission fields such as organism, host, collection_date, geographic_location; values must be the researcher's own words"},
-       "annotations": {"type": "object", "description": "{protein_id: {product?, note?, partial?, locus_tag?, reason}}"},
+       "annotations": {"type": "object", "description": "{protein_id: {product?, note?, locus_tag?, reason}}"},
        "addresses_errors": {"type": "string", "description": "The NCBI messages these corrections respond to"}},
       ["sample"])
 def preview_ncbi_corrections(ctx: ToolContext, sample: str, metadata: dict | None = None,
@@ -560,7 +647,6 @@ def preview_ncbi_corrections(ctx: ToolContext, sample: str, metadata: dict | Non
         raise ValueError("No corrections were given")
     problems = check_metadata(metadata, ctx.user_text)
     records = {r["protein_id"]: r for r in _records(ctx, sample)}
-    evidence = {r["protein_id"]: r for r in _json(run / "evidence.json", [])}
     changes = []
     for pid, change in annotations.items():
         if pid not in records:
@@ -569,35 +655,49 @@ def preview_ncbi_corrections(ctx: ToolContext, sample: str, metadata: dict | Non
         if not isinstance(change, dict):
             problems.append(f"correction for {pid} must be an object")
             continue
-        unsupported = set(change) - REVISABLE_FIELDS - {"reason", "source"}
+        curation = set(change) & CURATION_FIELDS
+        if curation:
+            problems.append(f"{pid}: {', '.join(sorted(curation))} is a curation decision about the gene model, "
+                            "not an NCBI wording fix; review the gene model instead")
+        unsupported = set(change) - REVISABLE_FIELDS - CURATION_FIELDS - {"reason", "source"}
         if unsupported:
-            problems.append(f"{pid}: {', '.join(sorted(unsupported))} cannot be revised (coordinates and sequence need re-analysis)")
+            problems.append(f"{pid}: {', '.join(sorted(unsupported))} cannot be revised")
         current = records[pid].get("product")
         if "product" in change:
-            reason = check_product(str(change["product"]), current, evidence_texts(evidence.get(pid, {}), records[pid]))
+            reason = check_product(str(change["product"]), current)
             if reason:
                 problems.append(f"{pid}: product '{change['product']}' refused, {reason}")
         for key in REVISABLE_FIELDS & set(change):
             changes.append({"protein_id": pid, "field": key, "before": current if key == "product" else None, "after": change[key]})
     if problems:
         raise ValueError("Corrections refused: " + " | ".join(problems))
-    merged = {"metadata": {**base.get("metadata", {}), **metadata},
-              "annotations": {**base.get("annotations", {}),
-                              **{pid: {**{k: v for k, v in c.items() if k in REVISABLE_FIELDS},
-                                       "reason": c.get("reason") or "NCBI validation response",
-                                       "source": "researcher-approved assistant proposal"} for pid, c in annotations.items()}}}
+    # Merge onto the original package metadata and earlier corrections, field by field.
+    merged_annotations = {pid: dict(fields) for pid, fields in base.get("annotations", {}).items()}
+    for pid, change in annotations.items():
+        entry = merged_annotations.setdefault(pid, {})
+        entry.update({k: v for k, v in change.items() if k in REVISABLE_FIELDS})
+        entry["reason"] = change.get("reason") or entry.get("reason") or "NCBI validation response"
+        entry["source"] = "researcher-approved assistant proposal"
+    merged = {"metadata": {**_original_metadata(run), **base.get("metadata", {}), **metadata},
+              "annotations": merged_annotations}
     preview_id = f"preview-{uuid.uuid4().hex[:8]}"
-    ctx.project.write_state(f"ncbi/{preview_id}.json", {"id": preview_id, "sample": sample, "created": now(),
-                                                         "turn": ctx.turn, "corrections": merged,
-                                                         "addresses_errors": addresses_errors, "applied": False})
-    return {"preview_id": preview_id, "sample": sample,
+    manifest = _json(run / "run_manifest.json", {})
+    preview = {"id": preview_id, "sample": sample, "created": now(), "corrections": merged,
+               "source_run": str(run.relative_to(ctx.project.root)), "input_sha256": manifest.get("input_sha256"),
+               "addresses_errors": addresses_errors, "applied": False}
+    request = approvals.request(ctx.project, "ncbi_corrections", _approval_payload(preview),
+                                f"Apply these corrections to the {sample} NCBI package?")
+    preview["approval_id"] = request["id"]
+    ctx.project.write_state(f"ncbi/{preview_id}.json", preview)
+    return {"preview_id": preview_id, "approval_id": request["id"], "sample": sample,
             "metadata_changes": [{"field": k, "after": v} for k, v in metadata.items()],
             "annotation_changes": changes, "builds_on": previous["id"] if previous else "original package",
-            "next_step": "Show this preview to the researcher. Apply only after they approve in their next message."}
+            "next_step": "Explain the changes. The researcher approves or declines with the buttons shown in the chat; "
+                         "only then can apply_ncbi_corrections run."}
 
 
 @tool("apply_ncbi_corrections", "job",
-      "Apply a previewed set of corrections after the researcher has approved it in a later message. Runs 'phagemine revise' to write a new submission package and re-validate it. Returns a job ID.",
+      "Apply a previewed set of corrections that the researcher approved with the Approve button. Runs 'phagemine revise' to write a new submission package and re-validate it. Returns a job ID. A typed message is not approval.",
       {"preview_id": {"type": "string"}}, ["preview_id"])
 def apply_ncbi_corrections(ctx: ToolContext, preview_id: str) -> dict:
     if not re.fullmatch(r"preview-[0-9a-f]{8}", preview_id or ""):
@@ -607,14 +707,17 @@ def apply_ncbi_corrections(ctx: ToolContext, preview_id: str) -> dict:
         raise ValueError("Unknown preview ID")
     if preview.get("applied"):
         raise ValueError("This preview was already applied")
-    if ctx.turn <= preview["turn"]:
-        raise ValueError("The researcher has not yet seen and approved this preview. Show it and wait for their reply.")
-    run = ctx.project.run_dir(preview["sample"])
+    approvals.check(ctx.project, preview["approval_id"], "ncbi_corrections", _approval_payload(preview))
+    run = ctx.project.contained(preview["source_run"])
+    if _json(run / "run_manifest.json", {}).get("input_sha256") != preview["input_sha256"]:
+        raise ValueError("The annotation this preview was built from has changed; prepare a new preview")
     corrections_file = f"ncbi/{preview_id}.corrections.json"
     ctx.project.write_state(corrections_file, preview["corrections"])
-    step = ["phagemine", "revise", str(run.relative_to(ctx.project.root)), "--corrections", corrections_file, "--output", "runs/{job_id}"]
+    step = ["phagemine", "revise", preview["source_run"], "--corrections", corrections_file, "--output", "runs/{job_id}"]
+    approvals.consume(ctx.project, preview["approval_id"])
     record = jobs.create_job(ctx.project, "ncbi_revision", [step], output="runs/{job_id}",
                              meta={"sample": preview["sample"], "corrections": corrections_file, "preview_id": preview_id})
     preview["applied"] = record["id"]
     ctx.project.write_state(f"ncbi/{preview_id}.json", preview)
-    return {"job_id": record["id"], "status": record["status"]}
+    return {"job_id": record["id"], "status": record["status"],
+            "note": "This job writes and re-validates a package. Its completion does not mean the submission passes NCBI review."}

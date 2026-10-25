@@ -9,7 +9,7 @@ import json
 
 import streamlit as st
 
-from phagemine.assistant import agent, jobs
+from phagemine.assistant import agent, approvals, jobs
 from phagemine.assistant.llm import ProviderUnavailable, default_provider
 from phagemine.assistant.store import Project, projects_root
 from phagemine.assistant.tools import demo_mode
@@ -81,6 +81,34 @@ def _transcript(project: Project) -> None:
                 _files(project, item.get("files") or [])
 
 
+def _decide(project: Project, approval_id: str, approve: bool) -> None:
+    """Button callback: the only code path that grants or declines an approval."""
+    record = (approvals.approve if approve else approvals.decline)(project, approval_id)
+    word = "approved" if approve else "declined"
+    preview = record["payload"].get("id") if isinstance(record.get("payload"), dict) else None
+    st.session_state.assistant_event = (f"[The researcher pressed the button and {word}: {record['title']} "
+                                        f"(approval {record['id']}{', preview ' + preview if preview else ''}). Continue accordingly.]")
+
+
+def _approvals(project: Project) -> None:
+    for record in approvals.pending(project):
+        with st.container(border=True):
+            st.markdown(f"**Your approval is needed:** {record['title']}")
+            payload = record.get("payload") or {}
+            corrections = payload.get("corrections") if isinstance(payload, dict) else None
+            if corrections:
+                rows = [{"what": f"metadata: {k}", "new value": str(v)} for k, v in corrections.get("metadata", {}).items()]
+                rows += [{"what": f"{pid}: {field}", "new value": str(value)}
+                         for pid, fields in corrections.get("annotations", {}).items()
+                         for field, value in fields.items() if field not in {"reason", "source"}]
+                st.table(rows)
+                st.caption("These are all the corrections the new package will contain, including earlier approved ones.")
+            cols = st.columns(2)
+            cols[0].button("Approve", key=f"approve-{record['id']}", type="primary",
+                           on_click=_decide, args=(project, record["id"], True))
+            cols[1].button("Decline", key=f"decline-{record['id']}", on_click=_decide, args=(project, record["id"], False))
+
+
 @st.fragment(run_every=3)
 def _jobs_panel(project: Project) -> None:
     records = [jobs.status(project, j["id"]) for j in project.jobs()]
@@ -143,6 +171,7 @@ def render() -> None:
         with st.expander("Examples of what you can ask", expanded=True):
             st.markdown("\n".join(f"- {e}" for e in EXAMPLES))
     _transcript(project)
+    _approvals(project)
     _jobs_panel(project)
     outputs = project.outputs()
     if outputs:

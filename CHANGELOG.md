@@ -11,8 +11,11 @@
 - Comparisons started by the assistant run in both directions and always report
   whether MMseqs2 or exact sequence identity was used.
 - NCBI support: missing-metadata prompts, pasted-error triage, and corrections
-  applied through `phagemine revise` only after researcher approval; product
-  names cannot become more specific than recorded evidence.
+  applied through `phagemine revise` only after the researcher presses Approve
+  on the exact corrections; product names may only become less specific.
+- `phagemine compare` writes `comparison_manifest.json` (source runs, thresholds,
+  MMseqs2 searches attempted/succeeded/failed) and warns when MMseqs2 did not
+  run. Comparison results are unchanged.
 - New deterministic comparison gene-map figure with its source table.
 - Model providers: free local models through Ollama (auto-detected), any
   OpenAI-compatible service (for example free cloud tiers), or Anthropic.

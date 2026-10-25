@@ -21,19 +21,21 @@ How you work
 - Before a long analysis, state your plan in one or two sentences, then start it.
 
 Truthfulness rules (these are checked automatically)
-- Every protein ID, count, score, database name and version you state must come from a tool result in this conversation. If you have not retrieved it, call a tool or say you do not have it.
+- Every protein ID, count, score, database name and version you state must come from a tool result in this conversation, copied exactly. Do not calculate new numbers (percentages, differences); report the numbers the tools give. What the researcher typed is not evidence: look it up.
 - A job has finished only when a tool reports status COMPLETE. Starting a job is not finishing it. If a job FAILED, say so and quote the error and the relevant log line.
 - UNRESOLVED or CONSERVED_UNKNOWN means no reliable function was assigned. Never call such a protein novel. No database match is not proof of novelty. Computational predictions are not experimental confirmation.
 - When explaining an annotation, give the evidence: which database, identifier, E-value or score, coverage, and database version. Say how strong or weak it is.
 - If evidence_mode is DEMO, say clearly that results are demonstration data, not biology.
-- If a comparison ran without MMseqs2, say that only identical proteins were counted, so shared counts are a lower bound.
+- If a comparison ran without MMseqs2, say that homologs came only from shared PHROG assignments and identical sequences, so shared counts are a lower bound.
+- Some actions need the researcher's explicit approval through an Approve button that the tools create in the chat page (comparing without MMseqs2, applying NCBI corrections). A typed reply is never approval. Explain what will happen and ask them to press Approve or Decline; you will be told when they decide.
 
 NCBI submissions
 - PhageMine never submits to NCBI; it prepares a package the researcher uploads.
 - Use get_submission_status to see what is missing. Ask the researcher for missing source details (host, collection date, location, isolation source, submitter, authors); never invent or guess them.
 - When the researcher pastes NCBI errors, call classify_ncbi_errors. Explain each group: FIXABLE_LABEL and FIXABLE_METADATA can be corrected; NEEDS_REANALYSIS requires gene-model review or re-annotation and cannot be fixed by relabelling; UNKNOWN is shown as received.
-- Call preview_ncbi_corrections, show the researcher the before/after changes, and wait. Call apply_ncbi_corrections only after they approve in a later message.
-- Product names may become less specific (for example "hypothetical protein") but never more specific than the evidence.
+- Call preview_ncbi_corrections and explain the before/after changes. Call apply_ncbi_corrections only after you are told the researcher pressed Approve.
+- Product names may only become "hypothetical protein", be re-formatted, or gain a qualifier such as "putative". Never remove qualifiers or make a name more specific; that needs evidence review. Partial flags and coordinates are curation decisions, not wording fixes.
+- A finished revision job means a new package was written, not that NCBI will accept it, and not that the biology is verified.
 
 Style
 - Lead with the answer. Use short paragraphs and small tables for lists of genes. Explain technical terms briefly when the researcher seems unfamiliar with them.
@@ -66,9 +68,7 @@ def job_event(project: Project) -> str | None:
         return None
     lines = []
     for record in unreported:
-        stored = project.job(record["id"])
-        stored["reported"] = True
-        project.save_job(stored)
+        job_store.transition(project, record["id"], reported=True)
         label = record.get("sample") or ", ".join(record.get("samples", []))
         lines.append(f"- {record['id']} ({record['kind']}, {label}): {record['status']}"
                      + (f"; error: {record['error']}" if record.get("error") else ""))
@@ -79,7 +79,8 @@ def job_event(project: Project) -> str | None:
 
 
 def _corpus(project: Project, messages: list[dict]) -> str:
-    parts = [item.get("text", "") for item in project.transcript() if item.get("role") == "user"]
+    """Evidence for grounding: tool results only. What the researcher typed is not evidence."""
+    parts = []
     for message in messages:
         if isinstance(message.get("content"), list):
             for block in message["content"]:
@@ -122,13 +123,15 @@ def run_turn(project: Project, user_text: str, provider, *, event: bool = False,
     context = tools.ToolContext(project, user_text=user_corpus, turn=project.user_turns())
     context.grounding = lambda text: grounding.check(text, _corpus(project, messages), project)
     system = SYSTEM_PROMPT + "\n\nCurrent project state\n" + ledger(project)
-    calls, files_before = [], {p.name for p in project.outputs()}
+    calls, turn_results, files_before = [], [], {p.name for p in project.outputs()}
     retried, text, problems = False, "", []
     for _ in range(MAX_STEPS):
         payload = _for_model(messages)
+        schemas = tools.schemas()
+        # Audit at the provider boundary: the complete payload as sent (a local provider sends nothing online).
         project.log_outbound({"provider": getattr(provider, "name", "unknown"), "assistant_version": ASSISTANT_VERSION,
-                              "new_content": payload[-1]["content"] if payload else None})
-        response = provider.complete(system, payload, tools.schemas())
+                              "system": system, "messages": payload, "tools": [t["name"] for t in schemas]})
+        response = provider.complete(system, payload, schemas)
         content = response["content"]
         messages.append({"role": "assistant", "content": content})
         uses = [b for b in content if b.get("type") == "tool_use"]
@@ -140,6 +143,7 @@ def run_turn(project: Project, user_text: str, provider, *, event: bool = False,
                 result = tools.execute(context, block["name"], block.get("input"))
                 calls.append({"name": block["name"], "input": block.get("input"), "ok": result.get("ok"),
                               "error": result.get("error")})
+                turn_results.append({"name": block["name"], "result": result})
                 if on_step:
                     on_step({"type": "tool_end", "name": block["name"], "ok": result.get("ok"), "error": result.get("error")})
                 body = json.dumps(result, default=str)
@@ -160,8 +164,10 @@ def run_turn(project: Project, user_text: str, provider, *, event: bool = False,
     else:
         text = text or "I stopped after too many steps without reaching an answer. Please narrow the request."
     if problems:
-        text += ("\n\n_Automatic check: parts of this answer could not be matched to PhageMine outputs ("
-                 + "; ".join(problems) + "). Treat them with caution and check the evidence tables._")
+        # Never show prose that failed twice; show the verified tool results instead.
+        text = grounding.verified_fallback(turn_results) + (
+            "\n\n_The written answer was withheld because it contained claims not found in PhageMine's outputs. "
+            "Details are under \"What PhageMine did\"._")
     if messages[-1]["role"] == "user":  # loop ended on a correction request: close the exchange
         messages.append({"role": "assistant", "content": [{"type": "text", "text": text or "(no answer)"}]})
     project.save_messages(messages)

@@ -126,9 +126,14 @@ class ReadingModel:
 
     name = "test-reading-model"
 
+    def __init__(self):
+        self.annotation_ids = []
+
     def complete(self, system, messages, tools):
         last = messages[-1]["content"]
         if isinstance(last, str):
+            if "approved" in last:
+                return self._use("start_comparison", {"annotation_job_ids": self.annotation_ids, "allow_exact_only": True})
             if "Automatic update" in last:
                 return self._use("get_shared_genes", {})
             if "unknown" in last.lower():
@@ -137,10 +142,12 @@ class ReadingModel:
         import json
         result = json.loads(last[0]["content"])
         if "started" in result:
-            ids = [item["job_id"] for item in result["started"]]
-            return self._use("start_comparison", {"annotation_job_ids": ids, "allow_exact_only": True})
+            self.annotation_ids = [item["job_id"] for item in result["started"]]
+            return self._use("start_comparison", {"annotation_job_ids": self.annotation_ids, "allow_exact_only": True})
+        if not result.get("ok") and "approval" in result.get("error", ""):
+            return self._say("MMseqs2 is not installed. Please approve comparing without it, or install MMseqs2.")
         if "waiting_for" in result:
-            return self._say("Annotation and comparison are running. I will report the results once they are complete.")
+            return self._say("The comparison is running. I will report the results once it is complete.")
         if "proteins_with_homolog_in_other" in result:
             counts = result["proteins_with_homolog_in_other"]
             return self._say("The comparison is COMPLETE. Proteins with a homolog in the other genome: "
@@ -171,6 +178,10 @@ def test_conversational_analysis_end_to_end(monkeypatch):
     app.run()
     app.chat_input[0].set_value("Here are two phage genomes. Annotate them, compare them, and show me which genes they share.").run()
     assert not app.exception
+    assert len(project.jobs()) == 2  # annotations started; comparison waits for the researcher's approval
+    approve = next(b for b in app.button if b.label == "Approve")
+    approve.click().run()
+    assert not app.exception
     assert len(project.jobs()) == 3
     deadline = time.time() + 120
     while time.time() < deadline and not any("is COMPLETE" in m.value for m in app.markdown):
@@ -181,5 +192,5 @@ def test_conversational_analysis_end_to_end(monkeypatch):
     app.chat_input[0].set_value("Which of these genes have unknown functions?").run()
     assert any("Unknown-function proteins: PM_" in m.value for m in app.markdown)
     transcript = Project(project.root).transcript()
-    assert [t["role"] for t in transcript] == ["user", "assistant", "event", "assistant", "user", "assistant"]
+    assert [t["role"] for t in transcript] == ["user", "assistant", "event", "assistant", "event", "assistant", "user", "assistant"]
     assert all(not t.get("grounding_problems") for t in transcript if t["role"] == "assistant")

@@ -4,8 +4,12 @@ PhageMine never uploads anything to NCBI. This module only:
 
 * classifies pasted validator / GenBank-staff messages into three outcomes;
 * validates proposed corrections against what ``phagemine revise`` may change;
-* refuses product names more specific than the recorded evidence supports;
+* refuses product names more specific than PhageMine's own adjudicated name,
+  including dropping uncertainty qualifiers such as "putative";
 * refuses metadata values the researcher never typed.
+
+Every correction still needs the researcher's explicit approval (see
+``approvals``); these checks only limit what may be proposed.
 
 The classifier is keyword-based. Extend ``CATALOGUE`` with real reports from
 past submissions; unknown messages are reported verbatim, never guessed at.
@@ -17,7 +21,11 @@ from dataclasses import dataclass
 
 from phagemine.models import SubmissionMetadata
 
-REVISABLE_FIELDS = {"product", "note", "partial", "locus_tag"}
+REVISABLE_FIELDS = {"product", "note", "locus_tag"}
+# Partial flags describe whether a gene's ends are complete: a curation decision, not wording.
+CURATION_FIELDS = {"partial", "start", "end", "strand", "codon_start", "sequence", "translation"}
+QUALIFIERS = ("putative", "probable", "possible", "predicted", "potential", "uncharacterized",
+              "uncharacterised", "like", "domain containing", "family protein", "homolog")
 METADATA_FIELDS = {f for f in SubmissionMetadata.__dataclass_fields__}
 
 NEEDS_REANALYSIS = "NEEDS_REANALYSIS"
@@ -45,23 +53,21 @@ CATALOGUE: tuple[Rule, ...] = (
     Rule(FIXABLE_METADATA, r"collection[\s_-]*date|country|geo[\s_-]*loc|\bhost\b|isolation[\s_-]*source|biosource|lineage|\borganism\b|source\s*modifier|\bstrain\b|\bisolate\b|bioproject|biosample|submitter|author", "Submission metadata. Supply the correct value; PhageMine will not invent it."),
     Rule(FIXABLE_LABEL, r"product\s*name|productname|suspect\s*product|hypothetical|\bproduct\b", "Product name wording. Can be revised, but never made more specific than the evidence."),
     Rule(FIXABLE_LABEL, r"locus[\s_-]*tag", "Locus tag. Can be revised."),
-    Rule(FIXABLE_LABEL, r"\bpartial", "Partial flag. Revisable, but check the gene ends first: a wrong partial flag can hide a coordinate problem."),
+    Rule(NEEDS_REANALYSIS, r"\bpartial", "Partial flag: whether the gene's ends are complete is a curation decision. Review the gene model before changing it."),
     Rule(FIXABLE_LABEL, r"\bnote\b", "Feature note. Can be revised."),
 )
 
-_SIGNAL = re.compile(r"error|warning|reject|fatal|problem|please|invalid|missing|suspect|\bseq_\w+", re.I)
 _PROTEIN = re.compile(r"\bPM_\d{6}\b")
 _LOCUS = re.compile(r"\b[A-Z][A-Z0-9]{2,11}_\d{3,6}\b")
 
 
 def classify(text: str, limit: int = 60) -> dict:
     """Split pasted text into messages and assign each an outcome."""
-    lines = [line.strip() for line in (text or "").splitlines() if line.strip()]
+    # Keep every line with words in it; only separators and blank lines are skipped.
+    lines = [line.strip() for line in (text or "").splitlines() if re.search(r"[A-Za-z0-9]", line)]
     items = []
     for line in lines:
         rule = next((r for r in CATALOGUE if re.search(r.pattern, line, re.I)), None)
-        if rule is None and not _SIGNAL.search(line):
-            continue
         items.append({"message": line[:400],
                       "outcome": rule.outcome if rule else UNKNOWN,
                       "guidance": rule.guidance if rule else "Not in PhageMine's error catalogue. Shown as received; no fix proposed.",
@@ -78,30 +84,39 @@ def _norm(text: str | None) -> str:
     return re.sub(r"[^a-z0-9]+", " ", (text or "").lower()).strip()
 
 
-def evidence_texts(evidence_row: dict, annotation_row: dict) -> list[str]:
-    texts = [annotation_row.get("product"), annotation_row.get("proposed_function"),
-             evidence_row.get("annotation")]
-    for item in evidence_row.get("evidence", []) or []:
-        if item.get("supports"):
-            texts += [item.get("statement"), item.get("description"), item.get("family_name")]
-    return [t for t in texts if t]
+def _qualifiers(name: str) -> tuple[set[str], str]:
+    """Split a normalised product name into its uncertainty qualifiers and its core."""
+    text, found = f" {_norm(name)} ", set()
+    for word in QUALIFIERS:
+        if f" {word} " in text:
+            found.add(word)
+            text = text.replace(f" {word} ", " ")
+    return found, " ".join(text.split())
 
 
-def check_product(new: str, current: str | None, supporting: list[str]) -> str | None:
-    """Return a reason to refuse, or None when the new product name is allowed."""
+def check_product(new: str, current: str | None, _unused_evidence: list[str] | None = None) -> str | None:
+    """Return a reason to refuse, or None when the new product name is allowed.
+
+    Allowed: "hypothetical protein"; the current name re-formatted; or the current
+    name with an added uncertainty qualifier. Anything more specific, including
+    dropping "putative", needs curation with evidence, not an NCBI wording fix.
+    Words found in evidence descriptions never authorise a name.
+    """
     candidate = _norm(new)
     if not candidate:
         return "product name is empty"
-    if candidate == "hypothetical protein":
+    if candidate == "hypothetical protein" or candidate == _norm(current):
         return None
-    if candidate == _norm(current):
-        return None
-    if current and len(candidate) >= 4 and candidate in _norm(current):
-        return None  # a less specific form of the current name
-    if any(candidate == _norm(t) or (len(candidate) >= 6 and candidate in _norm(t)) for t in supporting):
-        return None
-    return ("more specific than the recorded evidence supports; allowed choices are "
-            "'hypothetical protein', the current name, or wording found in this protein's evidence")
+    if current:
+        new_q, new_core = _qualifiers(new)
+        old_q, old_core = _qualifiers(current)
+        if new_core == old_core and old_q <= new_q:
+            return None
+        if new_core == old_core:
+            return "it drops an uncertainty qualifier (" + ", ".join(sorted(old_q - new_q)) + ") from the current name"
+    return ("more specific than PhageMine's adjudicated name; allowed choices are 'hypothetical protein', "
+            "the current name, or the current name with an added qualifier such as 'putative'. "
+            "A more specific name needs evidence review and curation")
 
 
 def check_metadata(metadata: dict, user_text: str) -> list[str]:

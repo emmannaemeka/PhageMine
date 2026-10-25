@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from phagemine.assistant import agent, grounding, jobs, ncbi, tools
+from phagemine.assistant import agent, approvals, grounding, jobs, ncbi, tools
 from phagemine.assistant.llm import ScriptedProvider
 from phagemine.assistant.store import Project
 
@@ -64,6 +64,8 @@ def compared(project):
     c = ctx(project)
     started = call(c, "start_annotation", files=["demo_phage.fasta", "demo_rotated.fasta"])
     ids = [s["job_id"] for s in started["started"]]
+    assert call(c, "start_comparison", annotation_job_ids=ids, allow_exact_only=True)["ok"] is False  # needs consent
+    approvals.approve(project, approvals.pending(project)[0]["id"])  # the researcher's button
     comparison = call(c, "start_comparison", annotation_job_ids=ids, allow_exact_only=True)
     assert comparison["ok"], comparison
     assert wait(project, comparison["job_id"])["status"] == "COMPLETE"
@@ -149,6 +151,8 @@ def test_comparison_refuses_exact_only_without_consent(project):
     ids = [s["job_id"] for s in started["started"]]
     refused = call(ctx(project), "start_comparison", annotation_job_ids=ids)
     assert refused["ok"] is False and "MMseqs2" in refused["error"]
+    still = call(ctx(project), "start_comparison", annotation_job_ids=ids, allow_exact_only=True)
+    assert still["ok"] is False and "approval" in still["error"]  # the model cannot consent for the researcher
 
 
 def test_shared_genes_are_counted_from_both_sides_with_method(compared):
@@ -158,7 +162,8 @@ def test_shared_genes_are_counted_from_both_sides_with_method(compared):
     assert set(shared["proteins_with_homolog_in_other"]) == {"demo_phage", "demo_rotated"}
     assert all(v > 0 for v in shared["proteins_with_homolog_in_other"].values())
     assert shared["mmseqs2_used"] is False and "lower bound" in shared["warning"]
-    assert set(shared["detection_methods"]) == {"EXACT_SEQUENCE_MATCH"}
+    assert {m for pair in shared["pairs"] for m in pair["methods"]} <= {"EXACT_SEQUENCE_MATCH", "PHROG_ANCHOR", "HYBRID"}
+    assert shared["distinct_pairs"] == shared["pairs_total"]
 
 
 def test_unknown_function_query_and_evidence(compared):
@@ -204,9 +209,11 @@ def test_ncbi_errors_are_routed_to_outcomes():
 
 def test_product_names_never_become_more_specific():
     assert ncbi.check_product("hypothetical protein", "putative tail fiber", []) is None
-    assert ncbi.check_product("tail fiber", "putative tail fiber protein", []) is None
+    assert ncbi.check_product("putative tail fiber protein", "tail fiber protein") is None  # qualifier added
+    assert ncbi.check_product("tail fiber protein", "putative tail fiber protein")  # qualifier dropped
     assert ncbi.check_product("major capsid protein", "hypothetical protein", ["unrelated statement"])
-    assert ncbi.check_product("terminase large subunit", "hypothetical protein", ["PHROG 1: terminase large subunit"]) is None
+    # Evidence wording never authorises a name; curation does.
+    assert ncbi.check_product("terminase large subunit", "hypothetical protein", ["PHROG 1: terminase large subunit"])
 
 
 def test_ncbi_corrections_need_typed_metadata_and_later_approval(compared):
@@ -215,15 +222,17 @@ def test_ncbi_corrections_need_typed_metadata_and_later_approval(compared):
     invented = call(ctx(p, 2, typed), "preview_ncbi_corrections", sample="demo_phage", metadata={"collection_date": "2024-01-01"})
     assert invented["ok"] is False and "not provided by the researcher" in invented["error"]
     coords = call(ctx(p, 2, typed), "preview_ncbi_corrections", sample="demo_phage", annotations={"PM_000001": {"start": 5}})
-    assert coords["ok"] is False and "cannot be revised" in coords["error"]
+    assert coords["ok"] is False and "curation decision" in coords["error"]
     preview = call(ctx(p, 2, typed), "preview_ncbi_corrections", sample="demo_phage",
                    metadata={"host": "Escherichia coli K-12", "collection_date": "2025-03-14"},
                    annotations={"PM_000001": {"product": "hypothetical protein", "reason": "NCBI"}})
     assert preview["ok"], preview
-    same_turn = call(ctx(p, 2, typed), "apply_ncbi_corrections", preview_id=preview["preview_id"])
-    assert same_turn["ok"] is False and "not yet seen" in same_turn["error"]
+    unapproved = call(ctx(p, 3, typed + " Yes, apply them."), "apply_ncbi_corrections", preview_id=preview["preview_id"])
+    assert unapproved["ok"] is False and "Approve" in unapproved["error"]
+    approvals.approve(p, preview["approval_id"])
     applied = call(ctx(p, 3, typed), "apply_ncbi_corrections", preview_id=preview["preview_id"])
     assert wait(p, applied["job_id"])["status"] == "COMPLETE"
+    assert jobs.status(p, applied["job_id"])["submission_readiness"]
     status = call(ctx(p, 3, typed), "get_submission_status", sample="demo_phage")
     assert status["package_version"].startswith("revision")
     assert "host" not in status["missing_required_metadata"]
@@ -270,12 +279,12 @@ def test_agent_runs_tools_and_reports_only_starting(project):
     assert (project.root / "outbound.jsonl").is_file()
 
 
-def test_agent_retries_then_flags_ungrounded_answer(project):
+def test_agent_retries_then_withholds_ungrounded_answer(project):
     provider = ScriptedProvider([[text("Annotation completed: PM_000777 is a capsid.")],
                                  [text("Annotation completed: PM_000777 is a capsid.")]])
     result = agent.run_turn(project, "What did you find?", provider)
     assert "Automatic grounding check failed" in json.dumps(provider.calls[1]["messages"][-1])
-    assert result["grounding_problems"] and "Automatic check" in result["text"]
+    assert result["grounding_problems"] and "PM_000777" not in result["text"] and "withheld" in result["text"]
 
 
 def test_agent_tool_error_is_returned_to_model_not_hidden(project):

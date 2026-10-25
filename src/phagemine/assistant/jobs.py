@@ -13,7 +13,14 @@ import signal
 import subprocess
 import sys
 import uuid
+from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - Windows
+    fcntl = None
 
 from .store import Project, now
 
@@ -48,15 +55,39 @@ def create_job(project: Project, kind: str, steps: list[list[str]], *, output: s
     return project.job(job_id)
 
 
+@contextmanager
+def _locked(project: Project, job_id: str):
+    """Serialise read-modify-write of one job record across processes."""
+    path = project.job_path(job_id).with_suffix(".lock")
+    with path.open("a") as handle:
+        if fcntl:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            if fcntl:
+                fcntl.flock(handle, fcntl.LOCK_UN)
+
+
+def transition(project: Project, job_id: str, **fields) -> dict:
+    """Update a job atomically. A final status (COMPLETE, FAILED, CANCELLED) is never
+    replaced; other fields (for example ``reported``) may still be recorded."""
+    with _locked(project, job_id):
+        record = project.job(job_id)
+        if record.get("status") in FINAL and "status" in fields:
+            fields = {k: v for k, v in fields.items() if k not in {"status", "error", "finished"}}
+        record.update(fields)
+        project.save_job(record)
+        return record
+
+
 def start_worker(project: Project, job_id: str) -> None:
     log = project.root / "jobs" / f"{job_id}.worker.log"
     with log.open("a") as handle:
         process = subprocess.Popen([sys.executable, "-m", "phagemine.assistant.runner", str(project.root), job_id],
                                    stdout=handle, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL,
                                    start_new_session=True, close_fds=True)
-    record = project.job(job_id)
-    record["worker_pid"] = process.pid
-    project.save_job(record)
+    transition(project, job_id, worker_pid=process.pid)
 
 
 def _alive(pid: int | None) -> bool:
@@ -75,12 +106,21 @@ def _alive(pid: int | None) -> bool:
         return True
 
 
+def _age_seconds(stamp: str | None) -> float:
+    try:
+        return (datetime.now(timezone.utc) - datetime.fromisoformat(stamp)).total_seconds()
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def status(project: Project, job_id: str, log_lines: int = 12) -> dict:
     """Job state as recorded by the worker, plus progress parsed from its log."""
     record = project.job(job_id)
-    if record.get("status") not in FINAL and record.get("status") != "QUEUED" and not _alive(record.get("worker_pid")):
-        record.update(status="FAILED", error="The worker process stopped unexpectedly", finished=now())
-        project.save_job(record)
+    state = record.get("status")
+    if state not in FINAL and record.get("worker_pid") and not _alive(record["worker_pid"]):
+        if state != "QUEUED" or _age_seconds(record.get("created")) > 30:
+            record = transition(project, job_id, status="FAILED", finished=now(),
+                                error="The worker process stopped unexpectedly")
     log_path = project.root / record.get("log", f"jobs/{job_id}.log")
     text = log_path.read_text(errors="replace") if log_path.is_file() else ""
     stages = _PROGRESS.findall(text)
@@ -103,9 +143,7 @@ def cancel(project: Project, job_id: str) -> dict:
                 os.killpg(pid, signal.SIGTERM)
             except (ProcessLookupError, PermissionError):
                 pass
-    record.update(status="CANCELLED", finished=now(), error="Cancelled by the researcher")
-    project.save_job(record)
-    return record
+    return transition(project, job_id, status="CANCELLED", finished=now(), error="Cancelled by the researcher")
 
 
 def cli_argv(step: list[str]) -> list[str]:
