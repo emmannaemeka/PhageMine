@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+- Add **Ask PhageMine**, a conversational assistant and the GUI's default page
+  (optional extra `phagemine[assistant]`). A language model selects among 17
+  structured tools; PhageMine's existing CLI performs all analysis in detached,
+  tracked jobs that are COMPLETE only after exit code 0 and validated outputs.
+  Answers pass a grounding check (protein and job IDs, completion claims,
+  novelty wording) before display.
+- Comparisons started by the assistant run in both directions and always report
+  whether MMseqs2 or exact sequence identity was used.
+- NCBI support: missing-metadata prompts, pasted-error triage, and corrections
+  applied through `phagemine revise` only after researcher approval; product
+  names cannot become more specific than recorded evidence.
+- New deterministic comparison gene-map figure with its source table.
+- No change to annotation, gene calling or evidence handling.
+
 ## 1.3.2 — 2026-10-13
 
 - Fix Pyrodigal/Pyrodigal-gv coordinate import: Pyrodigal reports one-based
