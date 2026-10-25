@@ -77,7 +77,28 @@ def product_name(protein: Protein) -> str:
     return "hypothetical protein"
 
 
+def locus_tag(prefix: str | None, protein_id: str) -> str | None:
+    """NCBI form PREFIX_uniqueID; only with a registered prefix (no prefix, no locus_tag)."""
+    if not prefix:
+        return None
+    return f"{prefix}_{protein_id.rsplit('_', 1)[-1]}"
+
+
+def protein_fasta_id(prefix: str | None, protein_id: str) -> str:
+    tag = locus_tag(prefix, protein_id)
+    return f"gnl|{prefix}|{tag}" if tag else f"gnl|PhageMine|{protein_id}"
+
+
+def submitted_product(protein: Protein, overrides: dict | None = None) -> str:
+    return (overrides or {}).get(protein.protein_id, {}).get("product") or product_name(protein)
+
+
 def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | None = None, locus_tag_prefix: str | None = None) -> str:
+    """Five-column table: a gene feature (carrying the locus_tag) and a CDS for every protein.
+
+    NCBI expects locus_tags on gene features only (DISC: MISSING_GENES, NON_GENE_LOCUS_TAG).
+    Notes are written only when a researcher supplied one; local file references never are.
+    """
     lines = [f">Feature {genome_id}"]
     for protein in proteins:
         start, end = (protein.start, protein.end) if protein.strand == "+" else (protein.end, protein.start)
@@ -87,12 +108,40 @@ def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | Non
         if protein.partial_3prime:
             end = f">{end}" if protein.strand == "+" else f"<{end}"
         change = (overrides or {}).get(protein.protein_id, {})
-        product = change.get("product") or product_name(protein)
-        tag = f"{locus_tag_prefix}{protein.protein_id}" if locus_tag_prefix else protein.protein_id
-        note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; functional claims withheld unless supported by non-mock curated/experimental evidence."
-        lines.extend([f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", f"\t\t\tnote\t{_safe(note)}"])
-
+        tag = change.get("locus_tag") or locus_tag(locus_tag_prefix, protein.protein_id)
+        lines.append(f"{start}\t{end}\tgene")
+        if tag:
+            lines.append(f"\t\t\tlocus_tag\t{tag}")
+        lines.extend([f"{start}\t{end}\tCDS", f"\t\t\tproduct\t{_safe(submitted_product(protein, overrides))}",
+                      f"\t\t\tprotein_id\t{protein_fasta_id(locus_tag_prefix, protein.protein_id)}"])
+        if change.get("note"):
+            lines.append(f"\t\t\tnote\t{_safe(change['note'])}")
     return "\n".join(lines) + "\n"
+
+
+SOURCE_MODIFIERS = (("organism", "organism"), ("host", "host"), ("isolation_source", "isolation_source"),
+                    ("collection_date", "collection_date"), ("geographic_location", "geo_loc_name"),
+                    ("isolate", "isolate"), ("strain", "strain"))
+
+
+def fasta_defline(genome_id: str, metadata: SubmissionMetadata) -> str:
+    """Source information goes on the FASTA definition line, where table2asn reads it.
+    Phages use translation table 11."""
+    parts = [f">{genome_id}"]
+    for field, modifier in SOURCE_MODIFIERS:
+        value = getattr(metadata, field, None)
+        if value:
+            parts.append(f"[{modifier}={_safe(str(value))}]")
+    parts += ["[mol_type=genomic DNA]", "[gcode=11]"]
+    return " ".join(parts)
+
+
+def submitted_translation(protein: Protein) -> str:
+    """NCBI translates an alternative start codon (GTG, TTG...) of a complete CDS as M."""
+    sequence = protein.sequence or ""
+    if sequence and not protein.partial_5prime and sequence[0] != "M":
+        return "M" + sequence[1:]
+    return sequence
 
 
 def table2asn_status(package_root: Path, executable: str | None = None) -> dict:
@@ -134,14 +183,27 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     if metadata.sequence_id and metadata.sequence_id != genome_id:
         pre_validation["errors"].append({"code": "metadata_sequence_id_mismatch", "message": "Metadata sequence_id does not match the FASTA identifier."})
         pre_validation["valid"] = False
-    fasta_header = f">{genome_id}" + (f" [organism={metadata.organism}]" if metadata.organism else "")
-    (root / "genome.fsa").write_text(f"{fasta_header}\n{genome}\n")
-    (root / "features.tbl").write_text(feature_table(genome_id, proteins, feature_overrides, getattr(metadata, "locus_tag_prefix", None)))
-    (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{p.protein_id} {p.protein_id}\n{p.sequence}\n" for p in proteins))
+    prefix = getattr(metadata, "locus_tag_prefix", None)
+    from .submission_review import review
+    products = {p.protein_id: submitted_product(p, feature_overrides) for p in proteins}
+    ncbi_review = review(genome, proteins, products, metadata)
+    pre_validation["errors"].extend(ncbi_review["errors"])
+    pre_validation["warnings"].extend(ncbi_review["warnings"])
+    pre_validation["valid"] = pre_validation["ncbi_submission_ready"] = not pre_validation["errors"]
+    pre_validation["fatal_error_count"], pre_validation["warning_count"] = len(pre_validation["errors"]), len(pre_validation["warnings"])
+    pre_validation["ncbi_requirements_review"] = {"rules_source": "phagemine.submission_review (NCBI/INSDC guidance, October 2026)",
+                                                  "errors": len(ncbi_review["errors"]), "warnings": len(ncbi_review["warnings"])}
+    (root / "genome.fsa").write_text(f"{fasta_defline(genome_id, metadata)}\n{genome}\n")
+    (root / "features.tbl").write_text(feature_table(genome_id, proteins, feature_overrides, prefix))
+    (root / "proteins.faa").write_text("".join(f">{protein_fasta_id(prefix, p.protein_id)} {p.protein_id}\n{submitted_translation(p)}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
-    (root / "submission.sbt").write_text(_submission_template(metadata))
-    cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{p.protein_id}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
+    official = Path(metadata.submission_template).expanduser() if metadata.submission_template else None
+    if official and official.is_file():
+        shutil.copyfile(official, root / "submission.sbt")
+    else:
+        (root / "submission.sbt").write_text(_submission_template(metadata))
+    cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": protein_fasta_id(prefix, p.protein_id), "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
     (root / "cds_provenance.json").write_text(json.dumps(cds_provenance, indent=2, default=str, sort_keys=True))
     table2asn = table2asn_status(root, table2asn_executable)
     state, missing = readiness(pre_validation, metadata, table2asn)
@@ -159,7 +221,11 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
         f"Warnings/review items: {len(pre_validation['warnings'])}",
     ]
     for item in pre_validation["errors"] + pre_validation["warnings"]:
-        report_lines.extend(["", f"{item.get('severity', 'ERROR' if item in pre_validation['errors'] else 'WARNING')} {item['code']}", f"{item.get('protein_id', '')} {item.get('message', '')}".strip()])
+        report_lines.extend(["", f"{item.get('severity', 'ERROR' if item in pre_validation['errors'] else 'WARNING')} {item['code']}"
+                             + (f" (NCBI: {item['ncbi_check']})" if item.get("ncbi_check") else ""),
+                             f"{item.get('protein_id', '')} {item.get('message', '')}".strip()]
+                            + ([f"Fix: {item['recommended_action']}"] if item.get("recommended_action") else [])
+                            + ([f"Source: {item['ncbi_reference']}"] if item.get("ncbi_reference") else []))
     (root / "NCBI_VALIDATION_REPORT.txt").write_text("\n".join(report_lines) + "\n")
     (root / "provenance.json").write_text(json.dumps(provenance, indent=2, sort_keys=True))
     (root / "README.txt").write_text("This is a local PhageMine pre-submission package; it has not been submitted to NCBI. PhageMine QC, PhageMine pre-submission validation, table2asn validation, and final NCBI review are distinct stages. If table2asn is unavailable, install the official NCBI table2asn distribution, add it to PATH, and rerun this command. Never treat mock, weak, or hypothesis-level annotations as asserted product names.\n")

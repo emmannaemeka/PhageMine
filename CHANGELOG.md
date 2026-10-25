@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased
+
+- Add **Ask PhageMine**, a conversational assistant and the GUI's default page
+  (optional extra `phagemine[assistant]`). A language model selects among 17
+  structured tools; PhageMine's existing CLI performs all analysis in detached,
+  tracked jobs that are COMPLETE only after exit code 0 and validated outputs.
+  Answers pass a grounding check (protein and job IDs, completion claims,
+  novelty wording) before display.
+- Comparisons started by the assistant run in both directions and always report
+  whether MMseqs2 or exact sequence identity was used.
+- NCBI support: missing-metadata prompts, pasted-error triage, and corrections
+  applied through `phagemine revise` only after the researcher presses Approve
+  on the exact corrections; product names may only become less specific.
+- `phagemine compare` writes `comparison_manifest.json` (source runs, thresholds,
+  MMseqs2 searches attempted/succeeded/failed) and warns when MMseqs2 did not
+  run. Comparison results are unchanged.
+- New deterministic comparison gene-map figure with its source table.
+- Model providers: free local models through Ollama (auto-detected), any
+  OpenAI-compatible service (for example free cloud tiers), or Anthropic.
+- NCBI requirements review (`submission_review.py`) for every GenBank package:
+  collection date and geo_loc_name formats (required by NCBI since December
+  2024) against the INSDC lists, phage organism naming, sequence quality
+  (length, terminal and internal Ns, ambiguity), product-name rules
+  (SUSPECT_PRODUCT_NAMES), partial CDSs, start codons, short and contained
+  CDSs, locus tag format, and the submission template. Each finding cites
+  the NCBI check, the fix and the NCBI source page.
+- GenBank package fixes: source modifiers and `[gcode=11]` are now written to
+  the FASTA definition line where table2asn reads them; `gene` features carry
+  locus tags (registered prefix only) for every CDS and tRNA; local file
+  references are no longer written into CDS notes; alternative start codons
+  are given an initial methionine in `proteins.faa`; an official NCBI
+  submission template can be supplied via `submission_template`.
+- No change to annotation, gene calling or evidence handling.
+
 ## 1.3.2 — 2026-10-13
 
 - Fix Pyrodigal/Pyrodigal-gv coordinate import: Pyrodigal reports one-based

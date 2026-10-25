@@ -76,6 +76,20 @@ phagemine-gui
 Your default browser opens when the local server is ready. Keep the terminal
 open while using the interface. See the [GUI guide](docs/gui.md).
 
+### Ask PhageMine (conversational assistant)
+
+The GUI opens on **Ask PhageMine**: upload genomes and describe what you want to
+investigate in plain English, for example *"Annotate these two phages, compare
+them, and show me which genes they share."* A language model plans the work and
+explains the results; PhageMine's tested workflows do every computation, and
+answers are checked against recorded outputs before they are shown. It can also
+prepare an NCBI submission package and propose guarded fixes for validator
+errors you paste back.
+
+It works with a free local model through [Ollama](https://ollama.com)
+(`ollama pull qwen3:8b`, then `phagemine gui`), with free cloud tiers, or with
+Anthropic Claude. See the [assistant guide](docs/assistant.md) for deployment, data flow and limits.
+
 ## Annotate a genome
 
 Supply a single-genome nucleotide FASTA file:
