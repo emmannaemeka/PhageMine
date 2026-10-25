@@ -442,8 +442,13 @@ def get_shared_genes(ctx: ToolContext, comparison_job_id: str | None = None, sam
             **({"stale_note": f"{', '.join(stale)} has been re-annotated since this comparison; results describe the earlier run."} if stale else {})}
 
 
+def _finding_brief(item: dict) -> dict:
+    keys = ("code", "severity", "ncbi_check", "protein_id", "message", "recommended_action", "ncbi_reference")
+    return {k: item[k] for k in keys if item.get(k) not in (None, "")}
+
+
 @tool("get_submission_status", "read",
-      "NCBI pre-submission package status for a sample: readiness, missing metadata, PhageMine validation errors, table2asn result, and corrections applied so far.",
+      "Review a sample's NCBI submission package: readiness, missing metadata, and the NCBI requirements review (each finding names the NCBI check, the fix and the NCBI source page), plus the table2asn result and corrections applied so far.",
       {"sample": {"type": "string"}}, ["sample"])
 def get_submission_status(ctx: ToolContext, sample: str) -> dict:
     run = ctx.project.run_dir(sample)
@@ -462,7 +467,8 @@ def get_submission_status(ctx: ToolContext, sample: str) -> dict:
             "package_files": sorted(p.name for p in package.iterdir() if p.is_file()),
             "submission_readiness": validation.get("submission_readiness"),
             "missing_required_metadata": validation.get("missing_required_metadata"),
-            "phagemine_errors": pre.get("errors", [])[:20], "phagemine_warnings": (pre.get("warnings") or [])[:20],
+            "errors": [_finding_brief(f) for f in pre.get("errors", [])[:25]], "errors_total": len(pre.get("errors", [])),
+            "warnings": [_finding_brief(f) for f in (pre.get("warnings") or [])[:25]], "warnings_total": len(pre.get("warnings") or []),
             "table2asn": {"state": t2a.get("state"), "message": t2a.get("message"), "val_messages": val_lines},
             "corrections_applied": _json(ctx.project.contained(revision["corrections"]), {}) if revision else {},
             "note": "PhageMine never submits to NCBI. The researcher uploads the package through the NCBI Submission Portal."}

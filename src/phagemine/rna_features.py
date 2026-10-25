@@ -91,10 +91,14 @@ def parse_trnascan(path: str | Path, version: str, *, confirmed_zero_hits: bool 
 def append_submission_features(root: Path, features: list[dict]) -> None:
     table = root / "genbank_submission/features.tbl"
     if not table.is_file(): return
+    metadata = root / "genbank_submission/submission_metadata.json"
+    prefix = (json.loads(metadata.read_text()).get("locus_tag_prefix") if metadata.is_file() else None)
     with table.open("a") as handle:
-        for feature in features:
+        for number, feature in enumerate(features, 1):
             start, end = (feature["start"], feature["end"]) if feature["strand"] == "+" else (feature["end"], feature["start"])
-            note = f"Computational RNA prediction; {feature['source']} {feature['source_version']}; record {feature['feature_id']}"
+            note = f"Computational RNA prediction; {feature['source']} {feature['source_version']}"
+            # NCBI expects a gene feature (with the locus_tag) for every RNA feature (DISC: MISSING_GENES).
+            handle.write(f"{start}\t{end}\tgene\n" + (f"\t\t\tlocus_tag\t{prefix}_t{number:04d}\n" if prefix else ""))
             handle.write(f"{start}\t{end}\t{feature['type']}\n\t\t\tproduct\t{feature['product']}\n\t\t\tnote\t{note}\n")
     validation = root / "genbank_submission/validation.json"
     if validation.is_file():

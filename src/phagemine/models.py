@@ -32,6 +32,8 @@ class SubmissionMetadata:
     bioproject_accession: str | None = None
     biosample_accession: str | None = None
     locus_tag_prefix: str | None = None
+    # Path to the official template made with NCBI's Submission Template form (replaces PhageMine's minimal one).
+    submission_template: str | None = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SubmissionMetadata":

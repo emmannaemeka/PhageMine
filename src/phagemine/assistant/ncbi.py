@@ -24,6 +24,7 @@ from phagemine.models import SubmissionMetadata
 REVISABLE_FIELDS = {"product", "note", "locus_tag"}
 # Partial flags describe whether a gene's ends are complete: a curation decision, not wording.
 CURATION_FIELDS = {"partial", "start", "end", "strand", "codon_start", "sequence", "translation"}
+UNCERTAIN_SYNONYMS = {"putative", "probable", "possible", "predicted", "potential", "candidate"}
 QUALIFIERS = ("putative", "probable", "possible", "predicted", "potential", "uncharacterized",
               "uncharacterised", "like", "domain containing", "family protein", "homolog")
 METADATA_FIELDS = {f for f in SubmissionMetadata.__dataclass_fields__}
@@ -87,9 +88,10 @@ def _norm(text: str | None) -> str:
 def _qualifiers(name: str) -> tuple[set[str], str]:
     """Split a normalised product name into its uncertainty qualifiers and its core."""
     text, found = f" {_norm(name)} ", set()
-    for word in QUALIFIERS:
+    for word in QUALIFIERS + ("candidate",):
         if f" {word} " in text:
-            found.add(word)
+            # NCBI asks for "putative" in place of predicted/possible/probable/potential/candidate.
+            found.add("putative" if word in UNCERTAIN_SYNONYMS else word)
             text = text.replace(f" {word} ", " ")
     return found, " ".join(text.split())
 
