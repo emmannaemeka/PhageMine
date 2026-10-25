@@ -17,6 +17,8 @@ genomic context. It is designed for researchers working in phage genomics,
 bacteriophage genome annotation, viral genomics and related bioinformatics
 workflows.
 
+Project website: [PhageMine](https://emmannaemeka.github.io/PhageMine/).
+
 ## What it does
 
 - Predicts protein-coding genes with PHANOTATE.
