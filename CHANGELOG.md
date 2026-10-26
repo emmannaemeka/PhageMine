@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.3 — 2026-10-26
+
+- Add overlap-aware coding-capacity reporting and low-density review warnings.
+- Expose native alternative-code evidence and short-CDS caller discrepancies.
+- Add optional annotated GenBank reference screening, alignment-based boundary
+  review and coverage/identity plots; retain existing whole-genome similarity.
+- Connect verified automated GitHub releases to guarded PyPI publication.
+- No automatic gene-model correction, translation-table switch or VIRIDIC dependency.
+
 ## 1.3.2 — 2026-10-13
 
 - Fix Pyrodigal/Pyrodigal-gv coordinate import: Pyrodigal reports one-based
