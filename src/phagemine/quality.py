@@ -79,5 +79,10 @@ def assess(genome: str, proteins: list[Protein]) -> dict:
             elif overlap_type in {"partial_overlap", "nested_overlap"}:
                 warnings.append({"code": "overlapping_cds", "message": f"{overlap_type.replace('_', ' ')} retained from the gene caller; phage genomes can contain legitimate overlapping CDSs, but review is recommended before submission.", "proteins": [left.protein_id, right.protein_id], "overlap_bases": overlap, "strand_pair": [left.strand, right.strand], "same_strand": left.strand == right.strand})
 
+    from .annotation_reliability import coding_capacity
+    capacity = coding_capacity(len(genome), [(p.start, p.end) for p in proteins])
+    density = capacity["coding_density_percent"]
+    if density is not None and density < 85:
+        warnings.append({"code": "low_coding_density", "message": "CDS union coverage is below the 85% review threshold. Review assembly quality, missed genes and alternative genetic-code evidence; this is not proof of recoding.", "coding_density_percent": density, "review_threshold_percent": 85})
     status = "failed" if errors else ("review_required" if warnings else "passed")
-    return {"sequence_length": len(genome), "predicted_cds": len(proteins), "status": status, "errors": errors, "warnings": warnings, "info": infos, "coordinate_system": "1-based-inclusive", "coordinate_scope": "analysis_sequence"}
+    return {**capacity, "coding_density_review_threshold_percent": 85, "sequence_length": len(genome), "predicted_cds": len(proteins), "status": status, "errors": errors, "warnings": warnings, "info": infos, "coordinate_system": "1-based-inclusive", "coordinate_scope": "analysis_sequence"}

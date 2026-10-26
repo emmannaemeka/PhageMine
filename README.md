@@ -111,6 +111,9 @@ PhageMine is research software. Functional predictions require review,
 and confidence labels describe evidence strength rather than calibrated
 probabilities. See the [limitations](docs/limitations.md) for interpretation.
 
+For coding-capacity, short-CDS, alternative-code evidence and optional annotated
+reference checks, see the [annotation reliability guide](docs/annotation-reliability.md).
+
 ## Citation and support
 
 Citation information is available in [CITATION.cff](CITATION.cff) and the
