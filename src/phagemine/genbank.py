@@ -62,7 +62,7 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
                 else:
                     errors.append({**diagnostic, "severity": "ERROR", "recommended_action": "Correct the CDS coordinates/partial state; do not add a stop codon to the genome merely to satisfy validation."})
         if "mock" in protein.annotation.lower() or any(e.status == "mock" for e in protein.evidence):
-            warnings.append({**prefix, "code": "mock_or_unsupported_function", "message": "Mock/computational annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein."})
+            warnings.append({**prefix, "code": "mock_or_unsupported_function", "message": "Mock annotation cannot support a GenBank functional claim; feature product will be emitted as hypothetical protein."})
         if protein.annotation_level.value in {"weak inference", "hypothesis requiring experimental validation"}:
             warnings.append({**prefix, "code": "uncharacterized_product", "message": "No supported functional product name is available; feature product will be hypothetical protein."})
     if provenance.get("input_sha256") is None:
@@ -71,8 +71,8 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
 
 
 def product_name(protein: Protein) -> str:
-    """Only experimentally/curated, non-mock claims may become a submitted product name."""
-    if protein.annotation_level in {EvidenceLevel.EXPERIMENTAL, EvidenceLevel.CURATED} and "mock" not in protein.annotation.lower() and not any(e.status == "mock" for e in protein.evidence):
+    """Preserve supported final annotations, including computational predictions."""
+    if protein.annotation_level in {EvidenceLevel.EXPERIMENTAL, EvidenceLevel.CURATED, EvidenceLevel.COMPUTATIONAL} and "mock" not in protein.annotation.lower() and not any(e.status == "mock" for e in protein.evidence):
         return protein.annotation
     return "hypothetical protein"
 
@@ -89,7 +89,7 @@ def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | Non
         change = (overrides or {}).get(protein.protein_id, {})
         product = change.get("product") or product_name(protein)
         tag = f"{locus_tag_prefix}{protein.protein_id}" if locus_tag_prefix else protein.protein_id
-        note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; functional claims withheld unless supported by non-mock curated/experimental evidence."
+        note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; Product reflects the final PhageMine annotation; computational predictions are not experimental validation."
         lines.extend([f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", f"\t\t\tnote\t{_safe(note)}"])
 
     return "\n".join(lines) + "\n"
