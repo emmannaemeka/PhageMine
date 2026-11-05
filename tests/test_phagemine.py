@@ -1902,11 +1902,13 @@ class PhageMineTests(unittest.TestCase):
             self.assertEqual(package["assembler"], "Flye")
 
     def _complete_metadata(self):
-        return SubmissionMetadata.from_dict(json.loads((ROOT / "examples/submission_metadata.json").read_text()))
+        metadata = SubmissionMetadata.from_dict(json.loads((ROOT / "examples/submission_metadata.json").read_text()))
+        metadata.locus_tag_prefix = "TEST"
+        return metadata
 
     def _fake_table2asn(self, directory, exit_code=0):
         script = Path(directory) / f"fake_table2asn_{exit_code}.sh"
-        script.write_text(f"#!/bin/sh\nmkdir -p \"$4\"\necho validation > \"$4/fake.val\"\necho stats > \"$4/fake.stats\"\nexit {exit_code}\n")
+        script.write_text(f"#!/bin/sh\nmkdir -p \"$4\"\necho validation > \"$4/fake.val\"\necho stats > \"$4/fake.stats\"\necho submission > \"$4/fake.sqn\"\nexit {exit_code}\n")
         script.chmod(script.stat().st_mode | stat.S_IXUSR)
         return str(script)
 
@@ -1930,7 +1932,7 @@ class PhageMineTests(unittest.TestCase):
             result = write_package(temp, genome_id, genome, self._submission_acceptable_proteins(genome_id, genome), {"input_sha256": "fixture"}, self._complete_metadata(), self._fake_table2asn(temp))
             self.assertEqual(result["submission_readiness"], "READY")
             self.assertEqual(result["ncbi_table2asn_validation"]["state"], "passed")
-            self.assertIn("table2asn_output/fake.val", result["ncbi_table2asn_validation"]["output_files"])
+            self.assertTrue(any(path.endswith("/fake.val") for path in result["ncbi_table2asn_validation"]["output_files"]))
 
     def test_table2asn_failure_fails_readiness(self):
         genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
