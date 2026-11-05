@@ -89,6 +89,8 @@ def parse_trnascan(path: str | Path, version: str, *, confirmed_zero_hits: bool 
 
 
 def append_submission_features(root: Path, features: list[dict]) -> None:
+    if not features:
+        return
     table = root / "genbank_submission/features.tbl"
     if not table.is_file(): return
     with table.open("a") as handle:
@@ -96,13 +98,35 @@ def append_submission_features(root: Path, features: list[dict]) -> None:
             start, end = (feature["start"], feature["end"]) if feature["strand"] == "+" else (feature["end"], feature["start"])
             note = f"Computational RNA prediction; {feature['source']} {feature['source_version']}; record {feature['feature_id']}"
             handle.write(f"{start}\t{end}\t{feature['type']}\n\t\t\tproduct\t{feature['product']}\n\t\t\tnote\t{note}\n")
+    # Keep the table2asn basename-matched table synchronized after RNA attachment.
+    (table.parent / "genome.tbl").write_text(table.read_text())
     validation = root / "genbank_submission/validation.json"
     if validation.is_file():
         payload = read_json(validation)
-        payload["ncbi_table2asn_validation"] = {"state": "not_run", "message": "RNA features were added; run official validation on the current package"}
-        payload["submission_readiness"] = "READY_WITH_WARNINGS" if payload.get("submission_readiness") == "READY" else payload.get("submission_readiness")
+        from .genbank import readiness, table2asn_status
+        from .models import SubmissionMetadata
+        official = table2asn_status(table.parent)
+        payload["ncbi_table2asn_validation"] = official
+        metadata = SubmissionMetadata.from_dict(read_json(table.parent / "submission_metadata.json"))
+        pre = payload.get("phagemine_pre_submission_validation", {"valid": False, "errors": [], "warnings": []})
+        state, missing = readiness(pre, metadata, official)
+        payload["submission_readiness"] = state
+        payload["missing_required_metadata"] = missing
+        pre["ncbi_submission_ready"] = state in {"READY", "READY_WITH_WARNINGS"}
         payload["rna_feature_review"] = {"count": len(features), "status": "COMPUTATIONAL_REQUIRES_REVIEW"}
         validation.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+        report = ["PhageMine NCBI Pre-submission Validation (after RNA attachment)",
+                  f"OVERALL: {state}", "Local checks and official validation are not NCBI acceptance.",
+                  f"Official table2asn validation: {official.get('state', 'unavailable')}",
+                  f"Missing required metadata: {', '.join(missing) or 'none'}",
+                  f"Fatal errors: {len(pre.get('errors', []))}",
+                  f"Warnings/review items: {len(pre.get('warnings', []))}"]
+        for item in pre.get("errors", []) + pre.get("warnings", []):
+            report.append(f"{item['code']}: {item.get('protein_id', '')} {item.get('message', '')}")
+        report.extend([official.get("message", ""), official.get("stderr", "")])
+        report.extend(official.get("validation_findings", []))
+        report.append("NCBI validation explanations: https://www.ncbi.nlm.nih.gov/genbank/genome_validation/")
+        (table.parent / "NCBI_VALIDATION_REPORT.txt").write_text("\n".join(report) + "\n")
     for pattern in ("*.sqn", "*.val", "*.gbf", "*.discr"):
         for stale in table.parent.glob(pattern): stale.unlink()
 
