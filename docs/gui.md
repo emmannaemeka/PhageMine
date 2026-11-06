@@ -102,3 +102,29 @@ authenticated access layer; it is not a public multi-user hosting service.
 
 If browser opening fails, use the printed link. A deliberately selected busy
 port fails with a clear message instead of opening another application's page.
+
+## Ask PhageMine (first version)
+
+Choose **Ask PhageMine** in the sidebar and type a supported request:
+
+- `Annotate my genome` opens the existing analysis workflow, where you can upload
+  FASTA files and start the run without entering a command.
+- `Find the capsid gene` searches saved product names and gene labels.
+- `Explain PM_000001` displays matching records, coordinates and saved evidence.
+- `Summarize my results` reports annotation, sample, unknown-product and conflict counts.
+- `Compare my genomes` displays existing native family, membership and recurrence
+  tables, or explains how to prepare the cohort workflow.
+- `Check my installation` opens tool and database diagnostics.
+
+Set **Result directory** to the completed run to query. Changing this folder clears
+an earlier question so results are not silently attributed to another run. Search
+matches annotation text, not raw sequences. No match does not establish biological
+absence. Original evidence and source directories are visible with each hit.
+
+This first version uses deterministic offline phrase matching, not a generative
+language model. It has no API key requirement, sends no data to an AI provider,
+and never executes text as code. Unrecognized requests receive guidance instead
+of a guessed answer. Annotation still requires the normal tools and databases;
+comparison uses already computed outputs and does not infer homology from names.
+Free-form conversational interpretation and automatic multi-step task planning
+remain future work.
