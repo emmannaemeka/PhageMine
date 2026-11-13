@@ -20,7 +20,7 @@ st.set_page_config(page_title="PhageMine GUI", page_icon="🧬", layout="wide")
 st.title("PhageMine")
 st.caption(f"Version {__version__} · Local analysis workspace")
 
-PAGES = ("Home / New Analysis", "Environment / Database Status", "Run Monitor",
+PAGES = ("Ask PhageMine", "Home / New Analysis", "Environment / Database Status", "Run Monitor",
          "Annotation Results", "Review / Curation", "RNA Features", "Discovery Results", "Figures", "Export / Downloads")
 st.sidebar.title("Your workspace")
 page = st.sidebar.radio("Workspace", PAGES, key="workspace_page")
@@ -43,6 +43,11 @@ if st.session_state.get("last_completed_run"):
 def caution() -> None:
     st.info("Unknown does not mean novel. NO_EXTERNAL_MATCH does not prove novelty. Genomic context supports but does not prove function. Computational predictions are not experimental confirmation.")
 
+
+if page == "Ask PhageMine":
+    from phagemine.gui.assistant_page import render as render_assistant
+    render_assistant()
+    st.stop()
 
 if page == "Home / New Analysis":
     st.subheader("New analysis")

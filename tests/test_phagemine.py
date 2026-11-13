@@ -1930,7 +1930,13 @@ class PhageMineTests(unittest.TestCase):
         genome_id, genome = read_fasta(ROOT / "examples/demo_phage.fasta")
         with tempfile.TemporaryDirectory() as temp:
             result = write_package(temp, genome_id, genome, self._submission_acceptable_proteins(genome_id, genome), {"input_sha256": "fixture"}, self._complete_metadata(), self._fake_table2asn(temp))
-            self.assertEqual(result["submission_readiness"], "READY")
+            # No blocking errors; the NCBI requirements review still lists what this synthetic fixture
+            # would be asked about (short proteins, identical overlapping names,
+            # non-phage organism name, PhageMine's minimal template).
+            self.assertEqual(result["submission_readiness"], "READY_WITH_WARNINGS")
+            self.assertEqual(result["phagemine_pre_submission_validation"]["errors"], [])
+            self.assertEqual({w["code"] for w in result["phagemine_pre_submission_validation"]["warnings"]},
+                             {"PHAGE_ORGANISM_NAME", "LOCAL_SUBMISSION_TEMPLATE", "SHORT_PROTEIN", "OVERLAPPING_SIMILAR_CDS"})
             self.assertEqual(result["ncbi_table2asn_validation"]["state"], "passed")
             self.assertTrue(any(path.endswith("/fake.val") for path in result["ncbi_table2asn_validation"]["output_files"]))
 

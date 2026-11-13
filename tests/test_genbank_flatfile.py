@@ -44,3 +44,14 @@ class GenBankFlatfileTests(unittest.TestCase):
         protein = Protein('test', 'PM_1', 1, 9, '+', 'ATGAAATAA', 'MK', 'test',
                           annotation='mock capsid protein', annotation_level=EvidenceLevel.COMPUTATIONAL)
         self.assertEqual(product_name(protein), 'hypothetical protein')
+
+    def test_export_does_not_rewrite_final_model_translation(self):
+        protein = Protein('test', 'PM_1', 1, 9, '+', 'GTGAAATAA', 'VK', 'test')
+        with tempfile.TemporaryDirectory() as tmp, patch('phagemine.genbank.table2asn_status', return_value={'state': 'unavailable'}):
+            write_package(tmp, 'test', protein.cds, [protein], {'input_sha256': 'fixture'})
+            root = Path(tmp) / 'genbank_submission'
+            exported = SeqIO.read(root / 'genome.gbk', 'genbank')
+            cds = next(f for f in exported.features if f.type == 'CDS')
+            assert cds.qualifiers['translation'] == ['VK']
+            assert str(SeqIO.read(root / 'proteins.faa', 'fasta').seq) == 'VK'
+            assert str(cds.extract(exported.seq).translate(table=11)).rstrip('*') == 'VK'

@@ -50,6 +50,8 @@ Documentation = "https://github.com/emmannaemeka/PhageMine/blob/main/docs/instal
 [project.optional-dependencies]
 # Retained so existing installation commands using [gui] keep working.
 gui = []
+# Conversational assistant (Ask PhageMine page): language-model client.
+assistant = ["anthropic>=0.40"]
 test = [
     "biopython>=1.85,<2",
     "build>=1,<2",

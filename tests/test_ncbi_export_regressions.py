@@ -18,7 +18,7 @@ def protein(**kw):
     return Protein(**args)
 
 def metadata():
-    return SubmissionMetadata(**{k: 'fixture' for k in ('organism','phage_name','host','isolation_source','collection_date','geographic_location','sequencing_technology','submitter_name','submitter_email')}, authors=['fixture'], locus_tag_prefix='TEST_')
+    return SubmissionMetadata(organism='Escherichia phage Test', phage_name='Test', host='Escherichia coli', isolation_source='water', collection_date='2025', geographic_location='Nigeria', sequencing_technology='Illumina', submitter_name='Test Author', submitter_email='test@example.org', authors=['Test Author'], locus_tag_prefix='TEST')
 
 class ExportTests(unittest.TestCase):
     def test_final_computational_product_is_preserved(self):
@@ -46,7 +46,7 @@ class ExportTests(unittest.TestCase):
     def test_warning_state_is_reported_without_false_failure(self):
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(export, 'table2asn_status', return_value={'state':'passed', 'official_ncbi_validation':True}):
-                result=export.write_package(tmp, 'fixture', 'ATGAAATAA', [protein(annotation_level=EvidenceLevel.HYPOTHESIS)], {'input_sha256':'fixture'}, metadata())
+                result=export.write_package(tmp, 'fixture', 'ATGAAATAA'+'ACG'*100, [protein(annotation_level=EvidenceLevel.HYPOTHESIS)], {'input_sha256':'fixture'}, metadata())
             report=(Path(tmp)/'genbank_submission/NCBI_VALIDATION_REPORT.txt').read_text()
             self.assertEqual(result['submission_readiness'], 'READY_WITH_WARNINGS')
             self.assertIn('OVERALL: READY_WITH_WARNINGS', report)
@@ -55,7 +55,7 @@ class ExportTests(unittest.TestCase):
     def test_missing_metadata_is_visible_and_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(export, 'table2asn_status', return_value={'state':'unavailable'}):
-                result=export.write_package(tmp, 'fixture', 'ATGAAATAA', [protein()], {'input_sha256':'fixture'})
+                result=export.write_package(tmp, 'fixture', 'ATGAAATAA'+'ACG'*100, [protein()], {'input_sha256':'fixture'})
             report=(Path(tmp)/'genbank_submission/NCBI_VALIDATION_REPORT.txt').read_text()
             self.assertEqual(result['submission_readiness'], 'INCOMPLETE_METADATA')
             self.assertFalse(result['phagemine_pre_submission_validation']['ncbi_submission_ready'])
@@ -85,9 +85,9 @@ class ExportTests(unittest.TestCase):
             with patch.object(export,'table2asn_status',return_value={'state':'unavailable'}):
                 export.write_package(tmp,'fixture','ATGAAATAA',[protein()],{'input_sha256':'fixture'},metadata())
             header=(Path(tmp)/'genbank_submission/genome.fsa').read_text().splitlines()[0]
-            self.assertIn('[host=fixture]',header)
-            self.assertIn('[geo_loc_name=fixture]',header)
-            self.assertIn('[collection_date=fixture]',header)
+            self.assertIn('[host=Escherichia coli]',header)
+            self.assertIn('[geo_loc_name=Nigeria]',header)
+            self.assertIn('[collection_date=2025]',header)
 
     def test_review_item_still_blocks(self):
         pre={'valid':True, 'warnings':[{'severity':'REQUIRES_REVIEW'}]}
@@ -96,7 +96,7 @@ class ExportTests(unittest.TestCase):
     def test_protein_ids_and_products_match_table(self):
         with tempfile.TemporaryDirectory() as tmp:
             with patch.object(export, 'table2asn_status', return_value={'state':'unavailable'}):
-                export.write_package(tmp, 'fixture', 'ATGAAATAA', [protein()], {'input_sha256':'fixture'}, metadata())
+                export.write_package(tmp, 'fixture', 'ATGAAATAA'+'ACG'*100, [protein()], {'input_sha256':'fixture'}, metadata())
             root=Path(tmp)/'genbank_submission'
             self.assertIn('>gnl|PhageMine|TEST_000001 example protein', (root/'proteins.faa').read_text())
             self.assertIn('protein_id\tgnl|PhageMine|TEST_000001', (root/'features.tbl').read_text())

@@ -72,6 +72,13 @@ def compare(roots: list[str | Path], output: str | Path, mmseqs: str | None = No
     if not 2 <= len(roots) <= 10: raise ValueError("Comparison requires 2-10 result directories")
     loaded=[_load(Path(r).resolve()) for r in roots]; output=Path(output).resolve(); output.mkdir(parents=True, exist_ok=True)
     query_root, query, query_phrog=loaded[0]; rows=[]; links=[]
+    searches=[]
+
+    def search(*arguments):
+        # Record every MMseqs2 attempt so the manifest reports execution, not just presence.
+        result = _mmseqs_matches(*arguments)
+        searches.append(result[1])
+        return result
     for qid, qp in query.items():
         per=[]
         for ref_root, ref, ref_phrog in loaded[1:]:
@@ -82,12 +89,12 @@ def compare(roots: list[str | Path], output: str | Path, mmseqs: str | None = No
                     if candidates: method='PHROG_ANCHOR'
             mm_matches, mm_provenance = ({}, {"mmseqs_executed":False})
             if candidates:
-                mm_matches, mm_provenance = _mmseqs_matches({qid:qp}, ref, mmseqs or shutil.which('mmseqs'))
+                mm_matches, mm_provenance = search({qid:qp}, ref, mmseqs or shutil.which('mmseqs'))
                 if mm_provenance.get('mmseqs_executed') and any(row['target_protein_id'] in candidates for row in mm_matches.get(qid, [])):
                     method='HYBRID'
             if not candidates:
                 executable=mmseqs or shutil.which('mmseqs')
-                mm_matches, mm_provenance = _mmseqs_matches({qid:qp}, ref, executable)
+                mm_matches, mm_provenance = search({qid:qp}, ref, executable)
                 candidates=[row['target_protein_id'] for row in mm_matches.get(qid, [])]
                 method='MMSEQS2' if mm_provenance.get('mmseqs_executed') and candidates else 'EXACT_SEQUENCE_MATCH'
                 if not candidates: candidates=[rid for rid,rp in ref.items() if rp.get('sequence')==qp.get('sequence')]
@@ -104,4 +111,33 @@ def compare(roots: list[str | Path], output: str | Path, mmseqs: str | None = No
     (output/'comparative_context.json').write_text(json.dumps(rows,indent=2,sort_keys=True)); (output/'ortholog_links.tsv').write_text('query_protein_id\treference_genome_id\treference_protein_id\torthology_method\tsequence_identity\talignment_length\tquery_coverage\ttarget_coverage\n'+''.join(f"{x['query_protein_id']}\t{x['reference_genome_id']}\t{x['reference_protein_id']}\t{x['orthology_method']}\t{x['sequence_identity']}\t{x['alignment_length']}\t{x['query_coverage']}\t{x['target_coverage']}\n" for x in links))
     cols=['query_protein_id','genomes_compared','homologs_found','fraction_present','conserved_order_count','conserved_orientation_count','conserved_module_count','synteny_status','functional_state','proposed_function','functional_module','is_cross_genome_conserved_unknown','ambiguous_mapping_count']
     with (output/'comparative_context.tsv').open('w',newline='') as h: w=csv.DictWriter(h,fieldnames=cols,delimiter='\t'); w.writeheader(); w.writerows({k:x.get(k) for k in cols} for x in rows)
+    _write_manifest(output, [root for root, _, _ in loaded], mmseqs or shutil.which('mmseqs'), searches, links)
     return rows,links
+
+
+def _write_manifest(output: Path, roots: list[Path], executable: str | None, searches: list[dict], links: list[dict]) -> dict:
+    """Record inputs, whether MMseqs2 searches actually ran, and how links were found."""
+    import sys
+    from . import __version__
+    from collections import Counter
+    attempted = [s for s in searches if s.get("mmseqs") or s.get("error")]
+    succeeded = sum(1 for s in searches if s.get("mmseqs_executed"))
+    failed = [s for s in attempted if not s.get("mmseqs_executed")]
+    runs = []
+    for root in roots:
+        manifest = json.loads((root / "run_manifest.json").read_text())
+        runs.append({"path": str(root), "input_sha256": manifest.get("input_sha256"),
+                     "pipeline_version": manifest.get("pipeline_version")})
+    payload = {"schema_version": 1, "phagemine_version": __version__, "query_run": runs[0], "reference_runs": runs[1:],
+               "mmseqs": {"executable": executable, "searches_attempted": len(attempted), "searches_succeeded": succeeded,
+                          "searches_failed": len(failed), "first_error": next((s.get("error") for s in failed if s.get("error")), None),
+                          "version": next((s.get("mmseqs_version") for s in searches if s.get("mmseqs_version")), None)},
+               "thresholds": {"evalue": 1e-3, "query_coverage": 0.5, "target_coverage": 0.5},
+               "orthology_methods": dict(Counter(link["orthology_method"] for link in links)),
+               "note": "Without successful MMseqs2 searches, links come only from shared PHROG assignments and identical sequences."}
+    (output / "comparison_manifest.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    if not executable:
+        print("WARNING: MMseqs2 not found; homologs limited to shared PHROG assignments and identical sequences.", file=sys.stderr)
+    elif failed:
+        print(f"WARNING: {len(failed)} MMseqs2 searches failed; affected proteins fell back to PHROG anchors or identical sequences.", file=sys.stderr)
+    return payload
