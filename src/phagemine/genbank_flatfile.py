@@ -1,6 +1,7 @@
 """Write a local GenBank view of the submission package, without table2asn."""
 from pathlib import Path
 import json
+import hashlib
 
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, SimpleLocation, BeforePosition, AfterPosition
@@ -11,9 +12,22 @@ def write_flatfile(package: Path) -> Path:
     package = Path(package)
     record = SeqIO.read(package / "genome.fsa", "fasta")
     metadata = json.loads((package / "submission_metadata.json").read_text())
+    # Keep the full accession in ACCESSION/VERSION; bound only the LOCUS label.
+    if len(record.name) > 16:
+        record.name = record.name[:7] + "_" + hashlib.sha256(record.id.encode()).hexdigest()[:8]
     record.description = "PhageMine annotated genome"
     record.annotations = {"molecule_type": "DNA", "data_file_division": "PHG",
                           "comment": "Computational annotations; this file does not establish NCBI submission readiness."}
+    topology = metadata.get("topology")
+    representation = package.parent / "genome_representation.json"
+    if topology is None and representation.is_file():
+        topology = json.loads(representation.read_text()).get("topology", "unknown").lower()
+    if topology in {"linear", "circular"}:
+        record.annotations["topology"] = topology
+    elif topology not in {None, "unknown"}:
+        raise ValueError("topology must be linear, circular or unknown")
+    else:
+        record.annotations["comment"] += " Genome topology is unknown; no topology was inferred."
     source = {}
     for field, qualifier in (("organism", "organism"), ("host", "host"),
                              ("isolation_source", "isolation_source"), ("collection_date", "collection_date"),

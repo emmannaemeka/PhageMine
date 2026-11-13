@@ -193,6 +193,22 @@ def prefix_checkpoint_artifacts(sample_root: str | Path, sample_id: str) -> None
             os.replace(temporary, target_path)
 
 
+def write_final_gene_models(root: Path, proteins: list[Protein]) -> None:
+    # A consistent snapshot for validation and curation on every caller path.
+    model_path = root / "final_gene_models.tsv"
+    existing = {}
+    if model_path.is_file():
+        with model_path.open(newline="") as handle:
+            existing = {row["final_protein_id"]: row for row in csv.DictReader(handle, delimiter="\t")}
+    model_rows = [{**existing.get(p.protein_id, {}), "final_protein_id": p.protein_id,
+                   "start": p.start, "end": p.end, "strand": p.strand,
+                   "translation": p.sequence, "cds": p.cds} for p in proteins]
+    model_columns = list(dict.fromkeys(key for row in model_rows for key in row)) or ["final_protein_id", "start", "end", "strand", "translation", "cds"]
+    with model_path.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=model_columns, delimiter="\t")
+        writer.writeheader(); writer.writerows(model_rows)
+
+
 def write_outputs(output: str | Path, representation: GenomeRepresentation, sequencing_provenance: SequencingProvenance, proteins: list[Protein], candidates: list[Protein], manifest: dict, quality_control: dict | None = None, original_fasta: str | Path | None = None, classifications: list[dict] | None = None, context_records: list[dict] | None = None, modules: list[dict] | None = None) -> None:
     root = Path(output)
     root.mkdir(parents=True, exist_ok=True)
@@ -223,6 +239,8 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
         json.dumps(scientific_status, indent=2, sort_keys=True) + "\n")
     (root / "proteins.faa").write_text("".join(f">{p.protein_id} genome={p.genome_id} start={p.start} end={p.end}\n{p.sequence}\n" for p in proteins))
     (root / "cds.fna").write_text("".join(f">{p.protein_id}\n{p.cds}\n" for p in proteins))
+    write_final_gene_models(root, proteins)
+
     gff_records = []
     cls_by_id = {r.get("protein_id"): r for r in (classifications or [])}
     for p in proteins:

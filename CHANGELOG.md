@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0 — 2026-11-13
+
+- Export annotated `genbank_submission/genome.gbk` with supported computational product names and translations.
+- Bound LOCUS labels to 16 characters while preserving the full accession. Export explicitly supplied or known topology; do not infer unknown topology.
+- Emit `final_gene_models.tsv` for every annotation report, with coordinates, strand, CDS and translation for cross-output validation.
+- Verify GenBank round-trip invariants against 72 saved PHANOTATE calls on the real PZ583544.1 genome.
+
 ## 1.3.3 — 2026-10-26
 
 - Add overlap-aware coding-capacity reporting and low-density review warnings.
