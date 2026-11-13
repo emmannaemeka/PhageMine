@@ -219,6 +219,8 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     (root / "genome.tbl").write_text(table)
     (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)} {_safe((feature_overrides or {}).get(p.protein_id, {}).get('product') or product_name(p))}\n{p.sequence}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
+    from .genbank_flatfile import write_flatfile
+    write_flatfile(root)
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
     (root / "submission.sbt").write_text(_submission_template(metadata))
     cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}

@@ -100,6 +100,9 @@ def append_submission_features(root: Path, features: list[dict]) -> None:
             handle.write(f"{start}\t{end}\t{feature['type']}\n\t\t\tproduct\t{feature['product']}\n\t\t\tnote\t{note}\n")
     # Keep the table2asn basename-matched table synchronized after RNA attachment.
     (table.parent / "genome.tbl").write_text(table.read_text())
+    from .genbank_flatfile import write_flatfile
+    if (table.parent / "genome.gbk").is_file():
+        write_flatfile(table.parent)
     validation = root / "genbank_submission/validation.json"
     if validation.is_file():
         payload = read_json(validation)
