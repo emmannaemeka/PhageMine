@@ -30,7 +30,7 @@ Project website: [PhageMine](https://emmannaemeka.github.io/PhageMine/).
 
 ## Install
 
-The current stable release is [v1.3.3](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.3).
+The current stable release is [v1.4.0](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.4.0).
 Python 3.10 or later is required.
 
 Install from Bioconda, which brings the external analysis tools with it:
@@ -50,7 +50,7 @@ pip install phagemine
 To install from source instead:
 
 ```bash
-git clone --branch v1.3.3 --depth 1 https://github.com/emmannaemeka/PhageMine.git
+git clone --branch v1.4.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
@@ -197,3 +197,11 @@ PhageMine is distributed under the [MIT licence](LICENSE).
 Each generated submission package includes `genbank_submission/genome.gbk`, with the genome sequence, gene/CDS features, supported product names and protein translations. It is generated without table2asn and refreshed when RNA annotations are attached. Submission readiness still depends on the separate validation report.
 
 Older exports could replace computational product names with hypothetical protein. Current exports preserve supported computational annotations; update PhageMine and regenerate old packages to apply this correction. Unsupported and mock annotations remain hypothetical.
+
+### Important outputs
+
+- `genbank_submission/genome.gbk`: annotated GenBank sequence with gene/CDS features, supported products and translations.
+- `final_gene_models.tsv`: final coordinates, strands, CDS sequences and translations for consistency checks.
+- `annotation.tsv`, `functional_classification.tsv`, `genes.gff3`, `proteins.faa`, `cds.fna`, and `report.html`: annotation tables, sequences and review report.
+
+To export a known topology, supply `"topology": "linear"` or `"topology": "circular"` in `--metadata`. Use source evidence for this value; unknown topology remains unknown. Full accession IDs are retained even when a compact LOCUS label is required.

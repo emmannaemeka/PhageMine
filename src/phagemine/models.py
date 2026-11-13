@@ -17,6 +17,7 @@ class EvidenceLevel(str, Enum):
 class SubmissionMetadata:
     """User-supplied source and submitter information; absent fields are never inferred."""
     sequence_id: str | None = None
+    topology: str | None = None
     organism: str | None = None
     phage_name: str | None = None
     host: str | None = None
