@@ -29,8 +29,8 @@
 - GenBank package fixes: source modifiers and `[gcode=11]` are now written to
   the FASTA definition line where table2asn reads them; `gene` features carry
   matching locus tags for CDS exports, with gene features for attached RNA;
-  CDS notes retain the existing evidence references; alternative start codons
-  are given an initial methionine in `proteins.faa`; an official NCBI
+  CDS notes retain the existing evidence references; translations stay identical
+  to the final gene models across all exported sequences; an official NCBI
   submission template can be supplied via `submission_template`.
 - No change to annotation, gene calling or evidence handling.
 

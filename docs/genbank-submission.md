@@ -67,8 +67,8 @@ What the package now contains for NCBI:
   tag for every protein. Notes link to local evidence records and distinguish
   computational predictions from experimental validation. Attached RNA features
   are synchronized into the tables and `genome.gbk`.
-- `proteins.faa` gives complete CDSs that start with an alternative start
-  codon (GTG, TTG...) an initial methionine, as NCBI translates them.
+- `proteins.faa` preserves the final-model translation, matching other protein
+  outputs and `genome.gbk`; export does not silently revise translations.
 
 Recommended metadata additions:
 

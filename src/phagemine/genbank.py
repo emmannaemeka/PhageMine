@@ -251,7 +251,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     table = feature_table(genome_id, proteins, feature_overrides, getattr(metadata, "locus_tag_prefix", None))
     (root / "features.tbl").write_text(table)
     (root / "genome.tbl").write_text(table)
-    (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)} {_safe((feature_overrides or {}).get(p.protein_id, {}).get('product') or product_name(p))}\n{submitted_translation(p)}\n" for p in proteins))
+    (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)} {_safe((feature_overrides or {}).get(p.protein_id, {}).get('product') or product_name(p))}\n{p.sequence}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
     from .genbank_flatfile import write_flatfile
     write_flatfile(root)
