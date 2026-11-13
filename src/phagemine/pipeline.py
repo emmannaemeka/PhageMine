@@ -542,7 +542,7 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None, reference_genbank: list[str] | None = None, reference_blastn: str = "blastn", reference_min_coverage: float = 70, reference_min_identity: float = 80) -> int:
     progress = progress or ProgressReporter(quiet=True)
     if evidence_cache_dir and segmented:
         raise ValueError("Persistent evidence reuse is currently supported for single-genome runs")
@@ -561,6 +561,10 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     molecule_type = str(molecule_type).lower()
     if molecule_type not in {"dna", "rna"}:
         raise ValueError("molecule_type must be dna or rna")
+    if not (0 <= reference_min_coverage <= 100 and 0 <= reference_min_identity <= 100):
+        raise ValueError("Reference coverage and identity thresholds must be between 0 and 100")
+    if reference_genbank and (molecule_type != "dna" or segmented):
+        raise ValueError("Annotated reference review currently supports single-record DNA genomes")
     consensus_active = gene_model_policy == "consensus"
     if molecule_type == "rna" and consensus_active:
         raise ValueError("RNA mode uses the explicit Pyrodigal-rv RNA policy; DNA consensus is not applicable")
@@ -941,6 +945,13 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     timed_start("reporting")
     quality_control = assess(representation.analysis_sequence, proteins)
     manifest["quality_control"] = quality_control
+    if molecule_type == "dna":
+        from .annotation_reliability import write_reliability_review
+        manifest["annotation_reliability"] = write_reliability_review(
+            output, representation.analysis_sequence, proteins,
+            reference_genbank=reference_genbank, blastn=reference_blastn,
+            min_coverage=reference_min_coverage, min_identity=reference_min_identity)
+
     write_outputs(output, representation, sequencing_provenance, proteins, candidates, manifest, quality_control, fasta, classifications, context_records, modules)
     progress.finish(f"outputs written to {output}")
     timed_end("reporting")

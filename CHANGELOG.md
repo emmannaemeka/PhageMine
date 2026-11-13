@@ -28,11 +28,20 @@
   the NCBI check, the fix and the NCBI source page.
 - GenBank package fixes: source modifiers and `[gcode=11]` are now written to
   the FASTA definition line where table2asn reads them; `gene` features carry
-  locus tags (registered prefix only) for every CDS and tRNA; local file
-  references are no longer written into CDS notes; alternative start codons
+  matching locus tags for CDS exports, with gene features for attached RNA;
+  CDS notes retain the existing evidence references; alternative start codons
   are given an initial methionine in `proteins.faa`; an official NCBI
   submission template can be supplied via `submission_template`.
 - No change to annotation, gene calling or evidence handling.
+
+## 1.3.3 — 2026-10-26
+
+- Add overlap-aware coding-capacity reporting and low-density review warnings.
+- Expose native alternative-code evidence and short-CDS caller discrepancies.
+- Add optional annotated GenBank reference screening, alignment-based boundary
+  review and coverage/identity plots; retain existing whole-genome similarity.
+- Connect verified automated GitHub releases to guarded PyPI publication.
+- No automatic gene-model correction, translation-table switch or VIRIDIC dependency.
 
 ## 1.3.2 — 2026-10-13
 

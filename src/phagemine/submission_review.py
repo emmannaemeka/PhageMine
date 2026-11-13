@@ -132,7 +132,7 @@ def check_metadata(metadata) -> list[dict]:
             found.append(finding("BAD_LOCUS_TAG_PREFIX", "ERROR", f"Locus tag prefix '{prefix}' must be 3-12 letters or digits and start with a letter.",
                                  "Use the prefix assigned when you registered your BioProject.", "ANNOT", "BAD_LOCUS_TAG_FORMAT"))
     else:
-        found.append(finding("NO_LOCUS_TAG_PREFIX", "WARNING", "No registered locus tag prefix: genes are written without locus_tags.",
+        found.append(finding("NO_LOCUS_TAG_PREFIX", "WARNING", "No registered locus tag prefix: exported local locus tags are not registered NCBI identifiers.",
                              "Register a BioProject and add its locus tag prefix to the metadata (locus_tag_prefix). "
                              "Genome submissions are expected to have a locus_tag on every gene.", "ANNOT", "MISSING_LOCUS_TAGS"))
     template = getattr(metadata, "submission_template", None)

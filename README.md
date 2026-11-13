@@ -17,6 +17,8 @@ genomic context. It is designed for researchers working in phage genomics,
 bacteriophage genome annotation, viral genomics and related bioinformatics
 workflows.
 
+Project website: [PhageMine](https://emmannaemeka.github.io/PhageMine/).
+
 ## What it does
 
 - Predicts protein-coding genes with PHANOTATE.
@@ -28,7 +30,7 @@ workflows.
 
 ## Install
 
-The current stable release is [v1.3.2](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.2).
+The current stable release is [v1.3.3](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.3.3).
 Python 3.10 or later is required.
 
 Install from Bioconda, which brings the external analysis tools with it:
@@ -48,7 +50,7 @@ pip install phagemine
 To install from source instead:
 
 ```bash
-git clone --branch v1.3.2 --depth 1 https://github.com/emmannaemeka/PhageMine.git
+git clone --branch v1.3.3 --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
@@ -90,6 +92,73 @@ It works with a free local model through [Ollama](https://ollama.com)
 (`ollama pull qwen3:8b`, then `phagemine gui`), with free cloud tiers, or with
 Anthropic Claude. See the [assistant guide](docs/assistant.md) for deployment, data flow and limits.
 
+### Install on Windows with WSL
+
+You can use PhageMine on a **Windows computer through WSL**, which runs Ubuntu
+underneath. The GUI opens in your normal **Windows browser**. The full pipeline
+is not currently supported on native Windows; run the installation and analysis
+commands inside Ubuntu, not PowerShell or Windows Command Prompt.
+
+1. Open **PowerShell as Administrator** and install Ubuntu through WSL:
+
+   ```powershell
+   wsl --install -d Ubuntu
+   ```
+
+   Restart Windows if prompted, then open **Ubuntu** from the Start menu and
+   create your Linux username and password. See Microsoft's
+   [WSL installation guide](https://learn.microsoft.com/windows/wsl/install).
+
+2. In the **Ubuntu terminal**, install Git and Miniforge. Skip the Miniforge
+   download and installation if Conda is already installed inside Ubuntu:
+
+   ```bash
+   sudo apt update
+   sudo apt install -y git curl ca-certificates
+   curl -fL "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-$(uname -m).sh" -o /tmp/miniforge.sh
+   bash /tmp/miniforge.sh -b -p "$HOME/miniforge3"
+   source "$HOME/miniforge3/etc/profile.d/conda.sh"
+   conda init bash
+   ```
+
+   Use Linux Conda inside Ubuntu, even if you already have Conda on Windows.
+   The installer above selects your Linux CPU architecture; availability of
+   PhageMine's external packages still depends on that architecture.
+
+3. Install the current GitHub version and its dependencies **inside Ubuntu**:
+
+   ```bash
+   cd ~
+   git clone https://github.com/emmannaemeka/PhageMine.git
+   cd PhageMine
+   conda env create --file environment.yml
+   conda activate phagemine
+   python -m pip install .
+   phagemine doctor
+   phagemine databases install --all
+   phagemine doctor --deep
+   ```
+
+   Ensure the required tools and evidence resources report ready before using
+   them. Database preparation needs additional disk space beyond the downloads;
+   keep at least 15–20 GiB free for the complete setup.
+
+4. Start the GUI from the same Ubuntu terminal:
+
+   ```bash
+   phagemine-gui
+   ```
+
+   If WSL does not open your Windows browser automatically, open
+   [http://localhost:8501](http://localhost:8501) manually. Use the port printed
+   by the launcher if it selects a different one. Keep the Ubuntu terminal open
+   while using the GUI; press **Ctrl+C** to stop it.
+
+For later sessions, open Ubuntu and run `conda activate phagemine`, followed by
+`phagemine-gui`. Windows files are accessible under `/mnt/c/`; keeping large
+analysis inputs and results in your Ubuntu home directory avoids cross-filesystem
+I/O overhead. WSL-specific end-to-end testing is not part of the current CI matrix.
+
 ## Annotate a genome
 
 Supply a single-genome nucleotide FASTA file:
@@ -125,6 +194,9 @@ PhageMine is research software. Functional predictions require review,
 and confidence labels describe evidence strength rather than calibrated
 probabilities. See the [limitations](docs/limitations.md) for interpretation.
 
+For coding-capacity, short-CDS, alternative-code evidence and optional annotated
+reference checks, see the [annotation reliability guide](docs/annotation-reliability.md).
+
 ## Citation and support
 
 Citation information is available in [CITATION.cff](CITATION.cff) and the
@@ -133,3 +205,9 @@ Citation information is available in [CITATION.cff](CITATION.cff) and the
 Report bugs or request features through
 [GitHub Issues](https://github.com/emmannaemeka/PhageMine/issues).
 PhageMine is distributed under the [MIT licence](LICENSE).
+
+### GenBank flat-file output
+
+Each generated submission package includes `genbank_submission/genome.gbk`, with the genome sequence, gene/CDS features, supported product names and protein translations. It is generated without table2asn and refreshed when RNA annotations are attached. Submission readiness still depends on the separate validation report.
+
+Older exports could replace computational product names with hypothetical protein. Current exports preserve supported computational annotations; update PhageMine and regenerate old packages to apply this correction. Unsupported and mock annotations remain hypothetical.

@@ -1,55 +1,64 @@
 name: Publish to PyPI
 
-# Publishes built distributions to PyPI when a GitHub release is published.
-# Uses PyPI Trusted Publishing (OIDC) — no API token stored in the repository.
-
+# workflow_run handles releases created with GITHUB_TOKEN, whose release events
+# deliberately do not trigger another workflow. The gate validates the exact
+# published tag, current main and all required checks before exposing OIDC.
 on:
   release:
     types: [published]
+  workflow_run:
+    workflows: ["Publish verified release"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read
+
+concurrency:
+  group: phagemine-pypi-publication
+  cancel-in-progress: false
 
 jobs:
   build:
     name: Build distributions
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.gate.outputs.ready }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
+      - name: Require a verified published release at this commit
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/pypi_release_gate.py --repo "$GITHUB_REPOSITORY" --sha "$(git rev-parse HEAD)"
+
       - name: Install build tooling
+        if: steps.gate.outputs.ready == 'true'
         run: python -m pip install --upgrade pip build twine
 
       - name: Build sdist and wheel
+        if: steps.gate.outputs.ready == 'true'
         run: python -m build
 
       - name: Check metadata renders on PyPI
+        if: steps.gate.outputs.ready == 'true'
         run: python -m twine check dist/*
 
-      - name: Confirm the tag matches the packaged version
-        if: github.event_name == 'release'
-        run: |
-          python - <<'PY'
-          import os, tomllib
-          from pathlib import Path
-
-          version = tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]
-          tag = os.environ["RELEASE_TAG"].removeprefix("v")
-          if version != tag:
-              raise SystemExit(
-                  f"Release tag {tag!r} does not match pyproject version {version!r}"
-              )
-          print(f"Version {version} matches tag.")
-          PY
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-
       - uses: actions/upload-artifact@v4
+        if: steps.gate.outputs.ready == 'true'
         with:
           name: dist
           path: dist/
@@ -57,6 +66,7 @@ jobs:
   publish:
     name: Upload to PyPI
     needs: build
+    if: needs.build.outputs.ready == 'true'
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -70,3 +80,5 @@ jobs:
           path: dist/
 
       - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true

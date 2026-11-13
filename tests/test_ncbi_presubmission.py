@@ -29,7 +29,7 @@ def test_k141_reverse_boundary_nostop_regression():
 def test_minus_strand_three_prime_partial_feature_table():
     p = protein("ATGAAATAA", start=1, end=9, strand="-", p3=True)
     table = feature_table("g", [p])
-    assert "9\t<1\tCDS" in table
+    assert "9\t>1\tCDS" in table
 
 
 def test_plus_strand_three_prime_partial_feature_table():

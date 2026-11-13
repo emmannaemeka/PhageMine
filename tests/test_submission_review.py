@@ -105,16 +105,13 @@ def test_feature_rules():
     assert "NO_START_CODON" in codes(sr.check_features(genome, proteins, products))
 
 
-def test_feature_table_puts_locus_tags_on_genes_only():
+def test_feature_table_preserves_main_export_identifiers():
     genome_id, genome, proteins = demo()
     table = feature_table(genome_id, proteins[:1], locus_tag_prefix="JOS1")
-    lines = table.splitlines()
-    assert lines[1].endswith("\tgene") and lines[2] == "\t\t\tlocus_tag\tJOS1_000001"
-    assert lines[3].endswith("\tCDS") and "locus_tag" not in "\n".join(lines[3:])
-    assert "\t\t\tprotein_id\tgnl|JOS1|JOS1_000001" in lines
-    assert "cds_provenance" not in table and "note" not in table
-    untagged = feature_table(genome_id, proteins[:1])
-    assert "locus_tag" not in untagged and "gene" in untagged
+    assert table.count("locus_tag\tJOS1_000001") == 2
+    assert "protein_id\tgnl|PhageMine|JOS1_000001" in table
+    assert "\tgene\n" in table and "\tCDS\n" in table
+    assert "computational predictions are not experimental validation" in table
 
 
 def test_defline_carries_source_modifiers_and_table_11():
