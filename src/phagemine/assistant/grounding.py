@@ -41,13 +41,108 @@ def _numbers(text: str) -> set[str]:
     return found
 
 
-def _significant(value: str) -> bool:
-    """Small whole numbers ("two genomes", "step 3") are not checked."""
-    try:
-        number = float(value)
-    except ValueError:
-        return False
-    return not (number.is_integer() and 0 <= number < 10)
+COUNT_WORDS = dict(zip(
+    ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"),
+    map(str, range(10)),
+))
+
+
+def _claim_text(text: str) -> str:
+    # Ignore presentation numbering, not scientific counts (including zero).
+    text = re.sub(r"(?m)^\s*\d+[.)]\s+", "", text)
+    text = re.sub(r"\bstep\s+\d+\b", "step", text, flags=re.I)
+    text = ISO_DATE.sub(" ", PROTEIN_ID.sub(" ", JOB_ID.sub(" ", text)))
+    return re.sub(
+        r"\b(" + "|".join(COUNT_WORDS) + r")(?=\s+(?:(?:shared|unknown|predicted|total|annotated|matching)\s+)*(?:genes?|proteins?|genomes?|matches|pairs?)\b)",
+        lambda m: COUNT_WORDS[m.group().lower()], text, flags=re.I,
+    )
+
+
+def _sample_numbers(corpus: str) -> dict[str, set[str]]:
+    """Keep numeric evidence attached to its sample, never pooled across samples.
+
+    Tool results are newline-separated JSON objects. Invalid/truncated results
+    cannot provide sample-scoped evidence; the model must query a smaller result.
+    """
+    scoped: dict[str, set[str]] = {}
+
+    def add(sample, value):
+        if isinstance(sample, str):
+            scoped.setdefault(sample, set()).update(_numbers(json.dumps(value)))
+
+    def visit(value):
+        if isinstance(value, list):
+            for item in value:
+                visit(item)
+        elif isinstance(value, dict):
+            if value.get("ok") is False:
+                return
+            sample = value.get("sample")
+            if isinstance(sample, str):
+                # Do not let numbers in identifiers or free text authorise counts.
+                add(sample, numeric_leaves(value))
+            for key, item in value.items():
+                if key in {"proteins_with_homolog_in_other", "sample_counts", "genome_counts"} and isinstance(item, dict):
+                    for name, count in item.items():
+                        add(name, numeric_leaves(count))
+                # Also accept compact exported summaries: genome_A_genes: 10.
+                match = re.fullmatch(r"(.+)_(?:genes|proteins|count)", key)
+                if match and isinstance(item, (int, float)) and not isinstance(item, bool):
+                    add(match[1], item)
+                visit(item)
+
+    def numeric_leaves(value):
+        if isinstance(value, bool):
+            return []
+        if isinstance(value, (int, float)):
+            return [value]
+        if isinstance(value, dict):
+            return [n for k, v in value.items() if k not in {"sample", "samples"}
+                    for n in numeric_leaves(v)]
+        if isinstance(value, list):
+            return [n for v in value for n in numeric_leaves(v)]
+        return []
+
+    decoder = json.JSONDecoder()
+    remaining = corpus.lstrip()
+    while remaining:
+        try:
+            value, end = decoder.raw_decode(remaining)
+        except ValueError:
+            # Skip a malformed result without interpreting fragments as evidence.
+            _, _, remaining = remaining.partition("\n")
+        else:
+            visit(value)
+            remaining = remaining[end:]
+        remaining = remaining.lstrip()
+    return scoped
+
+
+def _sample_count_problems(text: str, corpus: str) -> list[str]:
+    scoped = _sample_numbers(corpus)
+    if not scoped:
+        return []
+    # Allow case and space/underscore differences, but preserve sample boundaries.
+    patterns = {name: re.compile(r"(?<![\w-])" + re.escape(name).replace("_", r"[ _]")
+                                + r"(?![\w-])", re.I) for name in scoped}
+    problems = []
+    # Each clause/row must carry its own sample; multi-sample assertions are
+    # ambiguous and should be rewritten as separate clauses or table rows.
+    for clause in re.split(r"[;\n]|(?<=[.!?])\s+|,\s+|\band\b", text):
+        named = [name for name, pattern in patterns.items() if pattern.search(clause)]
+        if not named:
+            continue
+        clean = clause
+        for name in named:
+            clean = patterns[name].sub(" ", clean)
+        numbers = NUMBER.findall(_claim_text(clean))
+        if numbers and len(named) > 1:
+            problems.append("ambiguous counts for multiple samples; report each sample separately")
+        elif numbers:
+            for number in numbers:
+                if not (_numbers(number) & scoped[named[0]]):
+                    problems.append(f"number {number} is not supported by tool results for sample {named[0]}")
+    return problems
 
 
 def check(text: str, corpus: str, project: Project) -> list[str]:
@@ -57,10 +152,15 @@ def check(text: str, corpus: str, project: Project) -> list[str]:
     if unknown_ids:
         problems.append("protein IDs not found in any tool result: " + ", ".join(unknown_ids))
     supported = _numbers(PROTEIN_ID.sub(" ", corpus))
-    unsupported = sorted({raw.replace(",", "") for raw in NUMBER.findall(ISO_DATE.sub(" ", PROTEIN_ID.sub(" ", JOB_ID.sub(" ", text))))
-                          if _significant(raw.replace(",", "")) and not (_numbers(raw) & supported)})
+    numeric_text = text
+    for sample in _sample_numbers(corpus):
+        numeric_text = re.sub(r"(?<![\w-])" + re.escape(sample).replace("_", r"[ _]")
+                              + r"(?![\w-])", " ", numeric_text, flags=re.I)
+    unsupported = sorted({raw.replace(",", "") for raw in NUMBER.findall(_claim_text(numeric_text))
+                          if not (_numbers(raw) & supported)})
     if unsupported:
         problems.append("numbers not found in any tool result: " + ", ".join(unsupported[:10]))
+    problems.extend(_sample_count_problems(text, corpus))
     jobs = {j["id"]: j for j in project.jobs()}
     for job_id in sorted(set(JOB_ID.findall(text))):
         if job_id not in jobs:
