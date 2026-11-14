@@ -16,13 +16,14 @@ from pathlib import Path
 
 from .models import EvidenceLevel, Protein, SubmissionMetadata
 from .sequencing_provenance import SequencingProvenance
+from .start_selection import STARTS_11
 
 
 def _reverse_complement(sequence: str) -> str:
     return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
 
 
-_STARTS = {"ATG", "GTG", "TTG"}
+_STARTS = STARTS_11
 _STOPS = {"TAA", "TAG", "TGA"}
 
 
@@ -140,8 +141,8 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
         if protein.sequence not in {expected_translation, _export_translation(protein)}:
             errors.append({**prefix, "code": "translation_mismatch", "message": "Protein translation does not match the submitted CDS sequence."})
         if protein.strand in {"+", "-"} and len(protein.cds) >= 6:
-            if protein.cds[:3] not in {"ATG", "GTG", "TTG"}:
-                warnings.append({**prefix, "code": "noncanonical_start_codon", "severity": "WARNING" if getattr(protein, "partial_5prime", False) else "REQUIRES_REVIEW", "message": "CDS does not begin with a standard PHANOTATE start codon.", "recommended_action": "Confirm the genetic code, start boundary and 5-prime partial state before submission."})
+            if protein.cds[:3] not in _STARTS:
+                warnings.append({**prefix, "code": "noncanonical_start_codon", "severity": "WARNING" if getattr(protein, "partial_5prime", False) else "REQUIRES_REVIEW", "message": "CDS does not begin with a valid translation table 11 start codon.", "recommended_action": "Confirm the genetic code, start boundary and 5-prime partial state before submission."})
             if protein.cds[-3:] not in {"TAA", "TAG", "TGA"}:
                 diagnostic = {**prefix, "code": "NCBI_CDS_NOSTOP", "message": "CDS does not end with a valid terminal stop codon.", "evidence": {"terminal_codon": protein.cds[-3:], "strand": protein.strand}}
                 if getattr(protein, "partial_3prime", False):
@@ -187,7 +188,7 @@ def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | Non
         product = change.get("product") or product_name(protein)
         tag = _locus_tag(protein, locus_tag_prefix)
         note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; Product reflects the final PhageMine annotation; computational predictions are not experimental validation."
-        lines.extend([f"{start}\t{end}\tgene", f"\t\t\tlocus_tag\t{tag}", f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", f"\t\t\tnote\t{_safe(note)}"])
+        lines.extend([f"{start}\t{end}\tgene", f"\t\t\tlocus_tag\t{tag}", f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", "\t\t\ttransl_table\t11", f"\t\t\tnote\t{_safe(note)}"])
 
         if getattr(protein, "partial_5prime", False):
             lines.append(f"\t\t\tcodon_start\t{getattr(protein, 'codon_start', 1)}")
@@ -206,7 +207,7 @@ def table2asn_status(package_root: Path, executable: str | None = None) -> dict:
         (package_root / "genome.tbl").write_text(table.read_text())
     # Isolate every run so stale reports cannot establish success.
     output = Path(tempfile.mkdtemp(prefix="table2asn_", dir=package_root)).resolve()
-    command = [executable, "-indir", str(package_root), "-outdir", str(output), "-t", str(package_root / "submission.sbt"), "-M", "n", "-V", "vb", "-Z"]
+    command = [executable, "-indir", str(package_root), "-outdir", str(output), "-t", str(package_root / "submission.sbt"), "-M", "n", "-V", "vb", "-Z", "-j", "[gcode=11]"]
     try:
         completed = subprocess.run(command, capture_output=True, text=True, check=False, timeout=300)
     except (OSError, subprocess.TimeoutExpired) as exc:
@@ -298,6 +299,8 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     (root / "genome.tbl").write_text(table)
     (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)} {_safe((feature_overrides or {}).get(p.protein_id, {}).get('product') or product_name(p))}\n{p.sequence}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
+    from .orf_table import write_orfs
+    write_orfs(root / "orfs.tsv", proteins, feature_overrides, metadata.locus_tag_prefix)
     from .genbank_flatfile import write_flatfile
     write_flatfile(root)
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))

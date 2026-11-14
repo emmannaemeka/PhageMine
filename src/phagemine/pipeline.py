@@ -755,6 +755,19 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         manifest.update({"gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile,
                          "selection_policy_version": "1.0"})
         manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    if production_observation and gv_result.status == "SUCCESS":
+        from .start_selection import select_supported_starts
+        proteins, start_changes = select_supported_starts(
+            representation.analysis_sequence, proteins, gv_result.models)
+        (Path(output) / "gene_calls" / "start_selection.json").write_text(
+            json.dumps(start_changes, indent=2, sort_keys=True))
+        if start_changes:
+            manifest = json.loads(manifest_path.read_text())
+            manifest.update({"final_cds_source": "PHANOTATE_WITH_SUPPORTED_START_SELECTION",
+                             "phanotate_authoritative": False,
+                             "start_selection_code_path": "phagemine.start_selection.select_supported_starts",
+                             "start_changes": start_changes})
+            manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
