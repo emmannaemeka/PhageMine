@@ -10,7 +10,7 @@ import re
 import shutil
 import subprocess
 import tempfile
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import date
 from pathlib import Path
 
@@ -20,6 +20,83 @@ from .sequencing_provenance import SequencingProvenance
 
 def _reverse_complement(sequence: str) -> str:
     return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
+
+
+_STARTS = {"ATG", "GTG", "TTG"}
+_STOPS = {"TAA", "TAG", "TGA"}
+
+
+def _export_translation(protein: Protein) -> str:
+    from .genome import translate
+    offset = protein.codon_start - 1 if protein.partial_5prime else 0
+    sequence = translate(protein.cds[offset:])
+    if not protein.partial_5prime and protein.cds[:3] in _STARTS and sequence:
+        sequence = "M" + sequence[1:]
+    return sequence
+
+
+def repair_boundaries(genome: str, proteins: list[Protein]) -> list[Protein]:
+    """Return export models with bounded, in-frame repairs; never mutate input models.
+
+    Coordinates are 1-based inclusive. Search in biological strand orientation,
+    without wrapping the contig. Preserve explicit partial calls. Record original
+    boundaries and unresolved ends in the model's gene_call_parameters dictionary.
+    """
+    oriented = {"+": genome.upper(), "-": _reverse_complement(genome.upper())}
+    repaired = []
+    for original in proteins:
+        p = replace(original, gene_call_parameters=dict(original.gene_call_parameters))
+        repaired.append(p)
+        if p.strand not in {"+", "-"} or not (1 <= p.start <= p.end <= len(genome)):
+            continue
+        sequence = oriented[p.strand]
+        left, right = ((p.start - 1, p.end) if p.strand == "+"
+                       else (len(genome) - p.end, len(genome) - p.start + 1))
+        # Do not conceal inconsistent input sequence or non-triplet complete CDSs.
+        if sequence[left:right] != p.cds.upper() or (right - left) % 3 or p.codon_start != 1:
+            continue
+        before = {"start": p.start, "end": p.end,
+                  "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime}
+        if not p.partial_3prime and sequence[right - 3:right] not in _STOPS:
+            for delta in (3, 6, 9):
+                candidate = right + delta
+                if candidate > len(sequence):
+                    break
+                if sequence[candidate - 3:candidate] in _STOPS:
+                    right = candidate
+                    break
+            if sequence[right - 3:right] not in _STOPS:
+                p.partial_3prime = True
+                if len(sequence) - right < 9:
+                    right = len(sequence)
+        if not p.partial_5prime and sequence[left:left + 3] not in _STARTS:
+            for delta in (-3, -6, 3, 6):
+                candidate = left + delta
+                if not (0 <= candidate and candidate + 6 <= right):
+                    continue
+                if sequence[candidate:candidate + 3] not in _STARTS:
+                    continue
+                # An upstream start must not cross an intervening stop codon.
+                if any(sequence[i:i + 3] in _STOPS for i in range(candidate, left, 3)):
+                    continue
+                left = candidate
+                break
+            else:
+                p.partial_5prime = True
+        p.start, p.end = ((left + 1, right) if p.strand == "+"
+                          else (len(genome) - right + 1, len(genome) - left))
+        p.cds = sequence[left:right]
+        p.start_codon, p.stop_codon = p.cds[:3], p.cds[-3:]
+        after = {"start": p.start, "end": p.end,
+                 "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime}
+        if before != after:
+            p.gene_call_parameters["boundary_repair"] = {"original": before, "repaired": after}
+        # Derive translation only for a consistent input; validation still catches
+        # pre-existing translation errors instead of silently repairing them.
+        from .genome import translate
+        if original.sequence in {translate(original.cds), _export_translation(original)}:
+            p.sequence = _export_translation(p)
+    return repaired
 
 
 def _safe(value: str | None) -> str:
@@ -60,7 +137,7 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
         if not protein.sequence or "*" in protein.sequence:
             errors.append({**prefix, "code": "invalid_translation", "message": "Protein translation is empty or contains an internal stop."})
         expected_translation = __import__("phagemine.genome", fromlist=["translate"]).translate(protein.cds)
-        if protein.sequence != expected_translation:
+        if protein.sequence not in {expected_translation, _export_translation(protein)}:
             errors.append({**prefix, "code": "translation_mismatch", "message": "Protein translation does not match the submitted CDS sequence."})
         if protein.strand in {"+", "-"} and len(protein.cds) >= 6:
             if protein.cds[:3] not in {"ATG", "GTG", "TTG"}:
@@ -196,6 +273,8 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     root.mkdir(parents=True, exist_ok=True)
     metadata = metadata or SubmissionMetadata()
     sequencing_provenance = sequencing_provenance or SequencingProvenance()
+    genome = genome.upper()
+    proteins = repair_boundaries(genome, proteins)
     pre_validation = validate(genome_id, genome, proteins, provenance)
     if metadata.sequence_id and metadata.sequence_id != genome_id:
         pre_validation["errors"].append({"code": "metadata_sequence_id_mismatch", "message": "Metadata sequence_id does not match the FASTA identifier."})
@@ -223,7 +302,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     write_flatfile(root)
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
     (root / "submission.sbt").write_text(_submission_template(metadata))
-    cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
+    cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime, "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
     (root / "cds_provenance.json").write_text(json.dumps(cds_provenance, indent=2, default=str, sort_keys=True))
     table2asn = table2asn_status(root, table2asn_executable)
     pre_validation["fatal_error_count"] = len(pre_validation["errors"])

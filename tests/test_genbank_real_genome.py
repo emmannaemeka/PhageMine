@@ -1,5 +1,6 @@
 """Export invariants using real sequence and independently saved PHANOTATE calls."""
 import csv
+import json
 from pathlib import Path
 from Bio import SeqIO
 from phagemine.models import Protein, SubmissionMetadata, EvidenceLevel
@@ -33,13 +34,26 @@ def test_real_genome_export_invariants(tmp_path):
     assert len(genes) == len(cds_features) == len(models) == 72
     assert len(record.name) <= 16
     assert record.annotations['topology'] == 'linear'
+    provenance = json.loads((tmp_path / 'genbank_submission/cds_provenance.json').read_text())
+    validation = json.loads((tmp_path / 'genbank_submission/validation.json').read_text())
+    assert validation['phagemine_pre_submission_validation']['errors'] == []
+    assert provenance['PM_000001']['partial_5prime']
+    assert provenance['PM_000072']['partial_3prime']
     for gene, cds, model in zip(genes, cds_features, models):
+        exported = provenance[model['final_protein_id']]
+        if model['final_protein_id'] == 'PM_000072':
+            assert int(cds.location.end) == len(genome) == int(model['end']) + 1
+        else:
+            assert int(cds.location.end) == int(model['end'])
         assert gene.location == cds.location
         assert int(cds.location.start) + 1 == int(model['start'])
-        assert int(cds.location.end) == int(model['end'])
         assert cds.location.strand == (1 if model['strand'] == '+' else -1)
-        observed = str(cds.extract(record.seq).translate(table=11)).rstrip('*')
-        assert cds.qualifiers['translation'][0] == model['translation'] == observed
+        coding_sequence = cds.extract(record.seq)
+        observed = str(coding_sequence[:len(coding_sequence) // 3 * 3].translate(table=11)).rstrip('*')
+        assert observed == model['translation']
+        if not exported['partial_5prime']:
+            observed = 'M' + observed[1:]
+        assert cds.qualifiers['translation'][0] == observed
         assert cds.qualifiers['product'] == ['supported computational regression label']
     package = tmp_path / 'genbank_submission'
     sequence = (package / 'genome.fsa').read_text()

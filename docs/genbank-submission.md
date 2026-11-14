@@ -50,3 +50,25 @@ fields can still fail official validation. Supply source metadata and the approv
 to clear errors. Biological boundary decisions, completeness, and genetic code
 require review against evidence. Consult [NCBI validation explanations](https://www.ncbi.nlm.nih.gov/genbank/genome_validation/)
 and [feature-table formatting](https://www.ncbi.nlm.nih.gov/genbank/feature_table/).
+
+
+## Automatic export boundary repair
+
+Before validation and packaging, export copies each consistent, in-frame model
+and checks codons on its biological strand. Missing stops are sought at +3, +6,
+and +9 bases, choosing the first stop. Noncanonical starts are sought at -3, -6,
++3, and +6 bases in that order, accepting ATG, GTG, or TTG without crossing a stop.
+Searches never wrap the contig. Explicit partial calls are retained.
+
+Unresolved ends receive `partial_5prime` or `partial_3prime` flags and the standard
+partial location markers in both feature tables and `genome.gbk`. A 3-prime search
+that runs out of contig includes the remaining bases up to the sequence boundary.
+An unresolved internal partial remains a validation error requiring review; marking
+it partial does not establish biological completeness or NCBI acceptance.
+
+Export CDS sequences and translations are regenerated after repair (complete
+alternative starts translate to methionine). Original analysis models are retained;
+`cds_provenance.json` records export coordinates, partial flags and original/repaired
+boundaries under `gene_call_parameters.boundary_repair`. Invalid coordinates,
+inconsistent CDS sequences, and non-triplet complete models are left for validation
+rather than guessed. No genome bases are edited.
