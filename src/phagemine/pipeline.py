@@ -768,6 +768,15 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                              "start_selection_code_path": "phagemine.start_selection.select_supported_starts",
                              "start_changes": start_changes})
             manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    if molecule_type == "dna" and predictor.name == "PHANOTATE":
+        from .start_refinement import run_refinement
+        import shutil
+        registered = EvidenceResourceManager().find(ResourceType.SWISSPROT) if not swissprot_path else None
+        proteins = run_refinement(
+            representation.analysis_sequence, proteins, Path(output) / "gene_calls" / "start_refinement",
+            secondary=gv_result.models if production_observation and gv_result.status == "SUCCESS" else (),
+            database=swissprot_path or (registered or {}).get("path"),
+            diamond=diamond or shutil.which("diamond"), threads=threads)
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
@@ -1012,7 +1021,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         from .rna_features import scan
         progress.start("noncoding RNA annotation")
         timed_start("rna_annotation")
-        rna_result = scan(Path(output), trnascan_executable, threads)
+        rna_result = scan(Path(output), trnascan_executable, threads, aragorn_executable=shutil.which("aragorn"))
         manifest.update({key: value for key, value in json.loads((Path(output) / "run_manifest.json").read_text()).items()
                          if key in {"rna_annotation", "scientific_validation"}})
         progress.finish(f"{rna_result['feature_count']} tRNA predictions")
@@ -1025,4 +1034,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_conflicts(output)
     from .triage import write_triage_report
     write_triage_report(output)
+    from .genome_qc import write_qc
+    write_qc(output, proteins=proteins, metadata=metadata, provenance=manifest)
     return len(proteins)

@@ -285,7 +285,7 @@ class PyrodigalProvider(GeneModelProvider):
                                         external_executable_required=False, native_python_provider=True)
 
     def __init__(self, *, meta: bool = True, closed: bool = False, mask: bool = False,
-                 min_gene: int = 90, min_edge_gene: int = 60, max_overlap: int = 60,
+                 min_gene: int = 90, min_edge_gene: int = 90, max_overlap: int = 60,
                  translation_table: int = 11):
         self.meta = meta
         self.closed = closed
@@ -424,7 +424,7 @@ class ProdigalGVProvider(PyrodigalProvider):
     method_lineage = "prodigal"
 
     def __init__(self, *, meta: bool = True, viral_only: bool = False, closed: bool = False,
-                 mask: bool = False, min_gene: int = 90, min_edge_gene: int = 60,
+                 mask: bool = False, min_gene: int = 90, min_edge_gene: int = 90,
                  max_overlap: int = 60, translation_table: int = 11):
         super().__init__(meta=meta, closed=closed, mask=mask, min_gene=min_gene,
                          min_edge_gene=min_edge_gene, max_overlap=max_overlap,

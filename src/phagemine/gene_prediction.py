@@ -59,9 +59,12 @@ class PHANOTATEPredictor(GenePredictor):
     """Adapter for the locally installed PHANOTATE command-line predictor."""
     name = "PHANOTATE"
 
-    def __init__(self, executable: str | None = None, extra_args: list[str] | None = None):
+    def __init__(self, executable: str | None = None, extra_args: list[str] | None = None, min_orf_nt: int = 90):
         self.executable = executable or shutil.which("phanotate.py") or shutil.which("phanotate")
         self.extra_args = extra_args or []
+        self.min_orf_nt = min_orf_nt
+        if min_orf_nt < 90:
+            raise ValueError("Production minimum CDS length must be at least 90 nt")
         self.last_command: list[str] | None = None
         self.last_raw_output = ""
         self.last_stdout = ""
@@ -90,14 +93,14 @@ class PHANOTATEPredictor(GenePredictor):
         return self._version_cache
 
     def parameters(self) -> dict:
-        return {"executable": self.executable, "extra_args": self.extra_args}
+        return {"executable": self.executable, "extra_args": self.extra_args, "min_orf_nt": self.min_orf_nt, "start_refinement": "table11_rbs_spacing"}
 
     def predict(self, genome_id: str, sequence: str, input_fasta: str | Path | None = None) -> list[Protein]:
         if not self.available():
             raise RuntimeError("PHANOTATE is required for production gene prediction but was not found. Install PHANOTATE locally and add phanotate.py (or phanotate) to PATH, or pass --phanotate /path/to/phanotate.py. The demo predictor is test-fixture only.")
         if input_fasta is None:
             raise ValueError("PHANOTATE requires the original FASTA path for reproducible external execution.")
-        command = [str(self.executable), *self.extra_args, str(input_fasta)]
+        command = [str(self.executable), "-l", str(self.min_orf_nt), *self.extra_args, str(input_fasta)]
         self.last_command = command
         self.last_input_fasta = str(input_fasta)
         completed = subprocess.run(command, capture_output=True, text=True, check=False)
@@ -105,7 +108,11 @@ class PHANOTATEPredictor(GenePredictor):
         if completed.returncode:
             raise RuntimeError(f"PHANOTATE failed (exit {completed.returncode}): {(completed.stderr or completed.stdout).strip()}")
         self.last_raw_output = completed.stdout or ""
-        return self.parse_output(genome_id, sequence, self.last_raw_output)
+        calls = self.parse_output(genome_id, sequence, self.last_raw_output)
+        retained = [p for p in calls if len(p.cds) >= self.min_orf_nt]
+        if not retained:
+            raise ValueError("PHANOTATE produced no CDSs meeting the configured minimum length")
+        return retained
 
     @staticmethod
     def parse_output(genome_id: str, sequence: str, output: str) -> list[Protein]:

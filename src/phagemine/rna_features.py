@@ -170,7 +170,7 @@ def attach(root: Path, features: list[dict], provenance: dict, rejected: list[di
     return payload
 
 
-def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:
+def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1, aragorn_executable: str | None = None) -> dict:
     if threads < 1: raise ValueError("threads must be positive")
     program = shutil.which(executable)
     if not program: raise ValueError("tRNAscan-SE is unavailable; install trnascan-se or supply its executable path")
@@ -193,8 +193,12 @@ def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:
     confirmed_zero = bool(re.search(r"(?m)^Total tRNAs:\s+0\s*$", stats_text) and
                           re.search(r"Sequences read:\s+[1-9][0-9]*", stats_text))
     features, rejected = parse_trnascan(output, version, confirmed_zero_hits=confirmed_zero)
-    return attach(root, features, {"provider": "tRNAscan-SE", "version": version, "command": command,
-                    "raw_table_sha256": checksum(output), "zero_hits_confirmed_by_statistics": confirmed_zero, "stats_sha256": checksum(stats) if stats.is_file() else None, "searched_types": ["tRNA"], "mode": "bacterial"}, rejected)
+    tmrna = {"status": "NOT_CONFIGURED"}
+    if aragorn_executable:
+        extra, tmrna = scan_tmrna(root, aragorn_executable)
+        features.extend(extra)
+    return attach(root, features, {"tmrna": tmrna, "provider": "tRNAscan-SE", "version": version, "command": command,
+                    "raw_table_sha256": checksum(output), "zero_hits_confirmed_by_statistics": confirmed_zero, "stats_sha256": checksum(stats) if stats.is_file() else None, "searched_types": ["tRNA", "tmRNA"] if aragorn_executable else ["tRNA"], "mode": "bacterial"}, rejected)
 
 
 def scan_run(run: str | Path, output: str | Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:
@@ -211,3 +215,41 @@ def import_run(run: str | Path, gff: str | Path, output: str | Path, source: str
         payload = attach(root, features, {"provider": source, "version": version,
                          "source_gff_sha256": checksum(gff), "search_execution": "EXTERNAL_IMPORT"})
     return payload
+
+
+def parse_aragorn_tmrna(text: str, version: str) -> list[dict]:
+    """Parse ARAGORN -m -l -w output; reject unsupported/permuted locations."""
+    import re
+    features=[]; seqid=None; expected=0; headers=0
+    for line in text.splitlines():
+        if line.startswith('>'):
+            seqid=line[1:].split()[0]; headers+=1
+        count=re.fullmatch(r'\s*(\d+) genes? found\s*',line)
+        if count: expected+=int(count[1])
+        if re.match(r'\s*\d+\s+tmRNA',line):
+            match=re.match(r'\s*\d+\s+tmRNA\s+(c)?\[(\d+),(\d+)\]',line)
+            if not match or not seqid:
+                raise ValueError('Unsupported ARAGORN tmRNA location; review raw output')
+            a,b=int(match[2]),int(match[3])
+            if a>b: raise ValueError('Wrapped tmRNA cannot be emitted as a simple feature')
+            features.append(dict(seqid=seqid,type='tmRNA',start=a,end=b,strand='-' if match[1] else '+',score='.',product='transfer-messenger RNA',source='ARAGORN',source_version=version))
+    if not headers or expected!=len(features) or not re.search(r'\d+ genes? found',text):
+        raise ValueError('Incomplete ARAGORN output; zero hits not established')
+    return features
+
+
+def scan_tmrna(root: Path, executable: str) -> tuple[list[dict], dict]:
+    program=shutil.which(executable)
+    if not program: raise ValueError('ARAGORN is unavailable')
+    probe=subprocess.run([program,'-h'],capture_output=True,text=True,timeout=30)
+    import re
+    match=re.search(r'ARAGORN v[^\s]+',probe.stdout+probe.stderr)
+    if not match: raise RuntimeError('Unable to identify ARAGORN version')
+    command=[program,'-m','-l','-gc11','-w',str(root/'analysis_genome.fasta')]
+    result=subprocess.run(command,capture_output=True,text=True,timeout=3600)
+    folder=root/'rna_search';folder.mkdir(exist_ok=True)
+    (folder/'aragorn_tmrna.txt').write_text(result.stdout)
+    (folder/'aragorn_stderr.txt').write_text(result.stderr)
+    if result.returncode: raise RuntimeError(f'ARAGORN failed: {result.stderr}')
+    features=parse_aragorn_tmrna(result.stdout,match[0])
+    return features,{'provider':'ARAGORN','version':match[0],'command':command,'searched_types':['tmRNA'],'raw_sha256':checksum(folder/'aragorn_tmrna.txt')}

@@ -180,7 +180,32 @@ Individual installers are also available:
     revise.add_argument("results_dir")
     revise.add_argument("--corrections", required=True)
     revise.add_argument("--output", required=True)
+    qc = subcommands.add_parser("genome-qc", help="Inspect final GenBank and emit the 14-question QC checklist")
+    qc.add_argument("results_dir")
+    qc.add_argument("--safety-db", action="append", default=[], metavar="CATEGORY=DIAMOND_DB")
+    qc.add_argument("--diamond", default="diamond")
+    qc.add_argument("--threads", type=int, default=1)
+    assembly = subcommands.add_parser("assemble", help="Optional paired-read assembly before annotation")
+    assembly.add_argument("--reads1", required=True)
+    assembly.add_argument("--reads2", required=True)
+    assembly.add_argument("--output", required=True)
+    assembly.add_argument("--assembler", choices=("shovill", "spades"), default="shovill")
+    assembly.add_argument("--executable")
+    assembly.add_argument("--threads", type=int, default=1)
     args = parser.parse_args(argv)
+    if args.command == "genome-qc":
+        from .genome_qc import write_qc
+        if args.safety_db:
+            from .safety_screen import screen
+            databases = dict(item.split("=", 1) for item in args.safety_db)
+            screen(args.results_dir, databases, args.diamond, args.threads)
+        report = write_qc(args.results_dir)
+        print(json.dumps({"status": report["status"], "cds_count": report["cds_count"]}))
+        return 1 if report["status"] == "FAIL" else 0
+    if args.command == "assemble":
+        from .assembly import assemble
+        print(assemble(args.reads1, args.reads2, args.output, args.assembler, args.executable, args.threads))
+        return 0
     from .workflow_cli import COMMANDS, dispatch
     if args.command in COMMANDS:
         try:

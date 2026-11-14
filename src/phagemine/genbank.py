@@ -137,11 +137,17 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
             errors.append({**prefix, "code": "NCBI_CDS_FRAME", "severity": "ERROR", "message": "Complete CDS length is not divisible by three."})
         if not protein.sequence or "*" in protein.sequence:
             errors.append({**prefix, "code": "invalid_translation", "message": "Protein translation is empty or contains an internal stop."})
+        from .start_refinement import cds_problems
+        for code in cds_problems(protein, genome):
+            if code in {"CDS_INTERNAL_STOP_REVIEW_RECODING", "CDS_CODON_START_INVALID"}:
+                errors.append({**prefix, "code": code, "message": "Sequence-derived CDS validation failed; inspect the original sequence."})
         expected_translation = __import__("phagemine.genome", fromlist=["translate"]).translate(protein.cds)
         if protein.sequence not in {expected_translation, _export_translation(protein)}:
             errors.append({**prefix, "code": "translation_mismatch", "message": "Protein translation does not match the submitted CDS sequence."})
         if protein.strand in {"+", "-"} and len(protein.cds) >= 6:
             if protein.cds[:3] not in _STARTS:
+                if not protein.partial_5prime:
+                    errors.append({**prefix, "code": "NCBI_CDS_START", "message": "Complete CDS has an invalid table 11 start."})
                 warnings.append({**prefix, "code": "noncanonical_start_codon", "severity": "WARNING" if getattr(protein, "partial_5prime", False) else "REQUIRES_REVIEW", "message": "CDS does not begin with a valid translation table 11 start codon.", "recommended_action": "Confirm the genetic code, start boundary and 5-prime partial state before submission."})
             if protein.cds[-3:] not in {"TAA", "TAG", "TGA"}:
                 diagnostic = {**prefix, "code": "NCBI_CDS_NOSTOP", "message": "CDS does not end with a valid terminal stop codon.", "evidence": {"terminal_codon": protein.cds[-3:], "strand": protein.strand}}
@@ -164,7 +170,8 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
 def product_name(protein: Protein) -> str:
     """Preserve the final supported annotation, including computational predictions."""
     if protein.annotation_level in {EvidenceLevel.EXPERIMENTAL, EvidenceLevel.CURATED, EvidenceLevel.COMPUTATIONAL} and "mock" not in protein.annotation.lower() and not any(e.status == "mock" for e in protein.evidence):
-        return protein.annotation.strip() or "hypothetical protein"
+        from .genome_qc import sanitize_product
+        return sanitize_product(protein.annotation)
     return "hypothetical protein"
 
 
@@ -275,6 +282,8 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     metadata = metadata or SubmissionMetadata()
     sequencing_provenance = sequencing_provenance or SequencingProvenance()
     genome = genome.upper()
+    from .genome_qc import sanitize_product
+    feature_overrides = {key: {**value, **({"product": sanitize_product(value["product"])} if value.get("product") else {})} for key, value in (feature_overrides or {}).items()}
     proteins = repair_boundaries(genome, proteins)
     pre_validation = validate(genome_id, genome, proteins, provenance)
     if metadata.sequence_id and metadata.sequence_id != genome_id:
@@ -343,4 +352,6 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     (root / "NCBI_VALIDATION_REPORT.txt").write_text("\n".join(report_lines) + "\n")
     (root / "provenance.json").write_text(json.dumps(provenance, indent=2, sort_keys=True))
     (root / "README.txt").write_text("This is a local PhageMine pre-submission package; it has not been submitted to NCBI. PhageMine QC, PhageMine pre-submission validation, table2asn validation, and final NCBI review are distinct stages. If table2asn is unavailable, install the official NCBI table2asn distribution, add it to PATH, and rerun this command. Never treat mock, weak, or hypothesis-level annotations as asserted product names.\n")
+    from .genome_qc import write_qc
+    write_qc(output, proteins=proteins, metadata=metadata, provenance=provenance)
     return validation
