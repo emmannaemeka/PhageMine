@@ -196,7 +196,6 @@ PhageMine is distributed under the [MIT licence](LICENSE).
 
 Each generated submission package includes `genbank_submission/genome.gbk`, with the genome sequence, gene/CDS features, supported product names and protein translations. It is generated without table2asn and refreshed when RNA annotations are attached. Submission readiness still depends on the separate validation report.
 
-Older exports could replace computational product names with hypothetical protein. Current exports preserve supported computational annotations; update PhageMine and regenerate old packages to apply this correction. Unsupported and mock annotations remain hypothetical.
 
 ### Important outputs
 
