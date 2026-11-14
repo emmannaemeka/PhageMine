@@ -21,7 +21,7 @@ st.title("PhageMine")
 st.caption(f"Version {__version__} · Local analysis workspace")
 
 PAGES = ("Home / New Analysis", "Environment / Database Status", "Run Monitor",
-         "Annotation Results", "Review / Curation", "RNA Features", "Discovery Results", "Figures", "Export / Downloads")
+         "Ask PhageMine", "Annotation Results", "Review / Curation", "RNA Features", "Discovery Results", "Figures", "Export / Downloads")
 st.sidebar.title("Your workspace")
 page = st.sidebar.radio("Workspace", PAGES, key="workspace_page")
 result_dir = st.sidebar.text_input("Result directory", key="result_dir", value="results/gui_run",
@@ -131,6 +131,10 @@ if page == "Home / New Analysis":
                                       args=(st.session_state.last_completed_run,))
             except (OSError, ValueError) as exc:
                 st.error(f"Could not start analysis: {exc}")
+
+elif page == "Ask PhageMine":
+    from phagemine.gui.assistant_page import render
+    render(result_dir)
 
 elif page == "Environment / Database Status":
     st.subheader("Environment and database status")
