@@ -60,6 +60,10 @@ def check_cds(rec, f, require_table, extended_starts=False):
         problems.append(f"transl_table {table} != required {require_table}")
 
     cs = int(q.get("codon_start", ["1"])[0])
+    if cs not in (1, 2, 3):
+        problems.append(f"codon_start {cs} is not 1, 2 or 3")
+    if not p5 and cs != 1:
+        problems.append(f"complete 5-prime CDS has codon_start {cs}, expected 1")
     seq = f.extract(rec.seq)
     coding = seq[cs - 1:]
     first = str(coding[:3]).upper()
@@ -97,8 +101,11 @@ def check_cds(rec, f, require_table, extended_starts=False):
     given = q.get("translation", [None])[0]
     if given:
         expect = prot[:-1] if prot.endswith("*") else prot
-        if given.upper() != expect.upper() and not (p5 and given[1:] == expect[1:]):
+        if given.upper() != expect.upper():
             problems.append("translation qualifier does not match the CDS sequence")
+
+    else:
+        problems.append("missing translation qualifier")
 
     return {
         "locus_tag": tag,

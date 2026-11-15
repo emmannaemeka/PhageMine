@@ -170,7 +170,7 @@ def attach(root: Path, features: list[dict], provenance: dict, rejected: list[di
     return payload
 
 
-def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1, aragorn_executable: str | None = None) -> dict:
+def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1, aragorn_executable: str | None = None, *, attach_results: bool = True) -> dict:
     if threads < 1: raise ValueError("threads must be positive")
     program = shutil.which(executable)
     if not program: raise ValueError("tRNAscan-SE is unavailable; install trnascan-se or supply its executable path")
@@ -197,8 +197,12 @@ def scan(root: Path, executable: str = "tRNAscan-SE", threads: int = 1, aragorn_
     if aragorn_executable:
         extra, tmrna = scan_tmrna(root, aragorn_executable)
         features.extend(extra)
-    return attach(root, features, {"tmrna": tmrna, "provider": "tRNAscan-SE", "version": version, "command": command,
-                    "raw_table_sha256": checksum(output), "zero_hits_confirmed_by_statistics": confirmed_zero, "stats_sha256": checksum(stats) if stats.is_file() else None, "searched_types": ["tRNA", "tmRNA"] if aragorn_executable else ["tRNA"], "mode": "bacterial"}, rejected)
+    provenance = {"tmrna": tmrna, "provider": "tRNAscan-SE", "version": version, "command": command,
+                    "raw_table_sha256": checksum(output), "zero_hits_confirmed_by_statistics": confirmed_zero, "stats_sha256": checksum(stats) if stats.is_file() else None, "searched_types": ["tRNA", "tmRNA"] if aragorn_executable else ["tRNA"], "mode": "bacterial"}
+    features = validate_features(features, root / "analysis_genome.fasta")
+    if attach_results:
+        return attach(root, features, provenance, rejected)
+    return {"features": features, "provenance": provenance, "rejected": rejected, "feature_count": len(features)}
 
 
 def scan_run(run: str | Path, output: str | Path, executable: str = "tRNAscan-SE", threads: int = 1) -> dict:

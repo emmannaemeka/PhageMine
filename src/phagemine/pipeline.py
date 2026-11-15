@@ -768,6 +768,14 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                              "start_selection_code_path": "phagemine.start_selection.select_supported_starts",
                              "start_changes": start_changes})
             manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    # Search before rescue, attach to completed outputs only after export.
+    import shutil
+    (Path(output) / "analysis_genome.fasta").write_text(f">{representation.analysis_sequence_id}\n{representation.analysis_sequence}\n")
+    early_rna = None
+    if rna_annotation != "none" and shutil.which(trnascan_executable):
+        from .rna_features import scan
+        early_rna = scan(Path(output), trnascan_executable, threads,
+                         aragorn_executable=shutil.which("aragorn"), attach_results=False)
     if molecule_type == "dna" and predictor.name == "PHANOTATE":
         from .start_refinement import run_refinement
         import shutil
@@ -776,7 +784,8 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             representation.analysis_sequence, proteins, Path(output) / "gene_calls" / "start_refinement",
             secondary=gv_result.models if production_observation and gv_result.status == "SUCCESS" else (),
             database=swissprot_path or (registered or {}).get("path"),
-            diamond=diamond or shutil.which("diamond"), threads=threads)
+            diamond=diamond or shutil.which("diamond"), threads=threads,
+            rna_features=early_rna["features"] if early_rna else ())
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
@@ -926,6 +935,15 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                               representation, sequencing_provenance, proteins, checkpoint_manifest, fasta)
     progress.finish(f"{sum(len(p.evidence) for p in proteins)} annotation evidence records integrated")
     timed_end("evidence_fusion")
+    if molecule_type == "dna" and predictor.name == "PHANOTATE":
+        from .overlap_rescue import promote_overlaps
+        proteins = promote_overlaps(representation.analysis_sequence, proteins,
+            Path(output) / "gene_calls" / "start_refinement",
+            lambda candidates: [_analyze_evidence(a, candidates, shared_evidence_cache)
+                                for a in (vog_adapter, phrogs_hmm_adapter)],
+            early_rna["features"] if early_rna else ())
+    from .genbank import repair_boundaries
+    proteins = repair_boundaries(representation.analysis_sequence, proteins)
     classifications = attach_gene_call_assessments(
         classify_proteins(proteins), gene_review_records)
     classification_by_id = {item["protein_id"]: item for item in classifications}
@@ -1015,17 +1033,11 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_package(output, representation.analysis_sequence_id, representation.analysis_sequence, proteins, manifest, metadata, table2asn_executable, sequencing_provenance)
     progress.finish("package generated")
     timed_end("genbank")
-    import shutil
-    rna_available = shutil.which(trnascan_executable)
-    if rna_annotation != "none" and rna_available:
-        from .rna_features import scan
-        progress.start("noncoding RNA annotation")
-        timed_start("rna_annotation")
-        rna_result = scan(Path(output), trnascan_executable, threads, aragorn_executable=shutil.which("aragorn"))
+    if early_rna is not None:
+        from .rna_features import attach
+        attach(Path(output), early_rna["features"], early_rna["provenance"], early_rna["rejected"])
         manifest.update({key: value for key, value in json.loads((Path(output) / "run_manifest.json").read_text()).items()
                          if key in {"rna_annotation", "scientific_validation"}})
-        progress.finish(f"{rna_result['feature_count']} tRNA predictions")
-        timed_end("rna_annotation")
     else:
         manifest["rna_annotation"] = {"status": "SKIPPED", "reason": "Disabled" if rna_annotation == "none" else "tRNAscan-SE not installed"}
     manifest["stage_timings_seconds"] = timings

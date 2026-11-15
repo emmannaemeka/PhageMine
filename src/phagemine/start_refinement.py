@@ -112,7 +112,32 @@ def _spacing(left, right, strand, proteins, length, exclude):
     return left - end
 
 
-def candidate_scores(genome, proteins, p, secondary=(), anchors=None, config=None):
+def genome_start_context(genome, proteins, secondary=()):
+    """Calibrate only from caller-agreement anchors, never reference annotations.
+
+    SD absence is not evidence of leaderless transcription. Sparse anchor sets
+    leave SD weighting unchanged. Moderate-GC genomes retain the original rule.
+    """
+    genome = genome.upper()
+    gc = sum(b in 'GC' for b in genome) / max(1, sum(b in 'ACGT' for b in genome))
+    agreement = {(p.start, p.end, p.strand) for p in secondary}
+    anchors = [p for p in proteins if (p.start, p.end, p.strand) in agreement
+               and not p.partial_5prime and not p.partial_3prime
+               and 'start_selection' not in p.gene_call_parameters]
+    hits = 0
+    for p in anchors:
+        seq = genome if p.strand == '+' else str(Seq(genome).reverse_complement())
+        hits += rbs_score(seq, oriented_bounds(p, len(genome))[0])['score'] >= 8
+    prevalence = hits / len(anchors) if anchors else None
+    t = max(0.0, min(1.0, (gc - .58) / .12))
+    adaptation = t*t*(3-2*t)  # smoothstep, no jump at 58% GC
+    sparse_sd = len(anchors) >= 10 and prevalence < .35
+    return {'gc_fraction': gc, 'anchor_count': len(anchors), 'sd_prevalence': prevalence,
+            'adaptation': adaptation, 'sd_weight': 0.0 if gc > .58 and sparse_sd else 1.0,
+            'sd_sparse': bool(gc > .58 and sparse_sd)}
+
+
+def candidate_scores(genome, proteins, p, secondary=(), anchors=None, config=None, context=None):
     config = config or RefinementConfig()
     length = len(genome)
     sequence = genome if p.strand == '+' else str(Seq(genome).reverse_complement())
@@ -137,13 +162,17 @@ def candidate_scores(genome, proteins, p, secondary=(), anchors=None, config=Non
         key = (start, end, p.strand)
         homology = (anchors or {}).get(key)
         homology_score = 16.0 if homology else 0.0
-        prior = CODON_PRIOR[sequence[left:left+3]]
+        codon = sequence[left:left+3]
+        prior = CODON_PRIOR[codon]
+        if context and codon in {'GTG', 'TTG'}:
+            prior += context['adaptation'] * (3.0 - prior) * .8
+        sd_weight = (context or {}).get('sd_weight', 1.0)
         support = config.caller_bonus if left in caller_starts else 0.0
-        score = prior + config.rbs_weight*rbs['score'] + packing + support + homology_score
+        score = prior + config.rbs_weight*sd_weight*rbs['score'] + packing + support + homology_score
         rows.append({'protein_id': p.protein_id, 'start': start, 'end': end, 'strand': p.strand,
                      'left': left, 'right': right, 'start_codon': sequence[left:left+3],
                      'length_nt': right-left, 'score': round(score, 4), 'codon_prior': prior,
-                     'rbs_score': rbs['score'], 'rbs_motif': rbs['motif'], 'spacer_nt': rbs['spacer_nt'],
+                     'rbs_weight': sd_weight, 'rbs_score': rbs['score'], 'rbs_motif': rbs['motif'], 'spacer_nt': rbs['spacer_nt'],
                      'upstream_gap_nt': gap, 'packing_score': packing, 'caller_score': support,
                      'homology_score': homology_score, 'homology': homology,
                      'original': left == original_left})
@@ -170,11 +199,12 @@ def refine_starts(genome, proteins, secondary=(), anchors=None, config=None):
     """Use an immutable neighbor snapshot, retaining ambiguous/unsupported changes."""
     genome = genome.upper(); config = config or RefinementConfig()
     output, audit, candidates = [], [], []
+    context = genome_start_context(genome, proteins, secondary)
     for p in proteins:
         output.append(p)
         if p.strand not in {'+', '-'} or p.partial_5prime or p.partial_3prime: continue
         if not 1 <= p.start < p.end <= len(genome): continue
-        rows = candidate_scores(genome, proteins, p, secondary, anchors, config)
+        rows = candidate_scores(genome, proteins, p, secondary, anchors, config, context)
         candidates.extend(rows)
         if not rows: continue
         best = rows[0]; original = next((r for r in rows if r['original']), None)
@@ -193,7 +223,7 @@ def refine_starts(genome, proteins, secondary=(), anchors=None, config=None):
                                  and original['rbs_score'] == 0
                                  and original['upstream_gap_nt'] is not None
                                  and original['upstream_gap_nt']-best['upstream_gap_nt'] >= 15)
-        if not (best['rbs_score'] >= 8 or best['homology_score'] or compact_extension): continue
+        if not ((not context['sd_sparse'] and best['rbs_score'] >= 8) or best['homology_score'] or compact_extension): continue
         reason = 'START_REFINED_NTERMINAL_HOMOLOGY' if best['homology_score'] else ('START_REFINED_COMPACT_SPACING_REVIEW' if compact_extension and best['rbs_score'] < 8 else 'START_REFINED_RBS_SPACING')
         output[-1], event = _changed_model(p, best, genome, reason)
         output[-1].gene_call_parameters['start_selection_review'] = 'heuristic start refinement - review'
@@ -216,7 +246,7 @@ def intergenic_candidate(start, end, proteins):
     return True
 
 
-def rescue_short_orfs(genome, proteins, config=None, anchors=None):
+def rescue_short_orfs(genome, proteins, config=None, anchors=None, rna_features=()):
     """Recover intergenic 75–300 nt stop-delimited ORFs with initiation evidence.
 
     Existing IDs never change. Unsupported candidates remain in the audit table
@@ -249,10 +279,13 @@ def rescue_short_orfs(genome, proteins, config=None, anchors=None):
                 uncovered = sum(v==0 for v in occupied[row['start']-1:row['end']])
                 row['uncovered_nt']=uncovered
                 row['gap_eligible']=intergenic_candidate(row['start'], row['end'], output)
+                row['rna_overlap'] = any(min(row['end'], f['end']) >= max(row['start'], f['start']) for f in rna_features)
                 row['accepted']=False
                 row['review_reason']='SHORT_ORF_INSUFFICIENT_INITIATION_EVIDENCE' if row['gap_eligible'] else 'SHORT_ORF_OVERLAPS_EXISTING_CDS_REVIEW'
+            for row in rows:
+                if row['rna_overlap']: row['review_reason'] = 'SHORT_ORF_OVERLAPS_RNA_REJECTED'
             candidates.extend(rows)
-            eligible=[r for r in rows if r['gap_eligible'] and r['uncovered_nt']>=config.min_uncovered_nt
+            eligible=[r for r in rows if not r['rna_overlap'] and r['gap_eligible'] and r['uncovered_nt']>=config.min_uncovered_nt
                       and (r['homology_score'] or
                            (r['start_codon'] in STARTS_11 and
                             ((r['score']>=config.rescue_min_score and r['rbs_score']>=8) or
@@ -306,15 +339,15 @@ def diamond_anchors(genome, candidate_rows, database, executable, output, thread
     return anchors,status
 
 
-def run_refinement(genome, proteins, output, secondary=(), database=None, diamond=None, threads=1, config=None):
+def run_refinement(genome, proteins, output, secondary=(), database=None, diamond=None, threads=1, config=None, rna_features=()):
     config=config or RefinementConfig();root=Path(output);root.mkdir(parents=True,exist_ok=True)
     _,_,start_rows=refine_starts(genome,proteins,secondary,config=config)
-    _,_,rescue_rows=rescue_short_orfs(genome,proteins,config=config)
+    _,_,rescue_rows=rescue_short_orfs(genome,proteins,config=config,rna_features=rna_features)
     anchors={};status={'state':'NOT_CONFIGURED'}
     if database and diamond:
         anchors,status=diamond_anchors(genome,start_rows+rescue_rows,database,diamond,root/'homology',threads)
     refined,changes,candidates=refine_starts(genome,proteins,secondary,anchors,config)
-    final,rescues,rescue_candidates=rescue_short_orfs(genome,refined,config,anchors)
+    final,rescues,rescue_candidates=rescue_short_orfs(genome,refined,config,anchors,rna_features)
     with (root/'upstream_100nt.fna').open('w') as handle:
         for p in final:
             sequence=genome.upper() if p.strand=='+' else str(Seq(genome.upper()).reverse_complement())
@@ -322,5 +355,5 @@ def run_refinement(genome, proteins, output, secondary=(), database=None, diamon
             handle.write(f'>{p.protein_id} upstream_nt={min(100,left)} includes_start_codon=true\n{sequence[max(0,left-100):left+3]}\n')
     for filename,data in [('start_candidates.json',candidates),('short_orf_candidates.json',rescue_candidates),('changes.json',changes+rescues)]:
         (root/filename).write_text(json.dumps(data,indent=2,sort_keys=True)+'\n')
-    (root/'manifest.json').write_text(json.dumps({'config':asdict(config),'homology':status,'changes':len(changes),'rescued':len(rescues),'reference_used':False},indent=2)+'\n')
+    (root/'manifest.json').write_text(json.dumps({'config':asdict(config),'start_context':genome_start_context(genome, proteins, secondary),'homology':status,'changes':len(changes),'rescued':len(rescues),'reference_used':False},indent=2)+'\n')
     return final

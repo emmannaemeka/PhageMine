@@ -20,7 +20,8 @@ from .start_selection import STARTS_11
 
 
 def _reverse_complement(sequence: str) -> str:
-    return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
+    from Bio.Seq import Seq
+    return str(Seq(sequence).reverse_complement())
 
 
 _STARTS = STARTS_11
@@ -54,10 +55,12 @@ def repair_boundaries(genome: str, proteins: list[Protein]) -> list[Protein]:
         left, right = ((p.start - 1, p.end) if p.strand == "+"
                        else (len(genome) - p.end, len(genome) - p.start + 1))
         # Do not conceal inconsistent input sequence or non-triplet complete CDSs.
-        if sequence[left:right] != p.cds.upper() or (right - left) % 3 or p.codon_start != 1:
+        if (sequence[left:right] != p.cds.upper() or p.codon_start not in (1, 2, 3)
+                or ((right-left) % 3 and not (p.partial_5prime or p.partial_3prime))):
             continue
         before = {"start": p.start, "end": p.end,
-                  "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime}
+                  "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime,
+                  "codon_start": p.codon_start}
         if not p.partial_3prime and sequence[right - 3:right] not in _STOPS:
             for delta in (3, 6, 9):
                 candidate = right + delta
@@ -84,12 +87,20 @@ def repair_boundaries(genome: str, proteins: list[Protein]) -> list[Protein]:
                 break
             else:
                 p.partial_5prime = True
+        # Biological orientation makes the same rule apply to both strands.
+        # Added 5' bases are skipped; added 3' bases remain a trailing partial codon.
+        if p.partial_5prime and 0 < left <= 2 and left + p.codon_start <= 3:
+            p.codon_start += left
+            left = 0
+        if p.partial_3prime and 0 < len(sequence) - right <= 2:
+            right = len(sequence)
         p.start, p.end = ((left + 1, right) if p.strand == "+"
                           else (len(genome) - right + 1, len(genome) - left))
         p.cds = sequence[left:right]
         p.start_codon, p.stop_codon = p.cds[:3], p.cds[-3:]
         after = {"start": p.start, "end": p.end,
-                 "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime}
+                 "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime,
+                  "codon_start": p.codon_start}
         if before != after:
             p.gene_call_parameters["boundary_repair"] = {"original": before, "repaired": after}
         # Derive translation only for a consistent input; validation still catches

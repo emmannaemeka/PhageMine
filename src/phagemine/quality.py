@@ -5,7 +5,8 @@ from .models import Protein
 
 
 def _reverse_complement(sequence: str) -> str:
-    return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
+    from Bio.Seq import Seq
+    return str(Seq(sequence).reverse_complement())
 
 
 def _overlap_type(left: Protein, right: Protein) -> tuple[str, int]:

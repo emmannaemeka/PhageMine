@@ -12,7 +12,8 @@ from .models import Protein
 
 
 def reverse_complement(sequence: str) -> str:
-    return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
+    from Bio.Seq import Seq
+    return str(Seq(sequence).reverse_complement())
 
 
 def _assign_ids(proteins: list[Protein]) -> list[Protein]:

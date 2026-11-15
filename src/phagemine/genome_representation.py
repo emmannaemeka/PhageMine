@@ -60,7 +60,8 @@ class GenomeRecord:
 
 
 def reverse_complement(sequence: str) -> str:
-    return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
+    from Bio.Seq import Seq
+    return str(Seq(sequence).reverse_complement())
 
 
 @dataclass(frozen=True)

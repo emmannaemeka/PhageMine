@@ -252,8 +252,8 @@ def write_outputs(output: str | Path, representation: GenomeRepresentation, sequ
         raw_start = p.gene_call_parameters.get("raw_start", p.start)
         raw_end = p.gene_call_parameters.get("raw_end", p.end)
         gff_records.append(
-            f"{representation.analysis_sequence_id}\tPhageMine\tCDS\t{p.start}\t{p.end}\t.\t{p.strand}\t0\t"
-            f"ID={p.protein_id};Name={p.protein_id};calling_source={p.gene_call_source};"
+            f"{representation.analysis_sequence_id}\tPhageMine\tCDS\t{p.start}\t{p.end}\t.\t{p.strand}\t{p.codon_start-1 if p.partial_5prime else 0}\t"
+            f"partial_5prime={str(p.partial_5prime).lower()};partial_3prime={str(p.partial_3prime).lower()};ID={p.protein_id};Name={p.protein_id};calling_source={p.gene_call_source};"
             f"coordinate_representation={representation.analysis_sequence_id};coordinate_system=1-based-inclusive;"
             f"raw_start={raw_start};raw_end={raw_end};product={product};gene={gene};"
             f"evidence_sources={evidence_sources};confidence={quote(str(c.get('confidence') or 'NONE'), safe='')}\n"

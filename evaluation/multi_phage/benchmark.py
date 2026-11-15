@@ -9,7 +9,7 @@ import sys
 from Bio import SeqIO
 from phagemine.cds_benchmark import read_cds, compare
 
-ACCESSIONS=['PZ583544.1','NC_005282.1','NC_000866.4','NC_001416.1','NC_001604.1','NC_002656.1']
+ACCESSIONS=['PZ583544.1','NC_005282.1','NC_000866.4','NC_001416.1','NC_001604.1','NC_002656.1','OP373729.1','PX787804.1']
 
 
 def read_json(path, default):
@@ -28,10 +28,21 @@ def describe_ref(row, refs):
             'intron_note':bool(re.search('intron|splic',note,re.I))}
 
 
+def readable_location(row):
+    parts=row['parts']
+    if row['strand']=='-': parts=list(reversed(parts))
+    locations=[f"{p[0]}..{p[1]}" for p in parts]
+    location=locations[0] if len(locations)==1 else 'join('+','.join(locations)+')'
+    return 'complement('+location+')' if row['strand']=='-' else location
+
+
 def evaluate(accession,fixtures,runs,output,repo):
     root=runs/accession;gb=root/'genbank_submission/genome.gbk'
     if not gb.exists():return {'accession':accession,'state':'NO_EXPORT','log_status':read_json(runs.parent/'logs'/f'{accession}.status.json',{})}
     refpath=fixtures/(accession+'.gbk');refs=read_cds(refpath);pred=read_cds(gb)
+    for row in refs+pred:
+        row['biopython_location']=row['location']
+        row['location']=readable_location(row)
     # Reserve exact reference structures before assigning shared-stop alternatives.
     structures={tuple(tuple(x) for x in p['parts']) for p in pred}
     ordered=sorted(refs,key=lambda r:tuple(tuple(x) for x in r['parts']) not in structures)
@@ -66,12 +77,19 @@ def evaluate(accession,fixtures,runs,output,repo):
     qc=read_json(root/'phagemine_qc_report.json',{})
     validation=read_json(gb.parent/'validation.json',{})
     changes=read_json(root/'gene_calls/start_refinement/changes.json',[])
-    codons={name:dict(collections.Counter(p['start_codon'] for p in rows)) for name,rows in [('reference',refs),('predicted',pred),('exact_reference',[m['reference'] for m in report['exact']]),('stop_only_reference',[m['reference'] for m in report['stop_only']])]}
+    extras={p['id']:p for p in report['unmatched_predictions']}
+    rescued_extras=[]
+    for change in changes:
+        if 'RESCUED' not in change.get('code','') or change['protein_id'] not in extras: continue
+        prediction_row=extras[change['protein_id']]
+        rna_hits=[{'location':str(f.location),'product':f.qualifiers.get('product'),'overlap_nt':min(prediction_row['end'],int(f.location.end))-max(prediction_row['start'],int(f.location.start)+1)+1} for f in rna_ref if min(prediction_row['end'],int(f.location.end))>=max(prediction_row['start'],int(f.location.start)+1)]
+        rescued_extras.append({'prediction':prediction_row,'rescue_decision':change,'reference_trna_overlap':rna_hits})
+    codons={name:dict(collections.Counter(p['start_codon'] for p in rows)) for name,rows in [('reference',refs),('predicted',pred),('exact_reference',[m['reference'] for m in report['exact']]),('stop_only_reference',[m['reference'] for m in report['stop_only']]),('stop_only_predicted',[m['prediction'] for m in report['stop_only']])]}
     return {'accession':accession,'state':'COMPLETE','description':reference.description,'length_nt':len(reference),'gc_percent':round(100*(str(reference.seq).count('G')+str(reference.seq).count('C'))/len(reference),2),
             **report,'stop_match_count':len(matches),'spanins':spanins,'trna':{'reference':len(rna_ref),'predicted':len(rna_pred),'exact':len(rna_exact),'overlap_recovered':len(rna_overlap),'missed':[str(f.location) for f in rna_ref if f not in rna_overlap]},
             'codon_verifier':{'returncode':result.returncode,'passed':sum(not c['problems'] for c in checks),'total':len(checks),'failed':[c for c in checks if c['problems']],'package_problems':verification.get('package_problems',[])},
             'qc_status':qc.get('status','MISSING'),'qc_criteria':qc.get('criteria',[]),'pipeline_frameshift_findings':[f for c in qc.get('criteria',[]) if c['question']==3 for f in c['details'] if f.get('code')=='PUTATIVE_FRAMESHIFT'],
-            'complex_feature_diagnostics':diagnostics,'start_codon_breakdown':codons,'start_changes':changes,
+            'complex_feature_diagnostics':diagnostics,'start_codon_breakdown':codons,'start_changes':changes,'rescued_extras':rescued_extras,
             'submission_readiness':validation.get('submission_readiness'),
             'evidence_adapters':read_json(root/'run_manifest.json',{}).get('evidence_adapters',[])}
 
@@ -80,9 +98,9 @@ def main():
     ap=argparse.ArgumentParser();ap.add_argument('--fixtures',type=Path,required=True);ap.add_argument('--runs',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
     repo=Path(__file__).resolve().parents[2];a.output.mkdir(parents=True,exist_ok=True)
     results=[evaluate(x,a.fixtures,a.runs,a.output,repo) for x in ACCESSIONS]
-    report={'method':'Frozen structural rules; reference features used only for evaluation. Exact recovery requires identical ordered CDS parts, not just outer bounds. Exact matches reserved before shared-stop assignments. Rates use all reference CDSs as denominator. Unmatched predictions are benchmark extras, not experimentally proven false genes.','fixtures':read_json(a.fixtures/'manifest.json',[]),'runtime_fingerprint':read_json(a.runs.parent/'source_fingerprint.json',{}),'genomes':results}
+    report={'method':'Frozen structural rules; reference features used only for evaluation in these runs. The original six genomes informed this revision; OP373729.1 and PX787804.1 provide additional regression coverage. Exact recovery requires identical ordered CDS parts, not just outer bounds. Exact matches reserved before shared-stop assignments. Rates use all reference CDSs as denominator. Reported locations are 1-based inclusive; original Biopython locations are retained separately. Stop-only matches can include terminal fragments of joined reference genes and do not establish full complex-gene recovery. Unmatched predictions are benchmark extras, not experimentally proven false genes.','fixtures':read_json(a.fixtures/'manifest.json',[]),'runtime_fingerprint':read_json(a.runs.parent/'source_fingerprint.json',{}),'genomes':results}
     (a.output/'multi_phage_benchmark.json').write_text(json.dumps(report,indent=2)+'\n')
-    lines=['# Six-genome PhageMine regression benchmark','',report['method'],'','| Genome | Ref / predicted CDS | Exact | Stop-only | Missed / extra | tRNA exact/ref (pred) | Codons pass | QC |','|---|---|---|---|---|---|---|---|']
+    lines=['# Eight-genome PhageMine regression benchmark','',report['method'],'','| Genome | Ref / predicted CDS | Exact | Stop-only | Missed / extra | tRNA exact/ref (pred) | Codons pass | QC |','|---|---|---|---|---|---|---|---|']
     for r in results:
         if r['state']!='COMPLETE':lines.append(f"| {r['accession']} | {r['state']} | — | — | — | — | — | — |");continue
         t=r['trna'];v=r['codon_verifier'];lines.append(f"| {r['accession']} | {r['reference_count']} / {r['prediction_count']} | {r['exact_count']} ({r['exact_rate']:.1%}) | {r['stop_only_count']} ({r['stop_only_rate']:.1%}) | {len(r['missed'])} / {len(r['unmatched_predictions'])} | {t['exact']}/{t['reference']} ({t['predicted']}) | {v['passed']}/{v['total']} | {r['qc_status']} |")
@@ -96,6 +114,10 @@ def main():
         for q in r['missed']:lines.append(f"- {q['id']} {q['location']}, {q['length_nt']} nt; product={q['qualifiers'].get('product')}; compound={q['compound']}; frameshift/slippage={q['frameshift_or_slippage']}; overlaps={len(q['reference_overlaps'])}; candidate-review entries={len(q['manual_review_candidates'])}.")
         lines+=['','### Extra predictions','']
         for p in r['unmatched_predictions']:lines.append(f"- {p['id']} {p['location']}, {p['length_nt']} nt, {p['start_codon']}/{p['stop_codon']}; {p['qualifiers'].get('product')}.")
+        lines+=['','### New rescue calls absent from reference','']
+        for rescue in r['rescued_extras']:
+            p=rescue['prediction'];scores=rescue['rescue_decision']['score_components']
+            lines.append(f"- {p['id']} {p['location']}: RBS={scores['rbs_score']}, homology bonus={scores['homology_score']}, upstream gap={scores['upstream_gap_nt']} nt; reference tRNA overlaps={rescue['reference_trna_overlap']}.")
         lines+=['','### Spanins','']
         for s in r['spanins']:
             q,p=s['reference'],s['prediction'];lines.append(f"- Reference {q['id']} {q['location']} gene={q['qualifiers'].get('gene')} {q['qualifiers'].get('product')}; prediction: {p['id']+' '+p['location']+' '+str(p['qualifiers'].get('product')) if p else 'MISSED'}.")
