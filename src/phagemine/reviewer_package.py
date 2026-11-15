@@ -29,7 +29,7 @@ def build_reviewer_package(output, prefix=None):
     metadata=read(source/'submission_metadata.json',{})
     if metadata.get('locus_tag_prefix'):
         proteins.update({metadata['locus_tag_prefix'].rstrip('_')+'_'+p['protein_id'].rsplit('_',1)[-1]:p for p in list(proteins.values())})
-    candidate_scores={(r['start'],r['end'],r['strand']):r for r in read(root/'gene_calls/start_refinement/start_candidates.json',[])}
+    candidate_scores={(r['start'],r['end'],r['strand']):r for r in read(root/'gene_calls/start_refinement/start_candidates.json',[])+read(root/'gene_calls/start_refinement/short_orf_candidates.json',[])}
     cds=[f for f in record.features if f.type=='CDS'];qc=read(root/'phagemine_qc_report.json',{})
     wb=Workbook();wb.remove(wb.active)
     def sheet(name,columns,rows):
@@ -66,7 +66,7 @@ def build_reviewer_package(output, prefix=None):
         if '*' in translated:errors.append('INTERNAL_STOP')
         if len(coding)%3 and not p3:errors.append('FRAME_ERROR')
         row=dict(zip(COLUMNS,[None]*len(COLUMNS)))
-        row.update(Locus_Tag=tag,Start=start,End=end,Strand='+' if strand==1 else '-',Length_nt=len(nt),Length_aa=len(protein),Partial_5_Prime=p5,Partial_3_Prime=p3,Codon_Start=cs,Start_Codon=coding[:3],Stop_Codon=coding[-3:],Rare_Start_Flag=coding[:3] in {'CTG','ATT','ATC','ATA'},Upstream_20bp_DNA=seq[max(0,left-20):left],RBS_Motif=rbs['motif'],RBS_Spacer_nt=rbs['spacer_nt'],RBS_Score=scores.get('rbs_score',rbs['score']),Start_Total_Score=scores.get('score'),Start_Selection_Reason=event.get('code') or params.get('start_selection',{}).get('rule') or 'ORIGINAL_CALLER_START',Caller_Support=confidence.get('caller_support',p.get('gene_call_source')),Confidence_Tier=confidence.get('confidence_tier','unassessed'),Adjacent_Gene_Overlap_nt=max([max(0,min(end,int(g.location.end))-max(start,int(g.location.start)+1)+1) for g in cds if g is not f] or [0]),Product_Name=q.get('product',[''])[0],Codon_Verifier_Status='PASS' if not errors else '; '.join(errors),Review_Flags=params.get('start_selection_review',''),Protein_Translation=protein,Nucleotide_Sequence=nt)
+        row.update(Locus_Tag=tag,Start=start,End=end,Strand='+' if strand==1 else '-',Length_nt=len(nt),Length_aa=len(protein),Partial_5_Prime=p5,Partial_3_Prime=p3,Codon_Start=cs,Start_Codon=coding[:3],Stop_Codon=coding[-3:],Rare_Start_Flag=coding[:3] in {'CTG','ATT','ATC','ATA'},Upstream_20bp_DNA=seq[max(0,left-20):left],RBS_Motif=rbs['motif'],RBS_Spacer_nt=rbs['spacer_nt'],RBS_Score=scores.get('rbs_score',rbs['score']),Start_Total_Score=scores.get('score'),Start_Selection_Reason=params.get('overlap_rescue',{}).get('code') or event.get('code') or params.get('start_selection',{}).get('rule') or 'ORIGINAL_CALLER_START',Caller_Support=confidence.get('caller_support',p.get('gene_call_source')),Confidence_Tier=confidence.get('confidence_tier','unassessed'),Adjacent_Gene_Overlap_nt=max([max(0,min(end,int(g.location.end))-max(start,int(g.location.start)+1)+1) for g in cds if g is not f] or [0]),Product_Name=q.get('product',[''])[0],Codon_Verifier_Status='PASS' if not errors else '; '.join(errors),Review_Flags=params.get('start_selection_review',''),Protein_Translation=protein,Nucleotide_Sequence=nt)
         evidence=[e for e in p.get('evidence',[]) if e.get('status','').upper()=='REAL' and e.get('supports')]
         for names,hitcol,evalcol in [({'phrogs'},'Top_PHROGs_Hit','PHROGs_Evalue'),({'vogdb'},'Top_VOGDB_Hit','VOGDB_Evalue'),({'swissprot','swiss-prot'},'Top_SwissProt_Hit','SwissProt_Evalue')]:
             hits=[]
