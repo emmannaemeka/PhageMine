@@ -26,22 +26,25 @@ def read_cds(path, fasta=None):
         for record in SeqIO.parse(path,'genbank'):
             for f in record.features:
                 if f.type!='CDS': continue
-                rows.append(dict(id=f.qualifiers.get('locus_tag',f.qualifiers.get('protein_id',['unknown']))[0],contig=record.id,start=int(f.location.start)+1,end=int(f.location.end),strand='+' if f.location.strand==1 else '-',start_codon=str(f.extract(record.seq))[:3]))
+                nt=str(f.extract(record.seq))
+                rows.append(dict(id=f.qualifiers.get('locus_tag',f.qualifiers.get('protein_id',['unknown']))[0],contig=record.id,start=int(f.location.start)+1,end=int(f.location.end),strand='+' if f.location.strand==1 else '-',start_codon=nt[:3],stop_codon=nt[-3:],length_nt=len(nt),parts=[[int(part.start)+1,int(part.end),part.strand] for part in f.location.parts],location=str(f.location),qualifiers=f.qualifiers))
     return rows
 
 
 def compare(predictions, reference):
-    used=set();exact=[];stop_only=[];missed=[]
+    used=set();exact=[];stop_only=[];missed=[];structure_mismatch=[]
+    def parts(p):
+        return p.get('parts', [[p['start'],p['end'],1 if p['strand']=='+' else -1]])
     for ref in reference:
         stop=ref['end'] if ref['strand']=='+' else ref['start']
         choices=[(i,p) for i,p in enumerate(predictions) if i not in used and p['contig']==ref['contig'] and p['strand']==ref['strand'] and (p['end'] if p['strand']=='+' else p['start'])==stop]
-        choices.sort(key=lambda ip:(ip[1]['start']!=ref['start'] or ip[1]['end']!=ref['end'],abs(ip[1]['start']-ref['start'])+abs(ip[1]['end']-ref['end'])))
+        choices.sort(key=lambda ip:(parts(ip[1])!=parts(ref),ip[1]['start']!=ref['start'] or ip[1]['end']!=ref['end'],abs(ip[1]['start']-ref['start'])+abs(ip[1]['end']-ref['end'])))
         if not choices: missed.append(ref);continue
         i,p=choices[0];used.add(i)
         row={'prediction':p,'reference':ref}
-        (exact if (p['start'],p['end'])==(ref['start'],ref['end']) else stop_only).append(row)
+        (exact if parts(p)==parts(ref) else structure_mismatch if (p['start'],p['end'])==(ref['start'],ref['end']) else stop_only).append(row)
     n=len(reference)
-    return {'reference_count':n,'prediction_count':len(predictions),'exact_count':len(exact),'exact_rate':len(exact)/n if n else None,'stop_only_count':len(stop_only),'stop_only_rate':len(stop_only)/n if n else None,'stop_only':stop_only,'missed':missed,'unmatched_predictions':[p for i,p in enumerate(predictions) if i not in used], 'note':'Unmatched predictions are benchmark false positives, not proof that the genes are spurious.'}
+    return {'reference_count':n,'prediction_count':len(predictions),'exact_count':len(exact),'exact_rate':len(exact)/n if n else None,'stop_only_count':len(stop_only),'stop_only_rate':len(stop_only)/n if n else None,'stop_only':stop_only,'structure_mismatch':structure_mismatch,'exact':exact,'missed':missed,'unmatched_predictions':[p for i,p in enumerate(predictions) if i not in used], 'note':'Unmatched predictions are benchmark false positives, not proof that the genes are spurious.'}
 
 
 def main():

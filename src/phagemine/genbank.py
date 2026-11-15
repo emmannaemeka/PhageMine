@@ -171,7 +171,8 @@ def product_name(protein: Protein) -> str:
     """Preserve the final supported annotation, including computational predictions."""
     if protein.annotation_level in {EvidenceLevel.EXPERIMENTAL, EvidenceLevel.CURATED, EvidenceLevel.COMPUTATIONAL} and "mock" not in protein.annotation.lower() and not any(e.status == "mock" for e in protein.evidence):
         from .genome_qc import sanitize_product
-        return sanitize_product(protein.annotation)
+        from .spanins import canonical_spanin
+        return sanitize_product(canonical_spanin(protein.annotation))
     return "hypothetical protein"
 
 

@@ -772,6 +772,8 @@ def classify_proteins(proteins: list[Protein]) -> list[dict[str, Any]]:
             },
             "reasoning_summary": item.get("reasoning_summary", "") + " " + basis + ".",
         })
+    from .spanins import normalize_spanins
+    normalize_spanins(proteins, results)
     return results
 
 

@@ -89,3 +89,32 @@ features and unmatched predictions (benchmark false positives). Reference data
 belong only in evaluation inputs and tests. Existing IDs are never renumbered to
 improve benchmark metrics. Local `PM_000001` syntax does not establish that its
 prefix is registered for an INSDC submission.
+
+## Spanin subtype normalization
+
+After functional evidence fusion, `spanins.py` normalizes `rz spanin` and
+`rz-like spanin` to `Rz-like spanin`. A same-contig, same-strand two-component
+cassette can promote the downstream spanin to `Rz1-like spanin` when it overlaps
+in the +1 relative reading frame, or is separated by at most 15 nt. It must also
+have the requested `[LVI][ASTVI][GAS]C` motif entirely within its first 30 residues,
+or an accepted Rz1-family match. The initial explicit family policy includes
+PHROGs `phrog_5672`; explicit Rz1/o-spanin/outer-membrane spanin descriptions from
+other evidence sources are also recognized. Family support requires REAL,
+supporting evidence, E <= 1e-5 and >=50% query coverage. These are subtype-evidence
+requirements, not new gene-calling thresholds. Competing cassette partners are
+left unresolved. Unimolecular spanins and wrong-frame overlaps are not forced
+into the two-component model.
+
+The decision and evidence are retained in the classification record and protein
+provenance. Coordinates, sequences and caller thresholds do not change. This is
+a computational product-name assignment, not proof of membrane localization.
+The same rule works in transcription direction on the negative strand. Some
+biological spanin pairs have other frame arrangements; the narrow requested
+rule deliberately leaves those unresolved.
+
+The six-genome evaluation driver is `evaluation/multi_phage/benchmark.py`.
+Fixtures are external NCBI GenBank/FASTA files, and runtime input is FASTA only.
+The benchmark retains ordered joined intervals and does not credit a simple CDS
+spanning an intron or frameshift as an exact structural match. It reserves exact
+matches before assigning other predictions sharing a stop. All missed features,
+extra predictions, tRNA matches and strict codon failures remain in its JSON.

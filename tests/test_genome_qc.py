@@ -104,3 +104,11 @@ def test_benchmark_same_stop_and_strand():
     pred[0]['strand']='-'
     report=compare(pred,ref)
     assert len(report['missed'])==len(report['unmatched_predictions'])==1
+
+
+def test_joined_reference_not_counted_as_exact_spanning_cds():
+    from phagemine.cds_benchmark import compare
+    ref=[dict(id='r',contig='c',start=1,end=99,strand='+',parts=[[1,30,1],[40,99,1]])]
+    pred=[dict(id='p',contig='c',start=1,end=99,strand='+')]
+    report=compare(pred,ref)
+    assert report['exact_count']==0 and len(report['structure_mismatch'])==1

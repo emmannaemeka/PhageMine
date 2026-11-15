@@ -1,0 +1,1643 @@
+[
+  {
+    "genome_id": "PZ583544.1",
+    "protein_id": "PM_000009",
+    "start": 6860,
+    "end": 7264,
+    "strand": "+",
+    "cds": "ATAAAGAAAGGGGATACTATGAATTGGAAAGTAACCGCGATAACCACGGCAGCCGGTATCCTCTCTTTGTGGTTATACGGCCAGTACAACTACAGAAGCGGGTGGGTAGAAGGCCGTGCTAATCTTGTTTCACAGCAACAACAGAAAGCACAGGCCGAGCTAGCGAAGAAAACACAACGGCAGCTGCAGAACGATGCCAAGGCCGCCGCCGCCGAATCTGAAGGTAAAGAAAATGCGGAGGCTATCACCCGTGAAGTTATCAAATACGTTACCCGCCCTGGCCGCACTGTCTGTGAGTTTCACCCTGAACGGGTGTCAATCAAACGACGTGCCGCCGAGAATGCTAATTCCATCCCCGGATACGACGTTGATGCAGCCCCCGTGCAAAATGGTGCTACCAAGTAG",
+    "sequence": "MKKGDTMNWKVTAITTAAGILSLWLYGQYNYRSGWVEGRANLVSQQQQKAQAELAKKTQRQLQNDAKAAAAESEGKENAEAITREVIKYVTRPGRTVCEFHPERVSIKRRAAENANSIPGYDVDAAPVQNGATK",
+    "gene_call_source": "PHANOTATE",
+    "locus_tag": "PM_000009",
+    "gene_call_parameters": {
+      "raw_start": 6878,
+      "raw_end": 7264,
+      "reported_strand": "+",
+      "coordinate_system": "1-based-inclusive",
+      "coordinate_transform": "none",
+      "start_refinement": {
+        "code": "START_REFINED_COMPACT_SPACING_REVIEW",
+        "protein_id": "PM_000009",
+        "old_start": 6878,
+        "old_end": 7264,
+        "new_start": 6860,
+        "new_end": 7264,
+        "strand": "+",
+        "distance_nt": -18,
+        "score_components": {
+          "protein_id": "PM_000009",
+          "start": 6860,
+          "end": 7264,
+          "strand": "+",
+          "left": 6859,
+          "right": 7264,
+          "start_codon": "ATA",
+          "length_nt": 405,
+          "score": -5.0,
+          "codon_prior": 0.5,
+          "rbs_score": 0.0,
+          "rbs_motif": "",
+          "spacer_nt": null,
+          "upstream_gap_nt": 26,
+          "packing_score": -5.5,
+          "caller_score": 0.0,
+          "homology_score": 0.0,
+          "homology": null,
+          "original": false
+        }
+      },
+      "start_selection_review": "heuristic start refinement - review"
+    },
+    "start_codon": "ATA",
+    "stop_codon": "TAG",
+    "partial_5prime": false,
+    "partial_3prime": false,
+    "codon_start": 1,
+    "annotation": "rz-like spanin",
+    "annotation_level": "computational prediction",
+    "evidence": [
+      {
+        "modality": "domain",
+        "statement": "Pfam domain evidence for NHase_beta_N (PF21006.3); this is evidence, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "Pfam",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "target_name": "NHase_beta_N",
+          "pfam_accession": "PF21006.3",
+          "target_hmm_length": 115,
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.0099,
+          "full_sequence_score": 16.7,
+          "conditional_domain_e_value": 0.014,
+          "independent_domain_e_value": 4.8e-07,
+          "domain_bit_score": 16.1,
+          "hmm_coordinates": {
+            "start": 45,
+            "end": 109
+          },
+          "query_coordinates": {
+            "start": 8,
+            "end": 72
+          },
+          "envelope_coordinates": {
+            "start": 2,
+            "end": 82
+          },
+          "accuracy": 0.83,
+          "query_coverage": 0.48507462686567165,
+          "domain_coverage": 0.5652173913043478,
+          "raw_hmmscan_row": "NHase_beta_N         PF21006.3    115 PM_000009            -            134    0.0099   16.7   0.4   1   1   4.8e-07     0.014   16.1   0.4    45   109     8    72     2    82 0.83 Nitrile hydratase beta subunit, N-terminal"
+        },
+        "identifier": "PF21006.3",
+        "threshold": {
+          "evalue": null,
+          "coverage": null,
+          "trusted_cutoff": false
+        },
+        "coordinates": {
+          "start": 8,
+          "end": 72
+        },
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "pfam_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+          "evidence_pack_id": null,
+          "pfam_version": "unknown",
+          "threshold_mode": "NONE",
+          "trusted_cutoff": false,
+          "thresholds": {
+            "mode": "NONE",
+            "evalue": null,
+            "coverage": null,
+            "trusted_cutoff": false
+          },
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-o7e9oh1c/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-o7e9oh1c/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "WEAK",
+        "family_name": "NHase_beta_N",
+        "description": "Nitrile hydratase beta subunit, N-terminal"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG56147; evidence only, not an automatic functional assignment.",
+        "level": "computational prediction",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "vog_id": "VOG56147",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 8.8e-57,
+          "full_sequence_score": 192.0,
+          "conditional_domain_e_value": 9.7e-57,
+          "independent_domain_e_value": 1.6e-60,
+          "domain_bit_score": 191.8,
+          "hmm_coordinates": {
+            "start": 1,
+            "end": 129
+          },
+          "query_coordinates": {
+            "start": 7,
+            "end": 134
+          },
+          "envelope_coordinates": {
+            "start": 7,
+            "end": 134
+          },
+          "accuracy": 0.99,
+          "query_coverage": 0.9552238805970149,
+          "domain_coverage": 1.0,
+          "raw_hmmscan_row": "VOG56147             -            129 PM_000009            -            134   8.8e-57  192.0   3.4   1   1   1.6e-60   9.7e-57  191.8   3.4     1   129     7   134     7   134 0.99 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ hypothetical protein",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG56147",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 7,
+          "end": 134
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "VOG56147",
+        "description": "REFSEQ hypothetical protein"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG22828; evidence only, not an automatic functional assignment.",
+        "level": "computational prediction",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "vog_id": "VOG22828",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.00049,
+          "full_sequence_score": 20.4,
+          "conditional_domain_e_value": 0.00059,
+          "independent_domain_e_value": 9.6e-08,
+          "domain_bit_score": 20.1,
+          "hmm_coordinates": {
+            "start": 304,
+            "end": 383
+          },
+          "query_coordinates": {
+            "start": 33,
+            "end": 116
+          },
+          "envelope_coordinates": {
+            "start": 26,
+            "end": 131
+          },
+          "accuracy": 0.76,
+          "query_coverage": 0.6268656716417911,
+          "domain_coverage": 0.16806722689075632,
+          "raw_hmmscan_row": "VOG22828             -            476 PM_000009            -            134   0.00049   20.4   2.4   1   1   9.6e-08   0.00059   20.1   2.4   304   383    33   116    26   131 0.76 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ hypothetical protein",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG22828",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 33,
+          "end": 116
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "VOG22828",
+        "description": "REFSEQ hypothetical protein"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG05188; evidence only, not an automatic functional assignment.",
+        "level": "computational prediction",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "vog_id": "VOG05188",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.014,
+          "full_sequence_score": 16.9,
+          "conditional_domain_e_value": 0.019,
+          "independent_domain_e_value": 3.1e-06,
+          "domain_bit_score": 16.4,
+          "hmm_coordinates": {
+            "start": 10,
+            "end": 85
+          },
+          "query_coordinates": {
+            "start": 13,
+            "end": 84
+          },
+          "envelope_coordinates": {
+            "start": 4,
+            "end": 90
+          },
+          "accuracy": 0.81,
+          "query_coverage": 0.5373134328358209,
+          "domain_coverage": 0.5100671140939598,
+          "raw_hmmscan_row": "VOG05188             -            149 PM_000009            -            134     0.014   16.9   0.3   1   1   3.1e-06     0.019   16.4   0.3    10    85    13    84     4    90 0.81 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ hypothetical protein",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG05188",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 13,
+          "end": 84
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "VOG05188",
+        "description": "REFSEQ hypothetical protein"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG05877; evidence only, not an automatic functional assignment.",
+        "level": "computational prediction",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "vog_id": "VOG05877",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.044,
+          "full_sequence_score": 15.4,
+          "conditional_domain_e_value": 0.064,
+          "independent_domain_e_value": 1e-05,
+          "domain_bit_score": 14.8,
+          "hmm_coordinates": {
+            "start": 19,
+            "end": 83
+          },
+          "query_coordinates": {
+            "start": 24,
+            "end": 90
+          },
+          "envelope_coordinates": {
+            "start": 5,
+            "end": 93
+          },
+          "accuracy": 0.39,
+          "query_coverage": 0.5,
+          "domain_coverage": 0.5508474576271186,
+          "raw_hmmscan_row": "VOG05877             -            118 PM_000009            -            134     0.044   15.4   2.1   1   1     1e-05     0.064   14.8   2.1    19    83    24    90     5    93 0.39 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ Rz-like spanin",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG05877",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 24,
+          "end": 90
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "VOG05877",
+        "description": "REFSEQ Rz-like spanin"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG35270; evidence only, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": false,
+        "metrics": {
+          "vog_id": "VOG35270",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.07,
+          "full_sequence_score": 13.8,
+          "conditional_domain_e_value": 0.082,
+          "independent_domain_e_value": 1.4e-05,
+          "domain_bit_score": 13.5,
+          "hmm_coordinates": {
+            "start": 121,
+            "end": 177
+          },
+          "query_coordinates": {
+            "start": 45,
+            "end": 108
+          },
+          "envelope_coordinates": {
+            "start": 28,
+            "end": 125
+          },
+          "accuracy": 0.68,
+          "query_coverage": 0.47761194029850745,
+          "domain_coverage": 0.22178988326848248,
+          "raw_hmmscan_row": "VOG35270             -            257 PM_000009            -            134      0.07   13.8   0.3   1   1   1.4e-05     0.082   13.5   0.3   121   177    45   108    28   125 0.68 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ replisome organizer",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG35270",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 45,
+          "end": 108
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "REJECTED",
+        "family_name": "VOG35270",
+        "description": "REFSEQ replisome organizer"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG43884; evidence only, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": false,
+        "metrics": {
+          "vog_id": "VOG43884",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.28,
+          "full_sequence_score": 11.6,
+          "conditional_domain_e_value": 0.31,
+          "independent_domain_e_value": 5.2e-05,
+          "domain_bit_score": 11.4,
+          "hmm_coordinates": {
+            "start": 250,
+            "end": 300
+          },
+          "query_coordinates": {
+            "start": 43,
+            "end": 89
+          },
+          "envelope_coordinates": {
+            "start": 36,
+            "end": 129
+          },
+          "accuracy": 0.71,
+          "query_coverage": 0.35074626865671643,
+          "domain_coverage": 0.14325842696629212,
+          "raw_hmmscan_row": "VOG43884             -            356 PM_000009            -            134      0.28   11.6   5.1   1   1   5.2e-05      0.31   11.4   5.1   250   300    43    89    36   129 0.71 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "sp|Q5UP73|YR614_MIMIV Putative band 7 family protein R614",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG43884",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 43,
+          "end": 89
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "REJECTED",
+        "family_name": "VOG43884",
+        "description": "sp|Q5UP73|YR614_MIMIV Putative band 7 family protein R614"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG56057; evidence only, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": false,
+        "metrics": {
+          "vog_id": "VOG56057",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.35,
+          "full_sequence_score": 12.0,
+          "conditional_domain_e_value": 3300.0,
+          "independent_domain_e_value": 0.54,
+          "domain_bit_score": -0.7,
+          "hmm_coordinates": {
+            "start": 19,
+            "end": 28
+          },
+          "query_coordinates": {
+            "start": 44,
+            "end": 53
+          },
+          "envelope_coordinates": {
+            "start": 40,
+            "end": 63
+          },
+          "accuracy": 0.81,
+          "query_coverage": 0.07462686567164178,
+          "domain_coverage": 0.18867924528301888,
+          "raw_hmmscan_row": "VOG56057             -             53 PM_000009            -            134      0.35   12.0   0.3   1   2      0.54   3.3e+03   -0.7   0.1    19    28    44    53    40    63 0.81 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ Arc-like repressor",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG56057",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 44,
+          "end": 53
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "REJECTED",
+        "family_name": "VOG56057",
+        "description": "REFSEQ Arc-like repressor"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG56057; evidence only, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": false,
+        "metrics": {
+          "vog_id": "VOG56057",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.35,
+          "full_sequence_score": 12.0,
+          "conditional_domain_e_value": 1.4,
+          "independent_domain_e_value": 0.00023,
+          "domain_bit_score": 10.1,
+          "hmm_coordinates": {
+            "start": 20,
+            "end": 49
+          },
+          "query_coordinates": {
+            "start": 65,
+            "end": 95
+          },
+          "envelope_coordinates": {
+            "start": 60,
+            "end": 98
+          },
+          "accuracy": 0.81,
+          "query_coverage": 0.23134328358208955,
+          "domain_coverage": 0.5660377358490566,
+          "raw_hmmscan_row": "VOG56057             -             53 PM_000009            -            134      0.35   12.0   0.3   2   2   0.00023       1.4   10.1   0.0    20    49    65    95    60    98 0.81 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ Arc-like repressor",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG56057",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 65,
+          "end": 95
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "REJECTED",
+        "family_name": "VOG56057",
+        "description": "REFSEQ Arc-like repressor"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG17350; evidence only, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": false,
+        "metrics": {
+          "vog_id": "VOG17350",
+          "query_protein_id": "PM_000009",
+          "query_length": 134,
+          "full_sequence_e_value": 0.52,
+          "full_sequence_score": 12.4,
+          "conditional_domain_e_value": 0.73,
+          "independent_domain_e_value": 0.00012,
+          "domain_bit_score": 11.9,
+          "hmm_coordinates": {
+            "start": 8,
+            "end": 69
+          },
+          "query_coordinates": {
+            "start": 12,
+            "end": 76
+          },
+          "envelope_coordinates": {
+            "start": 6,
+            "end": 89
+          },
+          "accuracy": 0.58,
+          "query_coverage": 0.48507462686567165,
+          "domain_coverage": 0.5961538461538461,
+          "raw_hmmscan_row": "VOG17350             -            104 PM_000009            -            134      0.52   12.4   3.3   1   1   0.00012      0.73   11.9   3.3     8    69    12    76     6    89 0.58 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "sp|Q7Y2B9|SPAN1_BPKMV Probable spanin, inner membrane subunit",
+          "functional_category": "XhXp",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG17350",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 12,
+          "end": 76
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000009"
+        },
+        "evidence_strength": "REJECTED",
+        "family_name": "VOG17350",
+        "description": "sp|Q7Y2B9|SPAN1_BPKMV Probable spanin, inner membrane subunit"
+      },
+      {
+        "modality": "phage_orthology",
+        "statement": "PHROGs phage orthology evidence for phrog_2536; evidence only, not an automatic product assignment.",
+        "level": "computational prediction",
+        "source": "PHROGs",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "phrog_id": "phrog_2536",
+          "query_protein_id": "PM_000009",
+          "annotation": "Rz-like spanin",
+          "functional_category": "lysis",
+          "percent_identity": 0.54,
+          "bit_score": 121.0,
+          "mmseqs_score": 121.0,
+          "evalue": 1.527e-32,
+          "sequence_identity": 0.54,
+          "alignment_length": 116,
+          "query_coverage": 0.866,
+          "target_coverage": 0.991,
+          "profile_coverage": 0.991,
+          "search_backend": "MMseqs2",
+          "search_backends": [
+            "MMseqs2",
+            "PyHMMER"
+          ],
+          "query_coordinates": {
+            "start": 12,
+            "end": 127
+          },
+          "target_coordinates": {
+            "start": 2,
+            "end": 109
+          },
+          "query_length": 134,
+          "target_length": 109,
+          "raw_mmseqs_row": "PM_000009\tphrog_2536\t0.540\t116\t12\t127\t134\t2\t109\t109\t1.527E-32\t121\t0.866\t0.991",
+          "unknown_function": false,
+          "conflict": false,
+          "corroborating_backend_hits": [
+            {
+              "backend": "PyHMMER",
+              "bit_score": 188.4099884033203,
+              "evalue": 9.370122676820085e-56,
+              "query_coverage": 0.9552238805970149
+            }
+          ]
+        },
+        "identifier": "phrog_2536",
+        "threshold": {
+          "evalue": 1e-05,
+          "query_coverage": 0.5,
+          "score": null,
+          "identity": null,
+          "alignment_length": null,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 12,
+          "end": 127
+        },
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "mmseqs": "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "phrogs_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null,
+            "identity": null,
+            "alignment_length": null
+          },
+          "status": "REAL",
+          "search_commands": [
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/proteins.faa",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query"
+            ],
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "search",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query",
+              "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/result",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/tmp",
+              "--threads",
+              "8"
+            ],
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query",
+              "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/result",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "threshold_mode": "MANUAL",
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+          },
+          "protein_id": "PM_000009",
+          "search_backends": [
+            "MMseqs2",
+            "PyHMMER"
+          ]
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "phrog_2536",
+        "description": "Rz-like spanin"
+      },
+      {
+        "modality": "phage_profile_hmm",
+        "statement": "PHROGs profile-HMM evidence for phrog_1152; evidence only, not an automatic product assignment.",
+        "level": "computational prediction",
+        "source": "PHROGs",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "phrog_id": "phrog_1152",
+          "query_protein_id": "PM_000009",
+          "annotation": "Rz-like spanin",
+          "functional_category": "lysis",
+          "bit_score": 28.228923797607422,
+          "evalue": 2.984291173642746e-06,
+          "domain_i_evalue": 3.313591446571274e-06,
+          "alignment_length": 91,
+          "query_coverage": 0.6791044776119403,
+          "profile_coverage": 0.7322834645669292,
+          "query_coordinates": {
+            "start": 3,
+            "end": 93
+          },
+          "profile_coordinates": {
+            "start": 3,
+            "end": 95
+          },
+          "query_length": 134,
+          "profile_length": 127,
+          "unknown_function": false,
+          "conflict": false,
+          "search_backend": "PyHMMER",
+          "search_backends": [
+            "PyHMMER"
+          ]
+        },
+        "identifier": "phrog_1152",
+        "threshold": {
+          "evalue": 1e-05,
+          "query_coverage": 0.5,
+          "score": null,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 3,
+          "end": 93
+        },
+        "provenance": {
+          "adapter": "PHROGSPyHMMERAdapter",
+          "adapter_version": "0.1.0",
+          "pyhmmer_version": "0.12.3",
+          "phrogs_hmm_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/all_phrogs.h3m",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null
+          },
+          "status": "REAL",
+          "protein_id": "PM_000009",
+          "search_backend": "PyHMMER"
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "phrog_1152",
+        "description": "Rz-like spanin"
+      }
+    ],
+    "alternatives": [],
+    "missing_evidence": [],
+    "functional_confidence": "Moderate",
+    "biological_interest": 0,
+    "evidence_diversity": "High",
+    "score_components": {
+      "novelty": 0,
+      "conservation": 0,
+      "context": 0,
+      "functional_signal": 0,
+      "convergence": 0,
+      "quality_penalty": 0
+    }
+  },
+  {
+    "genome_id": "PZ583544.1",
+    "protein_id": "PM_000010",
+    "start": 7110,
+    "end": 7373,
+    "strand": "+",
+    "cds": "GTGAAGTTATCAAATACGTTACCCGCCCTGGCCGCACTGTCTGTGAGTTTCACCCTGAACGGGTGTCAATCAAACGACGTGCCGCCGAGAATGCTAATTCCATCCCCGGATACGACGTTGATGCAGCCCCCGTGCAAAATGGTGCTACCAAGTAGTGATGCTGATGGGGACCTGGCTGTAGATGTGCAGAACGCCGAGTGCACACGGCAATTGCGTCTGAAAGTATTCCGGTTGCAGGAGTACATAAGGAATATTCTGGAATAG",
+    "sequence": "MKLSNTLPALAALSVSFTLNGCQSNDVPPRMLIPSPDTTLMQPPCKMVLPSSDADGDLAVDVQNAECTRQLRLKVFRLQEYIRNILE",
+    "gene_call_source": "PHANOTATE",
+    "locus_tag": "PM_000010",
+    "gene_call_parameters": {
+      "raw_start": 7248,
+      "raw_end": 7373,
+      "reported_strand": "+",
+      "coordinate_system": "1-based-inclusive",
+      "coordinate_transform": "none",
+      "start_selection_review": "heuristic start refinement - review",
+      "start_refinement": {
+        "code": "START_REFINED_RBS_SPACING",
+        "protein_id": "PM_000010",
+        "old_start": 7248,
+        "old_end": 7373,
+        "new_start": 7110,
+        "new_end": 7373,
+        "strand": "+",
+        "distance_nt": -138,
+        "score_components": {
+          "protein_id": "PM_000010",
+          "start": 7110,
+          "end": 7373,
+          "strand": "+",
+          "left": 7109,
+          "right": 7373,
+          "start_codon": "GTG",
+          "length_nt": 264,
+          "score": 7.0,
+          "codon_prior": 2.0,
+          "rbs_score": 10.0,
+          "rbs_motif": "GGAGG",
+          "spacer_nt": 9,
+          "upstream_gap_nt": -155,
+          "packing_score": -5.0,
+          "caller_score": 0.0,
+          "homology_score": 0.0,
+          "homology": null,
+          "original": false
+        }
+      }
+    },
+    "start_codon": "GTG",
+    "stop_codon": "TAG",
+    "partial_5prime": false,
+    "partial_3prime": false,
+    "codon_start": 1,
+    "annotation": "rz-like spanin",
+    "annotation_level": "computational prediction",
+    "evidence": [
+      {
+        "modality": "domain",
+        "statement": "Pfam domain evidence for P23-45_gp39_N (PF20760.3); this is evidence, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "Pfam",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "target_name": "P23-45_gp39_N",
+          "pfam_accession": "PF20760.3",
+          "target_hmm_length": 94,
+          "query_protein_id": "PM_000010",
+          "query_length": 87,
+          "full_sequence_e_value": 0.07,
+          "full_sequence_score": 13.9,
+          "conditional_domain_e_value": 7.1,
+          "independent_domain_e_value": 0.00024,
+          "domain_bit_score": 7.4,
+          "hmm_coordinates": {
+            "start": 19,
+            "end": 33
+          },
+          "query_coordinates": {
+            "start": 25,
+            "end": 39
+          },
+          "envelope_coordinates": {
+            "start": 11,
+            "end": 45
+          },
+          "accuracy": 0.77,
+          "query_coverage": 0.1724137931034483,
+          "domain_coverage": 0.1595744680851064,
+          "raw_hmmscan_row": "P23-45_gp39_N        PF20760.3     94 PM_000010            -             87      0.07   13.9   0.2   1   2   0.00024       7.1    7.4   0.2    19    33    25    39    11    45 0.77 Thermus phage P23-45 gp39, N-terminal domain"
+        },
+        "identifier": "PF20760.3",
+        "threshold": {
+          "evalue": null,
+          "coverage": null,
+          "trusted_cutoff": false
+        },
+        "coordinates": {
+          "start": 25,
+          "end": 39
+        },
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "pfam_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+          "evidence_pack_id": null,
+          "pfam_version": "unknown",
+          "threshold_mode": "NONE",
+          "trusted_cutoff": false,
+          "thresholds": {
+            "mode": "NONE",
+            "evalue": null,
+            "coverage": null,
+            "trusted_cutoff": false
+          },
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-o7e9oh1c/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-o7e9oh1c/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "protein_id": "PM_000010"
+        },
+        "evidence_strength": "WEAK",
+        "family_name": "P23-45_gp39_N",
+        "description": "Thermus phage P23-45 gp39, N-terminal domain"
+      },
+      {
+        "modality": "domain",
+        "statement": "Pfam domain evidence for P23-45_gp39_N (PF20760.3); this is evidence, not an automatic functional assignment.",
+        "level": "weak inference",
+        "source": "Pfam",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "target_name": "P23-45_gp39_N",
+          "pfam_accession": "PF20760.3",
+          "target_hmm_length": 94,
+          "query_protein_id": "PM_000010",
+          "query_length": 87,
+          "full_sequence_e_value": 0.07,
+          "full_sequence_score": 13.9,
+          "conditional_domain_e_value": 17.0,
+          "independent_domain_e_value": 0.00055,
+          "domain_bit_score": 6.3,
+          "hmm_coordinates": {
+            "start": 20,
+            "end": 55
+          },
+          "query_coordinates": {
+            "start": 42,
+            "end": 78
+          },
+          "envelope_coordinates": {
+            "start": 37,
+            "end": 85
+          },
+          "accuracy": 0.73,
+          "query_coverage": 0.42528735632183906,
+          "domain_coverage": 0.3829787234042553,
+          "raw_hmmscan_row": "P23-45_gp39_N        PF20760.3     94 PM_000010            -             87      0.07   13.9   0.2   2   2   0.00055        17    6.3   0.0    20    55    42    78    37    85 0.73 Thermus phage P23-45 gp39, N-terminal domain"
+        },
+        "identifier": "PF20760.3",
+        "threshold": {
+          "evalue": null,
+          "coverage": null,
+          "trusted_cutoff": false
+        },
+        "coordinates": {
+          "start": 42,
+          "end": 78
+        },
+        "provenance": {
+          "adapter": "PfamHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "pfam_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+          "evidence_pack_id": null,
+          "pfam_version": "unknown",
+          "threshold_mode": "NONE",
+          "trusted_cutoff": false,
+          "thresholds": {
+            "mode": "NONE",
+            "evalue": null,
+            "coverage": null,
+            "trusted_cutoff": false
+          },
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-o7e9oh1c/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/pfam/38.2/Pfam-A.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-pfam-o7e9oh1c/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true
+          },
+          "protein_id": "PM_000010"
+        },
+        "evidence_strength": "WEAK",
+        "family_name": "P23-45_gp39_N",
+        "description": "Thermus phage P23-45 gp39, N-terminal domain"
+      },
+      {
+        "modality": "viral_orthology",
+        "statement": "VOGDB orthologous-group evidence for VOG16395; evidence only, not an automatic functional assignment.",
+        "level": "computational prediction",
+        "source": "VOGDB",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "vog_id": "VOG16395",
+          "query_protein_id": "PM_000010",
+          "query_length": 87,
+          "full_sequence_e_value": 3.6e-28,
+          "full_sequence_score": 99.2,
+          "conditional_domain_e_value": 4.1e-28,
+          "independent_domain_e_value": 8.3e-33,
+          "domain_bit_score": 99.1,
+          "hmm_coordinates": {
+            "start": 3,
+            "end": 88
+          },
+          "query_coordinates": {
+            "start": 9,
+            "end": 87
+          },
+          "envelope_coordinates": {
+            "start": 7,
+            "end": 87
+          },
+          "accuracy": 0.97,
+          "query_coverage": 0.9080459770114943,
+          "domain_coverage": 0.945054945054945,
+          "raw_hmmscan_row": "VOG16395             -             91 PM_000010            -             87   3.6e-28   99.2   0.1   1   1   8.3e-33   4.1e-28   99.1   0.1     3    88     9    87     7    87 0.97 -",
+          "hmmscan_description": "-",
+          "consensus_functional_description": "REFSEQ hypothetical protein",
+          "functional_category": "Xu",
+          "functional_category_meaning": null
+        },
+        "identifier": "VOG16395",
+        "threshold": {
+          "evalue": 1e-05,
+          "coverage": 0.5,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 9,
+          "end": 87
+        },
+        "provenance": {
+          "adapter": "VOGHMMAdapter",
+          "adapter_version": "0.1.0",
+          "hmmscan": "/usr/local/bin/hmmscan",
+          "hmmer_version": "3.4",
+          "vog_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/vog.annotations.tsv.gz",
+          "vogdb_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "thresholds": {
+            "evalue": 1e-05,
+            "coverage": 0.5
+          },
+          "trusted_cutoff": false,
+          "status": "REAL",
+          "search_command": [
+            "/usr/local/bin/hmmscan",
+            "--cpu",
+            "8",
+            "--domtblout",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/hmmscan.domtblout",
+            "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/vogdb/235/VOGDB.hmm",
+            "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-vog-el5d30m_/proteins.faa"
+          ],
+          "search_parameters": {
+            "domtblout": true,
+            "threshold_mode": "MANUAL"
+          },
+          "protein_id": "PM_000010"
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "VOG16395",
+        "description": "REFSEQ hypothetical protein"
+      },
+      {
+        "modality": "phage_orthology",
+        "statement": "PHROGs phage orthology evidence for phrog_5672; evidence only, not an automatic product assignment.",
+        "level": "computational prediction",
+        "source": "PHROGs",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "phrog_id": "phrog_5672",
+          "query_protein_id": "PM_000010",
+          "annotation": "Rz-like spanin",
+          "functional_category": "lysis",
+          "percent_identity": 0.8,
+          "bit_score": 96.0,
+          "mmseqs_score": 96.0,
+          "evalue": 9.282e-25,
+          "sequence_identity": 0.8,
+          "alignment_length": 57,
+          "query_coverage": 0.655,
+          "target_coverage": 1.0,
+          "profile_coverage": 1.0,
+          "search_backend": "MMseqs2",
+          "search_backends": [
+            "MMseqs2",
+            "PyHMMER"
+          ],
+          "query_coordinates": {
+            "start": 31,
+            "end": 87
+          },
+          "target_coordinates": {
+            "start": 1,
+            "end": 57
+          },
+          "query_length": 87,
+          "target_length": 57,
+          "raw_mmseqs_row": "PM_000010\tphrog_5672\t0.800\t57\t31\t87\t87\t1\t57\t57\t9.282E-25\t96\t0.655\t1.000",
+          "unknown_function": false,
+          "conflict": false,
+          "corroborating_backend_hits": [
+            {
+              "backend": "PyHMMER",
+              "bit_score": 106.09473419189453,
+              "evalue": 1.1700420265348504e-30,
+              "query_coverage": 0.5402298850574713
+            }
+          ]
+        },
+        "identifier": "phrog_5672",
+        "threshold": {
+          "evalue": 1e-05,
+          "query_coverage": 0.5,
+          "score": null,
+          "identity": null,
+          "alignment_length": null,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 31,
+          "end": 87
+        },
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "mmseqs": "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "phrogs_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null,
+            "identity": null,
+            "alignment_length": null
+          },
+          "status": "REAL",
+          "search_commands": [
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/proteins.faa",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query"
+            ],
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "search",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query",
+              "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/result",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/tmp",
+              "--threads",
+              "8"
+            ],
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query",
+              "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/result",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "threshold_mode": "MANUAL",
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+          },
+          "protein_id": "PM_000010",
+          "search_backends": [
+            "MMseqs2",
+            "PyHMMER"
+          ]
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "phrog_5672",
+        "description": "Rz-like spanin"
+      },
+      {
+        "modality": "phage_orthology",
+        "statement": "PHROGs phage orthology evidence for phrog_1267; evidence only, not an automatic product assignment.",
+        "level": "computational prediction",
+        "source": "PHROGs",
+        "source_version": "unknown",
+        "status": "REAL",
+        "supports": true,
+        "metrics": {
+          "phrog_id": "phrog_1267",
+          "query_protein_id": "PM_000010",
+          "annotation": "Rz-like spanin",
+          "functional_category": "lysis",
+          "percent_identity": 0.537,
+          "bit_score": 84.0,
+          "mmseqs_score": 84.0,
+          "evalue": 1.425e-20,
+          "sequence_identity": 0.537,
+          "alignment_length": 80,
+          "query_coverage": 0.92,
+          "target_coverage": 1.0,
+          "profile_coverage": 1.0,
+          "search_backend": "MMseqs2",
+          "search_backends": [
+            "MMseqs2",
+            "PyHMMER"
+          ],
+          "query_coordinates": {
+            "start": 6,
+            "end": 85
+          },
+          "target_coordinates": {
+            "start": 1,
+            "end": 76
+          },
+          "query_length": 87,
+          "target_length": 76,
+          "raw_mmseqs_row": "PM_000010\tphrog_1267\t0.537\t80\t6\t85\t87\t1\t76\t76\t1.425E-20\t84\t0.920\t1.000",
+          "unknown_function": false,
+          "conflict": false,
+          "corroborating_backend_hits": [
+            {
+              "backend": "PyHMMER",
+              "bit_score": 69.5010986328125,
+              "evalue": 7.801364670187004e-19,
+              "query_coverage": 0.8850574712643678
+            }
+          ]
+        },
+        "identifier": "phrog_1267",
+        "threshold": {
+          "evalue": 1e-05,
+          "query_coverage": 0.5,
+          "score": null,
+          "identity": null,
+          "alignment_length": null,
+          "threshold_mode": "MANUAL"
+        },
+        "coordinates": {
+          "start": 6,
+          "end": 85
+        },
+        "provenance": {
+          "adapter": "PHROGSMMseqsAdapter",
+          "adapter_version": "0.2.0",
+          "mmseqs": "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+          "mmseqs_version": "18.8cc5c",
+          "phrogs_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+          "annotations_path": "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrog_annot_v4.tsv",
+          "phrogs_version": "unknown",
+          "threshold_mode": "MANUAL",
+          "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov",
+          "thresholds": {
+            "evalue": 1e-05,
+            "query_coverage": 0.5,
+            "score": null,
+            "identity": null,
+            "alignment_length": null
+          },
+          "status": "REAL",
+          "search_commands": [
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "createdb",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/proteins.faa",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query"
+            ],
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "search",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query",
+              "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/result",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/tmp",
+              "--threads",
+              "8"
+            ],
+            [
+              "/Users/emmanuelnnadi/miniforge3/envs/phagemine/bin/mmseqs",
+              "convertalis",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/query",
+              "/Users/emmanuelnnadi/Library/Application Support/PhageMine/databases/phrogs/v4-pharokka-1.11.0/phrogs_profile_db",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/result",
+              "/var/folders/f7/x0h_zy3s6yj38f9q42vfhcfr0000gn/T/phagemine-phrogs-xk2w7tf9/phrogs.tsv",
+              "--format-output",
+              "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+            ]
+          ],
+          "search_parameters": {
+            "threshold_mode": "MANUAL",
+            "output_format": "query,target,fident,alnlen,qstart,qend,qlen,tstart,tend,tlen,evalue,bits,qcov,tcov"
+          },
+          "protein_id": "PM_000010",
+          "search_backends": [
+            "MMseqs2",
+            "PyHMMER"
+          ]
+        },
+        "evidence_strength": "STRONG",
+        "family_name": "phrog_1267",
+        "description": "Rz-like spanin"
+      }
+    ],
+    "alternatives": [],
+    "missing_evidence": [],
+    "functional_confidence": "Moderate",
+    "biological_interest": 0,
+    "evidence_diversity": "Moderate",
+    "score_components": {
+      "novelty": 0,
+      "conservation": 0,
+      "context": 0,
+      "functional_signal": 0,
+      "convergence": 0,
+      "quality_penalty": 0
+    }
+  }
+]
