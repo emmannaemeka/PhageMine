@@ -221,10 +221,18 @@ def write_qc(output, genome=None, proteins=None, metadata=None, provenance=None)
     item(14,'PASS' if provenance else 'WARN','Provenance retained; the submitter remains responsible for later updates')
     status='FAIL' if any(c['status']=='FAIL' for c in criteria) else 'WARN' if any(c['status']=='WARN' for c in criteria) else 'PASS'
     report={'schema_version':1,'guide':GUIDE,'status':status,'insdc_acceptance':False,'sequence_sha256':hashlib.sha256(sequence.encode()).hexdigest(),'coordinate_system':'1-based-inclusive','criteria':criteria,'safety':safety,'cds_count':len(cds),'rna_count':len(rna),'provenance':provenance}
+    confidence_path = root / 'cds_confidence.json'
+    confidence = json.loads(confidence_path.read_text()) if confidence_path.exists() else []
+    report['cds_confidence'] = {'records': confidence,
+        'retained_counts': {tier: sum(r['confidence_tier']==tier and not r['excluded'] for r in confidence)
+                            for tier in ('high', 'medium', 'low')},
+        'excluded_count': sum(r['excluded'] for r in confidence)}
     for dest in {root,package}:
         (dest/'phagemine_qc_report.json').write_text(json.dumps(report,indent=2,default=str)+'\n')
         lines=['# PhageMine genome QC',f'Overall: **{status}**. This is not INSDC acceptance or therapeutic clearance.',f'Guide: {GUIDE}','','| Question | Check | Status | Finding |','|---|---|---|---|']
         lines += [f"| {c['question']} | {c['criterion']} | {c['status']} | {c['reason']} |" for c in criteria]
+        lines += ['', '## CDS confidence', json.dumps(report['cds_confidence']['retained_counts']),
+                  f"Excluded by strict precision: {report['cds_confidence']['excluded_count']}"]
         lines += ['', '## Findings', '```json', json.dumps({str(c['question']):c['details'] for c in criteria if c['details']},indent=2,default=str), '```']
         (dest/'phagemine_qc_report.md').write_text('\n'.join(lines)+'\n')
     return report

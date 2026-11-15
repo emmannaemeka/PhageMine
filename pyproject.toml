@@ -29,6 +29,8 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
+    "openpyxl>=3.1,<4",
+    "PyYAML>=6,<7",
     "streamlit>=1.49,<2",
     "biopython>=1.85,<2",
     "psutil>=5,<8",

@@ -137,6 +137,24 @@ def genome_start_context(genome, proteins, secondary=()):
             'sd_sparse': bool(gc > .58 and sparse_sd)}
 
 
+def attenuate_rbs(rbs, context):
+    """Attenuate short/background motifs only in high-GC genomes."""
+    result = dict(rbs)
+    result['raw_score'] = rbs['score']
+    if context and context['gc_fraction'] > .58 and len(rbs['motif']) < 5:
+        result['score'] *= .25
+    return result
+
+
+def coupling_score(sequence, left, gap):
+    """Require an actual shared stop/start sequence, not just close coordinates."""
+    if gap == -1 and sequence[max(0,left-2):left+3] in {'TAATG','TGATG','TAGTG','TATTG'}:
+        return 4.0
+    if gap == -4 and sequence[left:left+4] in {'ATGA','GTGA','TTGA'}:
+        return 4.0
+    return 0.0
+
+
 def candidate_scores(genome, proteins, p, secondary=(), anchors=None, config=None, context=None):
     config = config or RefinementConfig()
     length = len(genome)
@@ -149,10 +167,15 @@ def candidate_scores(genome, proteins, p, secondary=(), anchors=None, config=Non
             if b == right: caller_starts.add(a)
     rows = []
     for left in enumerate_starts(sequence, right, config.min_cds_nt):
-        rbs = rbs_score(sequence, left)
+        # Attenuation targets alternative background motifs, not caller-supported starts.
+        rbs = attenuate_rbs(rbs_score(sequence, left), context if left not in caller_starts else None)
         gap = _spacing(left, right, p.strand, proteins, length, p.protein_id)
         packing = 0.0
-        if gap in (-1, -4): packing = 4.0
+        coupling = coupling_score(sequence, left, gap)
+        if gap in (-1, -4):
+            packing = coupling
+            if coupling and rbs['raw_score'] > rbs['score']:
+                packing += 2.0  # independent sequence-confirmed coupling evidence
         elif gap is not None and 0 <= gap <= 15: packing = 3.0
         elif gap is not None and gap > 15: packing = -min(20.0, config.gap_penalty*(gap-15))
         elif gap is not None and gap < -20:
@@ -172,7 +195,7 @@ def candidate_scores(genome, proteins, p, secondary=(), anchors=None, config=Non
         rows.append({'protein_id': p.protein_id, 'start': start, 'end': end, 'strand': p.strand,
                      'left': left, 'right': right, 'start_codon': sequence[left:left+3],
                      'length_nt': right-left, 'score': round(score, 4), 'codon_prior': prior,
-                     'rbs_weight': sd_weight, 'rbs_score': rbs['score'], 'rbs_motif': rbs['motif'], 'spacer_nt': rbs['spacer_nt'],
+                     'coupling_score': coupling, 'rbs_raw_score': rbs['raw_score'], 'rbs_weight': sd_weight, 'rbs_score': rbs['score'], 'rbs_motif': rbs['motif'], 'spacer_nt': rbs['spacer_nt'],
                      'upstream_gap_nt': gap, 'packing_score': packing, 'caller_score': support,
                      'homology_score': homology_score, 'homology': homology,
                      'original': left == original_left})
@@ -223,8 +246,10 @@ def refine_starts(genome, proteins, secondary=(), anchors=None, config=None):
                                  and original['rbs_score'] == 0
                                  and original['upstream_gap_nt'] is not None
                                  and original['upstream_gap_nt']-best['upstream_gap_nt'] >= 15)
-        if not ((not context['sd_sparse'] and best['rbs_score'] >= 8) or best['homology_score'] or compact_extension): continue
+        if not ((not context['sd_sparse'] and best['rbs_score'] >= 8) or best['homology_score'] or (best.get('coupling_score',0) and best.get('rbs_raw_score',0)>=8) or compact_extension): continue
         reason = 'START_REFINED_NTERMINAL_HOMOLOGY' if best['homology_score'] else ('START_REFINED_COMPACT_SPACING_REVIEW' if compact_extension and best['rbs_score'] < 8 else 'START_REFINED_RBS_SPACING')
+        if best.get('coupling_score',0) and best['rbs_score'] < 8 and not best['homology_score']:
+            reason = 'START_REFINED_TRANSLATIONAL_COUPLING'
         output[-1], event = _changed_model(p, best, genome, reason)
         output[-1].gene_call_parameters['start_selection_review'] = 'heuristic start refinement - review'
         audit.append(event)
@@ -339,13 +364,19 @@ def diamond_anchors(genome, candidate_rows, database, executable, output, thread
     return anchors,status
 
 
-def run_refinement(genome, proteins, output, secondary=(), database=None, diamond=None, threads=1, config=None, rna_features=()):
+def run_refinement(genome, proteins, output, secondary=(), database=None, diamond=None, threads=1, config=None, rna_features=(), phrogs_start_db=None):
     config=config or RefinementConfig();root=Path(output);root.mkdir(parents=True,exist_ok=True)
     _,_,start_rows=refine_starts(genome,proteins,secondary,config=config)
     _,_,rescue_rows=rescue_short_orfs(genome,proteins,config=config,rna_features=rna_features)
     anchors={};status={'state':'NOT_CONFIGURED'}
     if database and diamond:
         anchors,status=diamond_anchors(genome,start_rows+rescue_rows,database,diamond,root/'homology',threads)
+    if phrogs_start_db and diamond:
+        extra, phrogs_status = diamond_anchors(genome, start_rows, phrogs_start_db, diamond, root/'phrogs_nterminal', threads)
+        status = {'swissprot': status, 'phrogs': phrogs_status}
+        for key, hit in extra.items():
+            hit['source'] = 'PHROGs'
+            anchors.setdefault(key, hit)
     refined,changes,candidates=refine_starts(genome,proteins,secondary,anchors,config)
     final,rescues,rescue_candidates=rescue_short_orfs(genome,refined,config,anchors,rna_features)
     with (root/'upstream_100nt.fna').open('w') as handle:

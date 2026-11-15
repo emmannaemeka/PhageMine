@@ -542,7 +542,7 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None, reference_genbank: list[str] | None = None, reference_blastn: str = "blastn", reference_min_coverage: float = 70, reference_min_identity: float = 80) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None, reference_genbank: list[str] | None = None, reference_blastn: str = "blastn", reference_min_coverage: float = 70, reference_min_identity: float = 80, strict_precision: bool = False, phrogs_start_db: str | None = None) -> int:
     progress = progress or ProgressReporter(quiet=True)
     if evidence_cache_dir and segmented:
         raise ValueError("Persistent evidence reuse is currently supported for single-genome runs")
@@ -785,7 +785,7 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             secondary=gv_result.models if production_observation and gv_result.status == "SUCCESS" else (),
             database=swissprot_path or (registered or {}).get("path"),
             diamond=diamond or shutil.which("diamond"), threads=threads,
-            rna_features=early_rna["features"] if early_rna else ())
+            rna_features=early_rna["features"] if early_rna else (), phrogs_start_db=phrogs_start_db)
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
@@ -937,11 +937,20 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     timed_end("evidence_fusion")
     if molecule_type == "dna" and predictor.name == "PHANOTATE":
         from .overlap_rescue import promote_overlaps
+        overlap_adapters = [copy.copy(a) for a in (vog_adapter, phrogs_hmm_adapter)]
+        for adapter in overlap_adapters:
+            adapter.threads = min(2, threads)
         proteins = promote_overlaps(representation.analysis_sequence, proteins,
             Path(output) / "gene_calls" / "start_refinement",
             lambda candidates: [_analyze_evidence(a, candidates, shared_evidence_cache)
-                                for a in (vog_adapter, phrogs_hmm_adapter)],
+                                for a in overlap_adapters],
             early_rna["features"] if early_rna else ())
+    from .cds_confidence import assign_confidence
+    proteins, confidence_audit = assign_confidence(
+        representation.analysis_sequence, proteins,
+        gv_result.models if production_observation and gv_result.status == "SUCCESS" else (),
+        strict_precision=strict_precision)
+    (Path(output) / "cds_confidence.json").write_text(json.dumps(confidence_audit, indent=2)+"\n")
     from .genbank import repair_boundaries
     proteins = repair_boundaries(representation.analysis_sequence, proteins)
     classifications = attach_gene_call_assessments(
@@ -961,6 +970,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             protein.annotation_level = EvidenceLevel.COMPUTATIONAL
         else:
             protein.annotation_level = EvidenceLevel.HYPOTHESIS
+    from .slippage_review import annotate_slippage_review
+    slippage = annotate_slippage_review(proteins)
+    (Path(output)/'ribosomal_slippage_review.json').write_text(json.dumps(slippage,indent=2)+'\n')
     context_records, modules = build_context(proteins, classifications)
     hallmarks = assess_hallmarks(classifications)
     write_hallmarks(output, hallmarks)
@@ -1048,4 +1060,6 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_triage_report(output)
     from .genome_qc import write_qc
     write_qc(output, proteins=proteins, metadata=metadata, provenance=manifest)
+    from .reviewer_package import build_reviewer_package
+    build_reviewer_package(output)
     return len(proteins)

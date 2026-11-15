@@ -207,6 +207,8 @@ def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | Non
         product = change.get("product") or product_name(protein)
         tag = _locus_tag(protein, locus_tag_prefix)
         note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; Product reflects the final PhageMine annotation; computational predictions are not experimental validation."
+        if protein.gene_call_parameters.get('ribosomal_slippage_review'):
+            note += " Possible ribosomal_slippage: split-homology evidence requires manual review; no joined CDS or recoding exception asserted."
         lines.extend([f"{start}\t{end}\tgene", f"\t\t\tlocus_tag\t{tag}", f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", "\t\t\ttransl_table\t11", f"\t\t\tnote\t{_safe(note)}"])
 
         if getattr(protein, "partial_5prime", False):
@@ -301,7 +303,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     if metadata.sequence_id and metadata.sequence_id != genome_id:
         pre_validation["errors"].append({"code": "metadata_sequence_id_mismatch", "message": "Metadata sequence_id does not match the FASTA identifier."})
         pre_validation["valid"] = False
-    source_fields = {"organism": metadata.organism, "host": metadata.host,
+    source_fields = {"organism": metadata.organism, "host": metadata.host, "topology": metadata.topology,
                      "isolation_source": metadata.isolation_source, "collection_date": metadata.collection_date,
                      "geo_loc_name": metadata.geographic_location, "isolate": metadata.isolate, "strain": metadata.strain}
     modifiers = []
@@ -316,6 +318,13 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     fasta_header = f">{genome_id}" + "".join(modifiers)
     (root / "genome.fsa").write_text(f"{fasta_header}\n{genome}\n")
     table = feature_table(genome_id, proteins, feature_overrides, getattr(metadata, "locus_tag_prefix", None))
+    source_lines = [f"1\t{len(genome)}\tsource"]
+    for key, value in source_fields.items():
+        if value and key != 'topology' and not any(c in value for c in '[]\t\r\n'):
+            source_lines.append(f"\t\t\t{key}\t{_safe(value)}")
+    source_lines.append("\t\t\tmol_type\tgenomic DNA")
+    header, body = table.split('\n', 1)
+    table = header+'\n'+'\n'.join(source_lines)+'\n'+body
     (root / "features.tbl").write_text(table)
     (root / "genome.tbl").write_text(table)
     (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)} {_safe((feature_overrides or {}).get(p.protein_id, {}).get('product') or product_name(p))}\n{p.sequence}\n" for p in proteins))
@@ -325,7 +334,7 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     from .genbank_flatfile import write_flatfile
     write_flatfile(root)
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
-    (root / "submission.sbt").write_text(_submission_template(metadata))
+    (root / "submission.sbt").write_text(Path(metadata.submitter_template).read_text() if metadata.submitter_template else _submission_template(metadata))
     cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime, "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
     (root / "cds_provenance.json").write_text(json.dumps(cds_provenance, indent=2, default=str, sort_keys=True))
     table2asn = table2asn_status(root, table2asn_executable)

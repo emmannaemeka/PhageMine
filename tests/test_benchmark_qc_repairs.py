@@ -70,7 +70,8 @@ def test_overlap_requires_support_frame_and_rna_clearance():
     row={'rbs_score':10}
     assert overlap_decision(inner,row,[outer])['product']=='Rz1-like spanin'
     assert overlap_decision(inner,{'rbs_score':0},[outer]) is None
-    assert overlap_decision(replace(inner,start=33),row,[outer]) is None
+    assert overlap_decision(replace(inner,start=33),row,[outer]) is not None  # +2 frame now eligible
+    assert overlap_decision(replace(inner,start=34),row,[outer]) is None  # same frame
     assert overlap_decision(inner,row,[outer],[{'start':40,'end':50}]) is None
     inner.sequence='M'+'K'*25; inner.evidence=[evidence(identifier='phrog_other')]
     assert overlap_decision(inner,{'rbs_score':0},[outer])['code']=='SHORT_ORF_DISTINCT_FAMILY_OVERLAP_PROMOTED'
