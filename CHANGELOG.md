@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.4.1 — 2026-11-16
 
 ### Gene-start accuracy
 - Add a canonical-initiator guard (`phagemine.initiator_guard`). After start
