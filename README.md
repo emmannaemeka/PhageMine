@@ -30,7 +30,7 @@ Project website: [PhageMine](https://emmannaemeka.github.io/PhageMine/).
 
 ## Install
 
-The current stable release is [v1.4.0](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.4.0).
+The current stable release is [v1.4.1](https://github.com/emmannaemeka/PhageMine/releases/tag/v1.4.1).
 Python 3.10 or later is required.
 
 Install from Bioconda, which brings the external analysis tools with it:
@@ -50,7 +50,7 @@ pip install phagemine
 To install from source instead:
 
 ```bash
-git clone --branch v1.4.0 --depth 1 https://github.com/emmannaemeka/PhageMine.git
+git clone --branch v1.4.1 --depth 1 https://github.com/emmannaemeka/PhageMine.git
 cd PhageMine
 conda env create --file environment.yml
 conda activate phagemine
