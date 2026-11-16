@@ -7,7 +7,10 @@ CODON_TABLE = {
 
 
 def translate(cds: str) -> str:
-    return "".join(CODON_TABLE.get(cds[i:i+3], "X") for i in range(0, len(cds) - 2, 3)).rstrip("*")
+    from Bio.Seq import Seq
+    # Table 11 resolves IUPAC codons when every expansion encodes one residue.
+    peptide = str(Seq(cds.upper()[:len(cds)//3*3]).translate(table=11))
+    return peptide[:-1] if peptide.endswith("*") else peptide
 
 
 def predict_orfs(genome_id: str, sequence: str, min_orf_nt: int = 90) -> list[Protein]:

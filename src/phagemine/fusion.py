@@ -772,6 +772,16 @@ def classify_proteins(proteins: list[Protein]) -> list[dict[str, Any]]:
             },
             "reasoning_summary": item.get("reasoning_summary", "") + " " + basis + ".",
         })
+    by_id = {p.protein_id: p for p in proteins}
+    for row in results:
+        decision = by_id[row['protein_id']].gene_call_parameters.get('overlap_rescue', {})
+        if decision.get('code') == 'SHORT_ORF_RZ1_OVERLAP_PROMOTED':
+            for key in ('display_product', 'proposed_function', 'normalized_function'):
+                row[key] = 'Rz1-like spanin'
+            row.update(functional_state='PROBABLE_FUNCTION', confidence='MEDIUM',
+                       overlap_rescue=decision)
+    from .spanins import normalize_spanins
+    normalize_spanins(proteins, results)
     return results
 
 

@@ -130,6 +130,12 @@ Individual installers are also available:
         command = subcommands.add_parser(name, help=f"Run the MVP {name} workflow")
         command.add_argument("fasta", help="Single-record phage genome FASTA")
         command.add_argument("--output", default=None, help="Output directory (default: ./<genome stem>_phagemine_results)")
+        for field in ('organism','host','isolation-source','country','submitter-template'):
+            command.add_argument('--'+field)
+        command.add_argument('--topology', choices=('linear','circular'), default=None,
+                             help='Genome topology (default: linear unless specified in metadata)')
+        command.add_argument("--phrogs-start-db", help="DIAMOND database of PHROGs protein members for N-terminal anchoring")
+        command.add_argument("--strict-precision", action="store_true", help="Exclude unsupported single-caller micro-ORFs from final exports")
         command.add_argument("--metadata", help="Optional JSON submission metadata; missing fields are not inferred")
         command.add_argument("--sequencing-provenance", help="Optional JSON sequencing/assembly provenance; absent values remain UNKNOWN")
         command.add_argument("--table2asn", help="Optional path to official NCBI table2asn executable")
@@ -180,7 +186,32 @@ Individual installers are also available:
     revise.add_argument("results_dir")
     revise.add_argument("--corrections", required=True)
     revise.add_argument("--output", required=True)
+    qc = subcommands.add_parser("genome-qc", help="Inspect final GenBank and emit the 14-question QC checklist")
+    qc.add_argument("results_dir")
+    qc.add_argument("--safety-db", action="append", default=[], metavar="CATEGORY=DIAMOND_DB")
+    qc.add_argument("--diamond", default="diamond")
+    qc.add_argument("--threads", type=int, default=1)
+    assembly = subcommands.add_parser("assemble", help="Optional paired-read assembly before annotation")
+    assembly.add_argument("--reads1", required=True)
+    assembly.add_argument("--reads2", required=True)
+    assembly.add_argument("--output", required=True)
+    assembly.add_argument("--assembler", choices=("shovill", "spades"), default="shovill")
+    assembly.add_argument("--executable")
+    assembly.add_argument("--threads", type=int, default=1)
     args = parser.parse_args(argv)
+    if args.command == "genome-qc":
+        from .genome_qc import write_qc
+        if args.safety_db:
+            from .safety_screen import screen
+            databases = dict(item.split("=", 1) for item in args.safety_db)
+            screen(args.results_dir, databases, args.diamond, args.threads)
+        report = write_qc(args.results_dir)
+        print(json.dumps({"status": report["status"], "cds_count": report["cds_count"]}))
+        return 1 if report["status"] == "FAIL" else 0
+    if args.command == "assemble":
+        from .assembly import assemble
+        print(assemble(args.reads1, args.reads2, args.output, args.assembler, args.executable, args.threads))
+        return 0
     from .workflow_cli import COMMANDS, dispatch
     if args.command in COMMANDS:
         try:
@@ -409,7 +440,10 @@ Individual installers are also available:
             "SWISSPROT": {"path": args.swissprot, "required_tools": [args.diamond or "diamond"], "provenance": {"metadata_path": args.swissprot_metadata}} if args.swissprot else None,
             "PHROGS": {"path": args.phrogs, "required_tools": [args.mmseqs or "mmseqs"], "provenance": {"annotations_path": args.phrogs_annotations, "hmm_profiles_path": args.phrogs_hmm}} if args.phrogs else None,
         })
-        metadata = SubmissionMetadata.from_dict(json.loads(Path(args.metadata).read_text())) if args.metadata else None
+        from .submission_metadata import load_metadata
+        metadata = load_metadata(args.metadata, organism=args.organism, host=args.host,
+            isolation_source=args.isolation_source, geographic_location=args.country,
+            topology=args.topology, submitter_template=args.submitter_template)
         from .sequencing_provenance import SequencingProvenance
         sequencing_provenance = SequencingProvenance.from_dict(json.loads(Path(args.sequencing_provenance).read_text())) if args.sequencing_provenance else SequencingProvenance()
         from .gene_prediction import create_predictor
@@ -420,7 +454,7 @@ Individual installers are also available:
         # reconciliation layer.  ``run()`` still gates execution to genuine
         # PHANOTATE DNA analysis and keeps the flag as compatibility metadata.
         reconcile_orfs = args.reconcile_orfs or args.command in {"annotate", "mine", "run", "genbank"}
-        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress), gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented, rna_annotation=args.rna_features, trnascan_executable=args.trnascan, evidence_cache_dir=args.evidence_cache, reference_genbank=args.reference_genbank, reference_blastn=args.reference_blastn, reference_min_coverage=args.reference_min_coverage, reference_min_identity=args.reference_min_identity)
+        count = run(args.fasta, output, args.command, metadata, args.table2asn, create_predictor(args.gene_predictor, args.phanotate), sequencing_provenance=sequencing_provenance, pfam_path=args.pfam, pfam_hmmscan=args.pfam_hmmscan, pfam_evalue=args.pfam_evalue, pfam_coverage=args.pfam_coverage, pfam_trusted_cutoff=args.pfam_trusted_cutoff, use_mock_evidence=args.mock_evidence, pfam_threshold_mode=args.pfam_threshold_mode, vog_path=args.vogdb, vog_annotations=args.vog_annotations, vog_hmmscan=args.vog_hmmscan, vog_evalue=args.vog_evalue, vog_coverage=args.vog_coverage, swissprot_path=args.swissprot, swissprot_metadata=args.swissprot_metadata, diamond=args.diamond, swissprot_evalue=args.swissprot_evalue, phrogs_path=args.phrogs, phrogs_annotations=args.phrogs_annotations, phrogs_hmm_path=args.phrogs_hmm, mmseqs=args.mmseqs, phrogs_evalue=args.phrogs_evalue, phrogs_coverage=args.phrogs_coverage, phrogs_score=args.phrogs_score, phrogs_identity=args.phrogs_identity, phrogs_alignment_length=args.phrogs_alignment_length, reconcile_orfs=reconcile_orfs, prodigal=args.prodigal, threads=args.threads, progress=ProgressReporter(quiet=args.quiet, no_progress=args.no_progress), gene_model_policy=args.gene_model_policy, gene_model_profile=args.gene_model_profile, molecule_type=args.molecule_type, segmented=args.segmented, rna_annotation=args.rna_features, trnascan_executable=args.trnascan, evidence_cache_dir=args.evidence_cache, reference_genbank=args.reference_genbank, reference_blastn=args.reference_blastn, reference_min_coverage=args.reference_min_coverage, reference_min_identity=args.reference_min_identity, strict_precision=args.strict_precision, phrogs_start_db=args.phrogs_start_db)
     except (OSError, ValueError, RuntimeError) as exc:
         parser.error(str(exc))
     print(f"PhageMine complete: {count} predicted proteins. Outputs: {output}")

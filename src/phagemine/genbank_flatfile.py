@@ -52,6 +52,7 @@ def write_flatfile(package: Path) -> Path:
             start = BeforePosition(min(a, b) - 1) if low[0] in "<>" else min(a, b) - 1
             end = AfterPosition(max(a, b)) if high[0] in "<>" else max(a, b)
             feature = SeqFeature(SimpleLocation(start, end, strand=strand), type=kind)
+            if kind == 'source': record.features = [f for f in record.features if f.type != 'source']
             record.features.append(feature)
         elif feature is not None and len(fields) >= 5:
             feature.qualifiers.setdefault(fields[3], []).append(fields[4])

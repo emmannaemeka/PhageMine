@@ -542,7 +542,7 @@ def _run_validated_inphared(
     return result
 
 
-def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None, reference_genbank: list[str] | None = None, reference_blastn: str = "blastn", reference_min_coverage: float = 70, reference_min_identity: float = 80) -> int:
+def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: SubmissionMetadata | None = None, table2asn_executable: str | None = None, predictor: GenePredictor | None = None, representation: GenomeRepresentation | None = None, sequencing_provenance: SequencingProvenance | None = None, pfam_path: str | Path | None = None, pfam_hmmscan: str | None = None, pfam_evalue: float | None = None, pfam_coverage: float | None = None, pfam_trusted_cutoff: bool = False, use_mock_evidence: bool = False, pfam_threshold_mode: str | None = None, vog_path: str | Path | None = None, vog_annotations: str | Path | None = None, vog_hmmscan: str | None = None, vog_evalue: float | None = 1e-5, vog_coverage: float | None = 0.5, swissprot_path: str | Path | None = None, swissprot_metadata: str | Path | None = None, diamond: str | None = None, swissprot_evalue: float = 1e-5, phrogs_path: str | Path | None = None, phrogs_annotations: str | Path | None = None, phrogs_hmm_path: str | Path | None = None, mmseqs: str | None = None, phrogs_evalue: float | None = 1e-5, phrogs_coverage: float | None = 0.5, phrogs_score: float | None = None, phrogs_identity: float | None = None, phrogs_alignment_length: int | None = None, reconcile_orfs: bool = False, prodigal: str | None = None, progress: ProgressReporter | None = None, threads: int = 1, inphared_resolution: tuple[dict | None, str] | None = None, gene_model_policy: str = "phanotate-only", gene_model_profile: str = "standard", molecule_type: str = "dna", segmented: bool = False, shared_evidence_cache=None, rna_annotation: str = "auto", trnascan_executable: str = "tRNAscan-SE", evidence_cache_dir: str | Path | None = None, reference_genbank: list[str] | None = None, reference_blastn: str = "blastn", reference_min_coverage: float = 70, reference_min_identity: float = 80, strict_precision: bool = False, phrogs_start_db: str | None = None) -> int:
     progress = progress or ProgressReporter(quiet=True)
     if evidence_cache_dir and segmented:
         raise ValueError("Persistent evidence reuse is currently supported for single-genome runs")
@@ -755,6 +755,49 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
         manifest.update({"gene_model_policy": gene_model_policy, "gene_model_profile": gene_model_profile,
                          "selection_policy_version": "1.0"})
         manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    if production_observation and gv_result.status == "SUCCESS":
+        from .start_selection import select_supported_starts
+        proteins, start_changes = select_supported_starts(
+            representation.analysis_sequence, proteins, gv_result.models)
+        (Path(output) / "gene_calls" / "start_selection.json").write_text(
+            json.dumps(start_changes, indent=2, sort_keys=True))
+        if start_changes:
+            manifest = json.loads(manifest_path.read_text())
+            manifest.update({"final_cds_source": "PHANOTATE_WITH_SUPPORTED_START_SELECTION",
+                             "phanotate_authoritative": False,
+                             "start_selection_code_path": "phagemine.start_selection.select_supported_starts",
+                             "start_changes": start_changes})
+            manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    # Search before rescue, attach to completed outputs only after export.
+    import shutil
+    (Path(output) / "analysis_genome.fasta").write_text(f">{representation.analysis_sequence_id}\n{representation.analysis_sequence}\n")
+    early_rna = None
+    if rna_annotation != "none" and shutil.which(trnascan_executable):
+        from .rna_features import scan
+        early_rna = scan(Path(output), trnascan_executable, threads,
+                         aragorn_executable=shutil.which("aragorn"), attach_results=False)
+    if molecule_type == "dna" and predictor.name == "PHANOTATE":
+        from .start_refinement import run_refinement
+        import shutil
+        registered = EvidenceResourceManager().find(ResourceType.SWISSPROT) if not swissprot_path else None
+        proteins = run_refinement(
+            representation.analysis_sequence, proteins, Path(output) / "gene_calls" / "start_refinement",
+            secondary=gv_result.models if production_observation and gv_result.status == "SUCCESS" else (),
+            database=swissprot_path or (registered or {}).get("path"),
+            diamond=diamond or shutil.which("diamond"), threads=threads,
+            rna_features=early_rna["features"] if early_rna else (), phrogs_start_db=phrogs_start_db)
+        if production_observation and gv_result.status == "SUCCESS":
+            # Rare table-11 initiators (CTG/ATT/ATC/ATA) chosen on SD/spacing
+            # evidence alone yield to the unique canonical Prodigal-GV start for
+            # the same stop.  Homology/coupling-anchored starts and overlapping
+            # same-strand architectures are kept and listed for review.
+            from .initiator_guard import enforce_canonical_initiators
+            proteins, initiator_changes, initiator_reviews = enforce_canonical_initiators(
+                representation.analysis_sequence, proteins, gv_result.models)
+            (Path(output) / "gene_calls" / "initiator_guard.json").write_text(json.dumps(
+                {"code_path": "phagemine.initiator_guard.enforce_canonical_initiators",
+                 "reference_used": False, "changes": initiator_changes,
+                 "reviews": initiator_reviews}, indent=2, sort_keys=True) + "\n")
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
@@ -904,6 +947,24 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
                               representation, sequencing_provenance, proteins, checkpoint_manifest, fasta)
     progress.finish(f"{sum(len(p.evidence) for p in proteins)} annotation evidence records integrated")
     timed_end("evidence_fusion")
+    if molecule_type == "dna" and predictor.name == "PHANOTATE":
+        from .overlap_rescue import promote_overlaps
+        overlap_adapters = [copy.copy(a) for a in (vog_adapter, phrogs_hmm_adapter)]
+        for adapter in overlap_adapters:
+            adapter.threads = min(2, threads)
+        proteins = promote_overlaps(representation.analysis_sequence, proteins,
+            Path(output) / "gene_calls" / "start_refinement",
+            lambda candidates: [_analyze_evidence(a, candidates, shared_evidence_cache)
+                                for a in overlap_adapters],
+            early_rna["features"] if early_rna else ())
+    from .cds_confidence import assign_confidence
+    proteins, confidence_audit = assign_confidence(
+        representation.analysis_sequence, proteins,
+        gv_result.models if production_observation and gv_result.status == "SUCCESS" else (),
+        strict_precision=strict_precision)
+    (Path(output) / "cds_confidence.json").write_text(json.dumps(confidence_audit, indent=2)+"\n")
+    from .genbank import repair_boundaries
+    proteins = repair_boundaries(representation.analysis_sequence, proteins)
     classifications = attach_gene_call_assessments(
         classify_proteins(proteins), gene_review_records)
     classification_by_id = {item["protein_id"]: item for item in classifications}
@@ -921,6 +982,9 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             protein.annotation_level = EvidenceLevel.COMPUTATIONAL
         else:
             protein.annotation_level = EvidenceLevel.HYPOTHESIS
+    from .slippage_review import annotate_slippage_review
+    slippage = annotate_slippage_review(proteins)
+    (Path(output)/'ribosomal_slippage_review.json').write_text(json.dumps(slippage,indent=2)+'\n')
     context_records, modules = build_context(proteins, classifications)
     hallmarks = assess_hallmarks(classifications)
     write_hallmarks(output, hallmarks)
@@ -993,17 +1057,11 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_package(output, representation.analysis_sequence_id, representation.analysis_sequence, proteins, manifest, metadata, table2asn_executable, sequencing_provenance)
     progress.finish("package generated")
     timed_end("genbank")
-    import shutil
-    rna_available = shutil.which(trnascan_executable)
-    if rna_annotation != "none" and rna_available:
-        from .rna_features import scan
-        progress.start("noncoding RNA annotation")
-        timed_start("rna_annotation")
-        rna_result = scan(Path(output), trnascan_executable, threads)
+    if early_rna is not None:
+        from .rna_features import attach
+        attach(Path(output), early_rna["features"], early_rna["provenance"], early_rna["rejected"])
         manifest.update({key: value for key, value in json.loads((Path(output) / "run_manifest.json").read_text()).items()
                          if key in {"rna_annotation", "scientific_validation"}})
-        progress.finish(f"{rna_result['feature_count']} tRNA predictions")
-        timed_end("rna_annotation")
     else:
         manifest["rna_annotation"] = {"status": "SKIPPED", "reason": "Disabled" if rna_annotation == "none" else "tRNAscan-SE not installed"}
     manifest["stage_timings_seconds"] = timings
@@ -1012,4 +1070,8 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
     write_conflicts(output)
     from .triage import write_triage_report
     write_triage_report(output)
+    from .genome_qc import write_qc
+    write_qc(output, proteins=proteins, metadata=metadata, provenance=manifest)
+    from .reviewer_package import build_reviewer_package
+    build_reviewer_package(output)
     return len(proteins)

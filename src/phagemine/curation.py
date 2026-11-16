@@ -74,6 +74,15 @@ def _submission(root: Path, annotations: dict) -> None:
         fields["evidence"] = [Evidence(**{**e, "level": EvidenceLevel(e["level"])}) for e in fields.get("evidence", [])]
         proteins.append(Protein(**fields))
     genome_id, sequence = read_fasta(root / "analysis_genome.fasta")
+    raw_secondary = root / "gene_calls" / "raw" / "prodigal_gv.json"
+    if raw_secondary.is_file():
+        from .gene_models import GeneModel
+        from .start_selection import select_supported_starts
+        candidates = [GeneModel("prodigal_gv", row["raw_identifier"], row["begin"], row["end"],
+                                "+" if row["strand"] == 1 else "-")
+                      for row in read_json(raw_secondary).get("records", [])]
+        proteins, changes = select_supported_starts(sequence, proteins, candidates)
+        (root / "gene_calls" / "start_selection.json").write_text(json.dumps(changes, indent=2) + "\n")
     provenance = read_json(root / "run_manifest.json")
     sequencing = read_json(root / "sequencing_provenance.json") if (root / "sequencing_provenance.json").is_file() else {}
     if old.exists():

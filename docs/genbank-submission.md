@@ -57,7 +57,7 @@ and [feature-table formatting](https://www.ncbi.nlm.nih.gov/genbank/feature_tabl
 Before validation and packaging, export copies each consistent, in-frame model
 and checks codons on its biological strand. Missing stops are sought at +3, +6,
 and +9 bases, choosing the first stop. Noncanonical starts are sought at -3, -6,
-+3, and +6 bases in that order, accepting ATG, GTG, or TTG without crossing a stop.
++3, and +6 bases in that order, accepting table-11 initiation codons without crossing a stop.
 Searches never wrap the contig. Explicit partial calls are retained.
 
 Unresolved ends receive `partial_5prime` or `partial_3prime` flags and the standard
@@ -72,3 +72,27 @@ alternative starts translate to methionine). Original analysis models are retain
 boundaries under `gene_call_parameters.boundary_repair`. Invalid coordinates,
 inconsistent CDS sequences, and non-triplet complete models are left for validation
 rather than guessed. No genome bases are edited.
+
+## Supported start selection and the ORF table
+
+The PHANOTATE DNA path prefers a unique Prodigal-GV start when the callers
+agree on biological stop, strand and frame and the candidate is a complete
+table-11 ORF. Agreed starts remain unchanged; PHANOTATE is retained if no matching
+valid secondary model exists. Unresolved candidates are flagged for review.
+All seven table-11 initiators are accepted; CTG, ATT, ATC and ATA are flagged as
+`rare start codon - review`. Internal stops never imply automatic read-through.
+
+`gene_calls/start_selection.json` and each changed model's
+`gene_call_parameters.start_selection` record the original and selected boundaries,
+caller, distance, motif observations and rule. Re-export through the curation helper
+can use saved Prodigal-GV calls without rerunning annotation searches. Its changes
+apply to submission models; saved analysis evidence remains historical.
+
+`genbank_submission/orfs.tsv` is generated from the same final export objects as
+the GenBank file. Every CDS in the five-column table declares `transl_table 11`,
+and official validation is invoked with `-j "[gcode=11]"`. This declares the intended code;
+it does not resolve missing submission metadata or establish NCBI acceptance.
+
+The independent `scripts/verify_codons.py` accepts ATG/GTG/TTG by default;
+`--extended-starts` accepts all seven table-11 starts. It was adapted from the
+user-supplied verifier; its other codon, translation and partial checks are unchanged.

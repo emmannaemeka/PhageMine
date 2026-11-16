@@ -16,13 +16,15 @@ from pathlib import Path
 
 from .models import EvidenceLevel, Protein, SubmissionMetadata
 from .sequencing_provenance import SequencingProvenance
+from .start_selection import STARTS_11
 
 
 def _reverse_complement(sequence: str) -> str:
-    return sequence.translate(str.maketrans("ACGTN", "TGCAN"))[::-1]
+    from Bio.Seq import Seq
+    return str(Seq(sequence).reverse_complement())
 
 
-_STARTS = {"ATG", "GTG", "TTG"}
+_STARTS = STARTS_11
 _STOPS = {"TAA", "TAG", "TGA"}
 
 
@@ -53,10 +55,12 @@ def repair_boundaries(genome: str, proteins: list[Protein]) -> list[Protein]:
         left, right = ((p.start - 1, p.end) if p.strand == "+"
                        else (len(genome) - p.end, len(genome) - p.start + 1))
         # Do not conceal inconsistent input sequence or non-triplet complete CDSs.
-        if sequence[left:right] != p.cds.upper() or (right - left) % 3 or p.codon_start != 1:
+        if (sequence[left:right] != p.cds.upper() or p.codon_start not in (1, 2, 3)
+                or ((right-left) % 3 and not (p.partial_5prime or p.partial_3prime))):
             continue
         before = {"start": p.start, "end": p.end,
-                  "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime}
+                  "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime,
+                  "codon_start": p.codon_start}
         if not p.partial_3prime and sequence[right - 3:right] not in _STOPS:
             for delta in (3, 6, 9):
                 candidate = right + delta
@@ -83,12 +87,20 @@ def repair_boundaries(genome: str, proteins: list[Protein]) -> list[Protein]:
                 break
             else:
                 p.partial_5prime = True
+        # Biological orientation makes the same rule apply to both strands.
+        # Added 5' bases are skipped; added 3' bases remain a trailing partial codon.
+        if p.partial_5prime and 0 < left <= 2 and left + p.codon_start <= 3:
+            p.codon_start += left
+            left = 0
+        if p.partial_3prime and 0 < len(sequence) - right <= 2:
+            right = len(sequence)
         p.start, p.end = ((left + 1, right) if p.strand == "+"
                           else (len(genome) - right + 1, len(genome) - left))
         p.cds = sequence[left:right]
         p.start_codon, p.stop_codon = p.cds[:3], p.cds[-3:]
         after = {"start": p.start, "end": p.end,
-                 "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime}
+                 "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime,
+                  "codon_start": p.codon_start}
         if before != after:
             p.gene_call_parameters["boundary_repair"] = {"original": before, "repaired": after}
         # Derive translation only for a consistent input; validation still catches
@@ -136,12 +148,18 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
             errors.append({**prefix, "code": "NCBI_CDS_FRAME", "severity": "ERROR", "message": "Complete CDS length is not divisible by three."})
         if not protein.sequence or "*" in protein.sequence:
             errors.append({**prefix, "code": "invalid_translation", "message": "Protein translation is empty or contains an internal stop."})
+        from .start_refinement import cds_problems
+        for code in cds_problems(protein, genome):
+            if code in {"CDS_INTERNAL_STOP_REVIEW_RECODING", "CDS_CODON_START_INVALID"}:
+                errors.append({**prefix, "code": code, "message": "Sequence-derived CDS validation failed; inspect the original sequence."})
         expected_translation = __import__("phagemine.genome", fromlist=["translate"]).translate(protein.cds)
         if protein.sequence not in {expected_translation, _export_translation(protein)}:
             errors.append({**prefix, "code": "translation_mismatch", "message": "Protein translation does not match the submitted CDS sequence."})
         if protein.strand in {"+", "-"} and len(protein.cds) >= 6:
-            if protein.cds[:3] not in {"ATG", "GTG", "TTG"}:
-                warnings.append({**prefix, "code": "noncanonical_start_codon", "severity": "WARNING" if getattr(protein, "partial_5prime", False) else "REQUIRES_REVIEW", "message": "CDS does not begin with a standard PHANOTATE start codon.", "recommended_action": "Confirm the genetic code, start boundary and 5-prime partial state before submission."})
+            if protein.cds[:3] not in _STARTS:
+                if not protein.partial_5prime:
+                    errors.append({**prefix, "code": "NCBI_CDS_START", "message": "Complete CDS has an invalid table 11 start."})
+                warnings.append({**prefix, "code": "noncanonical_start_codon", "severity": "WARNING" if getattr(protein, "partial_5prime", False) else "REQUIRES_REVIEW", "message": "CDS does not begin with a valid translation table 11 start codon.", "recommended_action": "Confirm the genetic code, start boundary and 5-prime partial state before submission."})
             if protein.cds[-3:] not in {"TAA", "TAG", "TGA"}:
                 diagnostic = {**prefix, "code": "NCBI_CDS_NOSTOP", "message": "CDS does not end with a valid terminal stop codon.", "evidence": {"terminal_codon": protein.cds[-3:], "strand": protein.strand}}
                 if getattr(protein, "partial_3prime", False):
@@ -163,7 +181,9 @@ def validate(genome_id: str, genome: str, proteins: list[Protein], provenance: d
 def product_name(protein: Protein) -> str:
     """Preserve the final supported annotation, including computational predictions."""
     if protein.annotation_level in {EvidenceLevel.EXPERIMENTAL, EvidenceLevel.CURATED, EvidenceLevel.COMPUTATIONAL} and "mock" not in protein.annotation.lower() and not any(e.status == "mock" for e in protein.evidence):
-        return protein.annotation.strip() or "hypothetical protein"
+        from .genome_qc import sanitize_product
+        from .spanins import canonical_spanin
+        return sanitize_product(canonical_spanin(protein.annotation))
     return "hypothetical protein"
 
 
@@ -187,7 +207,9 @@ def feature_table(genome_id: str, proteins: list[Protein], overrides: dict | Non
         product = change.get("product") or product_name(protein)
         tag = _locus_tag(protein, locus_tag_prefix)
         note = change.get("note") or f"PhageMine evidence record: cds_provenance.json#{protein.protein_id}; Product reflects the final PhageMine annotation; computational predictions are not experimental validation."
-        lines.extend([f"{start}\t{end}\tgene", f"\t\t\tlocus_tag\t{tag}", f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", f"\t\t\tnote\t{_safe(note)}"])
+        if protein.gene_call_parameters.get('ribosomal_slippage_review'):
+            note += " Possible ribosomal_slippage: split-homology evidence requires manual review; no joined CDS or recoding exception asserted."
+        lines.extend([f"{start}\t{end}\tgene", f"\t\t\tlocus_tag\t{tag}", f"{start}\t{end}\tCDS", f"\t\t\tprotein_id\tgnl|PhageMine|{tag}", f"\t\t\tlocus_tag\t{tag}", f"\t\t\tproduct\t{_safe(product)}", "\t\t\ttransl_table\t11", f"\t\t\tnote\t{_safe(note)}"])
 
         if getattr(protein, "partial_5prime", False):
             lines.append(f"\t\t\tcodon_start\t{getattr(protein, 'codon_start', 1)}")
@@ -206,7 +228,7 @@ def table2asn_status(package_root: Path, executable: str | None = None) -> dict:
         (package_root / "genome.tbl").write_text(table.read_text())
     # Isolate every run so stale reports cannot establish success.
     output = Path(tempfile.mkdtemp(prefix="table2asn_", dir=package_root)).resolve()
-    command = [executable, "-indir", str(package_root), "-outdir", str(output), "-t", str(package_root / "submission.sbt"), "-M", "n", "-V", "vb", "-Z"]
+    command = [executable, "-indir", str(package_root), "-outdir", str(output), "-t", str(package_root / "submission.sbt"), "-M", "n", "-V", "vb", "-Z", "-j", "[gcode=11]"]
     try:
         completed = subprocess.run(command, capture_output=True, text=True, check=False, timeout=300)
     except (OSError, subprocess.TimeoutExpired) as exc:
@@ -274,12 +296,14 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     metadata = metadata or SubmissionMetadata()
     sequencing_provenance = sequencing_provenance or SequencingProvenance()
     genome = genome.upper()
+    from .genome_qc import sanitize_product
+    feature_overrides = {key: {**value, **({"product": sanitize_product(value["product"])} if value.get("product") else {})} for key, value in (feature_overrides or {}).items()}
     proteins = repair_boundaries(genome, proteins)
     pre_validation = validate(genome_id, genome, proteins, provenance)
     if metadata.sequence_id and metadata.sequence_id != genome_id:
         pre_validation["errors"].append({"code": "metadata_sequence_id_mismatch", "message": "Metadata sequence_id does not match the FASTA identifier."})
         pre_validation["valid"] = False
-    source_fields = {"organism": metadata.organism, "host": metadata.host,
+    source_fields = {"organism": metadata.organism, "host": metadata.host, "topology": metadata.topology,
                      "isolation_source": metadata.isolation_source, "collection_date": metadata.collection_date,
                      "geo_loc_name": metadata.geographic_location, "isolate": metadata.isolate, "strain": metadata.strain}
     modifiers = []
@@ -294,14 +318,23 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     fasta_header = f">{genome_id}" + "".join(modifiers)
     (root / "genome.fsa").write_text(f"{fasta_header}\n{genome}\n")
     table = feature_table(genome_id, proteins, feature_overrides, getattr(metadata, "locus_tag_prefix", None))
+    source_lines = [f"1\t{len(genome)}\tsource"]
+    for key, value in source_fields.items():
+        if value and key != 'topology' and not any(c in value for c in '[]\t\r\n'):
+            source_lines.append(f"\t\t\t{key}\t{_safe(value)}")
+    source_lines.append("\t\t\tmol_type\tgenomic DNA")
+    header, body = table.split('\n', 1)
+    table = header+'\n'+'\n'.join(source_lines)+'\n'+body
     (root / "features.tbl").write_text(table)
     (root / "genome.tbl").write_text(table)
     (root / "proteins.faa").write_text("".join(f">gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)} {_safe((feature_overrides or {}).get(p.protein_id, {}).get('product') or product_name(p))}\n{p.sequence}\n" for p in proteins))
     (root / "submission_metadata.json").write_text(json.dumps(asdict(metadata), indent=2, sort_keys=True))
+    from .orf_table import write_orfs
+    write_orfs(root / "orfs.tsv", proteins, feature_overrides, metadata.locus_tag_prefix)
     from .genbank_flatfile import write_flatfile
     write_flatfile(root)
     (root / "sequencing_provenance.json").write_text(json.dumps(sequencing_provenance.manifest(), indent=2, sort_keys=True))
-    (root / "submission.sbt").write_text(_submission_template(metadata))
+    (root / "submission.sbt").write_text(Path(metadata.submitter_template).read_text() if metadata.submitter_template else _submission_template(metadata))
     cds_provenance = {p.protein_id: {"coordinates": {"start": p.start, "end": p.end, "strand": p.strand}, "coordinate_system": "1-based-inclusive", "partial_5prime": p.partial_5prime, "partial_3prime": p.partial_3prime, "gene_call_parameters": p.gene_call_parameters, "protein_fasta_id": f"gnl|PhageMine|{_locus_tag(p, metadata.locus_tag_prefix)}", "evidence_record": f"../evidence.json#{p.protein_id}", "evidence": [asdict(e) for e in p.evidence]} for p in proteins}
     (root / "cds_provenance.json").write_text(json.dumps(cds_provenance, indent=2, default=str, sort_keys=True))
     table2asn = table2asn_status(root, table2asn_executable)
@@ -340,4 +373,6 @@ def write_package(output: str | Path, genome_id: str, genome: str, proteins: lis
     (root / "NCBI_VALIDATION_REPORT.txt").write_text("\n".join(report_lines) + "\n")
     (root / "provenance.json").write_text(json.dumps(provenance, indent=2, sort_keys=True))
     (root / "README.txt").write_text("This is a local PhageMine pre-submission package; it has not been submitted to NCBI. PhageMine QC, PhageMine pre-submission validation, table2asn validation, and final NCBI review are distinct stages. If table2asn is unavailable, install the official NCBI table2asn distribution, add it to PATH, and rerun this command. Never treat mock, weak, or hypothesis-level annotations as asserted product names.\n")
+    from .genome_qc import write_qc
+    write_qc(output, proteins=proteins, metadata=metadata, provenance=provenance)
     return validation

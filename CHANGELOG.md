@@ -1,5 +1,43 @@
 # Changelog
 
+## Unreleased
+
+### Gene-start accuracy
+- Add a canonical-initiator guard (`phagemine.initiator_guard`). After start
+  refinement and before evidence searches, a CDS that begins with a rare
+  table-11 initiator (CTG/ATT/ATC/ATA) chosen on SD/spacing evidence alone is
+  moved to the unique canonical Prodigal-GV start for the same strand and stop.
+  Starts anchored by N-terminal homology or translational coupling, and CDSs in
+  same-strand overlaps of >=100 nt (e.g. Rz/Rz1 spanins), are kept and listed
+  for review in `gene_calls/initiator_guard.json`. No reference annotation is used.
+- Eight-genome benchmark (full databases): exact CDS boundaries 765 -> 773,
+  zero exact matches lost, held-out OP373729.1 70 -> 72 and PX787804.1 83 -> 84,
+  44/44 acceptance checks (strict CDS verification, synchronized exports).
+
+### Product names
+- Fix GenBank/feature-table/FASTA product export discarding whole functional
+  names that contained a locus designation (e.g. "baseplate wedge protein gp25"
+  became "hypothetical protein"). Designations, accessions and ECO tags are now
+  removed and the descriptive name kept; "probable" is written as "putative".
+  On the eight benchmark genomes, named CDS products rise from 452 to 492 of 978.
+
+### Manual curation package
+- `final_annotation_package/<genome>_gene_curation.tsv`: one row per CDS with
+  coordinates, codons, partial flags, GenBank and PhageMine products,
+  functional state, best PHROGs/VOGDB/Swiss-Prot hits (ID, description,
+  E-value, coverage, identity), domains, neighbourhood and module, upstream
+  20 nt, RBS motif/spacer, start-selection and initiator-guard decisions,
+  review priority/action, and full nucleotide and protein sequences.
+- The same table is the first sheet (`Gene_Curation`) of
+  `<genome>_manual_verification.xlsx`; `README_CURATION.txt` documents the package.
+
+### Also included (previously local-only)
+- Prodigal-GV-supported start selection with synchronized table-11 exports;
+  RBS-aware start refinement and guide-aligned genome QC; spanin subtype
+  normalization and compound-aware regression benchmark; partial-CDS export
+  repair with evidence-gated overlapping ORF recovery; CDS confidence tiers,
+  submission-metadata support and reviewer export packages.
+
 ## 1.4.0 — 2026-11-13
 
 - Export annotated `genbank_submission/genome.gbk` with supported computational product names and translations.

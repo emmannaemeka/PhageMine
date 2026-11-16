@@ -71,10 +71,11 @@ class ExportTests(unittest.TestCase):
         result=export.validate('fixture', 'AATGAAATAA', [p], {'input_sha256':'fixture'})
         self.assertIn('NCBI_PARTIAL_LOCATION', {item['code'] for item in result['errors']})
 
-    def test_unresolved_complete_start_requires_review(self):
+    def test_unresolved_complete_start_fails_strict_gate(self):
         p=protein(cds='AAAAAATAA',sequence='KK')
         result=export.validate('fixture', p.cds, [p], {'input_sha256':'fixture'})
-        self.assertEqual(export.readiness(result,metadata(),{'state':'passed'})[0], 'REQUIRES_REVIEW')
+        self.assertIn('NCBI_CDS_START', {item['code'] for item in result['errors']})
+        self.assertEqual(export.readiness(result,metadata(),{'state':'passed'})[0], 'VALIDATION_FAILED')
 
     def test_missing_official_validation_cannot_be_ready(self):
         state,_=export.readiness({'valid':True,'warnings':[]},metadata(),{'state':'unavailable'})
