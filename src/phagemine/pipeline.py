@@ -786,6 +786,18 @@ def run(fasta: str | Path, output: str | Path, command: str = "run", metadata: S
             database=swissprot_path or (registered or {}).get("path"),
             diamond=diamond or shutil.which("diamond"), threads=threads,
             rna_features=early_rna["features"] if early_rna else (), phrogs_start_db=phrogs_start_db)
+        if production_observation and gv_result.status == "SUCCESS":
+            # Rare table-11 initiators (CTG/ATT/ATC/ATA) chosen on SD/spacing
+            # evidence alone yield to the unique canonical Prodigal-GV start for
+            # the same stop.  Homology/coupling-anchored starts and overlapping
+            # same-strand architectures are kept and listed for review.
+            from .initiator_guard import enforce_canonical_initiators
+            proteins, initiator_changes, initiator_reviews = enforce_canonical_initiators(
+                representation.analysis_sequence, proteins, gv_result.models)
+            (Path(output) / "gene_calls" / "initiator_guard.json").write_text(json.dumps(
+                {"code_path": "phagemine.initiator_guard.enforce_canonical_initiators",
+                 "reference_used": False, "changes": initiator_changes,
+                 "reviews": initiator_reviews}, indent=2, sort_keys=True) + "\n")
     evidence_adapters = []
     if use_mock_evidence:
         mock_result = _analyze_evidence(MockEvidenceBackend(), proteins, shared_evidence_cache)
