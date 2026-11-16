@@ -15,6 +15,142 @@ def read(path, default):
     return json.loads(path.read_text()) if path.exists() else default
 
 
+CURATION_COLUMNS = ['Locus_Tag', 'Gene_Order', 'Start', 'End', 'Strand', 'Length_nt', 'Length_aa',
+    'Start_Codon', 'Stop_Codon', 'Partial_5_Prime', 'Partial_3_Prime', 'Rare_Start_Flag',
+    'Product_GenBank', 'PhageMine_Product', 'Functional_State', 'Functional_Category', 'Confidence',
+    'Evidence_Tier', 'Gene_Symbol', 'EC_Number', 'Best_Evidence', 'Supporting_Sources',
+    'Top_PHROGs_Hit', 'PHROGs_Evalue', 'PHROGs_Query_Coverage',
+    'Top_VOGDB_Hit', 'VOGDB_Evalue', 'VOGDB_Query_Coverage',
+    'Top_SwissProt_Hit', 'SwissProt_Evalue', 'SwissProt_Identity', 'SwissProt_Query_Coverage',
+    'Domain_Hits', 'Functional_Module', 'Upstream_Gene', 'Upstream_Gap_nt', 'Downstream_Gene',
+    'Downstream_Gap_nt', 'Adjacent_Gene_Overlap_nt', 'Upstream_20bp_DNA', 'RBS_Motif', 'RBS_Spacer_nt',
+    'RBS_Score', 'Start_Selection_Reason', 'Initiator_Guard_Decision', 'Caller_Support',
+    'Gene_Call_Confidence', 'Codon_Verifier_Status', 'Review_Priority', 'Review_Issue',
+    'Recommended_Action', 'Review_Flags', 'Annotation_Reasoning', 'Nucleotide_Sequence', 'Protein_Translation']
+
+CURATION_README = """PhageMine final annotation package - files for manual curation
+==============================================================
+
+{prefix}_gene_curation.tsv  One row per CDS with everything needed to curate it:
+                            coordinates, start/stop codons, partial flags, GenBank product,
+                            PhageMine product and functional state, best PHROGs / VOGDB /
+                            Swiss-Prot hits (ID - description, E-value, coverage, identity),
+                            Pfam domains, gene neighbourhood and module, upstream 20 nt,
+                            RBS motif/spacer, how the start was chosen (incl. initiator guard),
+                            review priority and recommended action, full nucleotide and
+                            protein sequences. Tab-separated; opens in Excel/LibreOffice/R/pandas.
+{prefix}_manual_verification.xlsx  Filterable workbook: Gene_Curation (same table as the TSV;
+                            high-priority review rows highlighted), CDS_Verification, tRNA/tmRNA,
+                            review-queue candidates and genome QC sheets. Note: Excel cells hold at
+                            most 32,767 characters; the TSV is the lossless master copy.
+{prefix}.gbk                GenBank flat file (annotated genome).
+{prefix}.gff3               GFF3 features.     {prefix}.tbl  NCBI feature table.
+{prefix}.fsa                Genome FASTA.      {prefix}.faa  Proteins.   {prefix}.ffn  CDS nucleotides.
+phagemine_qc_report.md/json Genome QC checklist.
+
+Product names: a CDS is named only when PhageMine has accepted functional evidence.
+Locus designations such as 'gp25' are removed from product names (INSDC style).
+'hypothetical protein' means no accepted functional evidence; check the hit columns,
+which list sub-threshold and family-level hits for the curator's judgement.
+Computational predictions are not experimental validation.
+"""
+
+
+def _hit(evidence, names):
+    best = None
+    for e in evidence:
+        if e.get('source', '').lower() not in names:
+            continue
+        m = e.get('metrics', {})
+        value = m.get('evalue', m.get('e_value', m.get('full_sequence_e_value')))
+        if value is None:
+            continue
+        key = float(value)
+        if best is None or key < best[0]:
+            best = (key, e, m)
+    if not best:
+        return '', '', '', ''
+    value, e, m = best
+    desc = ' '.join(str(e.get('description') or e.get('family_name') or '').split())
+    label = f"{e.get('identifier')} - {desc}" if desc and desc != e.get('identifier') else str(e.get('identifier'))
+    ident = m.get('percent_identity', m.get('identity', m.get('pident', '')))
+    return label, value, m.get('query_coverage', ''), ident
+
+
+def _tsv_value(value):
+    if value is None:
+        return ''
+    if isinstance(value, (dict, list)):
+        value = json.dumps(value, ensure_ascii=False)
+    return str(value).replace('\t', ' ').replace('\r', ' ').replace('\n', ' ')
+
+
+def write_curation_table(root, destination, prefix, rows, proteins):
+    """Write {prefix}_gene_curation.tsv and README_CURATION.txt next to the exports."""
+    root, destination = Path(root), Path(destination)
+    def keyed(path, key='protein_id'):
+        data = read(path, [])
+        if isinstance(data, dict):
+            data = data.get('records', data.get('items', []))
+        return {r.get(key): r for r in data if isinstance(r, dict)}
+    classification = keyed(root / 'functional_classification.json')
+    context = keyed(root / 'genomic_context.json')
+    review = {}
+    for r in read(root / 'annotation_review.json', []) if isinstance(read(root / 'annotation_review.json', []), list) else []:
+        review.setdefault(r.get('protein_id'), r)
+    guard = {}
+    gj = read(root / 'gene_calls/initiator_guard.json', {})
+    for c in gj.get('changes', []):
+        guard[c['protein_id']] = f"CHANGED {c.get('old_start_codon')}->{c.get('new_start_codon')} ({c.get('rule')})"
+    for c in gj.get('reviews', []):
+        guard.setdefault(c['protein_id'], f"KEPT {c.get('start_codon')}: {c.get('decision')}")
+    lines = ['\t'.join(CURATION_COLUMNS)]
+    table = []
+    for order, row in enumerate(rows, 1):
+        tag = row['Locus_Tag']
+        pid = tag if tag in classification or tag in proteins else 'PM_' + tag.rsplit('_', 1)[-1]
+        p = proteins.get(tag, proteins.get(pid, {}))
+        pid = p.get('protein_id', pid)
+        fc, cx, rv = classification.get(pid, {}), context.get(pid, {}), review.get(pid, {})
+        evidence = [e for e in p.get('evidence', []) if str(e.get('status', '')).upper() == 'REAL']
+        ph, vo, sp = _hit(evidence, {'phrogs'}), _hit(evidence, {'vogdb'}), _hit(evidence, {'swissprot', 'swiss-prot'})
+        domains = []
+        for e in evidence:
+            if e.get('source', '').lower() in {'pfam', 'cdd', 'interpro'}:
+                m = e.get('metrics', {})
+                domains.append(f"{e.get('identifier')} {' '.join(str(e.get('description') or '').split())} (E={m.get('evalue', m.get('e_value', m.get('full_sequence_e_value', '')))})")
+        out = {
+            'Locus_Tag': tag, 'Gene_Order': order, 'Start': row['Start'], 'End': row['End'], 'Strand': row['Strand'],
+            'Length_nt': row['Length_nt'], 'Length_aa': row['Length_aa'], 'Start_Codon': row['Start_Codon'],
+            'Stop_Codon': row['Stop_Codon'], 'Partial_5_Prime': row['Partial_5_Prime'], 'Partial_3_Prime': row['Partial_3_Prime'],
+            'Rare_Start_Flag': row['Rare_Start_Flag'], 'Product_GenBank': row['Product_Name'],
+            'PhageMine_Product': fc.get('display_product', ''), 'Functional_State': fc.get('functional_state', ''),
+            'Functional_Category': fc.get('functional_category', ''), 'Confidence': fc.get('confidence', ''),
+            'Evidence_Tier': fc.get('evidence_tier_label', ''), 'Gene_Symbol': fc.get('gene', ''),
+            'EC_Number': fc.get('ec_number', ''), 'Best_Evidence': fc.get('best_evidence', ''),
+            'Supporting_Sources': '; '.join(fc.get('supporting_sources') or []),
+            'Top_PHROGs_Hit': ph[0], 'PHROGs_Evalue': ph[1], 'PHROGs_Query_Coverage': ph[2],
+            'Top_VOGDB_Hit': vo[0], 'VOGDB_Evalue': vo[1], 'VOGDB_Query_Coverage': vo[2],
+            'Top_SwissProt_Hit': sp[0], 'SwissProt_Evalue': sp[1], 'SwissProt_Identity': sp[3], 'SwissProt_Query_Coverage': sp[2],
+            'Domain_Hits': '; '.join(domains), 'Functional_Module': cx.get('functional_module', ''),
+            'Upstream_Gene': cx.get('upstream_protein_id', ''), 'Upstream_Gap_nt': cx.get('upstream_intergenic_distance', ''),
+            'Downstream_Gene': cx.get('downstream_protein_id', ''), 'Downstream_Gap_nt': cx.get('downstream_intergenic_distance', ''),
+            'Adjacent_Gene_Overlap_nt': row['Adjacent_Gene_Overlap_nt'], 'Upstream_20bp_DNA': row['Upstream_20bp_DNA'],
+            'RBS_Motif': row['RBS_Motif'], 'RBS_Spacer_nt': row['RBS_Spacer_nt'], 'RBS_Score': row['RBS_Score'],
+            'Start_Selection_Reason': row['Start_Selection_Reason'], 'Initiator_Guard_Decision': guard.get(pid, ''),
+            'Caller_Support': row['Caller_Support'], 'Gene_Call_Confidence': row['Confidence_Tier'],
+            'Codon_Verifier_Status': row['Codon_Verifier_Status'], 'Review_Priority': rv.get('priority', ''),
+            'Review_Issue': rv.get('issue', ''), 'Recommended_Action': rv.get('recommended_action', ''),
+            'Review_Flags': row['Review_Flags'], 'Annotation_Reasoning': fc.get('reasoning_summary', ''),
+            'Nucleotide_Sequence': row['Nucleotide_Sequence'], 'Protein_Translation': row['Protein_Translation']}
+        table.append(out)
+        lines.append('\t'.join(_tsv_value(out[c]) for c in CURATION_COLUMNS))
+    target = destination / f'{prefix}_gene_curation.tsv'
+    target.write_text('\n'.join(lines) + '\n')
+    (destination / 'README_CURATION.txt').write_text(CURATION_README.format(prefix=prefix))
+    return target, table
+
+
 def build_reviewer_package(output, prefix=None):
     from openpyxl import Workbook
     from openpyxl.styles import Font,PatternFill,Alignment
@@ -93,5 +229,12 @@ def build_reviewer_package(output, prefix=None):
     summary=[['Genome',record.id],['Length_nt',len(record)],['GC_percent',100*sum(b in 'GC' for b in str(record.seq))/len(record)],['CDS_count',len(cds)],['RNA_count',len(rna)],['Start_codons',dict(collections.Counter(r['Start_Codon'] for r in rows))]]
     summary += [[f"Guide_{c['question']}: {c['criterion']}",{'status':c['status'],'reason':c['reason']}] for c in qc.get('criteria',[])]
     sheet('Genome_Summary_and_QC',['Metric','Value'],summary)
+    _,curation=write_curation_table(root,destination,prefix,rows,proteins)
+    ws=sheet('Gene_Curation',CURATION_COLUMNS,curation)
+    highlight=PatternFill('solid',fgColor='FFF2CC');priority=CURATION_COLUMNS.index('Review_Priority')+1
+    for r in range(2,ws.max_row+1):
+        if str(ws.cell(r,priority).value or '').upper() in {'HIGH','CRITICAL'}:
+            for c in range(1,ws.max_column+1):ws.cell(r,c).fill=highlight
+    wb.move_sheet('Gene_Curation',offset=-(len(wb.sheetnames)-1));wb.active=0
     target=destination/(prefix+'_manual_verification.xlsx');wb.save(target)
     return destination

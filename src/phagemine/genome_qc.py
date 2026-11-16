@@ -23,16 +23,33 @@ QUESTIONS = [
 ]
 
 
+_PRODUCT_ID_TOKEN = re.compile(
+    r'\b(?:[A-Z]{1,4}_?\d{4,}(?:\.\d+)?|(?:ORF|gp|PHROG|VOG|PF)[ _]?\d+(?:\.\d+)?[A-Za-z]?)\b', re.I)
+
+
 def sanitize_product(value, supported=True):
+    """INSDC-style product name.
+
+    Locus/gene-product designations (gp25, ORF12, accessions, database IDs)
+    and evidence tags are removed; the descriptive name is kept.  Only a name
+    that is empty, vague or identifier-only after cleaning becomes
+    'hypothetical protein'.  'probable' is written as 'putative' (NCBI style).
+    """
     value = ' '.join(str(value or '').split())
     if not supported or not value:
         return 'hypothetical protein'
-    vague = re.search(r'\b(hypothetical|uncharacteri[sz]ed|unknown|unnamed)\b', value, re.I)
-    identifier = re.search(r'\b(?:[A-Z]{1,4}_?\d{4,}(?:\.\d+)?|(?:ORF|gp|PHROG|VOG|PF)\d+)\b', value, re.I)
-    symbol = re.fullmatch(r'(?:[a-z]{2,3}[A-Z][0-9]?|[A-Z][a-z]{2}[A-Z]?)', value)
-    if vague or identifier or symbol or value.lower() in {'putative phage protein', 'phage protein', 'putative protein'}:
+    if re.search(r'\b(hypothetical|uncharacteri[sz]ed|unknown|unnamed)\b', value, re.I):
         return 'hypothetical protein'
-    return value
+    cleaned = re.sub(r'\s*\{ECO:[^}]*\}', '', value)
+    cleaned = _PRODUCT_ID_TOKEN.sub('', cleaned)
+    cleaned = re.sub(r'\(\s*\)', '', cleaned)
+    cleaned = ' '.join(cleaned.split()).strip(' ,;:-')
+    cleaned = re.sub(r'^probable\b', 'putative', cleaned, flags=re.I)
+    symbol = re.fullmatch(r'(?:[a-z]{2,3}[A-Z][0-9]?|[A-Z][a-z]{2}[A-Z]?)', cleaned)
+    if (not cleaned or symbol or cleaned.lower() in {'putative phage protein', 'phage protein', 'putative protein',
+                                                     'protein', 'putative', 'gene product'}):
+        return 'hypothetical protein'
+    return cleaned
 
 
 def overlap(a, b):

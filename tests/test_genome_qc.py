@@ -112,3 +112,17 @@ def test_joined_reference_not_counted_as_exact_spanning_cds():
     pred=[dict(id='p',contig='c',start=1,end=99,strand='+')]
     report=compare(pred,ref)
     assert report['exact_count']==0 and len(report['structure_mismatch'])==1
+
+
+def test_products_keep_function_and_drop_locus_designations():
+    assert sanitize_product('baseplate wedge protein gp25') == 'baseplate wedge protein'
+    assert sanitize_product("5'-3' exonuclease gp43") == "5'-3' exonuclease"
+    assert sanitize_product('nucleotide kinase gp1.7') == 'nucleotide kinase'
+    assert sanitize_product('terminase, small subunit gp18') == 'terminase, small subunit'
+    assert sanitize_product('probable major capsid protein gp17') == 'putative major capsid protein'
+    assert sanitize_product('tail fiber protein {ECO:0000303|PubMed:1}') == 'tail fiber protein'
+    assert sanitize_product('Nrd.1 hypothetical protein') == 'hypothetical protein'
+    assert sanitize_product('conserved phage protein of unknown function') == 'hypothetical protein'
+    for value in ('gp5.4', 'ORF 12', 'protein gp7', 'phrog_123'):
+        assert sanitize_product(value) == 'hypothetical protein'
+    assert sanitize_product(sanitize_product('baseplate wedge protein gp25')) == 'baseplate wedge protein'

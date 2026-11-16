@@ -33,11 +33,19 @@ def test_metadata_and_workbook(tmp_path):
     (tmp_path/'phagemine_qc_report.json').write_text('{}');(tmp_path/'phagemine_qc_report.md').write_text('QC fixture')
     out=build_reviewer_package(tmp_path)
     wb=load_workbook(out/'test_manual_verification.xlsx')
-    assert wb.sheetnames==['CDS_Verification','tRNA_tmRNA','Review_Queue_Candidates','Genome_Summary_and_QC']
+    assert wb.sheetnames==['Gene_Curation','CDS_Verification','tRNA_tmRNA','Review_Queue_Candidates','Genome_Summary_and_QC']
     ws=wb['CDS_Verification'];assert [c.value for c in ws[1]]==COLUMNS
     assert ws.freeze_panes=='B2' and ws.auto_filter.ref
     assert ws.cell(2,COLUMNS.index('Codon_Verifier_Status')+1).value=='PASS'
-    assert len(list(out.iterdir()))==9
+    assert len(list(out.iterdir()))==11
+    from phagemine.reviewer_package import CURATION_COLUMNS
+    lines=(out/'test_gene_curation.tsv').read_text().splitlines()
+    assert lines[0].split('\t')==CURATION_COLUMNS and len(lines)==2
+    row=dict(zip(CURATION_COLUMNS,lines[1].split('\t')))
+    assert row['Protein_Translation']==p.sequence and row['Codon_Verifier_Status']=='PASS'
+    assert (out/'README_CURATION.txt').is_file()
+    gc=wb['Gene_Curation'];assert [c.value for c in gc[1]]==CURATION_COLUMNS and gc.max_row==2
+    assert gc.cell(2,CURATION_COLUMNS.index('Protein_Translation')+1).value==p.sequence
 
 
 def test_overlap_family_exception_without_rbs(tmp_path,monkeypatch):
